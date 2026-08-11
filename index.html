@@ -2245,6 +2245,21 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
   </div>
 </div>
 
+<div class="edit-modal-overlay" id="select-child-modal-overlay">
+  <div class="edit-modal-card">
+    <div class="section-hd" style="margin-bottom:0.75rem;">Select a child</div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Choose who this check is for before continuing.</p>
+    <div class="name-row" style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.5rem;">
+      <input type="text" id="select-child-search" placeholder="Search for a child..." oninput="renderSelectChildModalList()" style="flex:1;"/>
+    </div>
+    <div id="select-child-modal-list" style="max-height:320px;overflow-y:auto;"></div>
+    <div id="select-child-modal-empty" style="display:none;color:var(--text-secondary);font-size:14px;padding:0.5rem 0;">No children added yet. <a href="javascript:void(0)" onclick="closeSelectChildModal();switchTab('children');">Add children to the register</a> to get started.</div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+      <button class="btn" style="flex:1;" onclick="closeSelectChildModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -2672,17 +2687,77 @@ function requireActiveSchool(){
   return false;
 }
 
-function requireName(){
+function requireName(retryFn){
   if(!selectedAssessmentPupil){
-    alert('Please select a child from the register before starting.');
-    showScreen('screen-home');
+    openSelectChildModal(retryFn);
     return false;
   }
   return true;
 }
 
-function startPhase(key){if(!requireActiveSchool())return;if(!requireName())return;var s=SETS[key];currentSounds=s.sounds.slice();currentKeywords=s.keywords;currentSetLabel=s.label;currentSetKey=key;beginCheck();}
-function startAll(){if(!requireActiveSchool())return;if(!requireName())return;currentSounds=ALL_SOUNDS.slice();currentKeywords=Object.assign({},SETS.set1.keywords,SETS.set2.keywords,SETS.set3.keywords);currentSetLabel='All sets';currentSetKey='all';beginCheck();}
+/* ---------- "Select a child" popup, shown in place when a check is started
+   without a child chosen yet - avoids bouncing the teacher back to the home
+   screen and losing their spot in the topic/tier they'd already picked. ---------- */
+var pendingChildSelectRetry = null;
+function openSelectChildModal(retryFn){
+  pendingChildSelectRetry = retryFn || null;
+  var searchEl = document.getElementById('select-child-search');
+  if(searchEl) searchEl.value = '';
+  renderSelectChildModalList();
+  document.getElementById('select-child-modal-overlay').classList.add('active');
+  setTimeout(function(){ if(searchEl) searchEl.focus(); }, 50);
+}
+function closeSelectChildModal(){
+  document.getElementById('select-child-modal-overlay').classList.remove('active');
+  pendingChildSelectRetry = null;
+}
+function renderSelectChildModalList(){
+  var listEl = document.getElementById('select-child-modal-list');
+  var emptyEl = document.getElementById('select-child-modal-empty');
+  var searchEl = document.getElementById('select-child-search');
+  if(!listEl) return;
+  if(!pupilsRoster.length){
+    listEl.innerHTML = '';
+    emptyEl.style.display = 'block';
+    searchEl.style.display = 'none';
+    return;
+  }
+  emptyEl.style.display = 'none';
+  searchEl.style.display = 'block';
+  var search = (searchEl.value || '').trim().toLowerCase();
+  var list = search ? pupilsRoster.filter(function(p){ return p.name.toLowerCase().indexOf(search) > -1; }) : pupilsRoster;
+  listEl.innerHTML = '';
+  if(!list.length){
+    var none = document.createElement('div');
+    none.style.cssText = 'color:var(--text-secondary);font-size:14px;padding:0.5rem 0;';
+    none.textContent = 'No children match your search.';
+    listEl.appendChild(none);
+    return;
+  }
+  list.forEach(function(p){
+    var row = document.createElement('div'); row.className = 'pupil-card'; row.style.cursor = 'pointer';
+    var header = document.createElement('div'); header.className = 'pupil-header';
+    var nb = document.createElement('div'); nb.style.flex = '1';
+    var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = p.name;
+    var me = document.createElement('div'); me.className = 'pupil-meta';
+    me.textContent = [p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet';
+    nb.appendChild(ne); nb.appendChild(me);
+    header.appendChild(nb);
+    row.appendChild(header);
+    row.onclick = function(){ chooseChildFromModal(p); };
+    listEl.appendChild(row);
+  });
+}
+function chooseChildFromModal(p){
+  selectAssessmentPupil(p);
+  document.getElementById('select-child-modal-overlay').classList.remove('active');
+  var retry = pendingChildSelectRetry;
+  pendingChildSelectRetry = null;
+  if(retry) retry();
+}
+
+function startPhase(key){if(!requireActiveSchool())return;if(!requireName(function(){startPhase(key);}))return;var s=SETS[key];currentSounds=s.sounds.slice();currentKeywords=s.keywords;currentSetLabel=s.label;currentSetKey=key;beginCheck();}
+function startAll(){if(!requireActiveSchool())return;if(!requireName(function(){startAll();}))return;currentSounds=ALL_SOUNDS.slice();currentKeywords=Object.assign({},SETS.set1.keywords,SETS.set2.keywords,SETS.set3.keywords);currentSetLabel='All sets';currentSetKey='all';beginCheck();}
 function beginCheck(){soundIdx=0;soundResults={};showScreen('screen-check');renderSound();}
 
 function renderSound(){
@@ -3486,7 +3561,7 @@ async function loadBlendingResults(){
 
 function startBlendingCheck(){
   if(!requireActiveSchool())return;
-  if(!requireName())return;
+  if(!requireName(function(){startBlendingCheck();}))return;
   bcIdx = 0; bcWordResults = {};
   showScreen('screen-bc-check');
   renderBlendingWord();
@@ -3835,7 +3910,7 @@ function buildSingleTableFacts(n){
 
 function startTimesTablesCheck(which){
   if(!requireActiveSchool())return;
-  if(!requireName())return;
+  if(!requireName(function(){startTimesTablesCheck(which);}))return;
   if(which==='mixed' || which===undefined){
     currentTTFacts = shuffleArray(TIMES_TABLES_FACTS);
     currentTTLabel = 'Mixed';
@@ -5984,7 +6059,7 @@ function backToMathsTopics(){
 
 function startMathsCheck(tier){
   if(!requireActiveSchool())return;
-  if(!requireName())return;
+  if(!requireName(function(){startMathsCheck(tier);}))return;
   var t = MATHS_TOPICS[currentMathsKey];
   if(!t) return;
   currentMtQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -7204,7 +7279,7 @@ function backToEnglishTopics(){
 
 function startEnglishCheck(tier){
   if(!requireActiveSchool())return;
-  if(!requireName())return;
+  if(!requireName(function(){startEnglishCheck(tier);}))return;
   var t = ENGLISH_TOPICS[currentEnglishKey];
   if(!t) return;
   currentEnQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -7556,7 +7631,7 @@ var handwritingResults = [];
 
 function startHandwritingCheck(tier){
   if(!requireActiveSchool())return;
-  if(!requireName())return;
+  if(!requireName(function(){startHandwritingCheck(tier);}))return;
   currentHwItems = (HANDWRITING_SETS[tier] || HANDWRITING_SETS.KS1).slice();
   currentHwTier = tier;
   hwIdx = 0; hwItemResults = {};
@@ -11269,7 +11344,7 @@ function backToTopics(){
 
 function startTopicCheck(tier){
   if(!requireActiveSchool())return;
-  if(!requireName())return;
+  if(!requireName(function(){startTopicCheck(tier);}))return;
   var t = TOPICS[currentTopicKey];
   if(!t) return;
   currentTpQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -11640,7 +11715,7 @@ function backToScienceTopics(){
 
 function startScienceCheck(tier){
   if(!requireActiveSchool())return;
-  if(!requireName())return;
+  if(!requireName(function(){startScienceCheck(tier);}))return;
   var t = SCIENCE_TOPICS[currentScienceKey];
   if(!t) return;
   currentScQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -12011,7 +12086,7 @@ function backToReTopics(){
 
 function startReCheck(tier){
   if(!requireActiveSchool())return;
-  if(!requireName())return;
+  if(!requireName(function(){startReCheck(tier);}))return;
   var t = RE_TOPICS[currentReKey];
   if(!t) return;
   currentReQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -12670,7 +12745,7 @@ function backToMflTopics(){
 
 function startMflCheck(tier){
   if(!requireActiveSchool())return;
-  if(!requireName())return;
+  if(!requireName(function(){startMflCheck(tier);}))return;
   var t = MFL_TOPICS[currentMflKey];
   if(!t) return;
   currentMflQuestions = pickQuestions(t.questions[tier] || [], 12);
