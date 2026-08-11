@@ -221,6 +221,12 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .report-q-link{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);margin-top:0.75rem;text-decoration:none;cursor:pointer;}
 .report-q-link:hover{color:var(--text-secondary);text-decoration:underline;}
 .group-toggle-btn{font-size:12px;padding:4px 10px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-1);color:var(--text-secondary);cursor:pointer;}
+.class-filter-indicator{display:none;align-items:center;gap:6px;margin-bottom:0.75rem;padding:0.55rem 0.75rem;background:var(--hp-purple-light);border:0.5px solid var(--hp-purple-border);border-radius:var(--radius);font-size:13px;color:var(--hp-purple-dark);}
+.class-filter-indicator.active{display:flex;}
+.class-filter-indicator i{font-size:14px;flex-shrink:0;}
+.class-filter-indicator .class-filter-indicator-text{font-weight:600;}
+.class-filter-indicator a{margin-left:auto;color:var(--hp-purple);font-size:12.5px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap;}
+.class-filter-indicator a:hover{text-decoration:underline;}
 .group-toggle-btn.active{background:var(--hp-purple-light);color:var(--hp-purple);border-color:var(--hp-purple);font-weight:500;}
 .group-toggle-btn:hover{background:var(--surface-3);}
 .term-export-select{width:auto;font-size:12px;padding:0.4rem 0.5rem;}
@@ -1543,22 +1549,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-abc" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Phonics results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Results</h2>
@@ -1615,22 +1609,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Maths results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Maths</h2>
@@ -1663,22 +1645,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Times Tables results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Times Tables</h2>
@@ -1711,22 +1681,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-book-2" aria-hidden="true"></i></div>
       <div class="subject-banner-title">English results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">English</h2>
@@ -1759,22 +1717,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-pencil" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Handwriting results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Handwriting</h2>
@@ -1807,22 +1753,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Early Years results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Early Years</h2>
@@ -1855,22 +1789,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Topics results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Topics</h2>
@@ -1903,22 +1825,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Science results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Science</h2>
@@ -1951,22 +1861,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
       <div class="subject-banner-title">RE results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">RE</h2>
@@ -1999,22 +1897,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Languages results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Languages</h2>
@@ -2047,22 +1933,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Music results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Music</h2>
@@ -2095,22 +1969,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Reasoning results</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Reasoning</h2>
@@ -2213,22 +2075,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-abc" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Phonics analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -2269,22 +2119,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Maths analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -2308,22 +2146,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Times Tables analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -2347,22 +2173,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-book-2" aria-hidden="true"></i></div>
       <div class="subject-banner-title">English analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -2386,22 +2200,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-pencil" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Handwriting analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -2424,22 +2226,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Early Years analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -2462,22 +2252,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Topics analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -2501,22 +2279,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Science analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -2540,22 +2306,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
       <div class="subject-banner-title">RE analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -2579,22 +2333,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Languages analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -2618,22 +2360,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Music analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -2657,22 +2387,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Reasoning analytics</div>
     </div>
-    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
-      <div class="group-toggle-row" style="margin-bottom:0;">
-        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
-        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Under 2s" onclick="setClassFilter('Under 2s')">Under 2s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="2-3s" onclick="setClassFilter('2-3s')">2-3s</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Nursery (3-4s)" onclick="setClassFilter('Nursery (3-4s)')">Nursery</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
-        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
-      </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
@@ -4142,8 +3860,11 @@ function getTerm(dateStr){
 var classFilter = '';
 function setClassFilter(val){
   classFilter = val || '';
-  document.querySelectorAll('.class-filter-btn').forEach(function(btn){
-    btn.classList.toggle('active', (btn.getAttribute('data-class')||'') === classFilter);
+  document.querySelectorAll('.class-filter-indicator').forEach(function(el){
+    el.classList.toggle('active', !!classFilter);
+  });
+  document.querySelectorAll('.class-filter-indicator-text').forEach(function(el){
+    el.textContent = classFilter || '';
   });
   renderResults();
   renderBlendingResults();
