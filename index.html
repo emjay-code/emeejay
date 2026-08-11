@@ -206,6 +206,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .year-group-body .pupil-card:last-child{margin-bottom:0;}
 .group-toggle-row{display:flex;align-items:center;gap:6px;margin-bottom:0.75rem;flex-wrap:wrap;}
 .group-toggle-label{font-size:12px;color:var(--text-muted);margin-right:2px;}
+.report-q-link{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);margin-top:0.75rem;text-decoration:none;cursor:pointer;}
+.report-q-link:hover{color:var(--text-secondary);text-decoration:underline;}
 .group-toggle-btn{font-size:12px;padding:4px 10px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-1);color:var(--text-secondary);cursor:pointer;}
 .group-toggle-btn.active{background:var(--hp-purple-light);color:var(--hp-purple);border-color:var(--hp-purple);font-weight:500;}
 .group-toggle-btn:hover{background:var(--surface-3);}
@@ -815,6 +817,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         <button class="yn-btn yn-yes" onclick="markEy(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Yes</button>
         <button class="yn-btn yn-no" onclick="markEy(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
       </div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportEyItem()"><i class="ti ti-flag" aria-hidden="true"></i> Report this item</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1075,6 +1078,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="check-label">Ask the child this question, then tap the answer they give</div>
       <div class="gr-question-display" id="reasoning-question-display"></div>
       <div class="mc-grid mc-grid-text" id="reasoning-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportReasoningQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1118,6 +1122,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         <button class="yn-btn yn-yes" onclick="mark(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Can say it</button>
         <button class="yn-btn yn-no" onclick="mark(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
       </div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportPhonicsSound()"><i class="ti ti-flag" aria-hidden="true"></i> Report this sound</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1148,6 +1153,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         <button class="yn-btn yn-yes" onclick="markBlendingWord(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Read correctly</button>
         <button class="yn-btn yn-no" onclick="markBlendingWord(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
       </div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportBlendingWord()"><i class="ti ti-flag" aria-hidden="true"></i> Report this word</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1176,6 +1182,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         <button class="yn-btn yn-yes" onclick="markTT(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Correct</button>
         <button class="yn-btn yn-no" onclick="markTT(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
       </div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportTTFact()"><i class="ti ti-flag" aria-hidden="true"></i> Report this fact</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1200,6 +1207,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="check-label">Ask the child this question, then tap the answer they give</div>
       <div class="gr-question-display" id="en-question-display"></div>
       <div class="mc-grid mc-grid-text" id="en-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportEnglishQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1224,6 +1232,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="check-label">Ask the child this question, then tap the answer they give</div>
       <div class="gr-question-display" id="mt-question-display"></div>
       <div class="mc-grid mc-grid-text" id="mt-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportMathsQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1251,6 +1260,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         <button class="yn-btn yn-yes" onclick="markHw(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Formed correctly</button>
         <button class="yn-btn yn-no" onclick="markHw(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
       </div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportHwItem()"><i class="ti ti-flag" aria-hidden="true"></i> Report this item</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1277,6 +1287,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="check-label">Ask the child this question, then tap the answer they give</div>
       <div class="gr-question-display" id="tp-question-display"></div>
       <div class="mc-grid mc-grid-text" id="tp-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportTopicQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1301,6 +1312,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="check-label">Ask the child this question, then tap the answer they give</div>
       <div class="gr-question-display" id="sc-question-display"></div>
       <div class="mc-grid mc-grid-text" id="sc-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportScienceQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1325,6 +1337,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="check-label">Ask the child this question, then tap the answer they give</div>
       <div class="gr-question-display" id="re-question-display"></div>
       <div class="mc-grid mc-grid-text" id="re-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportReQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1349,6 +1362,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="check-label">Ask the child this question, then tap the answer they give</div>
       <div class="gr-question-display" id="mfl-question-display"></div>
       <div class="mc-grid mc-grid-text" id="mfl-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportMflQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -1373,6 +1387,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="check-label">Ask the child this question, then tap the answer they give</div>
       <div class="gr-question-display" id="music-question-display"></div>
       <div class="mc-grid mc-grid-text" id="music-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportMusicQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
     </div>
     <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
   </div>
@@ -2704,6 +2719,34 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
   </div>
 </div>
 
+<div class="edit-modal-overlay" id="report-modal-overlay">
+  <div class="edit-modal-card" id="report-modal-card">
+    <div class="section-hd" style="margin-bottom:0.35rem;">Report this question</div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Let us know if something's wrong with this question or item. This goes straight to the developer.</p>
+    <div class="field">
+      <label>Question / item</label>
+      <div id="report-modal-item" style="font-size:13px;color:var(--text-primary);background:var(--surface-1);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.5rem 0.65rem;"></div>
+    </div>
+    <div class="field">
+      <label>What's the issue?</label>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;" id="report-reason-btns">
+        <button type="button" class="group-toggle-btn" data-reason="Incorrect" onclick="selectReportReason('Incorrect')">Incorrect</button>
+        <button type="button" class="group-toggle-btn" data-reason="Not relevant" onclick="selectReportReason('Not relevant')">Not relevant</button>
+        <button type="button" class="group-toggle-btn" data-reason="Other" onclick="selectReportReason('Other')">Other</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Additional notes (optional)</label>
+      <textarea id="report-notes" maxlength="1000" placeholder="Tell us more, if useful..."></textarea>
+    </div>
+    <div class="error-text" id="report-error" style="display:none;"></div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+      <button class="btn" style="flex:1;" onclick="closeReportModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" id="report-submit-btn" onclick="submitQuestionReport()">Send</button>
+    </div>
+  </div>
+</div>
+
 <div class="edit-modal-overlay" id="select-child-modal-overlay">
   <div class="edit-modal-card">
     <div class="section-hd" style="margin-bottom:0.75rem;">Select a child</div>
@@ -3422,6 +3465,110 @@ async function submitFeedback(){
   }
   var card = document.getElementById('feedback-modal-card');
   card.innerHTML = '<div class="section-hd" style="margin-bottom:0.5rem;">Thanks!</div><p style="font-size:13px;color:var(--text-secondary);margin-bottom:1rem;">Your feedback has been sent.</p><button class="btn btn-primary" style="width:100%;" onclick="closeFeedbackModal()">Close</button>';
+}
+
+/* ---------- Report question: flag an incorrect/irrelevant/other question or item ---------- */
+var REPORT_FORM_HTML = null;
+var reportModalState = { subject:null, topicKey:null, topicLabel:null, tier:null, itemText:null, reason:null };
+function openReportModal(subject, topicKey, topicLabel, tier, itemText){
+  var card = document.getElementById('report-modal-card');
+  if(REPORT_FORM_HTML === null){ REPORT_FORM_HTML = card.innerHTML; }
+  card.innerHTML = REPORT_FORM_HTML;
+  reportModalState = { subject: subject, topicKey: topicKey || null, topicLabel: topicLabel || null, tier: tier || null, itemText: itemText || '', reason: null };
+  document.getElementById('report-modal-item').textContent = itemText || '';
+  document.getElementById('report-notes').value = '';
+  document.getElementById('report-error').style.display = 'none';
+  document.getElementById('report-modal-overlay').classList.add('active');
+}
+function closeReportModal(){
+  document.getElementById('report-modal-overlay').classList.remove('active');
+}
+function selectReportReason(reason){
+  reportModalState.reason = reason;
+  var btns = document.querySelectorAll('#report-reason-btns .group-toggle-btn');
+  for(var i=0;i<btns.length;i++){ btns[i].classList.toggle('active', btns[i].getAttribute('data-reason') === reason); }
+}
+async function submitQuestionReport(){
+  var errEl = document.getElementById('report-error');
+  errEl.style.display = 'none';
+  if(!reportModalState.reason){
+    errEl.textContent = 'Please choose a reason.';
+    errEl.style.display = 'block';
+    return;
+  }
+  var btn = document.getElementById('report-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  var row = {
+    school_id: currentProfile ? currentProfile.school_id : null,
+    teacher_id: currentUser ? currentUser.id : null,
+    teacher_name: currentProfile ? (currentProfile.display_name || null) : null,
+    teacher_email: currentUser ? currentUser.email : null,
+    school_name: currentSchool ? currentSchool.name : null,
+    subject: reportModalState.subject,
+    topic_key: reportModalState.topicKey,
+    topic_label: reportModalState.topicLabel,
+    tier: reportModalState.tier,
+    item_text: reportModalState.itemText,
+    reason: reportModalState.reason,
+    notes: document.getElementById('report-notes').value.trim() || null,
+    page: getFeedbackPageContext()
+  };
+  var ins = await sb.from('question_reports').insert(row);
+  btn.disabled = false;
+  btn.textContent = 'Send';
+  if(ins.error){
+    errEl.textContent = 'Could not send report: ' + ins.error.message;
+    errEl.style.display = 'block';
+    return;
+  }
+  var card = document.getElementById('report-modal-card');
+  card.innerHTML = '<div class="section-hd" style="margin-bottom:0.5rem;">Thanks!</div><p style="font-size:13px;color:var(--text-secondary);margin-bottom:1rem;">Your report has been sent.</p><button class="btn btn-primary" style="width:100%;" onclick="closeReportModal()">Close</button>';
+}
+
+/* ---------- Per-subject report-question wrappers ---------- */
+function reportPhonicsSound(){
+  var s = currentSounds[soundIdx];
+  var kw = currentKeywords[s];
+  openReportModal('phonics', null, currentSetLabel || null, null, kw ? (s + ' (e.g. ' + kw + ')') : s);
+}
+function reportBlendingWord(){
+  var w = BLENDING_WORDS[bcIdx];
+  openReportModal('blending', null, null, w.type, w.word);
+}
+function reportTTFact(){
+  var f = currentTTFacts[ttIdx];
+  openReportModal('times_tables', null, currentTTLabel || null, null, f[0] + ' × ' + f[1]);
+}
+function reportMathsQuestion(){
+  openReportModal('maths', currentMathsKey, (MATHS_TOPICS[currentMathsKey]||{}).label, currentMtTier, currentMtQuestions[mtIdx].q);
+}
+function reportEnglishQuestion(){
+  openReportModal('english', currentEnglishKey, (ENGLISH_TOPICS[currentEnglishKey]||{}).label, currentEnTier, currentEnQuestions[enIdx].q);
+}
+function reportHwItem(){
+  openReportModal('handwriting', null, null, currentHwTier, currentHwItems[hwIdx]);
+}
+function reportTopicQuestion(){
+  openReportModal('topics', currentTopicKey, (TOPICS[currentTopicKey]||{}).label, currentTpTier, currentTpQuestions[tpIdx].q);
+}
+function reportScienceQuestion(){
+  openReportModal('science', currentScienceKey, (SCIENCE_TOPICS[currentScienceKey]||{}).label, currentScTier, currentScQuestions[scIdx].q);
+}
+function reportReQuestion(){
+  openReportModal('re', currentReKey, (RE_TOPICS[currentReKey]||{}).label, currentReTier, currentReQuestions[reIdx].q);
+}
+function reportMflQuestion(){
+  openReportModal('mfl', currentMflKey, (MFL_TOPICS[currentMflKey]||{}).label, currentMflTier, currentMflQuestions[mfIdx].q);
+}
+function reportMusicQuestion(){
+  openReportModal('music', currentMusicKey, (MUSIC_TOPICS[currentMusicKey]||{}).label, currentMusicTier, currentMusicQuestions[muIdx].q);
+}
+function reportEyItem(){
+  openReportModal('early_years', currentEyTier, (EARLY_YEARS_AREAS[currentEyTier]||{}).label, null, currentEyItems[eyIdx]);
+}
+function reportReasoningQuestion(){
+  openReportModal('reasoning', currentReasoningKey, (REASONING_TOPICS[currentReasoningKey]||{}).label, currentReasoningTier, currentReasoningQuestions[rsIdx].q);
 }
 
 /* ---------- Pupils roster / children profiles ---------- */
