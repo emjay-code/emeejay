@@ -11761,18 +11761,19 @@ function pickQuestions(pool, n){
 
 /* Shows the multiple-choice options for a teacher-marked question, same
    options the child would see in a live session, so questions written as
-   "which of these..." make sense to read aloud. The correct option is
-   highlighted so the teacher knows what to listen for when marking
-   Correct / Not Yet - it isn't clickable, this is a reference for the
-   teacher, not a self-marking control. */
+   "which of these..." make sense to read aloud. Options are shown neutrally
+   (not pre-highlighted, so it doesn't look like it's already been marked)
+   with the correct answer noted separately below for the teacher's
+   reference when marking Correct / Not Yet. */
 function renderMcOptions(containerId, item){
   var el = document.getElementById(containerId);
   if(!el) return;
   var opts = shuffleArray((item.options && item.options.length) ? item.options : [item.a]);
-  el.innerHTML = opts.map(function(opt){
-    var cls = 'mc-btn' + (opt === item.a ? ' mc-correct' : '');
-    return '<button type="button" class="'+cls+'" disabled>'+escapeHtml(opt)+'</button>';
+  var html = opts.map(function(opt){
+    return '<button type="button" class="mc-btn" disabled>'+escapeHtml(opt)+'</button>';
   }).join('');
+  html += '<div class="gr-answer-hint" style="grid-column:1/-1;padding-top:0.25rem;">Answer: '+escapeHtml(item.a)+'</div>';
+  el.innerHTML = html;
 }
 
 function generateMathsDistractors(a, b){
