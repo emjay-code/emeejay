@@ -151,6 +151,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .pupil-name{font-size:15px;font-weight:500;color:var(--text-primary);font-family:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
 .pupil-meta{font-size:12px;color:var(--text-muted);margin-top:2px;}
 .pct-pill{font-size:13px;font-weight:600;color:var(--hp-purple);white-space:nowrap;}
+.trend-badge{font-size:11px;font-weight:600;white-space:nowrap;}
+.trend-badge.trend-up{color:var(--text-success);}
+.trend-badge.trend-down{color:var(--text-danger);}
+.trend-badge.trend-flat{color:var(--text-muted);}
+.sort-select{font-size:12px;padding:0.3rem 0.5rem;border:0.5px solid var(--border-strong);border-radius:var(--radius);background:var(--surface-1);color:var(--text-secondary);}
 .sound-section{margin-bottom:0.75rem;}
 .sound-section:last-child{margin-bottom:0;}
 .chips-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
@@ -170,6 +175,13 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .trend-set{font-size:12px;color:var(--text-secondary);flex:1;}
 .trend-score{font-size:14px;font-weight:500;color:var(--text-primary);}
 .trend-arrow{font-size:13px;min-width:60px;text-align:right;}
+.snapshot-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--border);cursor:pointer;}
+.snapshot-row:last-child{border-bottom:none;}
+.snapshot-row:hover{background:var(--surface-3);}
+.snapshot-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--hp-purple-light);color:var(--hp-purple);flex-shrink:0;font-size:14px;}
+.snapshot-subject{font-size:13px;font-weight:500;color:var(--text-primary);flex:1;}
+.snapshot-date{font-size:11px;color:var(--text-muted);min-width:64px;}
+.snapshot-score{font-size:14px;font-weight:600;color:var(--hp-purple);min-width:38px;text-align:right;}
 .sound-freq-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
 .sound-freq-chip{font-family:var(--phonics-font);min-width:40px;text-align:center;padding:3px 8px;border-radius:6px;font-size:12px;font-weight:600;background:var(--surface-3);color:var(--text-primary);}
 .sound-freq-bar-bg{flex:1;height:6px;background:var(--surface-3);border-radius:3px;overflow:hidden;}
@@ -1507,6 +1519,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="rv-group-year-btn" onclick="setResultsGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="rv-group-term-btn" onclick="setResultsGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="rv-sort" class="sort-select" onchange="renderResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="rv-empty" class="empty-state" style="display:none;">No assessments yet.</div>
     <div id="rv-summary" style="display:none;margin-bottom:0.75rem;">
@@ -1529,6 +1543,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="bc-group-year-btn" onclick="setBlendingGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="bc-group-term-btn" onclick="setBlendingGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="bc-sort" class="sort-select" onchange="renderBlendingResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="bc-list-empty" class="empty-state" style="display:none;">No blending checks yet.</div>
     <div id="bc-summary" style="display:none;margin-bottom:0.75rem;">
@@ -1572,6 +1588,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="mt-group-year-btn" onclick="setMathsGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="mt-group-term-btn" onclick="setMathsGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="mt-sort" class="sort-select" onchange="renderMathsResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="mt-list-empty" class="empty-state" style="display:none;">No Maths checks yet.</div>
     <div id="mt-summary" style="display:none;margin-bottom:0.75rem;">
@@ -1615,6 +1633,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="tt-group-year-btn" onclick="setTimesTablesGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="tt-group-term-btn" onclick="setTimesTablesGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="tt-sort" class="sort-select" onchange="renderTimesTablesResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="tt-list-empty" class="empty-state" style="display:none;">No Times Tables checks yet.</div>
     <div id="tt-summary" style="display:none;margin-bottom:0.75rem;">
@@ -1658,6 +1678,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="en-group-year-btn" onclick="setEnglishGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="en-group-term-btn" onclick="setEnglishGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="en-sort" class="sort-select" onchange="renderEnglishResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="en-list-empty" class="empty-state" style="display:none;">No English checks yet.</div>
     <div id="en-summary" style="display:none;margin-bottom:0.75rem;">
@@ -1701,6 +1723,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="hw-group-year-btn" onclick="setHandwritingGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="hw-group-term-btn" onclick="setHandwritingGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="hw-sort" class="sort-select" onchange="renderHandwritingResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="hw-list-empty" class="empty-state" style="display:none;">No handwriting checks yet.</div>
     <div id="hw-summary" style="display:none;margin-bottom:0.75rem;">
@@ -1744,6 +1768,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="ey-group-year-btn" onclick="setEyGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="ey-group-term-btn" onclick="setEyGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="ey-sort" class="sort-select" onchange="renderEyResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="ey-list-empty" class="empty-state" style="display:none;">No Early Years checks yet.</div>
     <div id="ey-summary" style="display:none;margin-bottom:0.75rem;">
@@ -1787,6 +1813,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="tp-group-year-btn" onclick="setTopicGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="tp-group-term-btn" onclick="setTopicGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="tp-sort" class="sort-select" onchange="renderTopicResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="tp-list-empty" class="empty-state" style="display:none;">No topic checks yet.</div>
     <div id="tp-summary" style="display:none;margin-bottom:0.75rem;">
@@ -1830,6 +1858,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="sc-group-year-btn" onclick="setScienceGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="sc-group-term-btn" onclick="setScienceGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="sc-sort" class="sort-select" onchange="renderScienceResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="sc-list-empty" class="empty-state" style="display:none;">No science checks yet.</div>
     <div id="sc-summary" style="display:none;margin-bottom:0.75rem;">
@@ -1873,6 +1903,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="re-group-year-btn" onclick="setReGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="re-group-term-btn" onclick="setReGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="re-sort" class="sort-select" onchange="renderReResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="re-list-empty" class="empty-state" style="display:none;">No RE checks yet.</div>
     <div id="re-summary" style="display:none;margin-bottom:0.75rem;">
@@ -1916,6 +1948,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="mfl-group-year-btn" onclick="setMflGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="mfl-group-term-btn" onclick="setMflGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="mfl-sort" class="sort-select" onchange="renderMflResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="mfl-list-empty" class="empty-state" style="display:none;">No Languages checks yet.</div>
     <div id="mfl-summary" style="display:none;margin-bottom:0.75rem;">
@@ -1959,6 +1993,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="music-group-year-btn" onclick="setMusicGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="music-group-term-btn" onclick="setMusicGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="music-sort" class="sort-select" onchange="renderMusicResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="music-list-empty" class="empty-state" style="display:none;">No Music checks yet.</div>
     <div id="music-summary" style="display:none;margin-bottom:0.75rem;">
@@ -2002,6 +2038,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <span class="group-toggle-label">Group by:</span>
       <button type="button" class="group-toggle-btn active" id="reasoning-group-year-btn" onclick="setReasoningGroupMode('year')">Year group</button>
       <button type="button" class="group-toggle-btn" id="reasoning-group-term-btn" onclick="setReasoningGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="reasoning-sort" class="sort-select" onchange="renderReasoningResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
     </div>
     <div id="reasoning-list-empty" class="empty-state" style="display:none;">No Reasoning checks yet.</div>
     <div id="reasoning-summary" style="display:none;margin-bottom:0.75rem;">
@@ -2560,19 +2598,26 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       </div>
     </div>
 
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Early Years</h2><div id="ch-profile-early_years"></div><div id="ch-profile-early_years-empty" style="font-size:13px;color:var(--text-muted);">No Early Years checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Phonics</h2><div id="ch-profile-phonics"></div><div id="ch-profile-phonics-empty" style="font-size:13px;color:var(--text-muted);">No phonics checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Blending</h2><div id="ch-profile-blending"></div><div id="ch-profile-blending-empty" style="font-size:13px;color:var(--text-muted);">No blending checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Times Tables</h2><div id="ch-profile-times-tables"></div><div id="ch-profile-times-tables-empty" style="font-size:13px;color:var(--text-muted);">No times tables checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Handwriting</h2><div id="ch-profile-handwriting"></div><div id="ch-profile-handwriting-empty" style="font-size:13px;color:var(--text-muted);">No handwriting checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">English</h2><div id="ch-profile-english"></div><div id="ch-profile-english-empty" style="font-size:13px;color:var(--text-muted);">No English checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Maths</h2><div id="ch-profile-maths"></div><div id="ch-profile-maths-empty" style="font-size:13px;color:var(--text-muted);">No maths checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Topics</h2><div id="ch-profile-topics"></div><div id="ch-profile-topics-empty" style="font-size:13px;color:var(--text-muted);">No topic checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Science</h2><div id="ch-profile-science"></div><div id="ch-profile-science-empty" style="font-size:13px;color:var(--text-muted);">No science checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">RE</h2><div id="ch-profile-re"></div><div id="ch-profile-re-empty" style="font-size:13px;color:var(--text-muted);">No RE checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Languages</h2><div id="ch-profile-mfl"></div><div id="ch-profile-mfl-empty" style="font-size:13px;color:var(--text-muted);">No Languages checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Music</h2><div id="ch-profile-music"></div><div id="ch-profile-music-empty" style="font-size:13px;color:var(--text-muted);">No Music checks yet.</div></div>
-    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Reasoning</h2><div id="ch-profile-reasoning"></div><div id="ch-profile-reasoning-empty" style="font-size:13px;color:var(--text-muted);">No Reasoning checks yet.</div></div>
+    <div class="card" id="ch-profile-snapshot-card" style="margin-bottom:1rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Overview</div>
+      <div id="ch-profile-snapshot-grid"></div>
+      <div id="ch-profile-snapshot-empty" class="empty-state" style="display:none;padding:1.5rem 1rem;">No checks recorded for this child yet.</div>
+    </div>
+
+    <div class="section-hd" id="ch-profile-history-hd" style="margin:1rem 0 0.5rem;display:none;">Full history by subject</div>
+    <details class="year-group" id="ch-profile-wrap-early_years"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Early Years</span><span class="year-group-count" id="ch-profile-count-early_years"></span></summary><div class="year-group-body"><div id="ch-profile-early_years"></div><div id="ch-profile-early_years-empty" style="font-size:13px;color:var(--text-muted);">No Early Years checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-phonics"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Phonics</span><span class="year-group-count" id="ch-profile-count-phonics"></span></summary><div class="year-group-body"><div id="ch-profile-phonics"></div><div id="ch-profile-phonics-empty" style="font-size:13px;color:var(--text-muted);">No phonics checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-blending"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Blending</span><span class="year-group-count" id="ch-profile-count-blending"></span></summary><div class="year-group-body"><div id="ch-profile-blending"></div><div id="ch-profile-blending-empty" style="font-size:13px;color:var(--text-muted);">No blending checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-times-tables"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Times Tables</span><span class="year-group-count" id="ch-profile-count-times-tables"></span></summary><div class="year-group-body"><div id="ch-profile-times-tables"></div><div id="ch-profile-times-tables-empty" style="font-size:13px;color:var(--text-muted);">No times tables checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-handwriting"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Handwriting</span><span class="year-group-count" id="ch-profile-count-handwriting"></span></summary><div class="year-group-body"><div id="ch-profile-handwriting"></div><div id="ch-profile-handwriting-empty" style="font-size:13px;color:var(--text-muted);">No handwriting checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-english"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">English</span><span class="year-group-count" id="ch-profile-count-english"></span></summary><div class="year-group-body"><div id="ch-profile-english"></div><div id="ch-profile-english-empty" style="font-size:13px;color:var(--text-muted);">No English checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-maths"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Maths</span><span class="year-group-count" id="ch-profile-count-maths"></span></summary><div class="year-group-body"><div id="ch-profile-maths"></div><div id="ch-profile-maths-empty" style="font-size:13px;color:var(--text-muted);">No maths checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-topics"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Topics</span><span class="year-group-count" id="ch-profile-count-topics"></span></summary><div class="year-group-body"><div id="ch-profile-topics"></div><div id="ch-profile-topics-empty" style="font-size:13px;color:var(--text-muted);">No topic checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-science"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Science</span><span class="year-group-count" id="ch-profile-count-science"></span></summary><div class="year-group-body"><div id="ch-profile-science"></div><div id="ch-profile-science-empty" style="font-size:13px;color:var(--text-muted);">No science checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-re"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">RE</span><span class="year-group-count" id="ch-profile-count-re"></span></summary><div class="year-group-body"><div id="ch-profile-re"></div><div id="ch-profile-re-empty" style="font-size:13px;color:var(--text-muted);">No RE checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-mfl"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Languages</span><span class="year-group-count" id="ch-profile-count-mfl"></span></summary><div class="year-group-body"><div id="ch-profile-mfl"></div><div id="ch-profile-mfl-empty" style="font-size:13px;color:var(--text-muted);">No Languages checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-music"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Music</span><span class="year-group-count" id="ch-profile-count-music"></span></summary><div class="year-group-body"><div id="ch-profile-music"></div><div id="ch-profile-music-empty" style="font-size:13px;color:var(--text-muted);">No Music checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-reasoning"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Reasoning</span><span class="year-group-count" id="ch-profile-count-reasoning"></span></summary><div class="year-group-body"><div id="ch-profile-reasoning"></div><div id="ch-profile-reasoning-empty" style="font-size:13px;color:var(--text-muted);">No Reasoning checks yet.</div></div></details>
   </div>
 </div>
 
@@ -3791,27 +3836,101 @@ async function openChildProfile(id){
   var earlyYears_ = await sb.from('early_years_results').select('*').ilike('pupil_name', nameFilter);
   var reasoning_ = await sb.from('reasoning_results').select('*').ilike('pupil_name', nameFilter);
 
-  renderProfileSection('phonics', (results_.data||[]).map(rowToResult), buildPupilCard);
-  renderProfileSection('blending', (blending_.data||[]).map(rowToBlendingResult), buildBlendingCard);
-  renderProfileSection('maths', (maths_.data||[]).map(rowToMathsResult), buildMathsCard);
-  renderProfileSection('times-tables', (timesTables_.data||[]).map(rowToTimesTablesResult), buildTimesTablesCard);
-  renderProfileSection('english', (english_.data||[]).map(rowToEnglishResult), buildEnglishCard);
-  renderProfileSection('handwriting', (handwriting_.data||[]).map(rowToHandwritingResult), buildHandwritingCard);
-  renderProfileSection('topics', (topics_.data||[]).map(rowToTopicResult), buildTopicCard);
-  renderProfileSection('science', (science_.data||[]).map(rowToScienceResult), buildScienceCard);
-  renderProfileSection('re', (re_.data||[]).map(rowToReResult), buildReCard);
-  renderProfileSection('mfl', (mfl_.data||[]).map(rowToMflResult), buildMflCard);
-  renderProfileSection('music', (music_.data||[]).map(rowToMusicResult), buildMusicCard);
-  renderProfileSection('early_years', (earlyYears_.data||[]).map(rowToEyResult), buildEyCard);
-  renderProfileSection('reasoning', (reasoning_.data||[]).map(rowToReasoningResult), buildReasoningCard);
+  var profileData = {
+    phonics: (results_.data||[]).map(rowToResult),
+    blending: (blending_.data||[]).map(rowToBlendingResult),
+    maths: (maths_.data||[]).map(rowToMathsResult),
+    'times-tables': (timesTables_.data||[]).map(rowToTimesTablesResult),
+    english: (english_.data||[]).map(rowToEnglishResult),
+    handwriting: (handwriting_.data||[]).map(rowToHandwritingResult),
+    topics: (topics_.data||[]).map(rowToTopicResult),
+    science: (science_.data||[]).map(rowToScienceResult),
+    re: (re_.data||[]).map(rowToReResult),
+    mfl: (mfl_.data||[]).map(rowToMflResult),
+    music: (music_.data||[]).map(rowToMusicResult),
+    early_years: (earlyYears_.data||[]).map(rowToEyResult),
+    reasoning: (reasoning_.data||[]).map(rowToReasoningResult)
+  };
+  var profileBuilders = {
+    phonics: buildPupilCard, blending: buildBlendingCard, maths: buildMathsCard,
+    'times-tables': buildTimesTablesCard, english: buildEnglishCard, handwriting: buildHandwritingCard,
+    topics: buildTopicCard, science: buildScienceCard, re: buildReCard, mfl: buildMflCard,
+    music: buildMusicCard, early_years: buildEyCard, reasoning: buildReasoningCard
+  };
+  CHILD_PROFILE_SUBJECTS.forEach(function(s){
+    renderProfileSection(s.key, profileData[s.key], profileBuilders[s.key]);
+  });
+  renderChildSnapshot(profileData);
 }
+/* Ordered list of every subject shown on a child's profile - drives both
+   the "Overview" snapshot grid and the full-history sections below it.
+   `key` must match the ch-profile-<key>/-empty/-wrap-<key>/-count-<key> ids
+   already wired up in the ch-profile-screen markup. */
+var CHILD_PROFILE_SUBJECTS = [
+  {key:'early_years', label:'Early Years', icon:'ti-building-carousel'},
+  {key:'phonics', label:'Phonics', icon:'ti-abc'},
+  {key:'blending', label:'Blending', icon:'ti-git-merge'},
+  {key:'times-tables', label:'Times Tables', icon:'ti-calculator'},
+  {key:'handwriting', label:'Handwriting', icon:'ti-pencil'},
+  {key:'english', label:'English', icon:'ti-book-2'},
+  {key:'maths', label:'Maths', icon:'ti-calculator'},
+  {key:'topics', label:'Topics', icon:'ti-world'},
+  {key:'science', label:'Science', icon:'ti-leaf'},
+  {key:'re', label:'RE', icon:'ti-star'},
+  {key:'mfl', label:'Languages', icon:'ti-language'},
+  {key:'music', label:'Music', icon:'ti-music'},
+  {key:'reasoning', label:'Reasoning', icon:'ti-brain'}
+];
 function renderProfileSection(key, list, buildFn){
   var el = document.getElementById('ch-profile-' + key);
   var emptyEl = document.getElementById('ch-profile-' + key + '-empty');
+  var wrapEl = document.getElementById('ch-profile-wrap-' + key);
+  var countEl = document.getElementById('ch-profile-count-' + key);
   el.innerHTML = '';
   list.sort(function(a,b){ return (b.ts||0) - (a.ts||0); });
   list.forEach(function(r){ el.appendChild(buildFn(r)); });
   emptyEl.style.display = list.length ? 'none' : 'block';
+  if(wrapEl) wrapEl.style.display = list.length ? '' : 'none';
+  if(countEl) countEl.textContent = list.length + (list.length===1 ? ' check' : ' checks');
+}
+/* "Overview" strip at the top of a child's profile: one row per subject
+   they've actually been checked in, showing their most recent score, the
+   date, and a trend badge vs their previous check in that subject. Clicking
+   a row opens (and scrolls to) that subject's full history below. Subjects
+   with zero checks are omitted entirely to avoid clutter. */
+function renderChildSnapshot(profileData){
+  var grid = document.getElementById('ch-profile-snapshot-grid');
+  var emptyEl = document.getElementById('ch-profile-snapshot-empty');
+  var historyHd = document.getElementById('ch-profile-history-hd');
+  grid.innerHTML = '';
+  var rows = [];
+  CHILD_PROFILE_SUBJECTS.forEach(function(s){
+    var list = profileData[s.key] || [];
+    if(!list.length) return;
+    var sorted = list.slice().sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
+    rows.push({ subject: s, latest: sorted[0], list: sorted });
+  });
+  var anyChecks = rows.length > 0;
+  emptyEl.style.display = anyChecks ? 'none' : 'block';
+  if(historyHd) historyHd.style.display = anyChecks ? '' : 'none';
+  rows.forEach(function(row){
+    var s = row.subject, r = row.latest;
+    var el = document.createElement('div'); el.className = 'snapshot-row';
+    el.onclick = function(){
+      var wrap = document.getElementById('ch-profile-wrap-' + s.key);
+      if(wrap){ wrap.open = true; wrap.scrollIntoView({behavior:'smooth', block:'start'}); }
+    };
+    var icon = document.createElement('div'); icon.className = 'snapshot-icon'; icon.innerHTML = '<i class="ti ' + s.icon + '" aria-hidden="true"></i>';
+    var nameWrap = document.createElement('div'); nameWrap.style.flex = '1';
+    var nameEl = document.createElement('div'); nameEl.className = 'snapshot-subject'; nameEl.textContent = s.label;
+    nameWrap.appendChild(nameEl);
+    var dateEl = document.createElement('div'); dateEl.className = 'snapshot-date'; dateEl.textContent = r.date || '';
+    var scoreEl = document.createElement('div'); scoreEl.className = 'snapshot-score'; scoreEl.textContent = Math.round(pctOf(r)) + '%';
+    var trend = buildTrendBadge(computeTrendDiff(row.list, r));
+    el.appendChild(icon); el.appendChild(nameWrap); el.appendChild(dateEl); el.appendChild(scoreEl);
+    if(trend) el.appendChild(trend);
+    grid.appendChild(el);
+  });
 }
 function editCurrentPupil(){
   var p = pupilsRoster.find(function(x){ return x.id === currentPupilId; });
@@ -3893,6 +4012,58 @@ function filterByTermSelect(list, selectId){
   var termFilter = sel ? sel.value : 'all';
   if(termFilter==='all') return list;
   return list.filter(function(r){ return getTerm(r.date)===termFilter; });
+}
+/* pctOf/sortResultList/computeTrendDiff/buildTrendBadge are shared across all
+   13 subjects' Results tabs. Each subject's normalised row object exposes its
+   score either as a direct .pct (phonics, handwriting, early_years - all
+   checklist-style) or as .totalCorrect alongside .totalQuestions (topic-style
+   subjects), .totalWords (blending) or .totalFacts (times tables). */
+function pctOf(r){
+  if(r.pct !== undefined && r.pct !== null) return r.pct;
+  if(r.totalQuestions) return r.totalCorrect / r.totalQuestions * 100;
+  if(r.totalWords) return r.totalCorrect / r.totalWords * 100;
+  if(r.totalFacts) return r.totalCorrect / r.totalFacts * 100;
+  return 0;
+}
+function sortResultList(list, mode){
+  var arr = list.slice();
+  if(mode==='score-desc') arr.sort(function(a,b){ return pctOf(b)-pctOf(a); });
+  else if(mode==='score-asc') arr.sort(function(a,b){ return pctOf(a)-pctOf(b); });
+  else if(mode==='name') arr.sort(function(a,b){ return (a.name||'').localeCompare(b.name||''); });
+  else arr.sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
+  return arr;
+}
+function sortSelectValue(selectId){
+  var sel = document.getElementById(selectId);
+  return sel ? sel.value : 'recent';
+}
+/* Finds this pupil's most recent OTHER check in the same subject that is
+   chronologically older than r, and returns the whole-percentage-point
+   difference (r's score minus that previous score). Returns null if there's
+   no earlier check to compare against. */
+function computeTrendDiff(list, r){
+  var nm = (r.name||'').trim().toLowerCase();
+  if(!nm) return null;
+  var prev = null;
+  for(var i=0;i<list.length;i++){
+    var x = list[i];
+    if(x.id===r.id) continue;
+    if((x.name||'').trim().toLowerCase()!==nm) continue;
+    if((x.ts||0) >= (r.ts||0)) continue;
+    if(!prev || (x.ts||0) > (prev.ts||0)) prev = x;
+  }
+  if(!prev) return null;
+  return Math.round(pctOf(r)) - Math.round(pctOf(prev));
+}
+function buildTrendBadge(diff){
+  if(diff===null || diff===undefined) return null;
+  var span = document.createElement('span');
+  var cls = diff>0 ? 'trend-up' : diff<0 ? 'trend-down' : 'trend-flat';
+  var arrow = diff>0 ? '▲' : diff<0 ? '▼' : '●';
+  span.className = 'trend-badge ' + cls;
+  span.textContent = arrow + ' ' + (diff>0?'+':'') + diff + '%';
+  span.title = 'Compared to their previous check in this subject';
+  return span;
 }
 
 function showRvScreen(containerId, id){
@@ -3984,6 +4155,7 @@ function buildPupilCard(r){
   var right=document.createElement('div');right.style.cssText='display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;';
   var pe=document.createElement('div');pe.className='pct-pill';pe.textContent=r.ok.length+'/'+r.total+' ('+r.pct+'%)';
   right.appendChild(pe);
+  var trendRv = buildTrendBadge(computeTrendDiff(results, r)); if(trendRv) right.appendChild(trendRv);
   if(!isDemoSchool()){
     var editBtn=document.createElement('button');editBtn.className='edit-row-btn';editBtn.textContent='Edit details';
     (function(rr){editBtn.onclick=function(){openEditDetails('phonics', rr);};})(r);
@@ -4000,7 +4172,7 @@ function buildPupilCard(r){
 
 function renderResults(){
   var el=document.getElementById('rv-pupils');el.innerHTML='';
-  var list = filterByTermSelect(filterByClass(results), 'rv-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(results), 'rv-export-term'), sortSelectValue('rv-sort'));
   if(!list.length){document.getElementById('rv-empty').style.display='block';document.getElementById('rv-empty').textContent = classFilter ? ('No assessments yet for '+classFilter+'.') : 'No assessments yet.';document.getElementById('rv-summary').style.display='none';return;}
   document.getElementById('rv-empty').style.display='none';document.getElementById('rv-summary').style.display='block';
   document.getElementById('rv-count').textContent=list.length;
@@ -4301,6 +4473,7 @@ function buildBlendingCard(r){
   var pe = document.createElement('div'); pe.className = 'pct-pill';
   pe.textContent = r.totalCorrect + '/' + r.totalWords + ' (real ' + r.realCorrect + '/' + r.realTotal + ', pseudo ' + r.pseudoCorrect + '/' + r.pseudoTotal + ')';
   right.appendChild(pe);
+  var trendBc = buildTrendBadge(computeTrendDiff(blendingResults, r)); if(trendBc) right.appendChild(trendBc);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('blending', rr); }; })(r);
@@ -4328,7 +4501,7 @@ function renderBlendingResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('bc-list-empty');
   var summaryEl = document.getElementById('bc-summary');
-  var list = filterByTermSelect(filterByClass(blendingResults), 'bc-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(blendingResults), 'bc-export-term'), sortSelectValue('bc-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No blending checks yet for '+classFilter+'.') : 'No blending checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -4652,6 +4825,7 @@ function buildTimesTablesCard(r){
   var pct = r.totalFacts ? Math.round(r.totalCorrect/r.totalFacts*100) : 0;
   pe.textContent = r.totalCorrect + '/' + r.totalFacts + ' (' + pct + '%)';
   right.appendChild(pe);
+  var trendTt = buildTrendBadge(computeTrendDiff(timesTablesResults, r)); if(trendTt) right.appendChild(trendTt);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('times_tables', rr); }; })(r);
@@ -4687,7 +4861,7 @@ function renderTimesTablesResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('tt-list-empty');
   var summaryEl = document.getElementById('tt-summary');
-  var list = filterByTermSelect(filterByClass(timesTablesResults), 'tt-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(timesTablesResults), 'tt-export-term'), sortSelectValue('tt-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No times tables checks yet for '+classFilter+'.') : 'No times tables checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -6831,6 +7005,7 @@ function buildMathsCard(r){
   var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
+  var trendMt = buildTrendBadge(computeTrendDiff(mathsResults, r)); if(trendMt) right.appendChild(trendMt);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('maths', rr); }; })(r);
@@ -6866,7 +7041,7 @@ function renderMathsResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('mt-list-empty');
   var summaryEl = document.getElementById('mt-summary');
-  var list = filterByTermSelect(filterByClass(mathsResults), 'mt-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(mathsResults), 'mt-export-term'), sortSelectValue('mt-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Maths checks yet for '+classFilter+'.') : 'No Maths checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -8051,6 +8226,7 @@ function buildEnglishCard(r){
   var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
+  var trendEn = buildTrendBadge(computeTrendDiff(englishResults, r)); if(trendEn) right.appendChild(trendEn);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('english', rr); }; })(r);
@@ -8086,7 +8262,7 @@ function renderEnglishResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('en-list-empty');
   var summaryEl = document.getElementById('en-summary');
-  var list = filterByTermSelect(filterByClass(englishResults), 'en-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(englishResults), 'en-export-term'), sortSelectValue('en-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No English checks yet for '+classFilter+'.') : 'No English checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -8557,6 +8733,7 @@ function buildHandwritingCard(r){
   var pe = document.createElement('div'); pe.className = 'pct-pill';
   pe.textContent = r.itemsOk.length + '/' + r.total + ' (' + r.pct + '%)';
   right.appendChild(pe);
+  var trendHw = buildTrendBadge(computeTrendDiff(handwritingResults, r)); if(trendHw) right.appendChild(trendHw);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('handwriting', rr); }; })(r);
@@ -8592,7 +8769,7 @@ function renderHandwritingResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('hw-list-empty');
   var summaryEl = document.getElementById('hw-summary');
-  var list = filterByTermSelect(filterByClass(handwritingResults), 'hw-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(handwritingResults), 'hw-export-term'), sortSelectValue('hw-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No handwriting checks yet for '+classFilter+'.') : 'No handwriting checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -8892,6 +9069,7 @@ function buildEyCard(r){
   var pe = document.createElement('div'); pe.className = 'pct-pill';
   pe.textContent = r.itemsOk.length + '/' + r.total + ' (' + r.pct + '%)';
   right.appendChild(pe);
+  var trendEy = buildTrendBadge(computeTrendDiff(earlyYearsResults, r)); if(trendEy) right.appendChild(trendEy);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('early_years', rr); }; })(r);
@@ -8927,7 +9105,7 @@ function renderEyResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('ey-list-empty');
   var summaryEl = document.getElementById('ey-summary');
-  var list = filterByTermSelect(filterByClass(earlyYearsResults), 'ey-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(earlyYearsResults), 'ey-export-term'), sortSelectValue('ey-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Early Years checks yet for '+classFilter+'.') : 'No Early Years checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -15811,6 +15989,7 @@ function buildTopicCard(r){
   var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
+  var trendTp = buildTrendBadge(computeTrendDiff(topicResults, r)); if(trendTp) right.appendChild(trendTp);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('topics', rr); }; })(r);
@@ -15846,7 +16025,7 @@ function renderTopicResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('tp-list-empty');
   var summaryEl = document.getElementById('tp-summary');
-  var list = filterByTermSelect(filterByClass(topicResults), 'tp-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(topicResults), 'tp-export-term'), sortSelectValue('tp-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No topic checks yet for '+classFilter+'.') : 'No topic checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -16182,6 +16361,7 @@ function buildScienceCard(r){
   var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
+  var trendSc = buildTrendBadge(computeTrendDiff(scienceResults, r)); if(trendSc) right.appendChild(trendSc);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('science', rr); }; })(r);
@@ -16217,7 +16397,7 @@ function renderScienceResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('sc-list-empty');
   var summaryEl = document.getElementById('sc-summary');
-  var list = filterByTermSelect(filterByClass(scienceResults), 'sc-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(scienceResults), 'sc-export-term'), sortSelectValue('sc-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No science checks yet for '+classFilter+'.') : 'No science checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -16553,6 +16733,7 @@ function buildReCard(r){
   var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
+  var trendRe = buildTrendBadge(computeTrendDiff(reResults, r)); if(trendRe) right.appendChild(trendRe);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('re', rr); }; })(r);
@@ -16588,7 +16769,7 @@ function renderReResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('re-list-empty');
   var summaryEl = document.getElementById('re-summary');
-  var list = filterByTermSelect(filterByClass(reResults), 're-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(reResults), 're-export-term'), sortSelectValue('re-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No RE checks yet for '+classFilter+'.') : 'No RE checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -17245,6 +17426,7 @@ function buildMflCard(r){
   var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
+  var trendMfl = buildTrendBadge(computeTrendDiff(mflResults, r)); if(trendMfl) right.appendChild(trendMfl);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('mfl', rr); }; })(r);
@@ -17280,7 +17462,7 @@ function renderMflResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('mfl-list-empty');
   var summaryEl = document.getElementById('mfl-summary');
-  var list = filterByTermSelect(filterByClass(mflResults), 'mfl-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(mflResults), 'mfl-export-term'), sortSelectValue('mfl-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Languages checks yet for '+classFilter+'.') : 'No Languages checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -17622,6 +17804,7 @@ function buildMusicCard(r){
   var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
+  var trendMu = buildTrendBadge(computeTrendDiff(musicResults, r)); if(trendMu) right.appendChild(trendMu);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('music', rr); }; })(r);
@@ -17657,7 +17840,7 @@ function renderMusicResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('music-list-empty');
   var summaryEl = document.getElementById('music-summary');
-  var list = filterByTermSelect(filterByClass(musicResults), 'music-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(musicResults), 'music-export-term'), sortSelectValue('music-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Music checks yet for '+classFilter+'.') : 'No Music checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -17999,6 +18182,7 @@ function buildReasoningCard(r){
   var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
+  var trendRs = buildTrendBadge(computeTrendDiff(reasoningResults, r)); if(trendRs) right.appendChild(trendRs);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('reasoning', rr); }; })(r);
@@ -18034,7 +18218,7 @@ function renderReasoningResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('reasoning-list-empty');
   var summaryEl = document.getElementById('reasoning-summary');
-  var list = filterByTermSelect(filterByClass(reasoningResults), 'reasoning-export-term');
+  var list = sortResultList(filterByTermSelect(filterByClass(reasoningResults), 'reasoning-export-term'), sortSelectValue('reasoning-sort'));
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Reasoning checks yet for '+classFilter+'.') : 'No Reasoning checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
