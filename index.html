@@ -4010,27 +4010,37 @@ function groupByKey(list, keyFn, order){
 function renderGroups(container, list, keyFn, order, buildCard, singularLabel, pluralLabel, onHeaderClick){
   container.innerHTML = '';
   var groups = groupByKey(list, keyFn, order);
+  if(onHeaderClick){
+    /* Picking a year group here is just another step in the same pick-one
+       flow as subject and topic, so it uses the same phase-btn look
+       (badge + name + desc) instead of the collapsible-group summary
+       style used below. */
+    groups.forEach(function(g){
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'phase-btn';
+      btn.onclick = function(){ onHeaderClick(g.key); };
+      var badge = document.createElement('div'); badge.className = 'phase-badge';
+      var icon = document.createElement('i'); icon.className = 'ti ti-users'; icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
+      badge.appendChild(icon);
+      var textWrap = document.createElement('div');
+      var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = g.key;
+      var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = g.items.length + ' ' + (g.items.length===1 ? singularLabel : pluralLabel);
+      textWrap.appendChild(name); textWrap.appendChild(desc);
+      btn.appendChild(badge); btn.appendChild(textWrap);
+      container.appendChild(btn);
+    });
+    return;
+  }
   groups.forEach(function(g){
     var details = document.createElement('details'); details.className='year-group'; details.open = true;
     var summary = document.createElement('summary'); summary.className='year-group-summary';
     var nameSpan = document.createElement('span'); nameSpan.className='year-group-name'; nameSpan.textContent = g.key;
     var countSpan = document.createElement('span'); countSpan.className='year-group-count'; countSpan.textContent = g.items.length + ' ' + (g.items.length===1 ? singularLabel : pluralLabel);
-    if(onHeaderClick){
-      summary.classList.add('clickable-group');
-      var goChevron = document.createElement('span'); goChevron.className='chevron-go'; goChevron.textContent='›';
-      summary.appendChild(nameSpan); summary.appendChild(countSpan); summary.appendChild(goChevron);
-      summary.addEventListener('click', function(e){ e.preventDefault(); onHeaderClick(g.key); });
-      details.appendChild(summary);
-      /* No body appended - cards only render once the user has clicked
-         into a single year group via the filter above. */
-    } else {
-      var chevron = document.createElement('span'); chevron.className='chevron'; chevron.textContent='▸';
-      summary.appendChild(chevron); summary.appendChild(nameSpan); summary.appendChild(countSpan);
-      details.appendChild(summary);
-      var body = document.createElement('div'); body.className='year-group-body';
-      g.items.forEach(function(r){ body.appendChild(buildCard(r)); });
-      details.appendChild(body);
-    }
+    var chevron = document.createElement('span'); chevron.className='chevron'; chevron.textContent='▸';
+    summary.appendChild(chevron); summary.appendChild(nameSpan); summary.appendChild(countSpan);
+    details.appendChild(summary);
+    var body = document.createElement('div'); body.className='year-group-body';
+    g.items.forEach(function(r){ body.appendChild(buildCard(r)); });
+    details.appendChild(body);
     container.appendChild(details);
   });
 }
