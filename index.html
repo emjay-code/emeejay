@@ -1498,7 +1498,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Results</h2>
       <div class="tab-actions">
-        <select id="rv-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="rv-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportResultsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-results-btn" onclick="clearAll()">Clear all</button>
       </div>
@@ -1520,7 +1520,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header" style="margin-top:2rem;">
       <h2 style="margin-bottom:0;">Blending checks</h2>
       <div class="tab-actions">
-        <select id="bc-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="bc-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderBlendingResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportBlendingCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-blending-btn" onclick="clearAllBlending()">Clear all</button>
       </div>
@@ -1563,7 +1563,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Maths</h2>
       <div class="tab-actions">
-        <select id="mt-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="mt-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderMathsResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportMathsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-maths-btn" onclick="clearAllMaths()">Clear all</button>
       </div>
@@ -1606,7 +1606,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Times Tables</h2>
       <div class="tab-actions">
-        <select id="tt-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="tt-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderTimesTablesResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportTimesTablesCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-times-tables-btn" onclick="clearAllTimesTables()">Clear all</button>
       </div>
@@ -1649,7 +1649,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">English</h2>
       <div class="tab-actions">
-        <select id="en-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="en-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderEnglishResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportEnglishCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-english-btn" onclick="clearAllEnglish()">Clear all</button>
       </div>
@@ -1692,7 +1692,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Handwriting</h2>
       <div class="tab-actions">
-        <select id="hw-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="hw-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderHandwritingResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportHandwritingCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-handwriting-btn" onclick="clearAllHandwriting()">Clear all</button>
       </div>
@@ -1735,7 +1735,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Early Years</h2>
       <div class="tab-actions">
-        <select id="ey-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="ey-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderEyResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportEyCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-early_years-btn" onclick="clearAllEy()">Clear all</button>
       </div>
@@ -1778,7 +1778,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Topics</h2>
       <div class="tab-actions">
-        <select id="tp-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="tp-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderTopicResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportTopicCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-topics-btn" onclick="clearAllTopics()">Clear all</button>
       </div>
@@ -1821,7 +1821,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Science</h2>
       <div class="tab-actions">
-        <select id="sc-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="sc-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderScienceResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportScienceCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-science-btn" onclick="clearAllScience()">Clear all</button>
       </div>
@@ -1864,7 +1864,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">RE</h2>
       <div class="tab-actions">
-        <select id="re-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="re-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderReResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportReCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-re-btn" onclick="clearAllRe()">Clear all</button>
       </div>
@@ -1907,7 +1907,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Languages</h2>
       <div class="tab-actions">
-        <select id="mfl-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="mfl-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderMflResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportMflCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-mfl-btn" onclick="clearAllMfl()">Clear all</button>
       </div>
@@ -1950,7 +1950,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Music</h2>
       <div class="tab-actions">
-        <select id="music-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="music-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderMusicResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportMusicCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-music-btn" onclick="clearAllMusic()">Clear all</button>
       </div>
@@ -1993,7 +1993,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Reasoning</h2>
       <div class="tab-actions">
-        <select id="reasoning-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <select id="reasoning-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderReasoningResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
         <button class="icon-btn export-btn" onclick="exportReasoningCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-reasoning-btn" onclick="clearAllReasoning()">Clear all</button>
       </div>
@@ -3888,6 +3888,12 @@ function filterByClass(list){
   if(!classFilter) return list;
   return list.filter(function(r){ return (r.year || 'Not recorded') === classFilter; });
 }
+function filterByTermSelect(list, selectId){
+  var sel = document.getElementById(selectId);
+  var termFilter = sel ? sel.value : 'all';
+  if(termFilter==='all') return list;
+  return list.filter(function(r){ return getTerm(r.date)===termFilter; });
+}
 
 function showRvScreen(containerId, id){
   var container = document.getElementById(containerId);
@@ -3994,7 +4000,7 @@ function buildPupilCard(r){
 
 function renderResults(){
   var el=document.getElementById('rv-pupils');el.innerHTML='';
-  var list = filterByClass(results);
+  var list = filterByTermSelect(filterByClass(results), 'rv-export-term');
   if(!list.length){document.getElementById('rv-empty').style.display='block';document.getElementById('rv-empty').textContent = classFilter ? ('No assessments yet for '+classFilter+'.') : 'No assessments yet.';document.getElementById('rv-summary').style.display='none';return;}
   document.getElementById('rv-empty').style.display='none';document.getElementById('rv-summary').style.display='block';
   document.getElementById('rv-count').textContent=list.length;
@@ -4322,7 +4328,7 @@ function renderBlendingResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('bc-list-empty');
   var summaryEl = document.getElementById('bc-summary');
-  var list = filterByClass(blendingResults);
+  var list = filterByTermSelect(filterByClass(blendingResults), 'bc-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No blending checks yet for '+classFilter+'.') : 'No blending checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -4681,7 +4687,7 @@ function renderTimesTablesResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('tt-list-empty');
   var summaryEl = document.getElementById('tt-summary');
-  var list = filterByClass(timesTablesResults);
+  var list = filterByTermSelect(filterByClass(timesTablesResults), 'tt-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No times tables checks yet for '+classFilter+'.') : 'No times tables checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -6860,7 +6866,7 @@ function renderMathsResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('mt-list-empty');
   var summaryEl = document.getElementById('mt-summary');
-  var list = filterByClass(mathsResults);
+  var list = filterByTermSelect(filterByClass(mathsResults), 'mt-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Maths checks yet for '+classFilter+'.') : 'No Maths checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -8080,7 +8086,7 @@ function renderEnglishResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('en-list-empty');
   var summaryEl = document.getElementById('en-summary');
-  var list = filterByClass(englishResults);
+  var list = filterByTermSelect(filterByClass(englishResults), 'en-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No English checks yet for '+classFilter+'.') : 'No English checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -8586,7 +8592,7 @@ function renderHandwritingResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('hw-list-empty');
   var summaryEl = document.getElementById('hw-summary');
-  var list = filterByClass(handwritingResults);
+  var list = filterByTermSelect(filterByClass(handwritingResults), 'hw-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No handwriting checks yet for '+classFilter+'.') : 'No handwriting checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -8921,7 +8927,7 @@ function renderEyResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('ey-list-empty');
   var summaryEl = document.getElementById('ey-summary');
-  var list = filterByClass(earlyYearsResults);
+  var list = filterByTermSelect(filterByClass(earlyYearsResults), 'ey-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Early Years checks yet for '+classFilter+'.') : 'No Early Years checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -15795,7 +15801,7 @@ function renderTopicResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('tp-list-empty');
   var summaryEl = document.getElementById('tp-summary');
-  var list = filterByClass(topicResults);
+  var list = filterByTermSelect(filterByClass(topicResults), 'tp-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No topic checks yet for '+classFilter+'.') : 'No topic checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -16166,7 +16172,7 @@ function renderScienceResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('sc-list-empty');
   var summaryEl = document.getElementById('sc-summary');
-  var list = filterByClass(scienceResults);
+  var list = filterByTermSelect(filterByClass(scienceResults), 'sc-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No science checks yet for '+classFilter+'.') : 'No science checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -16537,7 +16543,7 @@ function renderReResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('re-list-empty');
   var summaryEl = document.getElementById('re-summary');
-  var list = filterByClass(reResults);
+  var list = filterByTermSelect(filterByClass(reResults), 're-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No RE checks yet for '+classFilter+'.') : 'No RE checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -17229,7 +17235,7 @@ function renderMflResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('mfl-list-empty');
   var summaryEl = document.getElementById('mfl-summary');
-  var list = filterByClass(mflResults);
+  var list = filterByTermSelect(filterByClass(mflResults), 'mfl-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Languages checks yet for '+classFilter+'.') : 'No Languages checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -17606,7 +17612,7 @@ function renderMusicResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('music-list-empty');
   var summaryEl = document.getElementById('music-summary');
-  var list = filterByClass(musicResults);
+  var list = filterByTermSelect(filterByClass(musicResults), 'music-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Music checks yet for '+classFilter+'.') : 'No Music checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
@@ -17983,7 +17989,7 @@ function renderReasoningResults(){
   el.innerHTML = '';
   var emptyEl = document.getElementById('reasoning-list-empty');
   var summaryEl = document.getElementById('reasoning-summary');
-  var list = filterByClass(reasoningResults);
+  var list = filterByTermSelect(filterByClass(reasoningResults), 'reasoning-export-term');
   if(!list.length){
     if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Reasoning checks yet for '+classFilter+'.') : 'No Reasoning checks yet.'; }
     if(summaryEl) summaryEl.style.display = 'none';
