@@ -1,0 +1,10 @@
+{
+  "name": "emjay-phonics-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "stripe": "^17.4.0",
+    "@supabase/supabase-js": "^2.45.4",
+    "raw-body": "^3.0.0"
+  }
+}
