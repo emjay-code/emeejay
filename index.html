@@ -262,6 +262,9 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .subj-early-years{background:#FFF0E9;border-color:#F6CFB8;}
 .subj-early-years .subject-icon{background:#D9722F;}
 .subj-early-years .subject-name{color:#9A4C15;}
+.subj-reasoning{background:#EAF0FB;border-color:#C3D4F0;}
+.subj-reasoning .subject-icon{background:#2E5DA8;}
+.subj-reasoning .subject-name{color:#1E3E73;}
 .tt-table-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-top:0.75rem;}
 .tt-table-btn{padding:0.75rem 0;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-2);font-size:15px;font-weight:600;color:var(--text-primary);cursor:pointer;transition:background 0.12s,border-color 0.12s;}
 .tt-table-btn:hover{background:#E5F6F0;border-color:#1E9E76;}
@@ -578,6 +581,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <div class="subject-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
           <div class="subject-name">Music</div>
           <div class="subject-desc">Elements, instruments, notation, composers and more</div>
+        </button>
+        <button class="subject-card subj-reasoning" onclick="goToSubject('reasoning')">
+          <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+          <div class="subject-name">Reasoning</div>
+          <div class="subject-desc">Verbal and Non-Verbal Reasoning checks</div>
         </button>
       </div>
       <div style="text-align:center;font-size:13px;color:var(--text-secondary);margin-top:0.85rem;">Can't find what you need? <a href="javascript:void(0)" onclick="openFeedbackModal('Topic or check request')" style="color:var(--hp-purple);font-weight:500;">Request a new topic or check</a></div>
@@ -1021,6 +1029,69 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     </div>
   </div>
 
+  <div class="screen" id="screen-reasoning-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-reasoning">
+      <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Reasoning</div>
+    </div>
+    <div class="card" id="reasoning-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a topic</span>
+      </div>
+      <div id="reasoning-topic-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-reasoning-tiers">
+    <a href="javascript:void(0)" class="back-link" onclick="backToReasoningTopics()">&larr; Back to topics</a>
+    <div class="subject-banner subj-reasoning">
+      <div class="subject-icon" id="reasoning-banner-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="reasoning-banner-title">Topic</div>
+    </div>
+    <div class="card" id="reasoning-tier-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" onclick="startReasoningCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startReasoningCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
+      <button class="phase-btn" onclick="startReasoningCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveReasoningTier('KS1')">KS1</button>
+        <button type="button" class="year-btn" onclick="startLiveReasoningTier('LKS2')">LKS2</button>
+        <button type="button" class="year-btn" onclick="startLiveReasoningTier('UKS2')">UKS2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-reasoning-check">
+    <div class="progress-bar"><div class="progress-fill" id="reasoning-prog"></div></div>
+    <div class="sound-counter" id="reasoning-counter">Question 1 of 12</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child this question, then tap the answer they give</div>
+      <div class="gr-question-display" id="reasoning-question-display"></div>
+      <div class="mc-grid mc-grid-text" id="reasoning-answer-display"></div>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-reasoning-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Reasoning check for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:0.25rem;" id="reasoning-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="reasoning-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="reasoning-res-total"></div><div class="stat-lbl" id="reasoning-res-total-lbl">Correct</div></div>
+      </div>
+    </div>
+    <div class="card" id="reasoning-res-missed-wrap" style="display:none;"><div class="section-hd">Questions to revisit</div><div id="reasoning-res-missed-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New Reasoning check</button>
+  </div>
+
   <div class="screen" id="screen-live-dashboard">
     <div class="card" style="text-align:center;padding:1.5rem;">
       <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;" id="live-session-label">Live session</div>
@@ -1379,6 +1450,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <div class="subject-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
           <div class="subject-name">Music</div>
           <div class="subject-desc">Music check results</div>
+        </button>
+        <button class="subject-card subj-reasoning" onclick="goToResultsSubject('reasoning')">
+          <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+          <div class="subject-name">Reasoning</div>
+          <div class="subject-desc">Reasoning check results</div>
         </button>
       </div>
     </div>
@@ -1878,6 +1954,49 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     </div>
     <div id="music-list"></div>
   </div>
+
+  <div class="rv-screen" id="rv-reasoning-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-reasoning">
+      <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Reasoning results</div>
+    </div>
+    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
+      <div class="group-toggle-row" style="margin-bottom:0;">
+        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
+        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
+      </div>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Reasoning</h2>
+      <div class="tab-actions">
+        <select id="reasoning-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportReasoningCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-reasoning-btn" onclick="clearAllReasoning()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="reasoning-group-year-btn" onclick="setReasoningGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="reasoning-group-term-btn" onclick="setReasoningGroupMode('term')">Term</button>
+    </div>
+    <div id="reasoning-list-empty" class="empty-state" style="display:none;">No Reasoning checks yet.</div>
+    <div id="reasoning-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="reasoning-count">0</div><div class="stat-lbl">Children checked</div></div>
+        <div class="stat-card"><div class="stat-val" id="reasoning-avg">0%</div><div class="stat-lbl">Average score</div></div>
+      </div>
+    </div>
+    <div id="reasoning-list"></div>
+  </div>
 </div>
 
 <div id="tab-analytics" style="display:none;">
@@ -1939,6 +2058,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <div class="subject-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
           <div class="subject-name">Music</div>
           <div class="subject-desc">Music check analytics</div>
+        </button>
+        <button class="subject-card subj-reasoning" onclick="goToAnalyticsSubject('reasoning')">
+          <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+          <div class="subject-name">Reasoning</div>
+          <div class="subject-desc">Reasoning check analytics</div>
         </button>
       </div>
     </div>
@@ -2354,6 +2478,42 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       </div>
     </div>
   </div>
+
+  <div class="rv-screen" id="an-reasoning-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-reasoning">
+      <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Reasoning analytics</div>
+    </div>
+    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
+      <div class="group-toggle-row" style="margin-bottom:0;">
+        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
+        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
+      </div>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportReasoningAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="reasoning-an-empty" class="empty-state" style="display:none;">No Reasoning check data yet. Complete a Reasoning check first.</div>
+    <div id="reasoning-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Reasoning check overview</h2><div id="reasoning-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="reasoning-an-missed"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">Reasoning check trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children checked more than once, showing change over time.</p>
+        <div id="reasoning-an-trends"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="tab-children" style="display:none;">
@@ -2397,6 +2557,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">RE</h2><div id="ch-profile-re"></div><div id="ch-profile-re-empty" style="font-size:13px;color:var(--text-muted);">No RE checks yet.</div></div>
     <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">MFL</h2><div id="ch-profile-mfl"></div><div id="ch-profile-mfl-empty" style="font-size:13px;color:var(--text-muted);">No MFL checks yet.</div></div>
     <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Music</h2><div id="ch-profile-music"></div><div id="ch-profile-music-empty" style="font-size:13px;color:var(--text-muted);">No Music checks yet.</div></div>
+    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Reasoning</h2><div id="ch-profile-reasoning"></div><div id="ch-profile-reasoning-empty" style="font-size:13px;color:var(--text-muted);">No Reasoning checks yet.</div></div>
   </div>
 </div>
 
@@ -2593,7 +2754,7 @@ var DEMO_EMAIL = 'demo@emjayphonicstracker.com';
 var DEMO_PASSWORD = 'EmjayDemo2026!';
 var DEMO_ACCESS_CODE = 'DEMOLITION5678';
 var DEMO_SCHOOL_ID = '8f2b768c-8251-4351-9759-26b6271319ed';
-var DEMO_RESET_TABLES = ['results','blending_results','maths_results','maths_topics_results','english_results','handwriting_results','topic_results','science_results','re_results','mfl_results','music_results','early_years_results','pupils'];
+var DEMO_RESET_TABLES = ['results','blending_results','maths_results','maths_topics_results','english_results','handwriting_results','topic_results','science_results','re_results','mfl_results','music_results','early_years_results','reasoning_results','pupils'];
 async function resetDemoData(){
   try{
     await Promise.all(DEMO_RESET_TABLES.map(function(t){
@@ -2864,6 +3025,7 @@ async function onSignedIn(){
   var clearScienceBtn = document.getElementById('clear-science-btn');
   var clearReBtn = document.getElementById('clear-re-btn');
   var clearEyBtn = document.getElementById('clear-early_years-btn');
+  var clearReasoningBtn = document.getElementById('clear-reasoning-btn');
   if(clearResultsBtn) clearResultsBtn.style.display = isDemoSchool() ? 'none' : '';
   if(clearBlendingBtn) clearBlendingBtn.style.display = isDemoSchool() ? 'none' : '';
   if(clearMathsBtn) clearMathsBtn.style.display = isDemoSchool() ? 'none' : '';
@@ -2874,6 +3036,7 @@ async function onSignedIn(){
   if(clearScienceBtn) clearScienceBtn.style.display = isDemoSchool() ? 'none' : '';
   if(clearReBtn) clearReBtn.style.display = isDemoSchool() ? 'none' : '';
   if(clearEyBtn) clearEyBtn.style.display = isDemoSchool() ? 'none' : '';
+  if(clearReasoningBtn) clearReasoningBtn.style.display = isDemoSchool() ? 'none' : '';
 
   document.getElementById('landing-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'none';
@@ -2893,6 +3056,7 @@ async function onSignedIn(){
   await loadMflResults();
   await loadMusicResults();
   await loadEyResults();
+  await loadReasoningResults();
 
   if(isDemoSchool() && sess.data.session){
     demoAccessToken = sess.data.session.access_token;
@@ -2974,8 +3138,8 @@ async function switchTab(t){
     /* Re-fetch from Supabase rather than rendering cached arrays - a live
        session writes results from the child's own browser, so this
        teacher's locally-loaded data can be stale until refreshed. */
-    await Promise.all([loadResults(), loadBlendingResults(), loadMathsResults(), loadTimesTablesResults(), loadEnglishResults(), loadHandwritingResults(), loadTopicResults(), loadScienceResults(), loadReResults(), loadMflResults(), loadMusicResults(), loadEyResults()]);
-    renderAnalytics(); renderBlendingAnalytics(); renderMathsAnalytics(); renderTimesTablesAnalytics(); renderEnglishAnalytics(); renderHandwritingAnalytics(); renderTopicAnalytics(); renderScienceAnalytics(); renderReAnalytics(); renderMflAnalytics(); renderMusicAnalytics(); renderEyAnalytics();
+    await Promise.all([loadResults(), loadBlendingResults(), loadMathsResults(), loadTimesTablesResults(), loadEnglishResults(), loadHandwritingResults(), loadTopicResults(), loadScienceResults(), loadReResults(), loadMflResults(), loadMusicResults(), loadEyResults(), loadReasoningResults()]);
+    renderAnalytics(); renderBlendingAnalytics(); renderMathsAnalytics(); renderTimesTablesAnalytics(); renderEnglishAnalytics(); renderHandwritingAnalytics(); renderTopicAnalytics(); renderScienceAnalytics(); renderReAnalytics(); renderMflAnalytics(); renderMusicAnalytics(); renderEyAnalytics(); renderReasoningAnalytics();
   }
   if(t==='children'){
     showRvScreen('tab-children', 'ch-list-screen');
@@ -3156,7 +3320,7 @@ function syncYearButtons(selectId){
 function buildMeta(r){var parts=[r.set,r.date];if(r.year)parts.push(r.year);if(r.gender)parts.push(r.gender);if(r.needs)parts.push(r.needs);return parts.join(' / ');}
 
 /* ---------- Edit extra pupil details (year/gender/dob/needs) on any result row ---------- */
-var EDIT_TABLE_BY_SUBJECT = { phonics:'results', blending:'blending_results', maths:'maths_topics_results', times_tables:'maths_results', english:'english_results', handwriting:'handwriting_results', topics:'topic_results', science:'science_results', re:'re_results', mfl:'mfl_results', music:'music_results', early_years:'early_years_results' };
+var EDIT_TABLE_BY_SUBJECT = { phonics:'results', blending:'blending_results', maths:'maths_topics_results', times_tables:'maths_results', english:'english_results', handwriting:'handwriting_results', topics:'topic_results', science:'science_results', re:'re_results', mfl:'mfl_results', music:'music_results', early_years:'early_years_results', reasoning:'reasoning_results' };
 var editModalState = null;
 function refreshAfterEdit(subject){
   if(subject === 'phonics') return loadResults();
@@ -3171,6 +3335,7 @@ function refreshAfterEdit(subject){
   if(subject === 'mfl') return loadMflResults().then(function(){ renderMflAnalytics(); });
   if(subject === 'music') return loadMusicResults().then(function(){ renderMusicAnalytics(); });
   if(subject === 'early_years') return loadEyResults().then(function(){ renderEyAnalytics(); });
+  if(subject === 'reasoning') return loadReasoningResults().then(function(){ renderReasoningAnalytics(); });
 }
 function openEditDetails(subject, r){
   if(isDemoSchool()){ alert('This is the shared demo account, so its details can\'t be edited.'); return; }
@@ -3477,6 +3642,7 @@ async function openChildProfile(id){
   var mfl_ = await sb.from('mfl_results').select('*').ilike('pupil_name', nameFilter);
   var music_ = await sb.from('music_results').select('*').ilike('pupil_name', nameFilter);
   var earlyYears_ = await sb.from('early_years_results').select('*').ilike('pupil_name', nameFilter);
+  var reasoning_ = await sb.from('reasoning_results').select('*').ilike('pupil_name', nameFilter);
 
   renderProfileSection('phonics', (results_.data||[]).map(rowToResult), buildPupilCard);
   renderProfileSection('blending', (blending_.data||[]).map(rowToBlendingResult), buildBlendingCard);
@@ -3490,6 +3656,7 @@ async function openChildProfile(id){
   renderProfileSection('mfl', (mfl_.data||[]).map(rowToMflResult), buildMflCard);
   renderProfileSection('music', (music_.data||[]).map(rowToMusicResult), buildMusicCard);
   renderProfileSection('early_years', (earlyYears_.data||[]).map(rowToEyResult), buildEyCard);
+  renderProfileSection('reasoning', (reasoning_.data||[]).map(rowToReasoningResult), buildReasoningCard);
 }
 function renderProfileSection(key, list, buildFn){
   var el = document.getElementById('ch-profile-' + key);
@@ -3555,6 +3722,7 @@ function setClassFilter(val){
   renderMflResults();
   renderMusicResults();
   renderEyResults();
+  renderReasoningResults();
   renderAnalytics();
   renderBlendingAnalytics();
   renderMathsAnalytics();
@@ -3567,6 +3735,7 @@ function setClassFilter(val){
   renderMflAnalytics();
   renderMusicAnalytics();
   renderEyAnalytics();
+  renderReasoningAnalytics();
 }
 function filterByClass(list){
   if(!classFilter) return list;
@@ -3579,8 +3748,8 @@ function showRvScreen(containerId, id){
   container.querySelectorAll('.rv-screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
 }
-var SUBJECT_RESULTS_SCREENS = {phonics:'rv-phonics-section', maths:'rv-maths-section', times_tables:'rv-times-tables-section', english:'rv-english-section', handwriting:'rv-handwriting-section', topics:'rv-topics-section', science:'rv-science-section', re:'rv-re-section', mfl:'rv-mfl-section', music:'rv-music-section', early_years:'rv-early_years-section'};
-var SUBJECT_ANALYTICS_SCREENS = {phonics:'an-phonics-section', maths:'an-maths-section', times_tables:'an-times-tables-section', english:'an-english-section', handwriting:'an-handwriting-section', topics:'an-topics-section', science:'an-science-section', re:'an-re-section', mfl:'an-mfl-section', music:'an-music-section', early_years:'an-early_years-section'};
+var SUBJECT_RESULTS_SCREENS = {phonics:'rv-phonics-section', maths:'rv-maths-section', times_tables:'rv-times-tables-section', english:'rv-english-section', handwriting:'rv-handwriting-section', topics:'rv-topics-section', science:'rv-science-section', re:'rv-re-section', mfl:'rv-mfl-section', music:'rv-music-section', early_years:'rv-early_years-section', reasoning:'rv-reasoning-section'};
+var SUBJECT_ANALYTICS_SCREENS = {phonics:'an-phonics-section', maths:'an-maths-section', times_tables:'an-times-tables-section', english:'an-english-section', handwriting:'an-handwriting-section', topics:'an-topics-section', science:'an-science-section', re:'an-re-section', mfl:'an-mfl-section', music:'an-music-section', early_years:'an-early_years-section', reasoning:'an-reasoning-section'};
 function goToResultsSubject(subj){
   showRvScreen('tab-results', SUBJECT_RESULTS_SCREENS[subj] || 'rv-phonics-section');
 }
@@ -13068,6 +13237,2197 @@ var MUSIC_TOPICS = {
     }
   }
 };
+var REASONING_TOPICS = {
+  "verbal": {
+    "key": "verbal",
+    "label": "Verbal Reasoning",
+    "icon": "ti-brain",
+    "desc": "Word codes, analogies, hidden words and word logic",
+    "questions": {
+      "KS1": [
+        {
+          "q": "Which word does NOT belong with the others: One, Two, Three, Cat?",
+          "a": "Cat",
+          "options": [
+            "Three",
+            "One",
+            "Cat",
+            "Two"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'hot'?",
+          "a": "cold",
+          "options": [
+            "far",
+            "quiet",
+            "closed",
+            "cold"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'day'?",
+          "a": "night",
+          "options": [
+            "sad",
+            "night",
+            "thin",
+            "down"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'fast'?",
+          "a": "slow",
+          "options": [
+            "new",
+            "slow",
+            "night",
+            "thin"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'close'?",
+          "a": "shut",
+          "options": [
+            "little",
+            "hop",
+            "finish",
+            "shut"
+          ]
+        },
+        {
+          "q": "Which word does NOT belong with the others: Ruler, Rubber, Sharpener, Orange?",
+          "a": "Orange",
+          "options": [
+            "Rubber",
+            "Orange",
+            "Sharpener",
+            "Ruler"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'early'?",
+          "a": "late",
+          "options": [
+            "late",
+            "small",
+            "dry",
+            "empty"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'easy'?",
+          "a": "simple",
+          "options": [
+            "start",
+            "simple",
+            "glad",
+            "silent"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'shout'?",
+          "a": "yell",
+          "options": [
+            "yell",
+            "giggle",
+            "silent",
+            "hop"
+          ]
+        },
+        {
+          "q": "Which word does NOT belong with the others: Shirt, Trousers, Socks, Banana?",
+          "a": "Banana",
+          "options": [
+            "Banana",
+            "Shirt",
+            "Socks",
+            "Trousers"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'happy'?",
+          "a": "glad",
+          "options": [
+            "stroll",
+            "large",
+            "quick",
+            "glad"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'clean'?",
+          "a": "dirty",
+          "options": [
+            "quiet",
+            "hard",
+            "cold",
+            "dirty"
+          ]
+        },
+        {
+          "q": "Which word does NOT belong with the others: Football, Tennis, Cricket, Piano?",
+          "a": "Piano",
+          "options": [
+            "Piano",
+            "Football",
+            "Cricket",
+            "Tennis"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'long'?",
+          "a": "short",
+          "options": [
+            "empty",
+            "small",
+            "short",
+            "heavy"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'open'?",
+          "a": "closed",
+          "options": [
+            "short",
+            "closed",
+            "far",
+            "new"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'soft'?",
+          "a": "hard",
+          "options": [
+            "hard",
+            "dirty",
+            "heavy",
+            "down"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'wide'?",
+          "a": "narrow",
+          "options": [
+            "dirty",
+            "far",
+            "short",
+            "narrow"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'fast'?",
+          "a": "quick",
+          "options": [
+            "quick",
+            "clever",
+            "afraid",
+            "see"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'end'?",
+          "a": "finish",
+          "options": [
+            "little",
+            "shut",
+            "afraid",
+            "finish"
+          ]
+        },
+        {
+          "q": "Which word does NOT belong with the others: Dog, Cat, Rabbit, Table?",
+          "a": "Table",
+          "options": [
+            "Rabbit",
+            "Cat",
+            "Dog",
+            "Table"
+          ]
+        },
+        {
+          "q": "Which word does NOT belong with the others: January, March, May, Sunday?",
+          "a": "Sunday",
+          "options": [
+            "Sunday",
+            "March",
+            "May",
+            "January"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'look'?",
+          "a": "see",
+          "options": [
+            "silent",
+            "hop",
+            "toss",
+            "see"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'wet'?",
+          "a": "dry",
+          "options": [
+            "hard",
+            "night",
+            "dry",
+            "cold"
+          ]
+        },
+        {
+          "q": "Which word does NOT belong with the others: Carrot, Potato, Onion, Strawberry?",
+          "a": "Strawberry",
+          "options": [
+            "Onion",
+            "Potato",
+            "Carrot",
+            "Strawberry"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'throw'?",
+          "a": "toss",
+          "options": [
+            "see",
+            "stroll",
+            "toss",
+            "glad"
+          ]
+        },
+        {
+          "q": "Which word does NOT belong with the others: Mum, Dad, Sister, Teacher?",
+          "a": "Teacher",
+          "options": [
+            "Sister",
+            "Mum",
+            "Teacher",
+            "Dad"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'begin'?",
+          "a": "start",
+          "options": [
+            "start",
+            "afraid",
+            "toss",
+            "large"
+          ]
+        },
+        {
+          "q": "Which word does NOT belong with the others: Car, Bus, Train, Apple?",
+          "a": "Apple",
+          "options": [
+            "Car",
+            "Train",
+            "Bus",
+            "Apple"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'jump'?",
+          "a": "hop",
+          "options": [
+            "little",
+            "stroll",
+            "hop",
+            "afraid"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'thick'?",
+          "a": "thin",
+          "options": [
+            "dirty",
+            "thin",
+            "late",
+            "sad"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'sad'?",
+          "a": "unhappy",
+          "options": [
+            "unhappy",
+            "yell",
+            "silent",
+            "see"
+          ]
+        },
+        {
+          "q": "Which word does NOT belong with the others: Red, Blue, Green, Happy?",
+          "a": "Happy",
+          "options": [
+            "Blue",
+            "Red",
+            "Happy",
+            "Green"
+          ]
+        },
+        {
+          "q": "Which word does NOT belong with the others: Pen, Pencil, Crayon, Spoon?",
+          "a": "Spoon",
+          "options": [
+            "Crayon",
+            "Spoon",
+            "Pencil",
+            "Pen"
+          ]
+        },
+        {
+          "q": "Which word means almost the same as 'pretty'?",
+          "a": "beautiful",
+          "options": [
+            "beautiful",
+            "sleepy",
+            "quick",
+            "hop"
+          ]
+        },
+        {
+          "q": "What is the opposite of 'old'?",
+          "a": "new",
+          "options": [
+            "down",
+            "new",
+            "cold",
+            "sad"
+          ]
+        },
+        {
+          "q": "Which word does NOT belong with the others: Summer, Winter, Autumn, Monday?",
+          "a": "Monday",
+          "options": [
+            "Winter",
+            "Summer",
+            "Monday",
+            "Autumn"
+          ]
+        }
+      ],
+      "LKS2": [
+        {
+          "q": "Bird is to Nest as Bee is to ___?",
+          "a": "Hive",
+          "options": [
+            "Hive",
+            "Slow",
+            "Hear",
+            "Cat"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places forward through the alphabet (so BOX is written as DQZ). Using the same code, how would LEG be written?",
+          "a": "NGI",
+          "options": [
+            "IBD",
+            "NGI",
+            "MFH",
+            "JCE"
+          ]
+        },
+        {
+          "q": "Eye is to See as Ear is to ___?",
+          "a": "Hear",
+          "options": [
+            "Princess",
+            "Down",
+            "Fly",
+            "Hear"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places forward through the alphabet (so LEG is written as NGI). Using the same code, how would FISH be written?",
+          "a": "HKUJ",
+          "options": [
+            "ILVK",
+            "DGQF",
+            "GJTI",
+            "HKUJ"
+          ]
+        },
+        {
+          "q": "What compound word do WATER and FALL make when joined together?",
+          "a": "Waterfall",
+          "options": [
+            "Waterfall",
+            "Armchair",
+            "Notebook",
+            "Backpack"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places forward through the alphabet (so EGG is written as GII). Using the same code, how would GATE be written?",
+          "a": "ICVG",
+          "options": [
+            "ICVG",
+            "JDWH",
+            "EYRC",
+            "FZSD"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places forward through the alphabet (so CUP is written as EWR). Using the same code, how would BOOK be written?",
+          "a": "DQQM",
+          "options": [
+            "DQQM",
+            "ERRN",
+            "ZMMI",
+            "YLLH"
+          ]
+        },
+        {
+          "q": "Petal is to Flower as Leaf is to ___?",
+          "a": "Tree",
+          "options": [
+            "Princess",
+            "Lamb",
+            "Tree",
+            "Hive"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 1 place forward through the alphabet (so BIRD is written as CJSE). Using the same code, how would WIN be written?",
+          "a": "XJO",
+          "options": [
+            "ZLQ",
+            "XJO",
+            "TFK",
+            "UGL"
+          ]
+        },
+        {
+          "q": "What compound word do DAY and LIGHT make when joined together?",
+          "a": "Daylight",
+          "options": [
+            "Notebook",
+            "Firefly",
+            "Daylight",
+            "Sunflower"
+          ]
+        },
+        {
+          "q": "What compound word do TOOTH and BRUSH make when joined together?",
+          "a": "Toothbrush",
+          "options": [
+            "Rainbow",
+            "Grandfather",
+            "Toothbrush",
+            "Notebook"
+          ]
+        },
+        {
+          "q": "What compound word do STAR and FISH make when joined together?",
+          "a": "Starfish",
+          "options": [
+            "Grandfather",
+            "Starfish",
+            "Cupcake",
+            "Football"
+          ]
+        },
+        {
+          "q": "Finger is to Hand as Toe is to ___?",
+          "a": "Foot",
+          "options": [
+            "Puppy",
+            "Foot",
+            "Tree",
+            "Down"
+          ]
+        },
+        {
+          "q": "What compound word do GRAND and FATHER make when joined together?",
+          "a": "Grandfather",
+          "options": [
+            "Backpack",
+            "Waterfall",
+            "Grandfather",
+            "Rainbow"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 1 place forward through the alphabet (so BIG is written as CJH). Using the same code, how would EGG be written?",
+          "a": "FHH",
+          "options": [
+            "HJJ",
+            "BDD",
+            "DFF",
+            "FHH"
+          ]
+        },
+        {
+          "q": "What compound word do FOOT and BALL make when joined together?",
+          "a": "Football",
+          "options": [
+            "Waterfall",
+            "Backpack",
+            "Football",
+            "Daylight"
+          ]
+        },
+        {
+          "q": "What compound word do FIRE and FLY make when joined together?",
+          "a": "Firefly",
+          "options": [
+            "Rainbow",
+            "Butterfly",
+            "Firefly",
+            "Backpack"
+          ]
+        },
+        {
+          "q": "Fish is to Swim as Bird is to ___?",
+          "a": "Fly",
+          "options": [
+            "Hospital",
+            "Tree",
+            "Painting",
+            "Fly"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 1 place forward through the alphabet (so WIN is written as XJO). Using the same code, how would BOOK be written?",
+          "a": "CPPL",
+          "options": [
+            "DQQM",
+            "ERRN",
+            "CPPL",
+            "ZMMI"
+          ]
+        },
+        {
+          "q": "What compound word do BLACK and BOARD make when joined together?",
+          "a": "Blackboard",
+          "options": [
+            "Firefly",
+            "Backpack",
+            "Blackboard",
+            "Cupcake"
+          ]
+        },
+        {
+          "q": "Teacher is to School as Doctor is to ___?",
+          "a": "Hospital",
+          "options": [
+            "Princess",
+            "Hospital",
+            "Down",
+            "Hot"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 1 place forward through the alphabet (so BOOK is written as CPPL). Using the same code, how would FISH be written?",
+          "a": "GJTI",
+          "options": [
+            "GJTI",
+            "CFPE",
+            "DGQF",
+            "ILVK"
+          ]
+        },
+        {
+          "q": "Big is to Small as Fast is to ___?",
+          "a": "Slow",
+          "options": [
+            "Foot",
+            "Slow",
+            "Lamb",
+            "Hot"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places forward through the alphabet (so GATE is written as ICVG). Using the same code, how would MILK be written?",
+          "a": "OKNM",
+          "options": [
+            "LHKJ",
+            "OKNM",
+            "JFIH",
+            "KGJI"
+          ]
+        },
+        {
+          "q": "Water is to Wet as Fire is to ___?",
+          "a": "Hot",
+          "options": [
+            "Cut",
+            "Painting",
+            "Hot",
+            "Hear"
+          ]
+        },
+        {
+          "q": "Hot is to Cold as Up is to ___?",
+          "a": "Down",
+          "options": [
+            "Lamb",
+            "Down",
+            "Cat",
+            "Foot"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 1 place forward through the alphabet (so BAT is written as CBU). Using the same code, how would CUP be written?",
+          "a": "DVQ",
+          "options": [
+            "EWR",
+            "BTO",
+            "DVQ",
+            "ASN"
+          ]
+        },
+        {
+          "q": "What compound word do CUP and CAKE make when joined together?",
+          "a": "Cupcake",
+          "options": [
+            "Cupcake",
+            "Backpack",
+            "Rainbow",
+            "Starfish"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places forward through the alphabet (so MILK is written as OKNM). Using the same code, how would CUP be written?",
+          "a": "EWR",
+          "options": [
+            "BTO",
+            "FXS",
+            "ZRM",
+            "EWR"
+          ]
+        },
+        {
+          "q": "Cow is to Calf as Sheep is to ___?",
+          "a": "Lamb",
+          "options": [
+            "Foot",
+            "Lamb",
+            "Fly",
+            "Cat"
+          ]
+        },
+        {
+          "q": "What compound word do SUN and FLOWER make when joined together?",
+          "a": "Sunflower",
+          "options": [
+            "Blackboard",
+            "Notebook",
+            "Grandfather",
+            "Sunflower"
+          ]
+        },
+        {
+          "q": "What compound word do BACK and PACK make when joined together?",
+          "a": "Backpack",
+          "options": [
+            "Grandfather",
+            "Backpack",
+            "Notebook",
+            "Waterfall"
+          ]
+        },
+        {
+          "q": "Author is to Book as Artist is to ___?",
+          "a": "Painting",
+          "options": [
+            "Cat",
+            "Painting",
+            "Slow",
+            "Hive"
+          ]
+        },
+        {
+          "q": "King is to Queen as Prince is to ___?",
+          "a": "Princess",
+          "options": [
+            "Tree",
+            "Cut",
+            "Hive",
+            "Princess"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 1 place forward through the alphabet (so STAR is written as TUBS). Using the same code, how would EGG be written?",
+          "a": "FHH",
+          "options": [
+            "DFF",
+            "FHH",
+            "HJJ",
+            "GII"
+          ]
+        },
+        {
+          "q": "What compound word do BUTTER and FLY make when joined together?",
+          "a": "Butterfly",
+          "options": [
+            "Rainbow",
+            "Daylight",
+            "Snowman",
+            "Butterfly"
+          ]
+        }
+      ],
+      "UKS2": [
+        {
+          "q": "Which smaller word is hidden inside the word STOP?",
+          "a": "TOP",
+          "options": [
+            "PLANE",
+            "THE",
+            "TOP",
+            "ARROW"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places forward through the alphabet (so LAMP is written as NCOR). Using the same code, how would PEN be written?",
+          "a": "RGP",
+          "options": [
+            "NCL",
+            "MBK",
+            "RGP",
+            "ODM"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 1 place back through the alphabet (so ARM is written as ZQL). Using the same code, how would JOB be written?",
+          "a": "INA",
+          "options": [
+            "INA",
+            "HMZ",
+            "MRE",
+            "GLY"
+          ]
+        },
+        {
+          "q": "Bee is to Hive as Wolf is to ___?",
+          "a": "Den",
+          "options": [
+            "Speed",
+            "Room",
+            "Den",
+            "Book"
+          ]
+        },
+        {
+          "q": "Which smaller word is hidden inside the word HEATER?",
+          "a": "HEAT",
+          "options": [
+            "CAN",
+            "HEAT",
+            "LOW",
+            "THE"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 1 place back through the alphabet (so BIG is written as AHF). Using the same code, how would LAMP be written?",
+          "a": "KZLO",
+          "options": [
+            "IXJM",
+            "NCOR",
+            "KZLO",
+            "MBNQ"
+          ]
+        },
+        {
+          "q": "Sapling is to Tree as Kitten is to ___?",
+          "a": "Cat",
+          "options": [
+            "Cat",
+            "Wet",
+            "Drink",
+            "Book"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places forward through the alphabet (so PEN is written as RGP). Using the same code, how would ARM be written?",
+          "a": "CTO",
+          "options": [
+            "CTO",
+            "XOJ",
+            "ZQL",
+            "YPK"
+          ]
+        },
+        {
+          "q": "Which smaller word is hidden inside the word SPARROW?",
+          "a": "ARROW",
+          "options": [
+            "ARROW",
+            "RAP",
+            "CAN",
+            "READ"
+          ]
+        },
+        {
+          "q": "Tadpole is to Frog as Caterpillar is to ___?",
+          "a": "Butterfly",
+          "options": [
+            "Butterfly",
+            "Sculpt",
+            "Wet",
+            "Negative"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places back through the alphabet (so FROG is written as DPME). Using the same code, how would DESK be written?",
+          "a": "BCQI",
+          "options": [
+            "EFTL",
+            "FGUM",
+            "BCQI",
+            "GHVN"
+          ]
+        },
+        {
+          "q": "Thermometer is to Temperature as Ruler is to ___?",
+          "a": "Length",
+          "options": [
+            "Metal",
+            "Bird",
+            "Length",
+            "Room"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places back through the alphabet (so BOOK is written as ZMMI). Using the same code, how would ARM be written?",
+          "a": "YPK",
+          "options": [
+            "YPK",
+            "CTO",
+            "XOJ",
+            "BSN"
+          ]
+        },
+        {
+          "q": "Which smaller word is hidden inside the word SHOUT?",
+          "a": "OUT",
+          "options": [
+            "TON",
+            "READ",
+            "OUT",
+            "TOP"
+          ]
+        },
+        {
+          "q": "Which smaller word is hidden inside the word TABLET?",
+          "a": "TABLE",
+          "options": [
+            "RAP",
+            "TABLE",
+            "TON",
+            "CAR"
+          ]
+        },
+        {
+          "q": "Which smaller word is hidden inside the word CANDLE?",
+          "a": "CAN",
+          "options": [
+            "ARROW",
+            "HEAT",
+            "CAN",
+            "HAIR"
+          ]
+        },
+        {
+          "q": "Which smaller word is hidden inside the word PLANET?",
+          "a": "PLANE",
+          "options": [
+            "PLANE",
+            "HAIR",
+            "CAN",
+            "READ"
+          ]
+        },
+        {
+          "q": "Which smaller word is hidden inside the word STONE?",
+          "a": "TON",
+          "options": [
+            "ASK",
+            "TON",
+            "RAP",
+            "CAN"
+          ]
+        },
+        {
+          "q": "Which smaller word is hidden inside the word GRAPE?",
+          "a": "RAP",
+          "options": [
+            "ASK",
+            "CAR",
+            "RAP",
+            "PLANE"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places forward through the alphabet (so JOB is written as LQD). Using the same code, how would DESK be written?",
+          "a": "FGUM",
+          "options": [
+            "CDRJ",
+            "ABPH",
+            "BCQI",
+            "FGUM"
+          ]
+        },
+        {
+          "q": "Petal is to Flower as Page is to ___?",
+          "a": "Book",
+          "options": [
+            "Butterfly",
+            "Loud",
+            "Bird",
+            "Book"
+          ]
+        },
+        {
+          "q": "Which smaller word is hidden inside the word WHEAT?",
+          "a": "HEAT",
+          "options": [
+            "ARROW",
+            "THE",
+            "PLANE",
+            "HEAT"
+          ]
+        },
+        {
+          "q": "Which smaller word is hidden inside the word CHAIR?",
+          "a": "HAIR",
+          "options": [
+            "TABLE",
+            "HEAT",
+            "HAIR",
+            "LOW"
+          ]
+        },
+        {
+          "q": "Optimist is to Hopeful as Pessimist is to ___?",
+          "a": "Negative",
+          "options": [
+            "Drink",
+            "Negative",
+            "Cat",
+            "Speed"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 1 place back through the alphabet (so FUN is written as ETM). Using the same code, how would DOG be written?",
+          "a": "CNF",
+          "options": [
+            "CNF",
+            "BME",
+            "ALD",
+            "FQI"
+          ]
+        },
+        {
+          "q": "Which smaller word is hidden inside the word GHOST?",
+          "a": "HOST",
+          "options": [
+            "LOW",
+            "HOST",
+            "PLANE",
+            "OUT"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 3 places forward through the alphabet (so SUN is written as VXQ). Using the same code, how would FUN be written?",
+          "a": "IXQ",
+          "options": [
+            "IXQ",
+            "DSL",
+            "CRK",
+            "ETM"
+          ]
+        },
+        {
+          "q": "Novel is to Chapter as House is to ___?",
+          "a": "Room",
+          "options": [
+            "Butterfly",
+            "Length",
+            "Room",
+            "Cat"
+          ]
+        },
+        {
+          "q": "Author is to Write as Sculptor is to ___?",
+          "a": "Sculpt",
+          "options": [
+            "Book",
+            "Metal",
+            "Den",
+            "Sculpt"
+          ]
+        },
+        {
+          "q": "Thermostat is to Temperature as Speedometer is to ___?",
+          "a": "Speed",
+          "options": [
+            "Length",
+            "Butterfly",
+            "Speed",
+            "Room"
+          ]
+        },
+        {
+          "q": "Whisper is to Quiet as Shout is to ___?",
+          "a": "Loud",
+          "options": [
+            "Speed",
+            "Negative",
+            "Length",
+            "Loud"
+          ]
+        },
+        {
+          "q": "Carpenter is to Wood as Blacksmith is to ___?",
+          "a": "Metal",
+          "options": [
+            "Bird",
+            "Metal",
+            "Butterfly",
+            "Book"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 3 places forward through the alphabet (so BOX is written as ERA). Using the same code, how would ARM be written?",
+          "a": "DUP",
+          "options": [
+            "XOJ",
+            "BSN",
+            "DUP",
+            "ZQL"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 2 places forward through the alphabet (so HAT is written as JCV). Using the same code, how would FUN be written?",
+          "a": "HWP",
+          "options": [
+            "IXQ",
+            "ETM",
+            "DSL",
+            "HWP"
+          ]
+        },
+        {
+          "q": "In a code, every letter moves 3 places forward through the alphabet (so DESK is written as GHVN). Using the same code, how would LEG be written?",
+          "a": "OHJ",
+          "options": [
+            "JCE",
+            "NGI",
+            "IBD",
+            "OHJ"
+          ]
+        },
+        {
+          "q": "Drought is to Dry as Flood is to ___?",
+          "a": "Wet",
+          "options": [
+            "Cat",
+            "Book",
+            "Sculpt",
+            "Wet"
+          ]
+        }
+      ]
+    }
+  },
+  "nonverbal": {
+    "key": "nonverbal",
+    "label": "Non-Verbal Reasoning",
+    "icon": "ti-shape",
+    "desc": "Shape sequences, odd-one-out, analogies and pattern logic",
+    "questions": {
+      "KS1": [
+        {
+          "q": "How many ▲ shapes are in this row: ▲ ▲ ▲ ▲ ● ◆ ▲",
+          "a": "5",
+          "options": [
+            "8",
+            "3",
+            "6",
+            "5"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ◆ ■ ◆ ■ ◆  ?",
+          "a": "■",
+          "options": [
+            "◆",
+            "▲",
+            "■",
+            "●"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ■ ◆ ■ ◆ ■  ?",
+          "a": "◆",
+          "options": [
+            "●",
+            "■",
+            "▲",
+            "◆"
+          ]
+        },
+        {
+          "q": "How many ◆ shapes are in this row: ◆ ▲ ▲ ▲ ◆ ▲ ◆",
+          "a": "3",
+          "options": [
+            "1",
+            "4",
+            "3",
+            "2"
+          ]
+        },
+        {
+          "q": "How many ▲ shapes are in this row: ▲ ◆ ◆ ◆ ▲ ▲ ▲ ▲ ■",
+          "a": "5",
+          "options": [
+            "8",
+            "4",
+            "7",
+            "5"
+          ]
+        },
+        {
+          "q": "How many ● shapes are in this row: ● ● ◆ ● ● ★ ◆ ■ ●",
+          "a": "5",
+          "options": [
+            "3",
+            "8",
+            "6",
+            "5"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ■ ▲ ■ ▲ ■  ?",
+          "a": "▲",
+          "options": [
+            "◆",
+            "▲",
+            "■",
+            "●"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ◇ △ □ ●",
+          "a": "●",
+          "options": [
+            "□",
+            "●",
+            "△",
+            "◇"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ○ ◇ □ ◆",
+          "a": "◆",
+          "options": [
+            "◆",
+            "◇",
+            "□",
+            "○"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ■ ● ■ ● ■  ?",
+          "a": "●",
+          "options": [
+            "◆",
+            "■",
+            "●",
+            "▲"
+          ]
+        },
+        {
+          "q": "How many ★ shapes are in this row: ★ ★ ● ★ ★ ◆ ★",
+          "a": "5",
+          "options": [
+            "5",
+            "7",
+            "8",
+            "3"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ▲ ■ ▲ ■ ▲  ?",
+          "a": "■",
+          "options": [
+            "◆",
+            "▲",
+            "■",
+            "●"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ○ □ ◇ ■",
+          "a": "■",
+          "options": [
+            "◇",
+            "■",
+            "○",
+            "□"
+          ]
+        },
+        {
+          "q": "How many ▲ shapes are in this row: ■ ◆ ▲ ▲ ▲ ▲ ▲ ★",
+          "a": "5",
+          "options": [
+            "3",
+            "6",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ● ■ ● ■ ●  ?",
+          "a": "■",
+          "options": [
+            "◆",
+            "■",
+            "▲",
+            "●"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: □ ◇ △ ■",
+          "a": "■",
+          "options": [
+            "△",
+            "◇",
+            "■",
+            "□"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ■ ▲ ● ◇",
+          "a": "◇",
+          "options": [
+            "●",
+            "◇",
+            "▲",
+            "■"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ▲ ● ▲ ● ▲  ?",
+          "a": "●",
+          "options": [
+            "■",
+            "◆",
+            "●",
+            "▲"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: □ ◇ ○ ●",
+          "a": "●",
+          "options": [
+            "●",
+            "○",
+            "◇",
+            "□"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ● ◆ ■ ○",
+          "a": "○",
+          "options": [
+            "●",
+            "○",
+            "◆",
+            "■"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ■ ◆ ▲ □",
+          "a": "□",
+          "options": [
+            "◆",
+            "□",
+            "▲",
+            "■"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: △ ○ □ ◆",
+          "a": "◆",
+          "options": [
+            "○",
+            "△",
+            "◆",
+            "□"
+          ]
+        },
+        {
+          "q": "How many ● shapes are in this row: ● ● ● ● ▲ ● ▲",
+          "a": "5",
+          "options": [
+            "6",
+            "4",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ◆ ● ◆ ● ◆  ?",
+          "a": "●",
+          "options": [
+            "▲",
+            "◆",
+            "●",
+            "■"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ◆ ▲ ◆ ▲ ◆  ?",
+          "a": "▲",
+          "options": [
+            "■",
+            "◆",
+            "●",
+            "▲"
+          ]
+        },
+        {
+          "q": "How many ◆ shapes are in this row: ● ★ ◆ ◆ ◆",
+          "a": "3",
+          "options": [
+            "1",
+            "3",
+            "4",
+            "6"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ● ▲ ● ▲ ●  ?",
+          "a": "▲",
+          "options": [
+            "●",
+            "▲",
+            "◆",
+            "■"
+          ]
+        },
+        {
+          "q": "How many ■ shapes are in this row: ★ ■ ● ▲ ● ■ ■",
+          "a": "3",
+          "options": [
+            "1",
+            "3",
+            "5",
+            "2"
+          ]
+        },
+        {
+          "q": "How many ▲ shapes are in this row: ◆ ■ ▲ ▲ ◆ ◆",
+          "a": "2",
+          "options": [
+            "1",
+            "5",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ▲ ◆ ▲ ◆ ▲  ?",
+          "a": "◆",
+          "options": [
+            "◆",
+            "●",
+            "■",
+            "▲"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ■ ◆ ▲ ◇",
+          "a": "◇",
+          "options": [
+            "■",
+            "▲",
+            "◇",
+            "◆"
+          ]
+        },
+        {
+          "q": "How many ◆ shapes are in this row: ◆ ◆ ● ◆ ◆ ■ ◆",
+          "a": "5",
+          "options": [
+            "3",
+            "6",
+            "5",
+            "8"
+          ]
+        },
+        {
+          "q": "How many ■ shapes are in this row: ■ ★ ● ■ ▲ ■ ■ ■",
+          "a": "5",
+          "options": [
+            "7",
+            "5",
+            "8",
+            "4"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: □ ○ △ ■",
+          "a": "■",
+          "options": [
+            "■",
+            "□",
+            "△",
+            "○"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ● ◆ ● ◆ ●  ?",
+          "a": "◆",
+          "options": [
+            "●",
+            "■",
+            "▲",
+            "◆"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: △ □ ◇ ▲",
+          "a": "▲",
+          "options": [
+            "◇",
+            "△",
+            "▲",
+            "□"
+          ]
+        }
+      ],
+      "LKS2": [
+        {
+          "q": "Which shape is the odd one out: ○ ☆ □ ▲",
+          "a": "▲",
+          "options": [
+            "○",
+            "▲",
+            "□",
+            "☆"
+          ]
+        },
+        {
+          "q": "● is to ○ as ■ is to ?",
+          "a": "□",
+          "options": [
+            "△",
+            "■",
+            "□",
+            "☆"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ■ ● ★ ■ ● ★ ■  ?",
+          "a": "●",
+          "options": [
+            "●",
+            "◆",
+            "■",
+            "▲"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ▲ ◆ ■ ▲ ◆ ■ ▲  ?",
+          "a": "◆",
+          "options": [
+            "▲",
+            "■",
+            "◆",
+            "●"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ▲ ◆ ■ ◇",
+          "a": "◇",
+          "options": [
+            "◆",
+            "◇",
+            "▲",
+            "■"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ◆ ▲ ● ☆",
+          "a": "☆",
+          "options": [
+            "●",
+            "▲",
+            "☆",
+            "◆"
+          ]
+        },
+        {
+          "q": "◆ is to ◇ as ▲ is to ?",
+          "a": "△",
+          "options": [
+            "◇",
+            "△",
+            "☆",
+            "○"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ■ ★ ▲ ○",
+          "a": "○",
+          "options": [
+            "★",
+            "▲",
+            "○",
+            "■"
+          ]
+        },
+        {
+          "q": "★ is to ☆ as ■ is to ?",
+          "a": "□",
+          "options": [
+            "★",
+            "□",
+            "△",
+            "○"
+          ]
+        },
+        {
+          "q": "◆ is to ◇ as ● is to ?",
+          "a": "○",
+          "options": [
+            "◆",
+            "□",
+            "○",
+            "☆"
+          ]
+        },
+        {
+          "q": "▲ is to △ as ● is to ?",
+          "a": "○",
+          "options": [
+            "△",
+            "☆",
+            "▲",
+            "○"
+          ]
+        },
+        {
+          "q": "★ is to ☆ as ● is to ?",
+          "a": "○",
+          "options": [
+            "□",
+            "☆",
+            "○",
+            "●"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ● ★ ▲ ● ★ ▲ ●  ?",
+          "a": "★",
+          "options": [
+            "■",
+            "★",
+            "◆",
+            "●"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ◇ □ ○ ■",
+          "a": "■",
+          "options": [
+            "■",
+            "◇",
+            "□",
+            "○"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: △ ◇ ☆ ★",
+          "a": "★",
+          "options": [
+            "△",
+            "◇",
+            "★",
+            "☆"
+          ]
+        },
+        {
+          "q": "◆ is to ◇ as ■ is to ?",
+          "a": "□",
+          "options": [
+            "△",
+            "◆",
+            "◇",
+            "□"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ● ▲ ◆ ● ▲ ◆ ●  ?",
+          "a": "▲",
+          "options": [
+            "◆",
+            "●",
+            "▲",
+            "★"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ★ ▲ ■ ★ ▲ ■ ★  ?",
+          "a": "▲",
+          "options": [
+            "■",
+            "▲",
+            "◆",
+            "★"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ★ ■ ◆ ★ ■ ◆ ★  ?",
+          "a": "■",
+          "options": [
+            "●",
+            "■",
+            "★",
+            "▲"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: △ □ ○ ★",
+          "a": "★",
+          "options": [
+            "★",
+            "△",
+            "□",
+            "○"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ● ◆ ■ △",
+          "a": "△",
+          "options": [
+            "●",
+            "■",
+            "◆",
+            "△"
+          ]
+        },
+        {
+          "q": "◆ is to ◇ as ★ is to ?",
+          "a": "☆",
+          "options": [
+            "□",
+            "△",
+            "◇",
+            "☆"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ■ ◆ ★ ■ ◆ ★ ■  ?",
+          "a": "◆",
+          "options": [
+            "◆",
+            "●",
+            "★",
+            "▲"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ◆ ★ ▲ ◆ ★ ▲ ◆  ?",
+          "a": "★",
+          "options": [
+            "▲",
+            "●",
+            "★",
+            "◆"
+          ]
+        },
+        {
+          "q": "▲ is to △ as ■ is to ?",
+          "a": "□",
+          "options": [
+            "◇",
+            "○",
+            "□",
+            "▲"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ▲ ★ ■ △",
+          "a": "△",
+          "options": [
+            "★",
+            "△",
+            "■",
+            "▲"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ☆ □ △ ■",
+          "a": "■",
+          "options": [
+            "☆",
+            "■",
+            "△",
+            "□"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ▲ ★ ● ▲ ★ ● ▲  ?",
+          "a": "★",
+          "options": [
+            "◆",
+            "●",
+            "▲",
+            "★"
+          ]
+        },
+        {
+          "q": "▲ is to △ as ◆ is to ?",
+          "a": "◇",
+          "options": [
+            "△",
+            "◇",
+            "○",
+            "▲"
+          ]
+        },
+        {
+          "q": "● is to ○ as ★ is to ?",
+          "a": "☆",
+          "options": [
+            "☆",
+            "◇",
+            "★",
+            "●"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ☆ △ ◇ ▲",
+          "a": "▲",
+          "options": [
+            "◇",
+            "☆",
+            "▲",
+            "△"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ◆ ● ★ ◆ ● ★ ◆  ?",
+          "a": "●",
+          "options": [
+            "●",
+            "◆",
+            "■",
+            "★"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ★ ● ◆ ★ ● ◆ ★  ?",
+          "a": "●",
+          "options": [
+            "★",
+            "▲",
+            "●",
+            "■"
+          ]
+        },
+        {
+          "q": "What comes next in this pattern: ■ ★ ▲ ■ ★ ▲ ■  ?",
+          "a": "★",
+          "options": [
+            "◆",
+            "●",
+            "▲",
+            "★"
+          ]
+        },
+        {
+          "q": "■ is to □ as ▲ is to ?",
+          "a": "△",
+          "options": [
+            "△",
+            "☆",
+            "■",
+            "○"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ○ △ ☆ ■",
+          "a": "■",
+          "options": [
+            "☆",
+            "■",
+            "○",
+            "△"
+          ]
+        }
+      ],
+      "UKS2": [
+        {
+          "q": "This arrow turns anti-clockwise each time. What comes next: → ↑ ← ↓ →  ?",
+          "a": "↑",
+          "options": [
+            "↓",
+            "←",
+            "→",
+            "↑"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ○ ◇ ☆ ■",
+          "a": "■",
+          "options": [
+            "☆",
+            "○",
+            "■",
+            "◇"
+          ]
+        },
+        {
+          "q": "■ is to ◆ as ● is to ?",
+          "a": "▲",
+          "options": [
+            "●",
+            "★",
+            "◆",
+            "▲"
+          ]
+        },
+        {
+          "q": "This arrow turns anti-clockwise each time. What comes next: ← ↓ → ↑ ← ↓  ?",
+          "a": "→",
+          "options": [
+            "↓",
+            "→",
+            "←",
+            "↑"
+          ]
+        },
+        {
+          "q": "This arrow turns anti-clockwise each time. What comes next: ← ↓ → ↑ ← ↓ →  ?",
+          "a": "↑",
+          "options": [
+            "→",
+            "↑",
+            "←",
+            "↓"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ○ ◇ ☆ ★",
+          "a": "★",
+          "options": [
+            "★",
+            "○",
+            "◇",
+            "☆"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ○ ☆ □ ▲",
+          "a": "▲",
+          "options": [
+            "□",
+            "○",
+            "☆",
+            "▲"
+          ]
+        },
+        {
+          "q": "▲ is to ■ as ★ is to ?",
+          "a": "●",
+          "options": [
+            "●",
+            "◆",
+            "■",
+            "★"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ★ ■ ◆ ☆",
+          "a": "☆",
+          "options": [
+            "◆",
+            "★",
+            "■",
+            "☆"
+          ]
+        },
+        {
+          "q": "★ is to ● as ● is to ?",
+          "a": "▲",
+          "options": [
+            "▲",
+            "◆",
+            "●",
+            "★"
+          ]
+        },
+        {
+          "q": "This arrow turns anti-clockwise each time. What comes next: ← ↓ → ↑ ←  ?",
+          "a": "↓",
+          "options": [
+            "←",
+            "↓",
+            "→",
+            "↑"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: △ □ ◇ ▲",
+          "a": "▲",
+          "options": [
+            "◇",
+            "□",
+            "▲",
+            "△"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ■ ★ ◆ △",
+          "a": "△",
+          "options": [
+            "★",
+            "■",
+            "△",
+            "◆"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ◇ ○ △ ▲",
+          "a": "▲",
+          "options": [
+            "▲",
+            "◇",
+            "△",
+            "○"
+          ]
+        },
+        {
+          "q": "★ is to ● as ■ is to ?",
+          "a": "◆",
+          "options": [
+            "▲",
+            "◆",
+            "★",
+            "■"
+          ]
+        },
+        {
+          "q": "★ is to ● as ◆ is to ?",
+          "a": "★",
+          "options": [
+            "■",
+            "◆",
+            "★",
+            "▲"
+          ]
+        },
+        {
+          "q": "This arrow turns clockwise each time. What comes next: ← ↑ → ↓ ← ↑  ?",
+          "a": "→",
+          "options": [
+            "↓",
+            "←",
+            "↑",
+            "→"
+          ]
+        },
+        {
+          "q": "● is to ▲ as ■ is to ?",
+          "a": "◆",
+          "options": [
+            "▲",
+            "●",
+            "■",
+            "◆"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ★ ▲ ■ ○",
+          "a": "○",
+          "options": [
+            "○",
+            "■",
+            "★",
+            "▲"
+          ]
+        },
+        {
+          "q": "◆ is to ★ as ★ is to ?",
+          "a": "●",
+          "options": [
+            "▲",
+            "★",
+            "■",
+            "●"
+          ]
+        },
+        {
+          "q": "▲ is to ■ as ■ is to ?",
+          "a": "◆",
+          "options": [
+            "▲",
+            "■",
+            "★",
+            "◆"
+          ]
+        },
+        {
+          "q": "This arrow turns anti-clockwise each time. What comes next: ↑ ← ↓ → ↑ ← ↓  ?",
+          "a": "→",
+          "options": [
+            "↑",
+            "↓",
+            "←",
+            "→"
+          ]
+        },
+        {
+          "q": "This arrow turns anti-clockwise each time. What comes next: ↑ ← ↓ → ↑ ← ↓ →  ?",
+          "a": "↑",
+          "options": [
+            "←",
+            "→",
+            "↑",
+            "↓"
+          ]
+        },
+        {
+          "q": "■ is to ◆ as ▲ is to ?",
+          "a": "■",
+          "options": [
+            "◆",
+            "■",
+            "●",
+            "▲"
+          ]
+        },
+        {
+          "q": "This arrow turns anti-clockwise each time. What comes next: ↑ ← ↓ → ↑  ?",
+          "a": "←",
+          "options": [
+            "↓",
+            "↑",
+            "←",
+            "→"
+          ]
+        },
+        {
+          "q": "This arrow turns clockwise each time. What comes next: ↓ ← ↑ → ↓ ← ↑  ?",
+          "a": "→",
+          "options": [
+            "↓",
+            "↑",
+            "→",
+            "←"
+          ]
+        },
+        {
+          "q": "This arrow turns clockwise each time. What comes next: ↓ ← ↑ → ↓ ←  ?",
+          "a": "↑",
+          "options": [
+            "→",
+            "←",
+            "↑",
+            "↓"
+          ]
+        },
+        {
+          "q": "This arrow turns clockwise each time. What comes next: ↑ → ↓ ←  ?",
+          "a": "↑",
+          "options": [
+            "←",
+            "→",
+            "↑",
+            "↓"
+          ]
+        },
+        {
+          "q": "■ is to ◆ as ◆ is to ?",
+          "a": "★",
+          "options": [
+            "★",
+            "▲",
+            "●",
+            "■"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: ◆ ★ ■ □",
+          "a": "□",
+          "options": [
+            "□",
+            "★",
+            "◆",
+            "■"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: □ ◇ ☆ ★",
+          "a": "★",
+          "options": [
+            "□",
+            "☆",
+            "◇",
+            "★"
+          ]
+        },
+        {
+          "q": "◆ is to ★ as ■ is to ?",
+          "a": "◆",
+          "options": [
+            "★",
+            "▲",
+            "◆",
+            "■"
+          ]
+        },
+        {
+          "q": "● is to ▲ as ★ is to ?",
+          "a": "●",
+          "options": [
+            "■",
+            "◆",
+            "●",
+            "▲"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: △ □ ○ ▲",
+          "a": "▲",
+          "options": [
+            "○",
+            "▲",
+            "□",
+            "△"
+          ]
+        },
+        {
+          "q": "This arrow turns clockwise each time. What comes next: → ↓ ← ↑ → ↓ ←  ?",
+          "a": "↑",
+          "options": [
+            "↓",
+            "←",
+            "↑",
+            "→"
+          ]
+        },
+        {
+          "q": "Which shape is the odd one out: △ ☆ ◇ ◆",
+          "a": "◆",
+          "options": [
+            "☆",
+            "◇",
+            "◆",
+            "△"
+          ]
+        }
+      ]
+    }
+  }
+};
+
 var currentTopicKey = null;
 var tpIdx = 0, tpQResults = {};
 var currentTpQuestions = [], currentTpTier = 'KS1';
@@ -14344,6 +16704,10 @@ function buildPlayItems(){
     var tMu = MUSIC_TOPICS[s.checkType];
     var qs6 = pickQuestions(tMu ? (tMu.questions[s.tier] || tMu.questions.KS1) : [], 12);
     playItems = qs6.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
+  } else if(s.subject === 'reasoning'){
+    var tRs = REASONING_TOPICS[s.checkType];
+    var qs7 = pickQuestions(tRs ? (tRs.questions[s.tier] || tRs.questions.KS1) : [], 12);
+    playItems = qs7.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
   }
 }
 
@@ -15258,6 +17622,383 @@ function startLiveMusicTier(tier){
   startLiveSession('music', currentMusicKey, tier, t.label, t.label + ' · ' + tier);
 }
 
+/* ---------- Reasoning: Verbal + Non-Verbal Reasoning checks (mirrors MFL/Music) ---------- */
+var currentReasoningKey = null;
+var rsIdx = 0, rsQResults = {};
+var currentReasoningQuestions = [], currentReasoningTier = 'KS1';
+var reasoningResults = [];
+
+function renderReasoningList(){
+  var el = document.getElementById('reasoning-topic-list');
+  if(!el) return;
+  el.innerHTML = '';
+  Object.keys(REASONING_TOPICS).forEach(function(key, i){
+    var t = REASONING_TOPICS[key];
+    var btn = document.createElement('button');
+    btn.className = 'phase-btn';
+    btn.onclick = function(){ goToReasoningTopic(key); };
+    var badge = document.createElement('div'); badge.className = 'phase-badge';
+    var icon = document.createElement('i'); icon.className = 'ti ' + (t.icon || 'ti-brain'); icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
+    badge.appendChild(icon);
+    var textWrap = document.createElement('div');
+    var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = t.label;
+    var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = t.desc || '';
+    textWrap.appendChild(name); textWrap.appendChild(desc);
+    btn.appendChild(badge); btn.appendChild(textWrap);
+    el.appendChild(btn);
+  });
+}
+
+function goToReasoningTopic(key){
+  currentReasoningKey = key;
+  var t = REASONING_TOPICS[key];
+  if(!t) return;
+  document.getElementById('reasoning-banner-icon').innerHTML = '<i class="ti ' + (t.icon || 'ti-brain') + '" aria-hidden="true"></i>';
+  document.getElementById('reasoning-banner-title').textContent = t.label;
+  showScreen('screen-reasoning-tiers');
+}
+function backToReasoningTopics(){
+  showScreen('screen-reasoning-home');
+}
+
+function startReasoningCheck(tier){
+  if(!requireActiveSchool())return;
+  if(!requireName(function(){startReasoningCheck(tier);}))return;
+  var t = REASONING_TOPICS[currentReasoningKey];
+  if(!t) return;
+  currentReasoningQuestions = pickQuestions(t.questions[tier] || [], 12);
+  currentReasoningTier = tier;
+  rsIdx = 0; rsQResults = {};
+  showScreen('screen-reasoning-check');
+  renderReasoningQuestion();
+}
+
+function renderReasoningQuestion(){
+  var item = currentReasoningQuestions[rsIdx];
+  var total = currentReasoningQuestions.length;
+  document.getElementById('reasoning-prog').style.width = Math.round((rsIdx/total)*100)+'%';
+  document.getElementById('reasoning-counter').textContent = 'Question '+(rsIdx+1)+' of '+total;
+  document.getElementById('reasoning-question-display').textContent = item.q;
+  renderMcOptions('reasoning-answer-display', item, markReasoning);
+}
+
+function markReasoning(correct){
+  var item = currentReasoningQuestions[rsIdx];
+  rsQResults[rsIdx] = { question: item.q, correct: correct };
+  rsIdx++;
+  if(rsIdx >= currentReasoningQuestions.length){ finishReasoningCheck(); return; }
+  renderReasoningQuestion();
+}
+
+async function finishReasoningCheck(){
+  var name = document.getElementById('pupil-name').value.trim() || 'Unnamed';
+  var year = document.getElementById('pupil-year').value || '';
+  var gender = document.getElementById('pupil-gender').value || '';
+  var dob = document.getElementById('pupil-dob').value || '';
+  var needs = document.getElementById('pupil-needs').value || '';
+  var t = REASONING_TOPICS[currentReasoningKey];
+
+  var correctCount=0, missed=[];
+  Object.keys(rsQResults).forEach(function(k){
+    var r = rsQResults[k];
+    if(r.correct) correctCount++; else missed.push(r.question);
+  });
+  var total = currentReasoningQuestions.length;
+
+  var row = {
+    school_id: currentProfile.school_id,
+    teacher_id: currentUser.id,
+    pupil_name: name,
+    year_group: year || null,
+    gender: gender || null,
+    dob: dob || null,
+    additional_needs: needs || null,
+    topic_key: currentReasoningKey,
+    topic_label: t.label,
+    tier: currentReasoningTier,
+    total_correct: correctCount,
+    total_questions: total,
+    missed_questions: missed,
+    assessed_date: new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+    ts: Date.now()
+  };
+
+  var ins = await sb.from('reasoning_results').insert(row).select().single();
+  if(ins.error){
+    if(ins.error.code === '42501' || /row-level security/i.test(ins.error.message)){
+      alert('Your school\'s free trial or subscription isn\'t active, so this Reasoning check couldn\'t be saved. Please upgrade to continue.');
+    } else {
+      alert('Could not save this Reasoning check: ' + ins.error.message);
+    }
+    showScreen('screen-home');
+    return;
+  }
+
+  var entry = rowToReasoningResult(ins.data);
+  reasoningResults.unshift(entry);
+
+  document.getElementById('reasoning-res-name').textContent = name;
+  document.getElementById('reasoning-res-label').textContent = t.label + ' · ' + (TOPIC_TIER_LABELS[currentReasoningTier] || currentReasoningTier);
+  document.getElementById('reasoning-res-total').textContent = correctCount + '/' + total;
+  document.getElementById('reasoning-res-total-lbl').textContent = 'Correct (out of ' + total + ')';
+  var missedDiv = document.getElementById('reasoning-res-missed-chips'); missedDiv.innerHTML = '';
+  missed.forEach(function(w){ var c=document.createElement('span'); c.className='chip chip-no'; c.textContent=w; missedDiv.appendChild(c); });
+  document.getElementById('reasoning-res-missed-wrap').style.display = missed.length ? 'block' : 'none';
+
+  showScreen('screen-reasoning-done');
+  renderReasoningResults();
+}
+
+function rowToReasoningResult(row){
+  return {
+    id: row.id,
+    name: row.pupil_name,
+    year: row.year_group || '',
+    gender: row.gender || '',
+    dob: row.dob || '',
+    needs: row.additional_needs || '',
+    topicKey: row.topic_key,
+    topicLabel: row.topic_label,
+    tier: row.tier || 'KS1',
+    totalCorrect: row.total_correct,
+    totalQuestions: row.total_questions,
+    missedQuestions: row.missed_questions || [],
+    date: row.assessed_date,
+    ts: row.ts
+  };
+}
+
+async function loadReasoningResults(){
+  var res = await sb.from('reasoning_results').select('*').order('created_at', { ascending:false });
+  if(res.error){ console.error(res.error); reasoningResults = []; }
+  else { reasoningResults = res.data.map(rowToReasoningResult); }
+  renderReasoningResults();
+}
+
+async function deleteReasoningResult(id){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its sample data can\'t be deleted.'); return; }
+  if(!confirm('Delete this Reasoning check?'))return;
+  var del = await sb.from('reasoning_results').delete().eq('id', id);
+  if(del.error){ alert('Could not delete: ' + del.error.message); return; }
+  reasoningResults = reasoningResults.filter(function(r){return r.id!==id;});
+  renderReasoningResults();
+}
+
+function reasoningCheckLabel(r){
+  return (r.topicLabel || r.topicKey) + ' · ' + (TOPIC_TIER_LABELS[r.tier] || r.tier);
+}
+
+function buildReasoningCard(r){
+  var card = document.createElement('div'); card.className = 'pupil-card';
+  var header = document.createElement('div'); header.className = 'pupil-header';
+  var nb = document.createElement('div'); nb.style.flex = '1';
+  var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
+  var me = document.createElement('div'); me.className = 'pupil-meta';
+  me.textContent = [reasoningCheckLabel(r), r.date, r.year].filter(function(x){return x;}).join(' / ');
+  nb.appendChild(ne); nb.appendChild(me);
+  var right = document.createElement('div'); right.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;';
+  var pe = document.createElement('div'); pe.className = 'pct-pill';
+  var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
+  pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
+  right.appendChild(pe);
+  if(!isDemoSchool()){
+    var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
+    (function(rr){ editBtn.onclick = function(){ openEditDetails('reasoning', rr); }; })(r);
+    right.appendChild(editBtn);
+    var delBtn = document.createElement('button'); delBtn.className = 'delete-row-btn'; delBtn.textContent = 'Delete';
+    (function(id){ delBtn.onclick = function(){ deleteReasoningResult(id); }; })(r.id);
+    right.appendChild(delBtn);
+  }
+  header.appendChild(nb); header.appendChild(right);
+  card.appendChild(header);
+  if(r.missedQuestions && r.missedQuestions.length){
+    var ms = document.createElement('div'); ms.className = 'sound-section';
+    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Questions to revisit';
+    var mw = document.createElement('div'); mw.className = 'chips-row';
+    r.missedQuestions.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
+    ms.appendChild(mh); ms.appendChild(mw);
+    card.appendChild(ms);
+  }
+  return card;
+}
+
+var reasoningGroupMode = 'year';
+function setReasoningGroupMode(mode){
+  reasoningGroupMode = mode;
+  document.getElementById('reasoning-group-year-btn').classList.toggle('active', mode==='year');
+  document.getElementById('reasoning-group-term-btn').classList.toggle('active', mode==='term');
+  renderReasoningResults();
+}
+
+function renderReasoningResults(){
+  var el = document.getElementById('reasoning-list');
+  if(!el) return;
+  el.innerHTML = '';
+  var emptyEl = document.getElementById('reasoning-list-empty');
+  var summaryEl = document.getElementById('reasoning-summary');
+  var list = filterByClass(reasoningResults);
+  if(!list.length){
+    if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Reasoning checks yet for '+classFilter+'.') : 'No Reasoning checks yet.'; }
+    if(summaryEl) summaryEl.style.display = 'none';
+    return;
+  }
+  if(emptyEl) emptyEl.style.display = 'none';
+  if(summaryEl) summaryEl.style.display = 'block';
+  document.getElementById('reasoning-count').textContent = list.length;
+  var avgRs = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
+  document.getElementById('reasoning-avg').textContent = avgRs + '%';
+  var keyFn = reasoningGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
+  var order = reasoningGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
+  renderGroups(el, list, keyFn, order, buildReasoningCard, 'child checked', 'children checked', reasoningGroupMode==='year' && !classFilter ? setClassFilter : null);
+}
+
+function exportReasoningCSV(){
+  var termFilter = document.getElementById('reasoning-export-term') ? document.getElementById('reasoning-export-term').value : 'all';
+  var base = filterByClass(reasoningResults);
+  var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
+  if(!list.length){alert((termFilter==='all' ? 'No Reasoning checks to export yet' : 'No '+termFilter+' term Reasoning checks to export yet')+classSuffixText()+'.');return;}
+  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Missed questions'];
+  var rows=[header];
+  list.forEach(function(r){
+    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,(r.missedQuestions||[]).join('; ')]);
+  });
+  var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
+  downloadCSV(rows,'emeejay-reasoning'+suffix+'-'+dateStr()+'.csv');
+}
+
+async function clearAllReasoning(){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its sample data can\'t be cleared.'); return; }
+  if(!confirm('Clear all Reasoning checks for your school? This cannot be undone.'))return;
+  var del = await sb.from('reasoning_results').delete().not('id','is',null);
+  if(del.error){ alert('Could not clear Reasoning checks: ' + del.error.message); return; }
+  reasoningResults=[];
+  renderReasoningResults();
+  renderReasoningAnalytics();
+}
+
+function renderReasoningAnalytics(){
+  var emptyEl = document.getElementById('reasoning-an-empty');
+  var contentEl = document.getElementById('reasoning-an-content');
+  if(!emptyEl || !contentEl) return;
+  var list = filterByClass(reasoningResults);
+  if(!list.length){ emptyEl.style.display='block'; emptyEl.textContent = classFilter ? ('No Reasoning check data yet for '+classFilter+'.') : 'No Reasoning check data yet. Complete a Reasoning check first.'; contentEl.style.display='none'; return; }
+  emptyEl.style.display='none'; contentEl.style.display='block';
+
+  var overviewEl = document.getElementById('reasoning-an-overview'); overviewEl.innerHTML = '';
+  var avgTotal = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
+  overviewEl.appendChild(makeBar('Overall',avgTotal,barColor(avgTotal)));
+  var byLabel = {};
+  list.forEach(function(r){ var lbl = reasoningCheckLabel(r); if(!byLabel[lbl])byLabel[lbl]=[]; byLabel[lbl].push(r); });
+  Object.keys(byLabel).sort().forEach(function(lbl){
+    var subList = byLabel[lbl];
+    var subAvg = Math.round(subList.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/subList.length);
+    overviewEl.appendChild(makeBar(lbl, subAvg, barColor(subAvg)));
+  });
+
+  var missedEl = document.getElementById('reasoning-an-missed'); missedEl.innerHTML = '';
+  var qCount = {};
+  list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
+  var sortedQs = Object.keys(qCount).sort(function(a,b){return qCount[b]-qCount[a];}).slice(0,12);
+  var maxQCount = sortedQs.length ? qCount[sortedQs[0]] : 1;
+  if(!sortedQs.length){ var wmsg=document.createElement('p'); wmsg.style.cssText='font-size:13px;color:var(--text-muted);'; wmsg.textContent='No missed questions yet.'; missedEl.appendChild(wmsg); }
+  sortedQs.forEach(function(w){
+    var row=document.createElement('div');row.className='sound-freq-row';
+    var chip=document.createElement('span');chip.className='sound-freq-chip';chip.style.cssText='max-width:220px;white-space:normal;line-height:1.3;';chip.textContent=w;
+    var bg=document.createElement('div');bg.className='sound-freq-bar-bg';
+    var fill=document.createElement('div');fill.className='sound-freq-bar-fill';fill.style.width=Math.round((qCount[w]/maxQCount)*100)+'%';
+    bg.appendChild(fill);
+    var cnt=document.createElement('div');cnt.className='sound-freq-count';cnt.textContent=qCount[w]+' '+(qCount[w]===1?'child':'children');
+    row.appendChild(chip);row.appendChild(bg);row.appendChild(cnt);
+    missedEl.appendChild(row);
+  });
+
+  var trendEl = document.getElementById('reasoning-an-trends'); trendEl.innerHTML = '';
+  var byName = {};
+  list.forEach(function(r){ var k=r.name.toLowerCase().trim(); if(!byName[k])byName[k]=[]; byName[k].push(r); });
+  var multi = Object.keys(byName).filter(function(k){return byName[k].length>1;});
+  if(!multi.length){ var tmsg=document.createElement('p'); tmsg.style.cssText='font-size:13px;color:var(--text-muted);'; tmsg.textContent='Trends appear here once a child has completed more than one Reasoning check.'; trendEl.appendChild(tmsg); }
+  else{
+    multi.forEach(function(k){
+      var entries=byName[k].slice().sort(function(a,b){return a.ts-b.ts;});
+      var nameHd=document.createElement('div');nameHd.style.cssText='font-size:14px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:8px;margin-top:12px;';nameHd.textContent=entries[0].name;trendEl.appendChild(nameHd);
+      entries.forEach(function(r,i){
+        var pct=r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
+        var row=document.createElement('div');row.className='trend-row';
+        var dateEl=document.createElement('div');dateEl.className='trend-date';dateEl.textContent=r.date;
+        var setEl=document.createElement('div');setEl.className='trend-set';setEl.textContent=reasoningCheckLabel(r);
+        var scoreEl=document.createElement('div');scoreEl.className='trend-score';scoreEl.textContent=r.totalCorrect+'/'+r.totalQuestions+' ('+pct+'%)';
+        var arrowEl=document.createElement('div');arrowEl.className='trend-arrow';
+        if(i>0){
+          var prevPct = entries[i-1].totalQuestions ? Math.round(entries[i-1].totalCorrect/entries[i-1].totalQuestions*100) : 0;
+          var diff=pct-prevPct;
+          if(diff>0){arrowEl.textContent='+'+diff+'%';arrowEl.style.color='var(--text-success)';}
+          else if(diff<0){arrowEl.textContent=diff+'%';arrowEl.style.color='var(--text-danger)';}
+          else{arrowEl.textContent='no change';arrowEl.style.color='var(--text-muted)';}
+        }
+        row.appendChild(dateEl);row.appendChild(setEl);row.appendChild(scoreEl);row.appendChild(arrowEl);
+        trendEl.appendChild(row);
+      });
+    });
+  }
+}
+
+function exportReasoningAnalyticsCSV(){
+  var scoped = filterByClass(reasoningResults);
+  if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
+  var rows=[];
+  var blank=[''];
+  rows.push(['Emeejay Assess - Reasoning Analytics Export'+(classFilter?(' ('+classFilter+')'):''),'Generated: '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})]);
+  rows.push(['Total checks',scoped.length]);
+  var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/scoped.length);
+  rows.push(['Overall average',avgTotal+'%']);
+  rows.push(blank);
+
+  rows.push(['BY TOPIC & TIER','','']);
+  rows.push(['Topic check','Checks','Average score']);
+  var byLabel={};
+  scoped.forEach(function(r){var lbl=reasoningCheckLabel(r);if(!byLabel[lbl])byLabel[lbl]=[];byLabel[lbl].push(r);});
+  Object.keys(byLabel).sort().forEach(function(lbl){
+    var subList=byLabel[lbl];
+    var subAvg=Math.round(subList.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/subList.length);
+    rows.push([lbl,subList.length,subAvg+'%']);
+  });
+  rows.push(blank);
+
+  rows.push(['MOST MISSED QUESTIONS','','']);
+  rows.push(['Question','Children missing it','% of checks']);
+  var qCount={};
+  scoped.forEach(function(r){(r.missedQuestions||[]).forEach(function(q){qCount[q]=(qCount[q]||0)+1;});});
+  Object.keys(qCount).sort(function(a,b){return qCount[b]-qCount[a];}).forEach(function(q){
+    rows.push([q,qCount[q],Math.round((qCount[q]/scoped.length)*100)+'%']);
+  });
+  rows.push(blank);
+
+  rows.push(['TRENDS','','','']);
+  rows.push(['Name','Date','Topic check','Score','Change']);
+  var byName={};
+  scoped.forEach(function(r){var k=r.name.toLowerCase().trim();if(!byName[k])byName[k]=[];byName[k].push(r);});
+  Object.keys(byName).filter(function(k){return byName[k].length>1;}).forEach(function(k){
+    var entries=byName[k].slice().sort(function(a,b){return a.ts-b.ts;});
+    entries.forEach(function(r,i){
+      var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
+      var change='';
+      if(i>0){
+        var prevPct = entries[i-1].totalQuestions ? Math.round(entries[i-1].totalCorrect/entries[i-1].totalQuestions*100) : 0;
+        var diff=pct-prevPct;change=(diff>0?'+':'')+diff+'%';
+      }
+      rows.push([r.name,r.date,reasoningCheckLabel(r),r.totalCorrect+'/'+r.totalQuestions+' ('+pct+'%)',change]);
+    });
+  });
+
+  downloadCSV(rows,'emeejay-reasoning-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+}
+
+function startLiveReasoningTier(tier){
+  var t = REASONING_TOPICS[currentReasoningKey];
+  if(!t) return;
+  startLiveSession('reasoning', currentReasoningKey, tier, t.label, t.label + ' · ' + tier);
+}
+
 function startLivePolling(){
   stopLivePolling();
   pollLiveParticipants();
@@ -15327,6 +18068,7 @@ renderReList();
 renderMflList();
 renderMusicList();
 renderEyList();
+renderReasoningList();
 renderEnglishList();
 renderMathsList();
 var isPlayMode = checkPlayParam();
