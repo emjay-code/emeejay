@@ -2807,6 +2807,17 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
   </div>
 </div>
 
+<div class="edit-modal-overlay" id="tier-warning-modal-overlay">
+  <div class="edit-modal-card">
+    <div class="section-hd" style="margin-bottom:0.75rem;">Wrong level for this child?</div>
+    <p id="tier-warning-message" style="font-size:13px;color:var(--text-secondary);margin-bottom:0.75rem;"></p>
+    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+      <button class="btn" style="flex:1;" onclick="closeTierWarningModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="confirmTierOverride()">Start anyway</button>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -3959,6 +3970,32 @@ async function deleteResult(id){
 
 var YEAR_GROUP_ORDER = ['Reception','Year 1','Year 2','Year 3','Year 4','Year 5','Year 6','Not recorded'];
 var TERM_ORDER = ['Autumn','Spring','Summer','Not recorded'];
+var YEAR_TIER = {'Reception':'KS1','Year 1':'KS1','Year 2':'KS1','Year 3':'LKS2','Year 4':'LKS2','Year 5':'UKS2','Year 6':'UKS2'};
+var TIER_LABELS = {'KS1':'KS1 (Year 1–2)','LKS2':'LKS2 (Year 3–4)','UKS2':'UKS2 (Year 5–6)'};
+var pendingTierOverrideRetry = null;
+function requireTierMatch(tier, retryFn){
+  var pupil = selectedAssessmentPupil;
+  if(!pupil) return true;
+  var expected = YEAR_TIER[pupil.year];
+  if(!expected || expected === tier) return true;
+  pendingTierOverrideRetry = retryFn || null;
+  var msgEl = document.getElementById('tier-warning-message');
+  if(msgEl){
+    msgEl.textContent = (pupil.name || 'This child') + ' is in ' + pupil.year + ', which is usually ' + (TIER_LABELS[expected] || expected) + '. You’re about to start a ' + (TIER_LABELS[tier] || tier) + ' check.';
+  }
+  document.getElementById('tier-warning-modal-overlay').classList.add('active');
+  return false;
+}
+function closeTierWarningModal(){
+  document.getElementById('tier-warning-modal-overlay').classList.remove('active');
+  pendingTierOverrideRetry = null;
+}
+function confirmTierOverride(){
+  document.getElementById('tier-warning-modal-overlay').classList.remove('active');
+  var retry = pendingTierOverrideRetry;
+  pendingTierOverrideRetry = null;
+  if(retry) retry();
+}
 var TERM_MONTHS = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
 function getTerm(dateStr){
   if(!dateStr) return 'Not recorded';
@@ -6868,6 +6905,10 @@ function backToMathsTopics(){
 function startMathsCheck(tier){
   if(!requireActiveSchool())return;
   if(!requireName(function(){startMathsCheck(tier);}))return;
+  if(!requireTierMatch(tier, function(){doStartMathsCheck(tier);}))return;
+  doStartMathsCheck(tier);
+}
+function doStartMathsCheck(tier){
   var t = MATHS_TOPICS[currentMathsKey];
   if(!t) return;
   currentMtQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -8089,6 +8130,10 @@ function backToEnglishTopics(){
 function startEnglishCheck(tier){
   if(!requireActiveSchool())return;
   if(!requireName(function(){startEnglishCheck(tier);}))return;
+  if(!requireTierMatch(tier, function(){doStartEnglishCheck(tier);}))return;
+  doStartEnglishCheck(tier);
+}
+function doStartEnglishCheck(tier){
   var t = ENGLISH_TOPICS[currentEnglishKey];
   if(!t) return;
   currentEnQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -8607,6 +8652,10 @@ var handwritingResults = [];
 function startHandwritingCheck(tier){
   if(!requireActiveSchool())return;
   if(!requireName(function(){startHandwritingCheck(tier);}))return;
+  if(!requireTierMatch(tier, function(){doStartHandwritingCheck(tier);}))return;
+  doStartHandwritingCheck(tier);
+}
+function doStartHandwritingCheck(tier){
   currentHwItems = (HANDWRITING_SETS[tier] || HANDWRITING_SETS.KS1).slice();
   currentHwTier = tier;
   hwIdx = 0; hwItemResults = {};
@@ -15852,6 +15901,10 @@ function backToTopics(){
 function startTopicCheck(tier){
   if(!requireActiveSchool())return;
   if(!requireName(function(){startTopicCheck(tier);}))return;
+  if(!requireTierMatch(tier, function(){doStartTopicCheck(tier);}))return;
+  doStartTopicCheck(tier);
+}
+function doStartTopicCheck(tier){
   var t = TOPICS[currentTopicKey];
   if(!t) return;
   currentTpQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -16224,6 +16277,10 @@ function backToScienceTopics(){
 function startScienceCheck(tier){
   if(!requireActiveSchool())return;
   if(!requireName(function(){startScienceCheck(tier);}))return;
+  if(!requireTierMatch(tier, function(){doStartScienceCheck(tier);}))return;
+  doStartScienceCheck(tier);
+}
+function doStartScienceCheck(tier){
   var t = SCIENCE_TOPICS[currentScienceKey];
   if(!t) return;
   currentScQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -16596,6 +16653,10 @@ function backToReTopics(){
 function startReCheck(tier){
   if(!requireActiveSchool())return;
   if(!requireName(function(){startReCheck(tier);}))return;
+  if(!requireTierMatch(tier, function(){doStartReCheck(tier);}))return;
+  doStartReCheck(tier);
+}
+function doStartReCheck(tier){
   var t = RE_TOPICS[currentReKey];
   if(!t) return;
   currentReQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -17289,6 +17350,10 @@ function backToMflTopics(){
 function startMflCheck(tier){
   if(!requireActiveSchool())return;
   if(!requireName(function(){startMflCheck(tier);}))return;
+  if(!requireTierMatch(tier, function(){doStartMflCheck(tier);}))return;
+  doStartMflCheck(tier);
+}
+function doStartMflCheck(tier){
   var t = MFL_TOPICS[currentMflKey];
   if(!t) return;
   currentMflQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -17667,6 +17732,10 @@ function backToMusicTopics(){
 function startMusicCheck(tier){
   if(!requireActiveSchool())return;
   if(!requireName(function(){startMusicCheck(tier);}))return;
+  if(!requireTierMatch(tier, function(){doStartMusicCheck(tier);}))return;
+  doStartMusicCheck(tier);
+}
+function doStartMusicCheck(tier){
   var t = MUSIC_TOPICS[currentMusicKey];
   if(!t) return;
   currentMusicQuestions = pickQuestions(t.questions[tier] || [], 12);
@@ -18045,6 +18114,10 @@ function backToReasoningTopics(){
 function startReasoningCheck(tier){
   if(!requireActiveSchool())return;
   if(!requireName(function(){startReasoningCheck(tier);}))return;
+  if(!requireTierMatch(tier, function(){doStartReasoningCheck(tier);}))return;
+  doStartReasoningCheck(tier);
+}
+function doStartReasoningCheck(tier){
   var t = REASONING_TOPICS[currentReasoningKey];
   if(!t) return;
   currentReasoningQuestions = pickQuestions(t.questions[tier] || [], 12);
