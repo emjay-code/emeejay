@@ -3672,6 +3672,26 @@ function backToChildrenList(){
   showRvScreen('tab-children', 'ch-list-screen');
 }
 
+/* Jumping to a pupil's Child Profile from a Results card - results rows
+   store the pupil's name/year as plain text (not a roster id), so match
+   back to the roster by name, preferring a year-group match if more than
+   one child shares that name. */
+function findPupilIdByName(name, year){
+  if(!name) return null;
+  var nm = name.trim().toLowerCase();
+  var matches = pupilsRoster.filter(function(p){ return (p.name||'').trim().toLowerCase() === nm; });
+  if(!matches.length) return null;
+  if(matches.length === 1) return matches[0].id;
+  var withYear = matches.find(function(p){ return year && p.year === year; });
+  return (withYear || matches[0]).id;
+}
+async function goToChildProfileFromResult(r){
+  var id = findPupilIdByName(r.name, r.year);
+  if(!id) return;
+  await switchTab('children');
+  openChildProfile(id);
+}
+
 /* Profile view - full cross-subject history, matched by name */
 var currentPupilId = null;
 async function openChildProfile(id){
@@ -4048,7 +4068,7 @@ function renderGroups(container, list, keyFn, order, buildCard, singularLabel, p
 function buildPupilCard(r){
   var card=document.createElement('div');card.className='pupil-card';
   var header=document.createElement('div');header.className='pupil-header';
-  var nb=document.createElement('div');nb.style.flex='1';
+  var nb=document.createElement('div');nb.style.flex='1';nb.style.cursor='pointer';nb.onclick=function(){goToChildProfileFromResult(r);};
   var ne=document.createElement('div');ne.className='pupil-name';ne.textContent=r.name;
   var me=document.createElement('div');me.className='pupil-meta';me.textContent=buildMeta(r);
   nb.appendChild(ne);nb.appendChild(me);
@@ -4364,7 +4384,7 @@ async function deleteBlendingResult(id){
 function buildBlendingCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = ['Blending check', r.date, r.year].filter(function(x){return x;}).join(' / ');
@@ -4714,7 +4734,7 @@ async function deleteTimesTablesResult(id){
 function buildTimesTablesCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   var ttLabel = (!r.checkLabel || r.checkLabel === 'Mixed') ? 'Mixed check' : r.checkLabel;
@@ -6899,7 +6919,7 @@ function mathsCheckLabel(r){
 function buildMathsCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = [mathsCheckLabel(r), r.date, r.year].filter(function(x){return x;}).join(' / ');
@@ -8124,7 +8144,7 @@ function englishCheckLabel(r){
 function buildEnglishCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = [englishCheckLabel(r), r.date, r.year].filter(function(x){return x;}).join(' / ');
@@ -8636,7 +8656,7 @@ async function deleteHandwritingResult(id){
 function buildHandwritingCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = [r.setLabel, r.date, r.year].filter(function(x){return x;}).join(' / ');
@@ -8972,7 +8992,7 @@ async function deleteEyResult(id){
 function buildEyCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = [r.setLabel, r.date, r.year].filter(function(x){return x;}).join(' / ');
@@ -15895,7 +15915,7 @@ function topicCheckLabel(r){
 function buildTopicCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = [topicCheckLabel(r), r.date, r.year].filter(function(x){return x;}).join(' / ');
@@ -16271,7 +16291,7 @@ function scienceCheckLabel(r){
 function buildScienceCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = [scienceCheckLabel(r), r.date, r.year].filter(function(x){return x;}).join(' / ');
@@ -16647,7 +16667,7 @@ function reCheckLabel(r){
 function buildReCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = [reCheckLabel(r), r.date, r.year].filter(function(x){return x;}).join(' / ');
@@ -17344,7 +17364,7 @@ function mflCheckLabel(r){
 function buildMflCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = [mflCheckLabel(r), r.date, r.year].filter(function(x){return x;}).join(' / ');
@@ -17726,7 +17746,7 @@ function musicCheckLabel(r){
 function buildMusicCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = [musicCheckLabel(r), r.date, r.year].filter(function(x){return x;}).join(' / ');
@@ -18108,7 +18128,7 @@ function reasoningCheckLabel(r){
 function buildReasoningCard(r){
   var card = document.createElement('div'); card.className = 'pupil-card';
   var header = document.createElement('div'); header.className = 'pupil-header';
-  var nb = document.createElement('div'); nb.style.flex = '1';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = [reasoningCheckLabel(r), r.date, r.year].filter(function(x){return x;}).join(' / ');
