@@ -510,8 +510,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div style="display:flex;gap:0.6rem;align-items:flex-start;">
         <i class="ti ti-tools" aria-hidden="true" style="font-size:18px;color:var(--hp-purple);flex-shrink:0;margin-top:1px;"></i>
         <div style="flex:1;">
-          <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px;">This is a work in progress</div>
-          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.4;">Not every topic, tier or question will be right for every child yet. If something feels too hard or isn't suitable, use the <i class="ti ti-flag" aria-hidden="true"></i> flag link during a check to tell us &ndash; content gets reviewed and adjusted where appropriate.</div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px;">Our content library is continually expanding</div>
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.4;">Not every topic, tier or question will suit every child just yet. If something feels too difficult or isn't quite right, use the <i class="ti ti-flag" aria-hidden="true"></i> flag link during a check to let us know &ndash; content is reviewed and adjusted where appropriate.</div>
         </div>
         <a href="javascript:void(0)" onclick="document.getElementById('wip-banner').style.display='none';" style="color:var(--text-muted);font-size:16px;line-height:1;flex-shrink:0;" aria-label="Dismiss">&times;</a>
       </div>
@@ -2778,7 +2778,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 <div class="edit-modal-overlay" id="report-modal-overlay">
   <div class="edit-modal-card" id="report-modal-card">
     <div class="section-hd" style="margin-bottom:0.35rem;">Report this question</div>
-    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">We're still building out full coverage, so not every question will be right for every child yet. Let us know if something's wrong, too hard, or not suitable &ndash; this goes straight to the developer and content gets adjusted where appropriate.</p>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Our content library is continually expanding, so not every question will suit every child yet. Let us know if something's wrong, too difficult, or not suitable &ndash; this goes straight to the developer and content is reviewed and adjusted where appropriate.</p>
     <div class="field">
       <label>Question / item</label>
       <div id="report-modal-item" style="font-size:13px;color:var(--text-primary);background:var(--surface-1);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.5rem 0.65rem;"></div>
@@ -3591,7 +3591,7 @@ async function submitQuestionReport(){
     return;
   }
   var card = document.getElementById('report-modal-card');
-  card.innerHTML = '<div class="section-hd" style="margin-bottom:0.5rem;">Thanks!</div><p style="font-size:13px;color:var(--text-secondary);margin-bottom:1rem;">Your report has been sent. We\'re actively expanding and adjusting content, and we\'ll take a look at this and adapt it where appropriate.</p><button class="btn btn-primary" style="width:100%;" onclick="closeReportModal()">Close</button>';
+  card.innerHTML = '<div class="section-hd" style="margin-bottom:0.5rem;">Thanks!</div><p style="font-size:13px;color:var(--text-secondary);margin-bottom:1rem;">Your report has been sent. Our content is reviewed regularly, and we\'ll take a look at this and adapt it where appropriate.</p><button class="btn btn-primary" style="width:100%;" onclick="closeReportModal()">Close</button>';
 }
 
 /* ---------- Per-subject report-question wrappers ---------- */
