@@ -259,6 +259,9 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .subj-music{background:#F1EAFB;border-color:#DAC8F3;}
 .subj-music .subject-icon{background:#6B3FA0;}
 .subj-music .subject-name{color:#4A2470;}
+.subj-early-years{background:#FFF0E9;border-color:#F6CFB8;}
+.subj-early-years .subject-icon{background:#D9722F;}
+.subj-early-years .subject-name{color:#9A4C15;}
 .tt-table-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-top:0.75rem;}
 .tt-table-btn{padding:0.75rem 0;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-2);font-size:15px;font-weight:600;color:var(--text-primary);cursor:pointer;transition:background 0.12s,border-color 0.12s;}
 .tt-table-btn:hover{background:#E5F6F0;border-color:#1E9E76;}
@@ -571,6 +574,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <div class="subject-name">Music</div>
           <div class="subject-desc">Elements, instruments, notation, composers and more</div>
         </button>
+        <button class="subject-card subj-early-years" onclick="goToSubject('early_years')">
+          <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
+          <div class="subject-name">Early Years</div>
+          <div class="subject-desc">Teacher-observed checklist across the 7 EYFS Areas of Learning</div>
+        </button>
       </div>
       <div style="text-align:center;font-size:13px;color:var(--text-secondary);margin-top:0.85rem;">Can't find what you need? <a href="javascript:void(0)" onclick="openFeedbackModal('Topic or check request')" style="color:var(--hp-purple);font-weight:500;">Request a new topic or check</a></div>
     </div>
@@ -629,7 +637,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
         <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
       </div>
-      <button class="phase-btn" id="mt-tier-btn-KS1" onclick="startMathsCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Reception&ndash;Year 2 level questions</div></div></button>
+      <button class="phase-btn" id="mt-tier-btn-KS1" onclick="startMathsCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
       <button class="phase-btn" id="mt-tier-btn-LKS2" onclick="startMathsCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
       <button class="phase-btn" id="mt-tier-btn-UKS2" onclick="startMathsCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
     </div>
@@ -714,7 +722,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
         <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
       </div>
-      <button class="phase-btn" id="en-tier-btn-KS1" onclick="startEnglishCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Reception&ndash;Year 2 level questions</div></div></button>
+      <button class="phase-btn" id="en-tier-btn-KS1" onclick="startEnglishCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
       <button class="phase-btn" id="en-tier-btn-LKS2" onclick="startEnglishCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
       <button class="phase-btn" id="en-tier-btn-UKS2" onclick="startEnglishCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
     </div>
@@ -739,7 +747,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
         <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
       </div>
-      <button class="phase-btn" onclick="startHandwritingCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Handwriting Check</div><div class="phase-desc">Reception&ndash;Year 2: forming individual letters correctly</div></div></button>
+      <button class="phase-btn" onclick="startHandwritingCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Handwriting Check</div><div class="phase-desc">Year 1&ndash;2: forming individual letters correctly</div></div></button>
       <button class="phase-btn" onclick="startHandwritingCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Handwriting Check</div><div class="phase-desc">Years 3&ndash;4: joined handwriting for common letter strings and words</div></div></button>
       <button class="phase-btn" onclick="startHandwritingCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Handwriting Check</div><div class="phase-desc">Years 5&ndash;6: fluent, legible joined handwriting for words and short sentences</div></div></button>
     </div>
@@ -752,6 +760,70 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         <button type="button" class="year-btn" onclick="startLiveSession('handwriting','UKS2','UKS2',null,HANDWRITING_LABELS.UKS2)">UKS2</button>
       </div>
     </div>
+  </div>
+
+  <div class="screen" id="screen-early_years-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-early-years">
+      <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Early Years</div>
+    </div>
+    <div class="card" id="ey-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose an area of learning</span>
+      </div>
+      <div id="ey-area-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-ey-area">
+    <a href="javascript:void(0)" class="back-link" onclick="backToEyAreas()">&larr; Back to areas</a>
+    <div class="subject-banner subj-early-years">
+      <div class="subject-icon" id="ey-banner-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="ey-banner-title">Area</div>
+    </div>
+    <div class="card" id="ey-area-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" onclick="startEyCheck(currentEyKey)"><div class="phase-badge"><i class="ti ti-clipboard-check" aria-hidden="true" style="font-size:16px;"></i></div><div><div class="phase-name" id="ey-area-check-name">Start Check</div><div class="phase-desc" id="ey-area-check-desc"></div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveEyArea(currentEyKey)">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-ey-check">
+    <div class="progress-bar"><div class="progress-fill" id="ey-prog"></div></div>
+    <div class="sound-counter" id="ey-counter">Item 1 of 16</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Does the child do this?</div>
+      <div class="sound-display" id="ey-item-display" style="font-size:17px;"></div>
+      <div class="yn-row">
+        <button class="yn-btn yn-yes" onclick="markEy(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Yes</button>
+        <button class="yn-btn yn-no" onclick="markEy(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
+      </div>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-ey-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Results for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:1rem;" id="ey-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="ey-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="ey-res-got"></div><div class="stat-lbl">Yes</div></div>
+        <div class="stat-card"><div class="stat-val" id="ey-res-not"></div><div class="stat-lbl">Not yet</div></div>
+      </div>
+    </div>
+    <div class="card" id="ey-res-ok-wrap" style="display:none;"><div class="section-hd">Can do</div><div id="ey-res-ok-chips" class="chips-row"></div></div>
+    <div class="card" id="ey-res-no-wrap" style="display:none;"><div class="section-hd">Not yet</div><div id="ey-res-no-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New Early Years check</button>
   </div>
 
   <div class="screen" id="screen-topics-home">
@@ -778,7 +850,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
         <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
       </div>
-      <button class="phase-btn" id="tp-tier-btn-KS1" onclick="startTopicCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Reception&ndash;Year 2 level questions</div></div></button>
+      <button class="phase-btn" id="tp-tier-btn-KS1" onclick="startTopicCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
       <button class="phase-btn" id="tp-tier-btn-LKS2" onclick="startTopicCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
       <button class="phase-btn" id="tp-tier-btn-UKS2" onclick="startTopicCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
     </div>
@@ -817,7 +889,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
         <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
       </div>
-      <button class="phase-btn" onclick="startScienceCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Reception&ndash;Year 2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startScienceCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
       <button class="phase-btn" onclick="startScienceCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
       <button class="phase-btn" onclick="startScienceCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
     </div>
@@ -856,7 +928,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
         <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
       </div>
-      <button class="phase-btn" onclick="startReCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Reception&ndash;Year 2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startReCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
       <button class="phase-btn" onclick="startReCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
       <button class="phase-btn" onclick="startReCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
     </div>
@@ -895,7 +967,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
         <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
       </div>
-      <button class="phase-btn" onclick="startMflCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Reception&ndash;Year 2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startMflCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
       <button class="phase-btn" onclick="startMflCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
       <button class="phase-btn" onclick="startMflCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
     </div>
@@ -934,7 +1006,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
         <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
       </div>
-      <button class="phase-btn" onclick="startMusicCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Reception&ndash;Year 2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startMusicCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
       <button class="phase-btn" onclick="startMusicCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
       <button class="phase-btn" onclick="startMusicCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
     </div>
@@ -1303,6 +1375,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <div class="subject-name">Music</div>
           <div class="subject-desc">Music check results</div>
         </button>
+        <button class="subject-card subj-early-years" onclick="goToResultsSubject('early_years')">
+          <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
+          <div class="subject-name">Early Years</div>
+          <div class="subject-desc">Early Years check results</div>
+        </button>
       </div>
     </div>
   </div>
@@ -1542,6 +1619,49 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       </div>
     </div>
     <div id="hw-list"></div>
+  </div>
+
+  <div class="rv-screen" id="rv-early_years-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-early-years">
+      <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Early Years results</div>
+    </div>
+    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
+      <div class="group-toggle-row" style="margin-bottom:0;">
+        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
+        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
+      </div>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Early Years</h2>
+      <div class="tab-actions">
+        <select id="ey-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportEyCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-early_years-btn" onclick="clearAllEy()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="ey-group-year-btn" onclick="setEyGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="ey-group-term-btn" onclick="setEyGroupMode('term')">Term</button>
+    </div>
+    <div id="ey-list-empty" class="empty-state" style="display:none;">No Early Years checks yet.</div>
+    <div id="ey-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="ey-count">0</div><div class="stat-lbl">Children checked</div></div>
+        <div class="stat-card"><div class="stat-val" id="ey-avg">0%</div><div class="stat-lbl">Average score</div></div>
+      </div>
+    </div>
+    <div id="ey-list"></div>
   </div>
 
   <div class="rv-screen" id="rv-topics-section">
@@ -1815,6 +1935,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <div class="subject-name">Music</div>
           <div class="subject-desc">Music check analytics</div>
         </button>
+        <button class="subject-card subj-early-years" onclick="goToAnalyticsSubject('early_years')">
+          <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
+          <div class="subject-name">Early Years</div>
+          <div class="subject-desc">Early Years check analytics</div>
+        </button>
       </div>
     </div>
   </div>
@@ -2011,6 +2136,41 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Handwriting check trends</h2>
         <p style="font-size:13px;margin-bottom:1rem;">Children checked more than once, showing change over time.</p>
         <div id="hw-an-trends"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="an-early_years-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-early-years">
+      <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Early Years analytics</div>
+    </div>
+    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
+      <div class="group-toggle-row" style="margin-bottom:0;">
+        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
+        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
+      </div>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportEyAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="ey-an-empty" class="empty-state" style="display:none;">No Early Years check data yet. Complete an Early Years check first.</div>
+    <div id="ey-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most-emerging skills</h2><div id="ey-an-missed"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">Early Years check trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children checked more than once, showing change over time.</p>
+        <div id="ey-an-trends"></div>
       </div>
     </div>
   </div>
@@ -2236,6 +2396,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">RE</h2><div id="ch-profile-re"></div><div id="ch-profile-re-empty" style="font-size:13px;color:var(--text-muted);">No RE checks yet.</div></div>
     <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">MFL</h2><div id="ch-profile-mfl"></div><div id="ch-profile-mfl-empty" style="font-size:13px;color:var(--text-muted);">No MFL checks yet.</div></div>
     <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Music</h2><div id="ch-profile-music"></div><div id="ch-profile-music-empty" style="font-size:13px;color:var(--text-muted);">No Music checks yet.</div></div>
+    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Early Years</h2><div id="ch-profile-early_years"></div><div id="ch-profile-early_years-empty" style="font-size:13px;color:var(--text-muted);">No Early Years checks yet.</div></div>
   </div>
 </div>
 
@@ -2432,7 +2593,7 @@ var DEMO_EMAIL = 'demo@emjayphonicstracker.com';
 var DEMO_PASSWORD = 'EmjayDemo2026!';
 var DEMO_ACCESS_CODE = 'DEMOLITION5678';
 var DEMO_SCHOOL_ID = '8f2b768c-8251-4351-9759-26b6271319ed';
-var DEMO_RESET_TABLES = ['results','blending_results','maths_results','maths_topics_results','english_results','handwriting_results','topic_results','science_results','re_results','mfl_results','music_results','pupils'];
+var DEMO_RESET_TABLES = ['results','blending_results','maths_results','maths_topics_results','english_results','handwriting_results','topic_results','science_results','re_results','mfl_results','music_results','early_years_results','pupils'];
 async function resetDemoData(){
   try{
     await Promise.all(DEMO_RESET_TABLES.map(function(t){
@@ -2702,6 +2863,7 @@ async function onSignedIn(){
   var clearTopicsBtn = document.getElementById('clear-topics-btn');
   var clearScienceBtn = document.getElementById('clear-science-btn');
   var clearReBtn = document.getElementById('clear-re-btn');
+  var clearEyBtn = document.getElementById('clear-early_years-btn');
   if(clearResultsBtn) clearResultsBtn.style.display = isDemoSchool() ? 'none' : '';
   if(clearBlendingBtn) clearBlendingBtn.style.display = isDemoSchool() ? 'none' : '';
   if(clearMathsBtn) clearMathsBtn.style.display = isDemoSchool() ? 'none' : '';
@@ -2711,6 +2873,7 @@ async function onSignedIn(){
   if(clearTopicsBtn) clearTopicsBtn.style.display = isDemoSchool() ? 'none' : '';
   if(clearScienceBtn) clearScienceBtn.style.display = isDemoSchool() ? 'none' : '';
   if(clearReBtn) clearReBtn.style.display = isDemoSchool() ? 'none' : '';
+  if(clearEyBtn) clearEyBtn.style.display = isDemoSchool() ? 'none' : '';
 
   document.getElementById('landing-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'none';
@@ -2729,6 +2892,7 @@ async function onSignedIn(){
   await loadReResults();
   await loadMflResults();
   await loadMusicResults();
+  await loadEyResults();
 
   if(isDemoSchool() && sess.data.session){
     demoAccessToken = sess.data.session.access_token;
@@ -2810,8 +2974,8 @@ async function switchTab(t){
     /* Re-fetch from Supabase rather than rendering cached arrays - a live
        session writes results from the child's own browser, so this
        teacher's locally-loaded data can be stale until refreshed. */
-    await Promise.all([loadResults(), loadBlendingResults(), loadMathsResults(), loadTimesTablesResults(), loadEnglishResults(), loadHandwritingResults(), loadTopicResults(), loadScienceResults(), loadReResults(), loadMflResults(), loadMusicResults()]);
-    renderAnalytics(); renderBlendingAnalytics(); renderMathsAnalytics(); renderTimesTablesAnalytics(); renderEnglishAnalytics(); renderHandwritingAnalytics(); renderTopicAnalytics(); renderScienceAnalytics(); renderReAnalytics(); renderMflAnalytics(); renderMusicAnalytics();
+    await Promise.all([loadResults(), loadBlendingResults(), loadMathsResults(), loadTimesTablesResults(), loadEnglishResults(), loadHandwritingResults(), loadTopicResults(), loadScienceResults(), loadReResults(), loadMflResults(), loadMusicResults(), loadEyResults()]);
+    renderAnalytics(); renderBlendingAnalytics(); renderMathsAnalytics(); renderTimesTablesAnalytics(); renderEnglishAnalytics(); renderHandwritingAnalytics(); renderTopicAnalytics(); renderScienceAnalytics(); renderReAnalytics(); renderMflAnalytics(); renderMusicAnalytics(); renderEyAnalytics();
   }
   if(t==='children'){
     showRvScreen('tab-children', 'ch-list-screen');
@@ -2992,7 +3156,7 @@ function syncYearButtons(selectId){
 function buildMeta(r){var parts=[r.set,r.date];if(r.year)parts.push(r.year);if(r.gender)parts.push(r.gender);if(r.needs)parts.push(r.needs);return parts.join(' / ');}
 
 /* ---------- Edit extra pupil details (year/gender/dob/needs) on any result row ---------- */
-var EDIT_TABLE_BY_SUBJECT = { phonics:'results', blending:'blending_results', maths:'maths_topics_results', times_tables:'maths_results', english:'english_results', handwriting:'handwriting_results', topics:'topic_results', science:'science_results', re:'re_results', mfl:'mfl_results', music:'music_results' };
+var EDIT_TABLE_BY_SUBJECT = { phonics:'results', blending:'blending_results', maths:'maths_topics_results', times_tables:'maths_results', english:'english_results', handwriting:'handwriting_results', topics:'topic_results', science:'science_results', re:'re_results', mfl:'mfl_results', music:'music_results', early_years:'early_years_results' };
 var editModalState = null;
 function refreshAfterEdit(subject){
   if(subject === 'phonics') return loadResults();
@@ -3006,6 +3170,7 @@ function refreshAfterEdit(subject){
   if(subject === 're') return loadReResults().then(function(){ renderReAnalytics(); });
   if(subject === 'mfl') return loadMflResults().then(function(){ renderMflAnalytics(); });
   if(subject === 'music') return loadMusicResults().then(function(){ renderMusicAnalytics(); });
+  if(subject === 'early_years') return loadEyResults().then(function(){ renderEyAnalytics(); });
 }
 function openEditDetails(subject, r){
   if(isDemoSchool()){ alert('This is the shared demo account, so its details can\'t be edited.'); return; }
@@ -3311,6 +3476,7 @@ async function openChildProfile(id){
   var re_ = await sb.from('re_results').select('*').ilike('pupil_name', nameFilter);
   var mfl_ = await sb.from('mfl_results').select('*').ilike('pupil_name', nameFilter);
   var music_ = await sb.from('music_results').select('*').ilike('pupil_name', nameFilter);
+  var earlyYears_ = await sb.from('early_years_results').select('*').ilike('pupil_name', nameFilter);
 
   renderProfileSection('phonics', (results_.data||[]).map(rowToResult), buildPupilCard);
   renderProfileSection('blending', (blending_.data||[]).map(rowToBlendingResult), buildBlendingCard);
@@ -3323,6 +3489,7 @@ async function openChildProfile(id){
   renderProfileSection('re', (re_.data||[]).map(rowToReResult), buildReCard);
   renderProfileSection('mfl', (mfl_.data||[]).map(rowToMflResult), buildMflCard);
   renderProfileSection('music', (music_.data||[]).map(rowToMusicResult), buildMusicCard);
+  renderProfileSection('early_years', (earlyYears_.data||[]).map(rowToEyResult), buildEyCard);
 }
 function renderProfileSection(key, list, buildFn){
   var el = document.getElementById('ch-profile-' + key);
@@ -3387,6 +3554,7 @@ function setClassFilter(val){
   renderReResults();
   renderMflResults();
   renderMusicResults();
+  renderEyResults();
   renderAnalytics();
   renderBlendingAnalytics();
   renderMathsAnalytics();
@@ -3398,6 +3566,7 @@ function setClassFilter(val){
   renderReAnalytics();
   renderMflAnalytics();
   renderMusicAnalytics();
+  renderEyAnalytics();
 }
 function filterByClass(list){
   if(!classFilter) return list;
@@ -3410,8 +3579,8 @@ function showRvScreen(containerId, id){
   container.querySelectorAll('.rv-screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
 }
-var SUBJECT_RESULTS_SCREENS = {phonics:'rv-phonics-section', maths:'rv-maths-section', times_tables:'rv-times-tables-section', english:'rv-english-section', handwriting:'rv-handwriting-section', topics:'rv-topics-section', science:'rv-science-section', re:'rv-re-section', mfl:'rv-mfl-section', music:'rv-music-section'};
-var SUBJECT_ANALYTICS_SCREENS = {phonics:'an-phonics-section', maths:'an-maths-section', times_tables:'an-times-tables-section', english:'an-english-section', handwriting:'an-handwriting-section', topics:'an-topics-section', science:'an-science-section', re:'an-re-section', mfl:'an-mfl-section', music:'an-music-section'};
+var SUBJECT_RESULTS_SCREENS = {phonics:'rv-phonics-section', maths:'rv-maths-section', times_tables:'rv-times-tables-section', english:'rv-english-section', handwriting:'rv-handwriting-section', topics:'rv-topics-section', science:'rv-science-section', re:'rv-re-section', mfl:'rv-mfl-section', music:'rv-music-section', early_years:'rv-early_years-section'};
+var SUBJECT_ANALYTICS_SCREENS = {phonics:'an-phonics-section', maths:'an-maths-section', times_tables:'an-times-tables-section', english:'an-english-section', handwriting:'an-handwriting-section', topics:'an-topics-section', science:'an-science-section', re:'an-re-section', mfl:'an-mfl-section', music:'an-music-section', early_years:'an-early_years-section'};
 function goToResultsSubject(subj){
   showRvScreen('tab-results', SUBJECT_RESULTS_SCREENS[subj] || 'rv-phonics-section');
 }
@@ -7758,6 +7927,171 @@ function startLiveEnglishTier(tier){
   startLiveSession('english', currentEnglishKey, tier, t.label, t.label + ' · ' + tier);
 }
 
+/* ---------- Early Years (teacher-marked checklist against the 7 EYFS Areas of
+   Learning, mirrors Handwriting/Phonics) ---------- */
+/* Not multiple choice - for each Area of Learning the teacher observes the
+   child and marks each skill statement as demonstrated or not yet, rather
+   than asking quiz-style questions, since that better matches how EYFS
+   practitioners actually assess Reception-age children. */
+var EARLY_YEARS_AREAS = {
+  comm_lang: {
+    key: 'comm_lang', label: 'Communication and Language', icon: 'ti-messages',
+    desc: 'Listening, understanding, speaking and having conversations',
+    items: [
+      'Listens attentively in group activities and discussions',
+      'Follows instructions with two or more steps',
+      "Answers 'how' and 'why' questions about a story or experience",
+      'Listens to and talks about stories, building familiarity and understanding',
+      'Retells a simple story in their own words, in the correct sequence',
+      'Uses new vocabulary in different contexts',
+      'Expresses ideas clearly using full sentences',
+      "Connects ideas using a range of connectives (e.g. 'because', 'and', 'so')",
+      "Uses talk to organise themselves and their play (e.g. 'let's build a tower')",
+      'Engages in a back-and-forth conversation with an adult or friend',
+      'Asks questions to find out more or check understanding',
+      'Describes events in some detail',
+      'Uses talk to explain what is happening and anticipate what might happen next',
+      'Offers explanations for why things might happen',
+      'Holds a conversation while engaged in another activity',
+      'Understands humour, such as nonsense rhymes and jokes'
+    ]
+  },
+  psed: {
+    key: 'psed', label: 'Personal, Social and Emotional Development', icon: 'ti-heart',
+    desc: 'Self-regulation, managing feelings and building relationships',
+    items: [
+      'Shows understanding of their own feelings and those of others',
+      'Begins to regulate their behaviour accordingly',
+      'Sets and works towards simple goals',
+      'Waits for what they want and controls their immediate impulses when appropriate',
+      'Gives focused attention to what the teacher says',
+      'Is confident to try new activities and shows independence',
+      'Explains the reasons for rules and tries to behave accordingly',
+      'Manages their own basic hygiene and personal needs',
+      'Shows resilience and perseverance in the face of a challenge',
+      'Works and plays cooperatively and takes turns with others',
+      'Forms positive attachments to adults and friendships with peers',
+      'Shows sensitivity to their own and others’ needs',
+      'Manages their own feelings and behaviour, understanding how these link to rules and boundaries',
+      "Shows a 'can-do' attitude and confidence in a new social situation",
+      "Talks about their own and others' feelings and behaviour, and its consequences",
+      'Separates from their main carer with confidence'
+    ]
+  },
+  physical: {
+    key: 'physical', label: 'Physical Development', icon: 'ti-run',
+    desc: 'Gross motor skills, fine motor skills and pencil grip',
+    items: [
+      'Negotiates space and obstacles safely, with awareness of themselves and others',
+      'Demonstrates strength, balance and coordination when playing',
+      'Moves energetically (e.g. running, jumping, dancing, hopping, skipping, climbing)',
+      'Holds a pencil effectively in preparation for fluent writing, using a tripod grip',
+      'Uses a range of small tools competently, safely and confidently',
+      'Shows accuracy and care when drawing',
+      'Knows and talks about factors that support their overall health and wellbeing',
+      'Throws, catches and kicks a ball with reasonable control',
+      'Balances on one foot or in a range of other positions',
+      'Travels with confidence and skill around, under, over and through equipment',
+      'Shows good control and coordination in large and small movements',
+      'Handles equipment and tools effectively, including pencils for writing',
+      'Uses one-handed tools and equipment (e.g. scissors, tweezers)',
+      'Dresses and undresses independently, managing buttons and zips',
+      'Uses the toilet independently and washes hands without reminders',
+      'Confidently and safely uses a range of large and small apparatus'
+    ]
+  },
+  literacy: {
+    key: 'literacy', label: 'Literacy', icon: 'ti-book',
+    desc: 'Early reading, phonics and mark-making through to simple writing',
+    items: [
+      'Demonstrates understanding of what has been read to them',
+      'Anticipates key events in stories',
+      'Uses and understands recently introduced vocabulary during discussions about stories',
+      'Says a sound for each letter of the alphabet and at least 10 digraphs',
+      'Reads words consistent with their phonic knowledge by sound-blending',
+      'Reads aloud simple sentences and books consistent with their phonic knowledge',
+      'Writes recognisable letters, most of which are correctly formed',
+      'Spells words by identifying the sounds and then writing the sound with letter(s)',
+      'Writes simple phrases and sentences that can be read by others',
+      'Re-reads what they have written to check it makes sense',
+      'Engages in extended conversations about stories, learning new vocabulary',
+      'Understands that print carries meaning and is read left to right, top to bottom',
+      'Blends sounds into words so they can read short words',
+      'Recognises and reads their own name',
+      'Enjoys an increasing range of books and can retell familiar stories',
+      'Uses vocabulary and forms of speech encountered in books'
+    ]
+  },
+  maths: {
+    key: 'maths', label: 'Mathematics', icon: 'ti-123',
+    desc: 'Counting, number, comparing quantities and simple patterns',
+    items: [
+      'Counts objects, actions and sounds accurately up to 20',
+      'Recognises numbers up to 10',
+      'Subitises (recognises quantities without counting) up to 5',
+      'Automatically recalls number bonds up to 5, including subtraction facts',
+      'Automatically recalls some number bonds to 10',
+      'Verbally counts beyond 20, recognising the pattern of the counting system',
+      'Compares quantities up to 10, recognising greater than, less than or the same as',
+      'Explores and represents patterns within numbers up to 10',
+      'Selects, rotates and manipulates shapes to fit a space',
+      'Compares length, weight and capacity using everyday language',
+      'Continues, copies and creates repeating patterns',
+      'Shares items into equal groups',
+      'Talks about and identifies patterns around them (e.g. stripes on clothes)',
+      'Combines shapes to make new ones',
+      'Solves simple addition and subtraction problems using objects',
+      'Uses positional language (e.g. in front of, behind, next to)'
+    ]
+  },
+  understanding_world: {
+    key: 'understanding_world', label: 'Understanding the World', icon: 'ti-globe',
+    desc: 'People, communities, the natural world and past and present',
+    items: [
+      'Talks about the lives of the people around them and their roles in society',
+      'Knows some similarities and differences between things in the past and now',
+      'Understands the past through settings, characters and events in books and stories',
+      'Describes their immediate environment using knowledge from observation',
+      'Knows some similarities and differences between religious and cultural communities',
+      'Explains some similarities and differences between life in this country and others',
+      'Draws information from a simple map',
+      'Recognises some environments that are different from the one in which they live',
+      'Explores the natural world, making observations and drawing pictures of animals and plants',
+      'Knows some similarities and differences between the natural world around them and contrasting environments',
+      'Understands some important processes and changes in the natural world (e.g. seasons)',
+      'Talks about members of their immediate family and community',
+      'Names and describes people who are familiar to them',
+      'Comments on images of familiar situations in the past',
+      'Explores collections of materials with similar and/or different properties',
+      'Talks about what they see using a wide vocabulary'
+    ]
+  },
+  expressive_arts: {
+    key: 'expressive_arts', label: 'Expressive Arts and Design', icon: 'ti-palette',
+    desc: 'Art, music, role play and imaginative storytelling',
+    items: [
+      'Safely uses and explores a variety of materials, tools and techniques',
+      'Experiments with colour, design, texture, form and function',
+      'Shares their creations, explaining the process they have used',
+      'Makes use of props and materials when role playing characters in stories',
+      'Invents, adapts and recounts narratives and stories with peers and their teacher',
+      'Sings a range of well-known nursery rhymes and songs',
+      'Performs songs, rhymes, poems and stories, trying to move in time with music',
+      'Explores and engages in music-making and dance, performing solo or in groups',
+      'Develops storylines in their pretend play',
+      'Returns to and builds on their previous learning, refining and developing ideas',
+      'Creates collaboratively, sharing ideas, resources and skills',
+      'Listens attentively, moves to and talks about music, expressing feelings and responses',
+      'Watches and talks about dance and performance, expressing feelings and responses',
+      'Explores and uses a variety of artistic effects to express ideas and feelings',
+      'Draws with increasing complexity and detail (e.g. representing a face with details)',
+      'Uses drawing to represent ideas like movement or loud noises'
+    ]
+  }
+};
+var EARLY_YEARS_LABELS = {};
+Object.keys(EARLY_YEARS_AREAS).forEach(function(k){ EARLY_YEARS_LABELS[k] = EARLY_YEARS_AREAS[k].label + ' Check'; });
+
 /* ---------- Handwriting (teacher-marked, mirrors Phonics) ---------- */
 /* Not multiple choice - the teacher watches the child write each item and
    marks whether it was formed correctly, exactly like the Phonics sounds check. */
@@ -8063,6 +8397,346 @@ function exportHandwritingAnalyticsCSV(){
   });
 
   downloadCSV(rows,'emeejay-handwriting-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+}
+
+/* ---------- Early Years (teacher-marked checklist, mirrors Handwriting) ---------- */
+function renderEyList(){
+  var el = document.getElementById('ey-area-list');
+  if(!el) return;
+  el.innerHTML = '';
+  Object.keys(EARLY_YEARS_AREAS).forEach(function(key){
+    var a = EARLY_YEARS_AREAS[key];
+    var btn = document.createElement('button');
+    btn.className = 'phase-btn';
+    btn.onclick = function(){ goToEyArea(key); };
+    var badge = document.createElement('div'); badge.className = 'phase-badge';
+    var icon = document.createElement('i'); icon.className = 'ti ' + (a.icon || 'ti-building-carousel'); icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
+    badge.appendChild(icon);
+    var textWrap = document.createElement('div');
+    var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = a.label;
+    var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = a.desc || '';
+    textWrap.appendChild(name); textWrap.appendChild(desc);
+    btn.appendChild(badge); btn.appendChild(textWrap);
+    el.appendChild(btn);
+  });
+}
+
+var currentEyKey = 'comm_lang';
+function goToEyArea(key){
+  currentEyKey = key;
+  var a = EARLY_YEARS_AREAS[key];
+  if(!a) return;
+  document.getElementById('ey-banner-icon').innerHTML = '<i class="ti ' + (a.icon || 'ti-building-carousel') + '" aria-hidden="true"></i>';
+  document.getElementById('ey-banner-title').textContent = a.label;
+  document.getElementById('ey-area-check-name').textContent = a.label + ' Check';
+  document.getElementById('ey-area-check-desc').textContent = a.desc || '';
+  showScreen('screen-ey-area');
+}
+function backToEyAreas(){
+  showScreen('screen-early_years-home');
+}
+
+var eyIdx = 0, eyItemResults = {};
+var currentEyItems = [], currentEyTier = 'comm_lang';
+var earlyYearsResults = [];
+
+function startEyCheck(key){
+  if(!requireActiveSchool())return;
+  if(!requireName(function(){startEyCheck(key);}))return;
+  var a = EARLY_YEARS_AREAS[key] || EARLY_YEARS_AREAS.comm_lang;
+  currentEyItems = a.items.slice();
+  currentEyTier = key;
+  eyIdx = 0; eyItemResults = {};
+  showScreen('screen-ey-check');
+  renderEyItem();
+}
+
+function renderEyItem(){
+  var item = currentEyItems[eyIdx];
+  var total = currentEyItems.length;
+  document.getElementById('ey-prog').style.width = Math.round((eyIdx/total)*100)+'%';
+  document.getElementById('ey-counter').textContent = 'Item '+(eyIdx+1)+' of '+total;
+  document.getElementById('ey-item-display').textContent = item;
+}
+
+function markEy(correct){
+  eyItemResults[currentEyItems[eyIdx]] = correct;
+  eyIdx++;
+  if(eyIdx >= currentEyItems.length){ finishEyCheck(); return; }
+  renderEyItem();
+}
+
+async function finishEyCheck(){
+  var name = document.getElementById('pupil-name').value.trim() || 'Unnamed';
+  var year = document.getElementById('pupil-year').value || '';
+  var gender = document.getElementById('pupil-gender').value || '';
+  var dob = document.getElementById('pupil-dob').value || '';
+  var needs = document.getElementById('pupil-needs').value || '';
+  var ok=[], no=[];
+  Object.keys(eyItemResults).forEach(function(k){ if(eyItemResults[k]) ok.push(k); else no.push(k); });
+  var total = currentEyItems.length, pct = Math.round((ok.length/total)*100);
+
+  var row = {
+    school_id: currentProfile.school_id,
+    teacher_id: currentUser.id,
+    pupil_name: name,
+    year_group: year || null,
+    gender: gender || null,
+    dob: dob || null,
+    additional_needs: needs || null,
+    area_label: (EARLY_YEARS_AREAS[currentEyTier] || {}).label || currentEyTier,
+    area_key: currentEyTier,
+    items_ok: ok,
+    items_no: no,
+    total: total,
+    pct: pct,
+    assessed_date: new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+    ts: Date.now()
+  };
+
+  var ins = await sb.from('early_years_results').insert(row).select().single();
+  if(ins.error){
+    if(ins.error.code === '42501' || /row-level security/i.test(ins.error.message)){
+      alert('Your school\'s free trial or subscription isn\'t active, so this Early Years check couldn\'t be saved. Please upgrade to continue.');
+    } else {
+      alert('Could not save this Early Years check: ' + ins.error.message);
+    }
+    showScreen('screen-home');
+    return;
+  }
+
+  var entry = rowToEyResult(ins.data);
+  earlyYearsResults.unshift(entry);
+
+  document.getElementById('ey-res-name').textContent = name;
+  document.getElementById('ey-res-label').textContent = (EARLY_YEARS_AREAS[currentEyTier] || {}).label || currentEyTier;
+  document.getElementById('ey-res-got').textContent = ok.length;
+  document.getElementById('ey-res-not').textContent = no.length;
+  var okDiv = document.getElementById('ey-res-ok-chips'); okDiv.innerHTML = '';
+  ok.forEach(function(s){ var c=document.createElement('span'); c.className='chip chip-ok'; c.textContent=s; okDiv.appendChild(c); });
+  document.getElementById('ey-res-ok-wrap').style.display = ok.length ? 'block' : 'none';
+  var noDiv = document.getElementById('ey-res-no-chips'); noDiv.innerHTML = '';
+  no.forEach(function(s){ var c=document.createElement('span'); c.className='chip chip-no'; c.textContent=s; noDiv.appendChild(c); });
+  document.getElementById('ey-res-no-wrap').style.display = no.length ? 'block' : 'none';
+
+  showScreen('screen-ey-done');
+  renderEyResults();
+}
+
+function rowToEyResult(row){
+  return {
+    id: row.id,
+    name: row.pupil_name,
+    year: row.year_group || '',
+    gender: row.gender || '',
+    dob: row.dob || '',
+    needs: row.additional_needs || '',
+    setLabel: row.area_label,
+    setKey: row.area_key,
+    itemsOk: row.items_ok || [],
+    itemsNo: row.items_no || [],
+    total: row.total,
+    pct: row.pct,
+    date: row.assessed_date,
+    ts: row.ts
+  };
+}
+
+async function loadEyResults(){
+  var res = await sb.from('early_years_results').select('*').order('created_at', { ascending:false });
+  if(res.error){ console.error(res.error); earlyYearsResults = []; }
+  else { earlyYearsResults = res.data.map(rowToEyResult); }
+  renderEyResults();
+}
+
+async function deleteEyResult(id){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its sample data can\'t be deleted.'); return; }
+  if(!confirm('Delete this Early Years check?'))return;
+  var del = await sb.from('early_years_results').delete().eq('id', id);
+  if(del.error){ alert('Could not delete: ' + del.error.message); return; }
+  earlyYearsResults = earlyYearsResults.filter(function(r){return r.id!==id;});
+  renderEyResults();
+}
+
+function buildEyCard(r){
+  var card = document.createElement('div'); card.className = 'pupil-card';
+  var header = document.createElement('div'); header.className = 'pupil-header';
+  var nb = document.createElement('div'); nb.style.flex = '1';
+  var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
+  var me = document.createElement('div'); me.className = 'pupil-meta';
+  me.textContent = [r.setLabel, r.date, r.year].filter(function(x){return x;}).join(' / ');
+  nb.appendChild(ne); nb.appendChild(me);
+  var right = document.createElement('div'); right.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;';
+  var pe = document.createElement('div'); pe.className = 'pct-pill';
+  pe.textContent = r.itemsOk.length + '/' + r.total + ' (' + r.pct + '%)';
+  right.appendChild(pe);
+  if(!isDemoSchool()){
+    var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
+    (function(rr){ editBtn.onclick = function(){ openEditDetails('early_years', rr); }; })(r);
+    right.appendChild(editBtn);
+    var delBtn = document.createElement('button'); delBtn.className = 'delete-row-btn'; delBtn.textContent = 'Delete';
+    (function(id){ delBtn.onclick = function(){ deleteEyResult(id); }; })(r.id);
+    right.appendChild(delBtn);
+  }
+  header.appendChild(nb); header.appendChild(right);
+  card.appendChild(header);
+  if(r.itemsNo && r.itemsNo.length){
+    var ms = document.createElement('div'); ms.className = 'sound-section';
+    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Not yet';
+    var mw = document.createElement('div'); mw.className = 'chips-row';
+    r.itemsNo.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
+    ms.appendChild(mh); ms.appendChild(mw);
+    card.appendChild(ms);
+  }
+  return card;
+}
+
+var eyGroupMode = 'year';
+function setEyGroupMode(mode){
+  eyGroupMode = mode;
+  document.getElementById('ey-group-year-btn').classList.toggle('active', mode==='year');
+  document.getElementById('ey-group-term-btn').classList.toggle('active', mode==='term');
+  renderEyResults();
+}
+
+function renderEyResults(){
+  var el = document.getElementById('ey-list');
+  if(!el) return;
+  el.innerHTML = '';
+  var emptyEl = document.getElementById('ey-list-empty');
+  var summaryEl = document.getElementById('ey-summary');
+  var list = filterByClass(earlyYearsResults);
+  if(!list.length){
+    if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No Early Years checks yet for '+classFilter+'.') : 'No Early Years checks yet.'; }
+    if(summaryEl) summaryEl.style.display = 'none';
+    return;
+  }
+  if(emptyEl) emptyEl.style.display = 'none';
+  if(summaryEl) summaryEl.style.display = 'block';
+  document.getElementById('ey-count').textContent = list.length;
+  var avgEy = Math.round(list.reduce(function(a,r){return a+r.pct;},0)/list.length);
+  document.getElementById('ey-avg').textContent = avgEy + '%';
+  var keyFn = eyGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
+  var order = eyGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
+  renderGroups(el, list, keyFn, order, buildEyCard, 'child checked', 'children checked', eyGroupMode==='year' && !classFilter ? setClassFilter : null);
+}
+
+function exportEyCSV(){
+  var termFilter = document.getElementById('ey-export-term') ? document.getElementById('ey-export-term').value : 'all';
+  var base = filterByClass(earlyYearsResults);
+  var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
+  if(!list.length){alert((termFilter==='all' ? 'No Early Years checks to export yet' : 'No '+termFilter+' term Early Years checks to export yet')+classSuffixText()+'.');return;}
+  var header=['Name','Date','Term','Area of learning','Year group','Gender','Date of birth','Additional needs','Yes','Total items','Score','Not yet'];
+  var rows=[header];
+  list.forEach(function(r){
+    rows.push([r.name,r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%',(r.itemsNo||[]).join('; ')]);
+  });
+  var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
+  downloadCSV(rows,'emeejay-early-years'+suffix+'-'+dateStr()+'.csv');
+}
+
+async function clearAllEy(){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its sample data can\'t be cleared.'); return; }
+  if(!confirm('Clear all Early Years checks for your school? This cannot be undone.'))return;
+  var del = await sb.from('early_years_results').delete().not('id','is',null);
+  if(del.error){ alert('Could not clear Early Years checks: ' + del.error.message); return; }
+  earlyYearsResults=[];
+  renderEyResults();
+  renderEyAnalytics();
+}
+
+function renderEyAnalytics(){
+  var emptyEl = document.getElementById('ey-an-empty');
+  var contentEl = document.getElementById('ey-an-content');
+  if(!emptyEl || !contentEl) return;
+  var list = filterByClass(earlyYearsResults);
+  if(!list.length){ emptyEl.style.display='block'; emptyEl.textContent = classFilter ? ('No Early Years check data yet for '+classFilter+'.') : 'No Early Years check data yet. Complete an Early Years check first.'; contentEl.style.display='none'; return; }
+  emptyEl.style.display='none'; contentEl.style.display='block';
+
+  var missedEl = document.getElementById('ey-an-missed'); missedEl.innerHTML = '';
+  var iCount = {};
+  list.forEach(function(r){ (r.itemsNo||[]).forEach(function(w){ iCount[w]=(iCount[w]||0)+1; }); });
+  var sortedIs = Object.keys(iCount).sort(function(a,b){return iCount[b]-iCount[a];}).slice(0,16);
+  var maxICount = sortedIs.length ? iCount[sortedIs[0]] : 1;
+  if(!sortedIs.length){ var wmsg=document.createElement('p'); wmsg.style.cssText='font-size:13px;color:var(--text-muted);'; wmsg.textContent='No emerging skills recorded yet.'; missedEl.appendChild(wmsg); }
+  sortedIs.forEach(function(w){
+    var row=document.createElement('div');row.className='sound-freq-row';
+    var chip=document.createElement('span');chip.className='sound-freq-chip';chip.style.cssText='max-width:220px;white-space:normal;line-height:1.3;';chip.textContent=w;
+    var bg=document.createElement('div');bg.className='sound-freq-bar-bg';
+    var fill=document.createElement('div');fill.className='sound-freq-bar-fill';fill.style.width=Math.round((iCount[w]/maxICount)*100)+'%';
+    bg.appendChild(fill);
+    var cnt=document.createElement('div');cnt.className='sound-freq-count';cnt.textContent=iCount[w]+' '+(iCount[w]===1?'child':'children');
+    row.appendChild(chip);row.appendChild(bg);row.appendChild(cnt);
+    missedEl.appendChild(row);
+  });
+
+  var trendEl = document.getElementById('ey-an-trends'); trendEl.innerHTML = '';
+  var byName = {};
+  list.forEach(function(r){ var k=r.name.toLowerCase().trim(); if(!byName[k])byName[k]=[]; byName[k].push(r); });
+  var multi = Object.keys(byName).filter(function(k){return byName[k].length>1;});
+  if(!multi.length){ var tmsg=document.createElement('p'); tmsg.style.cssText='font-size:13px;color:var(--text-muted);'; tmsg.textContent='Trends appear here once a child has completed more than one Early Years check.'; trendEl.appendChild(tmsg); }
+  else{
+    multi.forEach(function(k){
+      var entries=byName[k].slice().sort(function(a,b){return a.ts-b.ts;});
+      var nameHd=document.createElement('div');nameHd.style.cssText='font-size:14px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:8px;margin-top:12px;';nameHd.textContent=entries[0].name;trendEl.appendChild(nameHd);
+      entries.forEach(function(r,i){
+        var row=document.createElement('div');row.className='trend-row';
+        var dateEl=document.createElement('div');dateEl.className='trend-date';dateEl.textContent=r.date;
+        var setEl=document.createElement('div');setEl.className='trend-set';setEl.textContent=r.setLabel;
+        var scoreEl=document.createElement('div');scoreEl.className='trend-score';scoreEl.textContent=r.itemsOk.length+'/'+r.total+' ('+r.pct+'%)';
+        var arrowEl=document.createElement('div');arrowEl.className='trend-arrow';
+        if(i>0){
+          var diff=r.pct-entries[i-1].pct;
+          if(diff>0){arrowEl.textContent='+'+diff+'%';arrowEl.style.color='var(--text-success)';}
+          else if(diff<0){arrowEl.textContent=diff+'%';arrowEl.style.color='var(--text-danger)';}
+          else{arrowEl.textContent='no change';arrowEl.style.color='var(--text-muted)';}
+        }
+        row.appendChild(dateEl);row.appendChild(setEl);row.appendChild(scoreEl);row.appendChild(arrowEl);
+        trendEl.appendChild(row);
+      });
+    });
+  }
+}
+
+function exportEyAnalyticsCSV(){
+  var scoped = filterByClass(earlyYearsResults);
+  if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
+  var rows=[];
+  var blank=[''];
+  rows.push(['Emeejay Assess - Early Years Analytics Export'+(classFilter?(' ('+classFilter+')'):''),'Generated: '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})]);
+  rows.push(['Total checks',scoped.length]);
+  var avgTotal = Math.round(scoped.reduce(function(a,r){return a+r.pct;},0)/scoped.length);
+  rows.push(['Overall average',avgTotal+'%']);
+  rows.push(blank);
+
+  rows.push(['MOST-EMERGING SKILLS','','']);
+  rows.push(['Skill','Children not yet showing this','% of checks']);
+  var iCount={};
+  scoped.forEach(function(r){(r.itemsNo||[]).forEach(function(w){iCount[w]=(iCount[w]||0)+1;});});
+  Object.keys(iCount).sort(function(a,b){return iCount[b]-iCount[a];}).forEach(function(w){
+    rows.push([w,iCount[w],Math.round((iCount[w]/scoped.length)*100)+'%']);
+  });
+  rows.push(blank);
+
+  rows.push(['TRENDS','','','']);
+  rows.push(['Name','Date','Area of learning','Score','Change']);
+  var byName={};
+  scoped.forEach(function(r){var k=r.name.toLowerCase().trim();if(!byName[k])byName[k]=[];byName[k].push(r);});
+  Object.keys(byName).filter(function(k){return byName[k].length>1;}).forEach(function(k){
+    var entries=byName[k].slice().sort(function(a,b){return a.ts-b.ts;});
+    entries.forEach(function(r,i){
+      var change='';
+      if(i>0){ var diff=r.pct-entries[i-1].pct; change=(diff>0?'+':'')+diff+'%'; }
+      rows.push([r.name,r.date,r.setLabel,r.itemsOk.length+'/'+r.total+' ('+r.pct+'%)',change]);
+    });
+  });
+
+  downloadCSV(rows,'emeejay-early-years-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+}
+
+function startLiveEyArea(key){
+  var a = EARLY_YEARS_AREAS[key] || EARLY_YEARS_AREAS.comm_lang;
+  startLiveSession('early_years', key, key, null, (EARLY_YEARS_LABELS[key] || (a.label + ' Check')));
 }
 
 /* ---------- Topics: general knowledge checks ---------- */
@@ -13646,6 +14320,10 @@ function buildPlayItems(){
   } else if(s.subject === 'handwriting'){
     var hwItems = (HANDWRITING_SETS[s.tier] || HANDWRITING_SETS.KS1).slice();
     playItems = hwItems.map(function(w){ return { kind:'handwriting', item: w }; });
+  } else if(s.subject === 'early_years'){
+    var eyArea = EARLY_YEARS_AREAS[s.tier] || EARLY_YEARS_AREAS.comm_lang;
+    var eyItems = eyArea.items.slice();
+    playItems = eyItems.map(function(w){ return { kind:'early_years', item: w }; });
   } else if(s.subject === 'topics'){
     var t = TOPICS[s.checkType];
     var qs2 = pickQuestions(t ? (t.questions[s.tier] || t.questions.KS1) : [], 12);
@@ -13701,6 +14379,14 @@ function renderPlayItem(){
         '<button class="yn-btn yn-yes" onclick="playMark(true)"><i class="ti ti-check" aria-hidden="true"></i> Formed correctly</button>'+
         '<button class="yn-btn yn-no" onclick="playMark(false)"><i class="ti ti-x" aria-hidden="true"></i> Not yet</button>'+
       '</div>';
+  } else if(item.kind === 'early_years'){
+    card.innerHTML =
+      '<div class="check-label">Does the child do this?</div>'+
+      '<div class="sound-display" style="font-size:17px;">'+escapeHtml(item.item)+'</div>'+
+      '<div class="yn-row">'+
+        '<button class="yn-btn yn-yes" onclick="playMark(true)"><i class="ti ti-check" aria-hidden="true"></i> Yes</button>'+
+        '<button class="yn-btn yn-no" onclick="playMark(false)"><i class="ti ti-x" aria-hidden="true"></i> Not yet</button>'+
+      '</div>';
   } else if(item.kind === 'maths'){
     card.innerHTML =
       '<div class="check-label">Choose the right answer</div>'+
@@ -13738,7 +14424,7 @@ function playChoose(btnEl, chosen){
 
 function playMark(correct){
   var item = playItems[playIdx];
-  var label = item.kind === 'phonics' ? item.key : item.kind === 'blending' ? item.word : item.kind === 'handwriting' ? item.item : item.display;
+  var label = item.kind === 'phonics' ? item.key : item.kind === 'blending' ? item.word : (item.kind === 'handwriting' || item.kind === 'early_years') ? item.item : item.display;
   playAnswers[playIdx] = { correct: correct, label: label, item: item };
   playIdx++;
   if(playIdx >= playItems.length){ finishPlay(); return; }
@@ -13751,7 +14437,7 @@ async function finishPlay(){
   var realCorrect = 0, realTotal = 0, pseudoCorrect = 0, pseudoTotal = 0;
   Object.keys(playAnswers).forEach(function(k){
     var a = playAnswers[k];
-    if(a.correct){ correctCount++; if(a.item.kind === 'phonics' || a.item.kind === 'handwriting') ok.push(a.label); }
+    if(a.correct){ correctCount++; if(a.item.kind === 'phonics' || a.item.kind === 'handwriting' || a.item.kind === 'early_years') ok.push(a.label); }
     else { missed.push(a.label); }
     if(a.item.kind === 'blending'){
       if(a.item.type === 'real'){ realTotal++; if(a.correct) realCorrect++; }
@@ -14640,6 +15326,7 @@ renderScienceList();
 renderReList();
 renderMflList();
 renderMusicList();
+renderEyList();
 renderEnglishList();
 renderMathsList();
 var isPlayMode = checkPlayParam();
