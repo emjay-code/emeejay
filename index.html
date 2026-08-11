@@ -253,6 +253,9 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .subj-times-tables{background:#E3F4F8;border-color:#B8E0EA;}
 .subj-times-tables .subject-icon{background:#1786A0;}
 .subj-times-tables .subject-name{color:#0F5A6B;}
+.subj-mfl{background:#FDEAEA;border-color:#F3C6C6;}
+.subj-mfl .subject-icon{background:#C23B3B;}
+.subj-mfl .subject-name{color:#8A1F1F;}
 .tt-table-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-top:0.75rem;}
 .tt-table-btn{padding:0.75rem 0;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-2);font-size:15px;font-weight:600;color:var(--text-primary);cursor:pointer;transition:background 0.12s,border-color 0.12s;}
 .tt-table-btn:hover{background:#E5F6F0;border-color:#1E9E76;}
@@ -555,6 +558,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <div class="subject-name">RE</div>
           <div class="subject-desc">Religious Education checks, starting with Christianity</div>
         </button>
+        <button class="subject-card subj-mfl" onclick="goToSubject('mfl')">
+          <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+          <div class="subject-name">MFL</div>
+          <div class="subject-desc">French, Spanish, German and Latin checks</div>
+        </button>
       </div>
       <div style="text-align:center;font-size:13px;color:var(--text-secondary);margin-top:0.85rem;">Can't find what you need? <a href="javascript:void(0)" onclick="openFeedbackModal('Topic or check request')" style="color:var(--hp-purple);font-weight:500;">Request a new topic or check</a></div>
     </div>
@@ -855,6 +863,45 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     </div>
   </div>
 
+  <div class="screen" id="screen-mfl-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-mfl">
+      <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">MFL</div>
+    </div>
+    <div class="card" id="mfl-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a language</span>
+      </div>
+      <div id="mfl-topic-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-mfl-tiers">
+    <a href="javascript:void(0)" class="back-link" onclick="backToMflTopics()">&larr; Back to languages</a>
+    <div class="subject-banner subj-mfl">
+      <div class="subject-icon" id="mfl-banner-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="mfl-banner-title">Language</div>
+    </div>
+    <div class="card" id="mfl-tier-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" onclick="startMflCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Reception&ndash;Year 2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startMflCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
+      <button class="phase-btn" onclick="startMflCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveMflTier('KS1')">KS1</button>
+        <button type="button" class="year-btn" onclick="startLiveMflTier('LKS2')">LKS2</button>
+        <button type="button" class="year-btn" onclick="startLiveMflTier('UKS2')">UKS2</button>
+      </div>
+    </div>
+  </div>
+
   <div class="screen" id="screen-live-dashboard">
     <div class="card" style="text-align:center;padding:1.5rem;">
       <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;" id="live-session-label">Live session</div>
@@ -1124,6 +1171,34 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="card" id="re-res-missed-wrap" style="display:none;"><div class="section-hd">Questions to revisit</div><div id="re-res-missed-chips" class="chips-row"></div></div>
     <button class="btn btn-primary" onclick="goHome()">New RE check</button>
   </div>
+
+  <div class="screen" id="screen-mfl-check">
+    <div class="progress-bar"><div class="progress-fill" id="mfl-prog"></div></div>
+    <div class="sound-counter" id="mfl-counter">Question 1 of 12</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child this question</div>
+      <div class="gr-question-display" id="mfl-question-display"></div>
+      <div class="mc-grid mc-grid-text" id="mfl-answer-display" style="margin-bottom:0.5rem;"></div>
+      <div class="yn-row">
+        <button class="yn-btn yn-yes" onclick="markMfl(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Correct</button>
+        <button class="yn-btn yn-no" onclick="markMfl(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
+      </div>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-mfl-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">MFL check for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:0.25rem;" id="mfl-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="mfl-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="mfl-res-total"></div><div class="stat-lbl" id="mfl-res-total-lbl">Correct</div></div>
+      </div>
+    </div>
+    <div class="card" id="mfl-res-missed-wrap" style="display:none;"><div class="section-hd">Questions to revisit</div><div id="mfl-res-missed-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New MFL check</button>
+  </div>
 </div>
 
 <div id="tab-results" style="display:none;">
@@ -1170,6 +1245,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <div class="subject-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
           <div class="subject-name">RE</div>
           <div class="subject-desc">RE check results</div>
+        </button>
+        <button class="subject-card subj-mfl" onclick="goToResultsSubject('mfl')">
+          <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+          <div class="subject-name">MFL</div>
+          <div class="subject-desc">MFL check results</div>
         </button>
       </div>
     </div>
@@ -1540,6 +1620,49 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     </div>
     <div id="re-list"></div>
   </div>
+
+  <div class="rv-screen" id="rv-mfl-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-mfl">
+      <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">MFL results</div>
+    </div>
+    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
+      <div class="group-toggle-row" style="margin-bottom:0;">
+        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
+        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
+      </div>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">MFL</h2>
+      <div class="tab-actions">
+        <select id="mfl-export-term" class="term-export-select" title="Choose which term to export"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportMflCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-mfl-btn" onclick="clearAllMfl()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="mfl-group-year-btn" onclick="setMflGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="mfl-group-term-btn" onclick="setMflGroupMode('term')">Term</button>
+    </div>
+    <div id="mfl-list-empty" class="empty-state" style="display:none;">No MFL checks yet.</div>
+    <div id="mfl-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="mfl-count">0</div><div class="stat-lbl">Children checked</div></div>
+        <div class="stat-card"><div class="stat-val" id="mfl-avg">0%</div><div class="stat-lbl">Average score</div></div>
+      </div>
+    </div>
+    <div id="mfl-list"></div>
+  </div>
 </div>
 
 <div id="tab-analytics" style="display:none;">
@@ -1586,6 +1709,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <div class="subject-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
           <div class="subject-name">RE</div>
           <div class="subject-desc">RE check analytics</div>
+        </button>
+        <button class="subject-card subj-mfl" onclick="goToAnalyticsSubject('mfl')">
+          <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+          <div class="subject-name">MFL</div>
+          <div class="subject-desc">MFL check analytics</div>
         </button>
       </div>
     </div>
@@ -1894,6 +2022,42 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       </div>
     </div>
   </div>
+
+  <div class="rv-screen" id="an-mfl-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-mfl">
+      <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">MFL analytics</div>
+    </div>
+    <div class="card" style="margin-bottom:1rem;padding:0.85rem 1rem;">
+      <div class="group-toggle-row" style="margin-bottom:0;">
+        <span class="group-toggle-label"><i class="ti ti-users" aria-hidden="true" style="margin-right:2px;"></i>Viewing class:</span>
+        <button type="button" class="group-toggle-btn class-filter-btn active" data-class="" onclick="setClassFilter('')">All classes</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Reception" onclick="setClassFilter('Reception')">Reception</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 1" onclick="setClassFilter('Year 1')">Year 1</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 2" onclick="setClassFilter('Year 2')">Year 2</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 3" onclick="setClassFilter('Year 3')">Year 3</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 4" onclick="setClassFilter('Year 4')">Year 4</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 5" onclick="setClassFilter('Year 5')">Year 5</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Year 6" onclick="setClassFilter('Year 6')">Year 6</button>
+        <button type="button" class="group-toggle-btn class-filter-btn" data-class="Not recorded" onclick="setClassFilter('Not recorded')">Not recorded</button>
+      </div>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportMflAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="mfl-an-empty" class="empty-state" style="display:none;">No MFL check data yet. Complete an MFL check first.</div>
+    <div id="mfl-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">MFL check overview</h2><div id="mfl-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mfl-an-missed"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">MFL check trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children checked more than once, showing change over time.</p>
+        <div id="mfl-an-trends"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="tab-children" style="display:none;">
@@ -1934,6 +2098,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Topics</h2><div id="ch-profile-topics"></div><div id="ch-profile-topics-empty" style="font-size:13px;color:var(--text-muted);">No topic checks yet.</div></div>
     <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">Science</h2><div id="ch-profile-science"></div><div id="ch-profile-science-empty" style="font-size:13px;color:var(--text-muted);">No science checks yet.</div></div>
     <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">RE</h2><div id="ch-profile-re"></div><div id="ch-profile-re-empty" style="font-size:13px;color:var(--text-muted);">No RE checks yet.</div></div>
+    <div class="card"><h2 style="font-size:16px;margin-bottom:0.75rem;">MFL</h2><div id="ch-profile-mfl"></div><div id="ch-profile-mfl-empty" style="font-size:13px;color:var(--text-muted);">No MFL checks yet.</div></div>
   </div>
 </div>
 
@@ -2115,7 +2280,7 @@ var DEMO_EMAIL = 'demo@emjayphonicstracker.com';
 var DEMO_PASSWORD = 'EmjayDemo2026!';
 var DEMO_ACCESS_CODE = 'DEMOLITION5678';
 var DEMO_SCHOOL_ID = '8f2b768c-8251-4351-9759-26b6271319ed';
-var DEMO_RESET_TABLES = ['results','blending_results','maths_results','maths_topics_results','english_results','handwriting_results','topic_results','science_results','re_results','pupils'];
+var DEMO_RESET_TABLES = ['results','blending_results','maths_results','maths_topics_results','english_results','handwriting_results','topic_results','science_results','re_results','mfl_results','pupils'];
 async function resetDemoData(){
   try{
     await Promise.all(DEMO_RESET_TABLES.map(function(t){
@@ -2410,6 +2575,7 @@ async function onSignedIn(){
   await loadTopicResults();
   await loadScienceResults();
   await loadReResults();
+  await loadMflResults();
 
   if(isDemoSchool() && sess.data.session){
     demoAccessToken = sess.data.session.access_token;
@@ -2491,8 +2657,8 @@ async function switchTab(t){
     /* Re-fetch from Supabase rather than rendering cached arrays - a live
        session writes results from the child's own browser, so this
        teacher's locally-loaded data can be stale until refreshed. */
-    await Promise.all([loadResults(), loadBlendingResults(), loadMathsResults(), loadTimesTablesResults(), loadEnglishResults(), loadHandwritingResults(), loadTopicResults(), loadScienceResults(), loadReResults()]);
-    renderAnalytics(); renderBlendingAnalytics(); renderMathsAnalytics(); renderTimesTablesAnalytics(); renderEnglishAnalytics(); renderHandwritingAnalytics(); renderTopicAnalytics(); renderScienceAnalytics(); renderReAnalytics();
+    await Promise.all([loadResults(), loadBlendingResults(), loadMathsResults(), loadTimesTablesResults(), loadEnglishResults(), loadHandwritingResults(), loadTopicResults(), loadScienceResults(), loadReResults(), loadMflResults()]);
+    renderAnalytics(); renderBlendingAnalytics(); renderMathsAnalytics(); renderTimesTablesAnalytics(); renderEnglishAnalytics(); renderHandwritingAnalytics(); renderTopicAnalytics(); renderScienceAnalytics(); renderReAnalytics(); renderMflAnalytics();
   }
   if(t==='children'){
     showRvScreen('tab-children', 'ch-list-screen');
@@ -2613,7 +2779,7 @@ function syncYearButtons(selectId){
 function buildMeta(r){var parts=[r.set,r.date];if(r.year)parts.push(r.year);if(r.gender)parts.push(r.gender);if(r.needs)parts.push(r.needs);return parts.join(' / ');}
 
 /* ---------- Edit extra pupil details (year/gender/dob/needs) on any result row ---------- */
-var EDIT_TABLE_BY_SUBJECT = { phonics:'results', blending:'blending_results', maths:'maths_topics_results', times_tables:'maths_results', english:'english_results', handwriting:'handwriting_results', topics:'topic_results', science:'science_results', re:'re_results' };
+var EDIT_TABLE_BY_SUBJECT = { phonics:'results', blending:'blending_results', maths:'maths_topics_results', times_tables:'maths_results', english:'english_results', handwriting:'handwriting_results', topics:'topic_results', science:'science_results', re:'re_results', mfl:'mfl_results' };
 var editModalState = null;
 function refreshAfterEdit(subject){
   if(subject === 'phonics') return loadResults();
@@ -2625,6 +2791,7 @@ function refreshAfterEdit(subject){
   if(subject === 'topics') return loadTopicResults().then(function(){ renderTopicAnalytics(); });
   if(subject === 'science') return loadScienceResults().then(function(){ renderScienceAnalytics(); });
   if(subject === 're') return loadReResults().then(function(){ renderReAnalytics(); });
+  if(subject === 'mfl') return loadMflResults().then(function(){ renderMflAnalytics(); });
 }
 function openEditDetails(subject, r){
   if(isDemoSchool()){ alert('This is the shared demo account, so its details can\'t be edited.'); return; }
@@ -2928,6 +3095,7 @@ async function openChildProfile(id){
   var topics_ = await sb.from('topic_results').select('*').ilike('pupil_name', nameFilter);
   var science_ = await sb.from('science_results').select('*').ilike('pupil_name', nameFilter);
   var re_ = await sb.from('re_results').select('*').ilike('pupil_name', nameFilter);
+  var mfl_ = await sb.from('mfl_results').select('*').ilike('pupil_name', nameFilter);
 
   renderProfileSection('phonics', (results_.data||[]).map(rowToResult), buildPupilCard);
   renderProfileSection('blending', (blending_.data||[]).map(rowToBlendingResult), buildBlendingCard);
@@ -2938,6 +3106,7 @@ async function openChildProfile(id){
   renderProfileSection('topics', (topics_.data||[]).map(rowToTopicResult), buildTopicCard);
   renderProfileSection('science', (science_.data||[]).map(rowToScienceResult), buildScienceCard);
   renderProfileSection('re', (re_.data||[]).map(rowToReResult), buildReCard);
+  renderProfileSection('mfl', (mfl_.data||[]).map(rowToMflResult), buildMflCard);
 }
 function renderProfileSection(key, list, buildFn){
   var el = document.getElementById('ch-profile-' + key);
@@ -3000,6 +3169,7 @@ function setClassFilter(val){
   renderTopicResults();
   renderScienceResults();
   renderReResults();
+  renderMflResults();
   renderAnalytics();
   renderBlendingAnalytics();
   renderMathsAnalytics();
@@ -3009,6 +3179,7 @@ function setClassFilter(val){
   renderTopicAnalytics();
   renderScienceAnalytics();
   renderReAnalytics();
+  renderMflAnalytics();
 }
 function filterByClass(list){
   if(!classFilter) return list;
@@ -3021,8 +3192,8 @@ function showRvScreen(containerId, id){
   container.querySelectorAll('.rv-screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
 }
-var SUBJECT_RESULTS_SCREENS = {phonics:'rv-phonics-section', maths:'rv-maths-section', times_tables:'rv-times-tables-section', english:'rv-english-section', handwriting:'rv-handwriting-section', topics:'rv-topics-section', science:'rv-science-section', re:'rv-re-section'};
-var SUBJECT_ANALYTICS_SCREENS = {phonics:'an-phonics-section', maths:'an-maths-section', times_tables:'an-times-tables-section', english:'an-english-section', handwriting:'an-handwriting-section', topics:'an-topics-section', science:'an-science-section', re:'an-re-section'};
+var SUBJECT_RESULTS_SCREENS = {phonics:'rv-phonics-section', maths:'rv-maths-section', times_tables:'rv-times-tables-section', english:'rv-english-section', handwriting:'rv-handwriting-section', topics:'rv-topics-section', science:'rv-science-section', re:'rv-re-section', mfl:'rv-mfl-section'};
+var SUBJECT_ANALYTICS_SCREENS = {phonics:'an-phonics-section', maths:'an-maths-section', times_tables:'an-times-tables-section', english:'an-english-section', handwriting:'an-handwriting-section', topics:'an-topics-section', science:'an-science-section', re:'an-re-section', mfl:'an-mfl-section'};
 function goToResultsSubject(subj){
   showRvScreen('tab-results', SUBJECT_RESULTS_SCREENS[subj] || 'rv-phonics-section');
 }
@@ -10573,6 +10744,484 @@ var RE_TOPICS = {
     }
   }
 };
+var MFL_TOPICS = {
+  french: {
+    key: "french", label: "French", desc: "Greetings, numbers, colours, family, phrases and French culture", icon: "ti-language",
+    questions: {
+  KS1: [
+    {"q": "What is the French word for 'hello'?", "a": "Bonjour", "options": ["Bonjour", "Oui", "S'il te plaît", "Merci"]},
+    {"q": "What is the French word for 'goodbye'?", "a": "Au revoir", "options": ["Bonne nuit", "Au revoir", "S'il te plaît", "Non"]},
+    {"q": "What is the French word for 'please'?", "a": "S'il te plaît", "options": ["Bonjour", "S'il te plaît", "Non", "Merci"]},
+    {"q": "What is the French word for 'thank you'?", "a": "Merci", "options": ["Non", "Oui", "Au revoir", "Merci"]},
+    {"q": "What is the French word for 'yes'?", "a": "Oui", "options": ["Merci", "Oui", "Non", "S'il te plaît"]},
+    {"q": "What is the French word for 'no'?", "a": "Non", "options": ["Bonne nuit", "Au revoir", "Non", "Bonjour"]},
+    {"q": "What is the French word for 'good night'?", "a": "Bonne nuit", "options": ["Non", "S'il te plaît", "Bonne nuit", "Merci"]},
+    {"q": "What is the French word for 'sorry'?", "a": "Pardon", "options": ["Merci", "Bonjour", "Pardon", "Oui"]},
+    {"q": "What is the French word for 'one'?", "a": "Un", "options": ["Un", "Huit", "Deux", "Neuf"]},
+    {"q": "What is the French word for 'two'?", "a": "Deux", "options": ["Sept", "Dix", "Six", "Deux"]},
+    {"q": "What is the French word for 'three'?", "a": "Trois", "options": ["Dix", "Deux", "Quatre", "Trois"]},
+    {"q": "What is the French word for 'four'?", "a": "Quatre", "options": ["Un", "Sept", "Six", "Quatre"]},
+    {"q": "What is the French word for 'five'?", "a": "Cinq", "options": ["Un", "Cinq", "Sept", "Quatre"]},
+    {"q": "What is the French word for 'six'?", "a": "Six", "options": ["Un", "Six", "Neuf", "Deux"]},
+    {"q": "What is the French word for 'seven'?", "a": "Sept", "options": ["Dix", "Neuf", "Huit", "Sept"]},
+    {"q": "What is the French word for 'eight'?", "a": "Huit", "options": ["Huit", "Sept", "Neuf", "Cinq"]},
+    {"q": "What is the French word for 'nine'?", "a": "Neuf", "options": ["Dix", "Six", "Cinq", "Neuf"]},
+    {"q": "What is the French word for 'ten'?", "a": "Dix", "options": ["Dix", "Un", "Quatre", "Trois"]},
+    {"q": "What is the French word for 'red'?", "a": "Rouge", "options": ["Noir", "Marron", "Rouge", "Bleu"]},
+    {"q": "What is the French word for 'blue'?", "a": "Bleu", "options": ["Rouge", "Jaune", "Bleu", "Noir"]},
+    {"q": "What is the French word for 'green'?", "a": "Vert", "options": ["Jaune", "Noir", "Rouge", "Vert"]},
+    {"q": "What is the French word for 'yellow'?", "a": "Jaune", "options": ["Bleu", "Noir", "Rose", "Jaune"]},
+    {"q": "What is the French word for 'black'?", "a": "Noir", "options": ["Violet", "Noir", "Bleu", "Jaune"]},
+    {"q": "What is the French word for 'white'?", "a": "Blanc", "options": ["Blanc", "Rouge", "Marron", "Bleu"]},
+    {"q": "What is the French word for 'orange'?", "a": "Orange", "options": ["Blanc", "Orange", "Violet", "Rouge"]},
+    {"q": "What is the French word for 'pink'?", "a": "Rose", "options": ["Rose", "Vert", "Noir", "Marron"]},
+    {"q": "What is the French word for 'purple'?", "a": "Violet", "options": ["Bleu", "Jaune", "Rose", "Violet"]},
+    {"q": "What is the French word for 'brown'?", "a": "Marron", "options": ["Bleu", "Vert", "Marron", "Rouge"]},
+    {"q": "What is the French word for 'cat'?", "a": "Chat", "options": ["Oiseau", "Vache", "Chat", "Cheval"]},
+    {"q": "What is the French word for 'dog'?", "a": "Chien", "options": ["Chien", "Vache", "Lapin", "Oiseau"]},
+    {"q": "What is the French word for 'bird'?", "a": "Oiseau", "options": ["Oiseau", "Chat", "Vache", "Poisson"]},
+    {"q": "What is the French word for 'fish'?", "a": "Poisson", "options": ["Chien", "Cochon", "Poisson", "Lapin"]},
+    {"q": "What is the French word for 'horse'?", "a": "Cheval", "options": ["Chien", "Lapin", "Vache", "Cheval"]},
+    {"q": "What is the French word for 'rabbit'?", "a": "Lapin", "options": ["Cheval", "Chien", "Lapin", "Poisson"]},
+    {"q": "What is the French word for 'cow'?", "a": "Vache", "options": ["Vache", "Oiseau", "Chat", "Poisson"]},
+    {"q": "What is the French word for 'pig'?", "a": "Cochon", "options": ["Lapin", "Cochon", "Poisson", "Oiseau"]}
+  ],
+  LKS2: [
+    {"q": "What is the French word for 'mother'?", "a": "Mère", "options": ["Cousin", "Frère", "Mère", "Grand-mère"]},
+    {"q": "What is the French word for 'father'?", "a": "Père", "options": ["Mère", "Cousin", "Père", "Grand-mère"]},
+    {"q": "What is the French word for 'brother'?", "a": "Frère", "options": ["Cousin", "Père", "Frère", "Oncle"]},
+    {"q": "What is the French word for 'sister'?", "a": "Sœur", "options": ["Oncle", "Mère", "Tante", "Sœur"]},
+    {"q": "What is the French word for 'grandmother'?", "a": "Grand-mère", "options": ["Grand-mère", "Bébé", "Père", "Frère"]},
+    {"q": "What is the French word for 'grandfather'?", "a": "Grand-père", "options": ["Cousin", "Frère", "Grand-mère", "Grand-père"]},
+    {"q": "What is the French word for 'aunt'?", "a": "Tante", "options": ["Bébé", "Tante", "Mère", "Frère"]},
+    {"q": "What is the French word for 'uncle'?", "a": "Oncle", "options": ["Oncle", "Sœur", "Bébé", "Frère"]},
+    {"q": "What is the French word for 'cousin'?", "a": "Cousin", "options": ["Grand-mère", "Cousin", "Frère", "Sœur"]},
+    {"q": "What is the French word for 'baby'?", "a": "Bébé", "options": ["Oncle", "Bébé", "Grand-mère", "Tante"]},
+    {"q": "What is the French word for 'bread'?", "a": "Pain", "options": ["Pain", "Chocolat", "Soupe", "Œuf"]},
+    {"q": "What is the French word for 'cheese'?", "a": "Fromage", "options": ["Pain", "Œuf", "Soupe", "Fromage"]},
+    {"q": "What is the French word for 'milk'?", "a": "Lait", "options": ["Soupe", "Eau", "Fromage", "Lait"]},
+    {"q": "What is the French word for 'water'?", "a": "Eau", "options": ["Pain", "Lait", "Soupe", "Eau"]},
+    {"q": "What is the French word for 'apple'?", "a": "Pomme", "options": ["Lait", "Soupe", "Pomme", "Eau"]},
+    {"q": "What is the French word for 'banana'?", "a": "Banane", "options": ["Banane", "Œuf", "Pain", "Soupe"]},
+    {"q": "What is the French word for 'chicken'?", "a": "Poulet", "options": ["Soupe", "Poulet", "Eau", "Banane"]},
+    {"q": "What is the French word for 'egg'?", "a": "Œuf", "options": ["Eau", "Soupe", "Œuf", "Banane"]},
+    {"q": "What is the French word for 'chocolate'?", "a": "Chocolat", "options": ["Chocolat", "Eau", "Lait", "Œuf"]},
+    {"q": "What is the French word for 'soup'?", "a": "Soupe", "options": ["Chocolat", "Banane", "Soupe", "Fromage"]},
+    {"q": "What is the French word for 'Monday'?", "a": "Lundi", "options": ["Mercredi", "Lundi", "Mardi", "Jeudi"]},
+    {"q": "What is the French word for 'Tuesday'?", "a": "Mardi", "options": ["Jeudi", "Dimanche", "Mercredi", "Mardi"]},
+    {"q": "What is the French word for 'Wednesday'?", "a": "Mercredi", "options": ["Mardi", "Mercredi", "Vendredi", "Dimanche"]},
+    {"q": "What is the French word for 'Thursday'?", "a": "Jeudi", "options": ["Mercredi", "Vendredi", "Samedi", "Jeudi"]},
+    {"q": "What is the French word for 'Friday'?", "a": "Vendredi", "options": ["Vendredi", "Dimanche", "Lundi", "Mercredi"]},
+    {"q": "What is the French word for 'Saturday'?", "a": "Samedi", "options": ["Jeudi", "Lundi", "Samedi", "Dimanche"]},
+    {"q": "What is the French word for 'Sunday'?", "a": "Dimanche", "options": ["Dimanche", "Samedi", "Vendredi", "Lundi"]},
+    {"q": "What is the French word for 'head'?", "a": "Tête", "options": ["Main", "Nez", "Tête", "Œil"]},
+    {"q": "What is the French word for 'hand'?", "a": "Main", "options": ["Main", "Bras", "Jambe", "Bouche"]},
+    {"q": "What is the French word for 'foot'?", "a": "Pied", "options": ["Œil", "Pied", "Bouche", "Jambe"]},
+    {"q": "What is the French word for 'eye'?", "a": "Œil", "options": ["Oreille", "Œil", "Pied", "Tête"]},
+    {"q": "What is the French word for 'ear'?", "a": "Oreille", "options": ["Jambe", "Oreille", "Nez", "Tête"]},
+    {"q": "What is the French word for 'nose'?", "a": "Nez", "options": ["Main", "Œil", "Nez", "Tête"]},
+    {"q": "What is the French word for 'mouth'?", "a": "Bouche", "options": ["Jambe", "Bouche", "Main", "Oreille"]},
+    {"q": "What is the French word for 'arm'?", "a": "Bras", "options": ["Jambe", "Pied", "Bras", "Main"]},
+    {"q": "What is the French word for 'leg'?", "a": "Jambe", "options": ["Oreille", "Pied", "Jambe", "Nez"]}
+  ],
+  UKS2: [
+    {"q": "What is the French word for 'It is sunny'?", "a": "Il fait beau", "options": ["Il fait beau", "Il y a du vent", "Il y a des nuages", "Il fait froid"]},
+    {"q": "What is the French word for 'It is raining'?", "a": "Il pleut", "options": ["Il fait beau", "Il pleut", "Il y a des nuages", "Il fait chaud"]},
+    {"q": "What is the French word for 'It is cold'?", "a": "Il fait froid", "options": ["Il pleut", "Il neige", "Il y a du vent", "Il fait froid"]},
+    {"q": "What is the French word for 'It is hot'?", "a": "Il fait chaud", "options": ["Il y a des nuages", "Il neige", "Il y a du vent", "Il fait chaud"]},
+    {"q": "What is the French word for 'It is snowing'?", "a": "Il neige", "options": ["Il pleut", "Il neige", "Il y a des nuages", "Quel temps fait-il ?"]},
+    {"q": "What is the French word for 'It is windy'?", "a": "Il y a du vent", "options": ["Il y a du vent", "Il fait beau", "Il fait chaud", "Il fait froid"]},
+    {"q": "What is the French word for 'It is cloudy'?", "a": "Il y a des nuages", "options": ["Quel temps fait-il ?", "Il fait froid", "Il y a du vent", "Il y a des nuages"]},
+    {"q": "What is the French word for 'What is the weather like?'?", "a": "Quel temps fait-il ?", "options": ["Il y a du vent", "Il fait beau", "Quel temps fait-il ?", "Il fait chaud"]},
+    {"q": "What is the French word for 'What time is it?'?", "a": "Quelle heure est-il ?", "options": ["Pourquoi", "Où", "Quoi", "Quelle heure est-il ?"]},
+    {"q": "What is the French word for 'Where'?", "a": "Où", "options": ["Pourquoi", "Où", "Comment", "Quelle heure est-il ?"]},
+    {"q": "What is the French word for 'When'?", "a": "Quand", "options": ["Où", "Quand", "Pourquoi", "Qui"]},
+    {"q": "What is the French word for 'Why'?", "a": "Pourquoi", "options": ["Pourquoi", "Quand", "Où", "Quelle heure est-il ?"]},
+    {"q": "What is the French word for 'How'?", "a": "Comment", "options": ["Comment", "Qui", "Pourquoi", "Quand"]},
+    {"q": "What is the French word for 'Who'?", "a": "Qui", "options": ["Combien", "Quelle heure est-il ?", "Qui", "Quand"]},
+    {"q": "What is the French word for 'What'?", "a": "Quoi", "options": ["Quelle heure est-il ?", "Pourquoi", "Quoi", "Quand"]},
+    {"q": "What is the French word for 'How many'?", "a": "Combien", "options": ["Quelle heure est-il ?", "Combien", "Qui", "Comment"]},
+    {"q": "What is the French word for 'My name is...'?", "a": "Je m'appelle...", "options": ["Joyeux anniversaire", "À bientôt", "Je m'appelle...", "Je vais bien"]},
+    {"q": "What is the French word for 'How are you?'?", "a": "Comment ça va ?", "options": ["Comment ça va ?", "Je m'appelle...", "À bientôt", "Excusez-moi"]},
+    {"q": "What is the French word for 'I am fine'?", "a": "Je vais bien", "options": ["Je m'appelle...", "Comment ça va ?", "Je vais bien", "J'aime..."]},
+    {"q": "What is the French word for 'How old are you?'?", "a": "Quel âge as-tu ?", "options": ["Excusez-moi", "Comment ça va ?", "Joyeux anniversaire", "Quel âge as-tu ?"]},
+    {"q": "What is the French word for 'I like...'?", "a": "J'aime...", "options": ["J'aime...", "Quel âge as-tu ?", "Je m'appelle...", "Joyeux anniversaire"]},
+    {"q": "What is the French word for 'I don't like...'?", "a": "Je n'aime pas...", "options": ["Je n'aime pas...", "Bienvenue", "À bientôt", "Comment ça va ?"]},
+    {"q": "What is the French word for 'See you soon'?", "a": "À bientôt", "options": ["Comment ça va ?", "À bientôt", "J'aime...", "Excusez-moi"]},
+    {"q": "What is the French word for 'Excuse me'?", "a": "Excusez-moi", "options": ["Bienvenue", "Joyeux anniversaire", "Quel âge as-tu ?", "Excusez-moi"]},
+    {"q": "What is the French word for 'Happy birthday'?", "a": "Joyeux anniversaire", "options": ["Joyeux anniversaire", "Bienvenue", "J'aime...", "Je m'appelle..."]},
+    {"q": "What is the French word for 'Welcome'?", "a": "Bienvenue", "options": ["J'aime...", "Je n'aime pas...", "Bienvenue", "Joyeux anniversaire"]},
+    {"q": "What is the capital city of France?", "a": "Paris", "options": ["Paris", "Madrid", "London", "Berlin"]},
+    {"q": "What is the currency used in France?", "a": "Euro", "options": ["Dollar", "Franc", "Euro", "Pound"]},
+    {"q": "What is a famous tower in Paris called?", "a": "The Eiffel Tower", "options": ["Big Ben", "The Colosseum", "The Eiffel Tower", "The Louvre"]},
+    {"q": "What are the three colours of the French flag?", "a": "Blue, white and red", "options": ["Blue, white and red", "Blue, white and green", "Red, white and green", "Red, yellow and green"]},
+    {"q": "What is a French breakfast pastry called?", "a": "Croissant", "options": ["Waffle", "Baguette", "Pretzel", "Croissant"]},
+    {"q": "What is a long stick of French bread called?", "a": "Baguette", "options": ["Bagel", "Baguette", "Croissant", "Pretzel"]},
+    {"q": "What continent is France in?", "a": "Europe", "options": ["Africa", "Europe", "South America", "Asia"]},
+    {"q": "A person from France is called what?", "a": "French", "options": ["French", "Spanish", "Italian", "German"]},
+    {"q": "What famous art museum is in Paris?", "a": "The Louvre", "options": ["The Prado", "The Vatican Museums", "The British Museum", "The Louvre"]},
+    {"q": "What sport is the Tour de France?", "a": "Cycling", "options": ["Tennis", "Cycling", "Rugby", "Football"]}
+  ],
+    }
+  },
+  spanish: {
+    key: "spanish", label: "Spanish", desc: "Greetings, numbers, colours, family, phrases and Spanish culture", icon: "ti-language",
+    questions: {
+  KS1: [
+    {"q": "What is the Spanish word for 'hello'?", "a": "Hola", "options": ["No", "Adiós", "Hola", "Por favor"]},
+    {"q": "What is the Spanish word for 'goodbye'?", "a": "Adiós", "options": ["Adiós", "Por favor", "Gracias", "No"]},
+    {"q": "What is the Spanish word for 'please'?", "a": "Por favor", "options": ["Sí", "Buenas noches", "Adiós", "Por favor"]},
+    {"q": "What is the Spanish word for 'thank you'?", "a": "Gracias", "options": ["Buenas noches", "Hola", "Sí", "Gracias"]},
+    {"q": "What is the Spanish word for 'yes'?", "a": "Sí", "options": ["Sí", "Por favor", "Gracias", "Lo siento"]},
+    {"q": "What is the Spanish word for 'no'?", "a": "No", "options": ["Por favor", "Buenas noches", "Hola", "No"]},
+    {"q": "What is the Spanish word for 'good night'?", "a": "Buenas noches", "options": ["Buenas noches", "No", "Hola", "Por favor"]},
+    {"q": "What is the Spanish word for 'sorry'?", "a": "Lo siento", "options": ["Lo siento", "Sí", "Buenas noches", "Gracias"]},
+    {"q": "What is the Spanish word for 'one'?", "a": "Uno", "options": ["Cuatro", "Dos", "Uno", "Seis"]},
+    {"q": "What is the Spanish word for 'two'?", "a": "Dos", "options": ["Cuatro", "Cinco", "Diez", "Dos"]},
+    {"q": "What is the Spanish word for 'three'?", "a": "Tres", "options": ["Ocho", "Siete", "Cinco", "Tres"]},
+    {"q": "What is the Spanish word for 'four'?", "a": "Cuatro", "options": ["Siete", "Cinco", "Cuatro", "Diez"]},
+    {"q": "What is the Spanish word for 'five'?", "a": "Cinco", "options": ["Cinco", "Nueve", "Tres", "Siete"]},
+    {"q": "What is the Spanish word for 'six'?", "a": "Seis", "options": ["Diez", "Dos", "Tres", "Seis"]},
+    {"q": "What is the Spanish word for 'seven'?", "a": "Siete", "options": ["Siete", "Cinco", "Diez", "Tres"]},
+    {"q": "What is the Spanish word for 'eight'?", "a": "Ocho", "options": ["Nueve", "Diez", "Cinco", "Ocho"]},
+    {"q": "What is the Spanish word for 'nine'?", "a": "Nueve", "options": ["Dos", "Tres", "Ocho", "Nueve"]},
+    {"q": "What is the Spanish word for 'ten'?", "a": "Diez", "options": ["Siete", "Ocho", "Seis", "Diez"]},
+    {"q": "What is the Spanish word for 'red'?", "a": "Rojo", "options": ["Verde", "Negro", "Rojo", "Marrón"]},
+    {"q": "What is the Spanish word for 'blue'?", "a": "Azul", "options": ["Marrón", "Amarillo", "Azul", "Verde"]},
+    {"q": "What is the Spanish word for 'green'?", "a": "Verde", "options": ["Negro", "Naranja", "Rojo", "Verde"]},
+    {"q": "What is the Spanish word for 'yellow'?", "a": "Amarillo", "options": ["Amarillo", "Marrón", "Negro", "Morado"]},
+    {"q": "What is the Spanish word for 'black'?", "a": "Negro", "options": ["Blanco", "Negro", "Morado", "Marrón"]},
+    {"q": "What is the Spanish word for 'white'?", "a": "Blanco", "options": ["Azul", "Marrón", "Negro", "Blanco"]},
+    {"q": "What is the Spanish word for 'orange'?", "a": "Naranja", "options": ["Negro", "Marrón", "Naranja", "Rosa"]},
+    {"q": "What is the Spanish word for 'pink'?", "a": "Rosa", "options": ["Morado", "Negro", "Naranja", "Rosa"]},
+    {"q": "What is the Spanish word for 'purple'?", "a": "Morado", "options": ["Morado", "Amarillo", "Naranja", "Rosa"]},
+    {"q": "What is the Spanish word for 'brown'?", "a": "Marrón", "options": ["Marrón", "Morado", "Negro", "Verde"]},
+    {"q": "What is the Spanish word for 'cat'?", "a": "Gato", "options": ["Conejo", "Cerdo", "Gato", "Perro"]},
+    {"q": "What is the Spanish word for 'dog'?", "a": "Perro", "options": ["Conejo", "Perro", "Pez", "Gato"]},
+    {"q": "What is the Spanish word for 'bird'?", "a": "Pájaro", "options": ["Vaca", "Caballo", "Pájaro", "Conejo"]},
+    {"q": "What is the Spanish word for 'fish'?", "a": "Pez", "options": ["Pájaro", "Vaca", "Pez", "Conejo"]},
+    {"q": "What is the Spanish word for 'horse'?", "a": "Caballo", "options": ["Caballo", "Conejo", "Gato", "Perro"]},
+    {"q": "What is the Spanish word for 'rabbit'?", "a": "Conejo", "options": ["Vaca", "Pez", "Conejo", "Pájaro"]},
+    {"q": "What is the Spanish word for 'cow'?", "a": "Vaca", "options": ["Caballo", "Perro", "Gato", "Vaca"]},
+    {"q": "What is the Spanish word for 'pig'?", "a": "Cerdo", "options": ["Gato", "Vaca", "Perro", "Cerdo"]}
+  ],
+  LKS2: [
+    {"q": "What is the Spanish word for 'mother'?", "a": "Madre", "options": ["Bebé", "Hermano", "Abuelo", "Madre"]},
+    {"q": "What is the Spanish word for 'father'?", "a": "Padre", "options": ["Primo", "Madre", "Padre", "Tía"]},
+    {"q": "What is the Spanish word for 'brother'?", "a": "Hermano", "options": ["Padre", "Hermano", "Tío", "Tía"]},
+    {"q": "What is the Spanish word for 'sister'?", "a": "Hermana", "options": ["Primo", "Hermana", "Abuela", "Padre"]},
+    {"q": "What is the Spanish word for 'grandmother'?", "a": "Abuela", "options": ["Abuela", "Hermana", "Primo", "Hermano"]},
+    {"q": "What is the Spanish word for 'grandfather'?", "a": "Abuelo", "options": ["Hermana", "Hermano", "Primo", "Abuelo"]},
+    {"q": "What is the Spanish word for 'aunt'?", "a": "Tía", "options": ["Tía", "Madre", "Hermano", "Tío"]},
+    {"q": "What is the Spanish word for 'uncle'?", "a": "Tío", "options": ["Abuelo", "Madre", "Tío", "Tía"]},
+    {"q": "What is the Spanish word for 'cousin'?", "a": "Primo", "options": ["Abuelo", "Bebé", "Primo", "Tío"]},
+    {"q": "What is the Spanish word for 'baby'?", "a": "Bebé", "options": ["Padre", "Hermana", "Abuelo", "Bebé"]},
+    {"q": "What is the Spanish word for 'bread'?", "a": "Pan", "options": ["Pollo", "Agua", "Huevo", "Pan"]},
+    {"q": "What is the Spanish word for 'cheese'?", "a": "Queso", "options": ["Queso", "Agua", "Leche", "Pan"]},
+    {"q": "What is the Spanish word for 'milk'?", "a": "Leche", "options": ["Queso", "Leche", "Manzana", "Chocolate"]},
+    {"q": "What is the Spanish word for 'water'?", "a": "Agua", "options": ["Pollo", "Pan", "Queso", "Agua"]},
+    {"q": "What is the Spanish word for 'apple'?", "a": "Manzana", "options": ["Sopa", "Manzana", "Chocolate", "Queso"]},
+    {"q": "What is the Spanish word for 'banana'?", "a": "Plátano", "options": ["Queso", "Huevo", "Pan", "Plátano"]},
+    {"q": "What is the Spanish word for 'chicken'?", "a": "Pollo", "options": ["Sopa", "Pollo", "Chocolate", "Pan"]},
+    {"q": "What is the Spanish word for 'egg'?", "a": "Huevo", "options": ["Huevo", "Queso", "Plátano", "Leche"]},
+    {"q": "What is the Spanish word for 'chocolate'?", "a": "Chocolate", "options": ["Plátano", "Chocolate", "Manzana", "Leche"]},
+    {"q": "What is the Spanish word for 'soup'?", "a": "Sopa", "options": ["Pan", "Agua", "Chocolate", "Sopa"]},
+    {"q": "What is the Spanish word for 'Monday'?", "a": "Lunes", "options": ["Domingo", "Jueves", "Viernes", "Lunes"]},
+    {"q": "What is the Spanish word for 'Tuesday'?", "a": "Martes", "options": ["Martes", "Miércoles", "Jueves", "Lunes"]},
+    {"q": "What is the Spanish word for 'Wednesday'?", "a": "Miércoles", "options": ["Domingo", "Jueves", "Miércoles", "Viernes"]},
+    {"q": "What is the Spanish word for 'Thursday'?", "a": "Jueves", "options": ["Viernes", "Jueves", "Sábado", "Martes"]},
+    {"q": "What is the Spanish word for 'Friday'?", "a": "Viernes", "options": ["Viernes", "Domingo", "Lunes", "Jueves"]},
+    {"q": "What is the Spanish word for 'Saturday'?", "a": "Sábado", "options": ["Domingo", "Miércoles", "Sábado", "Lunes"]},
+    {"q": "What is the Spanish word for 'Sunday'?", "a": "Domingo", "options": ["Domingo", "Viernes", "Jueves", "Sábado"]},
+    {"q": "What is the Spanish word for 'head'?", "a": "Cabeza", "options": ["Cabeza", "Brazo", "Nariz", "Oreja"]},
+    {"q": "What is the Spanish word for 'hand'?", "a": "Mano", "options": ["Nariz", "Mano", "Ojo", "Brazo"]},
+    {"q": "What is the Spanish word for 'foot'?", "a": "Pie", "options": ["Pie", "Oreja", "Nariz", "Mano"]},
+    {"q": "What is the Spanish word for 'eye'?", "a": "Ojo", "options": ["Pie", "Oreja", "Ojo", "Mano"]},
+    {"q": "What is the Spanish word for 'ear'?", "a": "Oreja", "options": ["Oreja", "Brazo", "Mano", "Pie"]},
+    {"q": "What is the Spanish word for 'nose'?", "a": "Nariz", "options": ["Brazo", "Nariz", "Cabeza", "Pierna"]},
+    {"q": "What is the Spanish word for 'mouth'?", "a": "Boca", "options": ["Pie", "Boca", "Pierna", "Cabeza"]},
+    {"q": "What is the Spanish word for 'arm'?", "a": "Brazo", "options": ["Oreja", "Brazo", "Cabeza", "Mano"]},
+    {"q": "What is the Spanish word for 'leg'?", "a": "Pierna", "options": ["Ojo", "Pie", "Pierna", "Oreja"]}
+  ],
+  UKS2: [
+    {"q": "What is the Spanish word for 'It is sunny'?", "a": "Hace sol", "options": ["Está nublado", "Hace sol", "Está lloviendo", "Hace viento"]},
+    {"q": "What is the Spanish word for 'It is raining'?", "a": "Está lloviendo", "options": ["Hace frío", "¿Qué tiempo hace?", "Está lloviendo", "Hace calor"]},
+    {"q": "What is the Spanish word for 'It is cold'?", "a": "Hace frío", "options": ["Hace frío", "Está lloviendo", "Hace viento", "Hace sol"]},
+    {"q": "What is the Spanish word for 'It is hot'?", "a": "Hace calor", "options": ["Hace frío", "Hace calor", "Está nublado", "Está lloviendo"]},
+    {"q": "What is the Spanish word for 'It is snowing'?", "a": "Está nevando", "options": ["Hace viento", "Hace calor", "Hace sol", "Está nevando"]},
+    {"q": "What is the Spanish word for 'It is windy'?", "a": "Hace viento", "options": ["Hace viento", "Hace sol", "Está nevando", "Hace calor"]},
+    {"q": "What is the Spanish word for 'It is cloudy'?", "a": "Está nublado", "options": ["Hace viento", "Está nublado", "Está lloviendo", "Hace calor"]},
+    {"q": "What is the Spanish word for 'What is the weather like?'?", "a": "¿Qué tiempo hace?", "options": ["¿Qué tiempo hace?", "Hace calor", "Hace frío", "Hace viento"]},
+    {"q": "What is the Spanish word for 'What time is it?'?", "a": "¿Qué hora es?", "options": ["Cuántos", "Cómo", "¿Qué hora es?", "Dónde"]},
+    {"q": "What is the Spanish word for 'Where'?", "a": "Dónde", "options": ["Cuántos", "Dónde", "Cómo", "Qué"]},
+    {"q": "What is the Spanish word for 'When'?", "a": "Cuándo", "options": ["Cuándo", "¿Qué hora es?", "Cómo", "Dónde"]},
+    {"q": "What is the Spanish word for 'Why'?", "a": "Por qué", "options": ["Dónde", "Qué", "Por qué", "Cómo"]},
+    {"q": "What is the Spanish word for 'How'?", "a": "Cómo", "options": ["Por qué", "Qué", "Cómo", "¿Qué hora es?"]},
+    {"q": "What is the Spanish word for 'Who'?", "a": "Quién", "options": ["Quién", "Dónde", "Qué", "Cuándo"]},
+    {"q": "What is the Spanish word for 'What'?", "a": "Qué", "options": ["Por qué", "Cuántos", "¿Qué hora es?", "Qué"]},
+    {"q": "What is the Spanish word for 'How many'?", "a": "Cuántos", "options": ["Cuántos", "¿Qué hora es?", "Dónde", "Por qué"]},
+    {"q": "What is the Spanish word for 'My name is...'?", "a": "Me llamo...", "options": ["Estoy bien", "Me llamo...", "Hasta pronto", "¿Cuántos años tienes?"]},
+    {"q": "What is the Spanish word for 'How are you?'?", "a": "¿Cómo estás?", "options": ["Estoy bien", "¿Cómo estás?", "Me gusta...", "Feliz cumpleaños"]},
+    {"q": "What is the Spanish word for 'I am fine'?", "a": "Estoy bien", "options": ["¿Cuántos años tienes?", "Estoy bien", "Bienvenido", "Me gusta..."]},
+    {"q": "What is the Spanish word for 'How old are you?'?", "a": "¿Cuántos años tienes?", "options": ["¿Cuántos años tienes?", "Bienvenido", "Me llamo...", "Me gusta..."]},
+    {"q": "What is the Spanish word for 'I like...'?", "a": "Me gusta...", "options": ["¿Cómo estás?", "Perdón", "No me gusta...", "Me gusta..."]},
+    {"q": "What is the Spanish word for 'I don't like...'?", "a": "No me gusta...", "options": ["Perdón", "Feliz cumpleaños", "No me gusta...", "Me gusta..."]},
+    {"q": "What is the Spanish word for 'See you soon'?", "a": "Hasta pronto", "options": ["Feliz cumpleaños", "Me gusta...", "No me gusta...", "Hasta pronto"]},
+    {"q": "What is the Spanish word for 'Excuse me'?", "a": "Perdón", "options": ["Me llamo...", "¿Cuántos años tienes?", "Perdón", "Feliz cumpleaños"]},
+    {"q": "What is the Spanish word for 'Happy birthday'?", "a": "Feliz cumpleaños", "options": ["Perdón", "¿Cuántos años tienes?", "Feliz cumpleaños", "Estoy bien"]},
+    {"q": "What is the Spanish word for 'Welcome'?", "a": "Bienvenido", "options": ["Estoy bien", "Bienvenido", "Hasta pronto", "No me gusta..."]},
+    {"q": "What is the capital city of Spain?", "a": "Madrid", "options": ["Rome", "Madrid", "Lisbon", "Barcelona"]},
+    {"q": "What is the currency used in Spain?", "a": "Euro", "options": ["Dollar", "Peso", "Pound", "Euro"]},
+    {"q": "What continent is Spain in?", "a": "Europe", "options": ["South America", "Europe", "Asia", "Africa"]},
+    {"q": "What language do most people in Mexico speak?", "a": "Spanish", "options": ["Portuguese", "French", "Spanish", "English"]},
+    {"q": "What colours are on the Spanish flag?", "a": "Red and yellow", "options": ["Red and white", "Green and white", "Blue and white", "Red and yellow"]},
+    {"q": "What is a famous Spanish dance called?", "a": "Flamenco", "options": ["Salsa", "Flamenco", "Waltz", "Tango"]},
+    {"q": "What is a Spanish snack of small shared dishes called?", "a": "Tapas", "options": ["Tapas", "Churros", "Paella", "Sangria"]},
+    {"q": "What famous Spanish rice dish is often made with seafood?", "a": "Paella", "options": ["Paella", "Tortilla", "Churros", "Tapas"]},
+    {"q": "A person from Spain is called what?", "a": "Spanish", "options": ["Spanish", "Italian", "Portuguese", "French"]},
+    {"q": "What is the Spanish word for 'Spain' itself?", "a": "España", "options": ["España", "Espagne", "Espana", "Hispania"]}
+  ],
+    }
+  },
+  german: {
+    key: "german", label: "German", desc: "Greetings, numbers, colours, family, phrases and German culture", icon: "ti-language",
+    questions: {
+  KS1: [
+    {"q": "What is the German word for 'hello'?", "a": "Hallo", "options": ["Bitte", "Danke", "Hallo", "Nein"]},
+    {"q": "What is the German word for 'goodbye'?", "a": "Auf Wiedersehen", "options": ["Gute Nacht", "Bitte", "Hallo", "Auf Wiedersehen"]},
+    {"q": "What is the German word for 'please'?", "a": "Bitte", "options": ["Ja", "Gute Nacht", "Bitte", "Danke"]},
+    {"q": "What is the German word for 'thank you'?", "a": "Danke", "options": ["Danke", "Entschuldigung", "Nein", "Hallo"]},
+    {"q": "What is the German word for 'yes'?", "a": "Ja", "options": ["Bitte", "Ja", "Nein", "Danke"]},
+    {"q": "What is the German word for 'no'?", "a": "Nein", "options": ["Nein", "Bitte", "Ja", "Auf Wiedersehen"]},
+    {"q": "What is the German word for 'good night'?", "a": "Gute Nacht", "options": ["Gute Nacht", "Nein", "Auf Wiedersehen", "Danke"]},
+    {"q": "What is the German word for 'sorry'?", "a": "Entschuldigung", "options": ["Nein", "Bitte", "Entschuldigung", "Ja"]},
+    {"q": "What is the German word for 'one'?", "a": "Eins", "options": ["Zwei", "Fünf", "Eins", "Drei"]},
+    {"q": "What is the German word for 'two'?", "a": "Zwei", "options": ["Eins", "Acht", "Zwei", "Sieben"]},
+    {"q": "What is the German word for 'three'?", "a": "Drei", "options": ["Drei", "Zehn", "Neun", "Eins"]},
+    {"q": "What is the German word for 'four'?", "a": "Vier", "options": ["Zwei", "Sechs", "Vier", "Zehn"]},
+    {"q": "What is the German word for 'five'?", "a": "Fünf", "options": ["Neun", "Fünf", "Acht", "Sechs"]},
+    {"q": "What is the German word for 'six'?", "a": "Sechs", "options": ["Drei", "Zwei", "Sechs", "Neun"]},
+    {"q": "What is the German word for 'seven'?", "a": "Sieben", "options": ["Neun", "Sieben", "Eins", "Zwei"]},
+    {"q": "What is the German word for 'eight'?", "a": "Acht", "options": ["Acht", "Fünf", "Eins", "Sieben"]},
+    {"q": "What is the German word for 'nine'?", "a": "Neun", "options": ["Neun", "Zwei", "Acht", "Zehn"]},
+    {"q": "What is the German word for 'ten'?", "a": "Zehn", "options": ["Zehn", "Vier", "Eins", "Neun"]},
+    {"q": "What is the German word for 'red'?", "a": "Rot", "options": ["Braun", "Rot", "Blau", "Grün"]},
+    {"q": "What is the German word for 'blue'?", "a": "Blau", "options": ["Schwarz", "Blau", "Lila", "Rosa"]},
+    {"q": "What is the German word for 'green'?", "a": "Grün", "options": ["Grün", "Weiß", "Orange", "Blau"]},
+    {"q": "What is the German word for 'yellow'?", "a": "Gelb", "options": ["Braun", "Rot", "Schwarz", "Gelb"]},
+    {"q": "What is the German word for 'black'?", "a": "Schwarz", "options": ["Braun", "Schwarz", "Blau", "Lila"]},
+    {"q": "What is the German word for 'white'?", "a": "Weiß", "options": ["Gelb", "Rot", "Weiß", "Lila"]},
+    {"q": "What is the German word for 'orange'?", "a": "Orange", "options": ["Rot", "Schwarz", "Weiß", "Orange"]},
+    {"q": "What is the German word for 'pink'?", "a": "Rosa", "options": ["Rot", "Gelb", "Rosa", "Schwarz"]},
+    {"q": "What is the German word for 'purple'?", "a": "Lila", "options": ["Lila", "Braun", "Gelb", "Blau"]},
+    {"q": "What is the German word for 'brown'?", "a": "Braun", "options": ["Rosa", "Weiß", "Gelb", "Braun"]},
+    {"q": "What is the German word for 'cat'?", "a": "Katze", "options": ["Schwein", "Katze", "Pferd", "Hund"]},
+    {"q": "What is the German word for 'dog'?", "a": "Hund", "options": ["Vogel", "Hund", "Pferd", "Schwein"]},
+    {"q": "What is the German word for 'bird'?", "a": "Vogel", "options": ["Katze", "Kuh", "Vogel", "Hund"]},
+    {"q": "What is the German word for 'fish'?", "a": "Fisch", "options": ["Hund", "Katze", "Fisch", "Vogel"]},
+    {"q": "What is the German word for 'horse'?", "a": "Pferd", "options": ["Schwein", "Pferd", "Katze", "Kuh"]},
+    {"q": "What is the German word for 'rabbit'?", "a": "Hase", "options": ["Hase", "Katze", "Vogel", "Pferd"]},
+    {"q": "What is the German word for 'cow'?", "a": "Kuh", "options": ["Hase", "Fisch", "Kuh", "Schwein"]},
+    {"q": "What is the German word for 'pig'?", "a": "Schwein", "options": ["Katze", "Schwein", "Hase", "Hund"]}
+  ],
+  LKS2: [
+    {"q": "What is the German word for 'mother'?", "a": "Mutter", "options": ["Mutter", "Vater", "Großvater", "Cousin"]},
+    {"q": "What is the German word for 'father'?", "a": "Vater", "options": ["Schwester", "Großvater", "Tante", "Vater"]},
+    {"q": "What is the German word for 'brother'?", "a": "Bruder", "options": ["Bruder", "Großvater", "Schwester", "Tante"]},
+    {"q": "What is the German word for 'sister'?", "a": "Schwester", "options": ["Cousin", "Tante", "Schwester", "Onkel"]},
+    {"q": "What is the German word for 'grandmother'?", "a": "Großmutter", "options": ["Großmutter", "Schwester", "Mutter", "Onkel"]},
+    {"q": "What is the German word for 'grandfather'?", "a": "Großvater", "options": ["Großvater", "Schwester", "Tante", "Mutter"]},
+    {"q": "What is the German word for 'aunt'?", "a": "Tante", "options": ["Mutter", "Bruder", "Tante", "Onkel"]},
+    {"q": "What is the German word for 'uncle'?", "a": "Onkel", "options": ["Schwester", "Onkel", "Großvater", "Mutter"]},
+    {"q": "What is the German word for 'cousin'?", "a": "Cousin", "options": ["Großvater", "Onkel", "Cousin", "Tante"]},
+    {"q": "What is the German word for 'baby'?", "a": "Baby", "options": ["Großvater", "Großmutter", "Baby", "Schwester"]},
+    {"q": "What is the German word for 'bread'?", "a": "Brot", "options": ["Brot", "Suppe", "Apfel", "Milch"]},
+    {"q": "What is the German word for 'cheese'?", "a": "Käse", "options": ["Milch", "Hähnchen", "Apfel", "Käse"]},
+    {"q": "What is the German word for 'milk'?", "a": "Milch", "options": ["Ei", "Wasser", "Milch", "Brot"]},
+    {"q": "What is the German word for 'water'?", "a": "Wasser", "options": ["Apfel", "Ei", "Wasser", "Milch"]},
+    {"q": "What is the German word for 'apple'?", "a": "Apfel", "options": ["Brot", "Suppe", "Apfel", "Milch"]},
+    {"q": "What is the German word for 'banana'?", "a": "Banane", "options": ["Schokolade", "Käse", "Hähnchen", "Banane"]},
+    {"q": "What is the German word for 'chicken'?", "a": "Hähnchen", "options": ["Milch", "Wasser", "Schokolade", "Hähnchen"]},
+    {"q": "What is the German word for 'egg'?", "a": "Ei", "options": ["Wasser", "Suppe", "Ei", "Milch"]},
+    {"q": "What is the German word for 'chocolate'?", "a": "Schokolade", "options": ["Milch", "Wasser", "Schokolade", "Banane"]},
+    {"q": "What is the German word for 'soup'?", "a": "Suppe", "options": ["Schokolade", "Milch", "Suppe", "Wasser"]},
+    {"q": "What is the German word for 'Monday'?", "a": "Montag", "options": ["Dienstag", "Sonntag", "Mittwoch", "Montag"]},
+    {"q": "What is the German word for 'Tuesday'?", "a": "Dienstag", "options": ["Sonntag", "Dienstag", "Donnerstag", "Freitag"]},
+    {"q": "What is the German word for 'Wednesday'?", "a": "Mittwoch", "options": ["Sonntag", "Donnerstag", "Mittwoch", "Montag"]},
+    {"q": "What is the German word for 'Thursday'?", "a": "Donnerstag", "options": ["Sonntag", "Montag", "Freitag", "Donnerstag"]},
+    {"q": "What is the German word for 'Friday'?", "a": "Freitag", "options": ["Donnerstag", "Mittwoch", "Freitag", "Samstag"]},
+    {"q": "What is the German word for 'Saturday'?", "a": "Samstag", "options": ["Freitag", "Montag", "Samstag", "Donnerstag"]},
+    {"q": "What is the German word for 'Sunday'?", "a": "Sonntag", "options": ["Sonntag", "Dienstag", "Samstag", "Freitag"]},
+    {"q": "What is the German word for 'head'?", "a": "Kopf", "options": ["Ohr", "Bein", "Kopf", "Auge"]},
+    {"q": "What is the German word for 'hand'?", "a": "Hand", "options": ["Arm", "Ohr", "Hand", "Fuß"]},
+    {"q": "What is the German word for 'foot'?", "a": "Fuß", "options": ["Ohr", "Bein", "Kopf", "Fuß"]},
+    {"q": "What is the German word for 'eye'?", "a": "Auge", "options": ["Kopf", "Mund", "Arm", "Auge"]},
+    {"q": "What is the German word for 'ear'?", "a": "Ohr", "options": ["Ohr", "Nase", "Kopf", "Fuß"]},
+    {"q": "What is the German word for 'nose'?", "a": "Nase", "options": ["Kopf", "Mund", "Ohr", "Nase"]},
+    {"q": "What is the German word for 'mouth'?", "a": "Mund", "options": ["Bein", "Ohr", "Mund", "Kopf"]},
+    {"q": "What is the German word for 'arm'?", "a": "Arm", "options": ["Arm", "Mund", "Auge", "Nase"]},
+    {"q": "What is the German word for 'leg'?", "a": "Bein", "options": ["Ohr", "Mund", "Bein", "Kopf"]}
+  ],
+  UKS2: [
+    {"q": "What is the German word for 'It is sunny'?", "a": "Es ist sonnig", "options": ["Wie ist das Wetter?", "Es schneit", "Es ist heiß", "Es ist sonnig"]},
+    {"q": "What is the German word for 'It is raining'?", "a": "Es regnet", "options": ["Es ist sonnig", "Es schneit", "Es regnet", "Es ist bewölkt"]},
+    {"q": "What is the German word for 'It is cold'?", "a": "Es ist kalt", "options": ["Es regnet", "Es ist sonnig", "Es ist heiß", "Es ist kalt"]},
+    {"q": "What is the German word for 'It is hot'?", "a": "Es ist heiß", "options": ["Es ist heiß", "Es ist bewölkt", "Wie ist das Wetter?", "Es schneit"]},
+    {"q": "What is the German word for 'It is snowing'?", "a": "Es schneit", "options": ["Es ist sonnig", "Wie ist das Wetter?", "Es regnet", "Es schneit"]},
+    {"q": "What is the German word for 'It is windy'?", "a": "Es ist windig", "options": ["Wie ist das Wetter?", "Es ist kalt", "Es regnet", "Es ist windig"]},
+    {"q": "What is the German word for 'It is cloudy'?", "a": "Es ist bewölkt", "options": ["Es regnet", "Wie ist das Wetter?", "Es schneit", "Es ist bewölkt"]},
+    {"q": "What is the German word for 'What is the weather like?'?", "a": "Wie ist das Wetter?", "options": ["Wie ist das Wetter?", "Es ist kalt", "Es ist windig", "Es ist heiß"]},
+    {"q": "What is the German word for 'What time is it?'?", "a": "Wie spät ist es?", "options": ["Wie spät ist es?", "Wo", "Wie", "Warum"]},
+    {"q": "What is the German word for 'Where'?", "a": "Wo", "options": ["Wie", "Warum", "Was", "Wo"]},
+    {"q": "What is the German word for 'When'?", "a": "Wann", "options": ["Wann", "Was", "Warum", "Wo"]},
+    {"q": "What is the German word for 'Why'?", "a": "Warum", "options": ["Wie spät ist es?", "Warum", "Wann", "Wer"]},
+    {"q": "What is the German word for 'How'?", "a": "Wie", "options": ["Wer", "Wie spät ist es?", "Wie", "Was"]},
+    {"q": "What is the German word for 'Who'?", "a": "Wer", "options": ["Wann", "Wer", "Wie viele", "Was"]},
+    {"q": "What is the German word for 'What'?", "a": "Was", "options": ["Wer", "Wie viele", "Wo", "Was"]},
+    {"q": "What is the German word for 'How many'?", "a": "Wie viele", "options": ["Wie viele", "Wo", "Wie", "Warum"]},
+    {"q": "What is the German word for 'My name is...'?", "a": "Ich heiße...", "options": ["Ich mag es nicht", "Willkommen", "Mir geht es gut", "Ich heiße..."]},
+    {"q": "What is the German word for 'How are you?'?", "a": "Wie geht es dir?", "options": ["Mir geht es gut", "Willkommen", "Bis bald", "Wie geht es dir?"]},
+    {"q": "What is the German word for 'I am fine'?", "a": "Mir geht es gut", "options": ["Wie geht es dir?", "Wie alt bist du?", "Willkommen", "Mir geht es gut"]},
+    {"q": "What is the German word for 'How old are you?'?", "a": "Wie alt bist du?", "options": ["Wie alt bist du?", "Ich mag es nicht", "Willkommen", "Alles Gute zum Geburtstag"]},
+    {"q": "What is the German word for 'I like...'?", "a": "Ich mag...", "options": ["Alles Gute zum Geburtstag", "Wie geht es dir?", "Mir geht es gut", "Ich mag..."]},
+    {"q": "What is the German word for 'I don't like...'?", "a": "Ich mag es nicht", "options": ["Mir geht es gut", "Bis bald", "Wie alt bist du?", "Ich mag es nicht"]},
+    {"q": "What is the German word for 'See you soon'?", "a": "Bis bald", "options": ["Ich mag es nicht", "Alles Gute zum Geburtstag", "Wie alt bist du?", "Bis bald"]},
+    {"q": "What is the German word for 'Excuse me'?", "a": "Entschuldigung", "options": ["Ich mag es nicht", "Alles Gute zum Geburtstag", "Entschuldigung", "Mir geht es gut"]},
+    {"q": "What is the German word for 'Happy birthday'?", "a": "Alles Gute zum Geburtstag", "options": ["Ich mag...", "Ich mag es nicht", "Wie geht es dir?", "Alles Gute zum Geburtstag"]},
+    {"q": "What is the German word for 'Welcome'?", "a": "Willkommen", "options": ["Wie alt bist du?", "Ich heiße...", "Ich mag es nicht", "Willkommen"]},
+    {"q": "What is the capital city of Germany?", "a": "Berlin", "options": ["Vienna", "Berlin", "Frankfurt", "Munich"]},
+    {"q": "What is the currency used in Germany?", "a": "Euro", "options": ["Euro", "Pound", "Franc", "Deutschmark"]},
+    {"q": "What continent is Germany in?", "a": "Europe", "options": ["South America", "Africa", "Europe", "Asia"]},
+    {"q": "What colours are on the German flag?", "a": "Black, red and gold", "options": ["Black, red and gold", "Blue and white", "Red, white and blue", "Green, white and red"]},
+    {"q": "What is a traditional German sausage called?", "a": "Bratwurst", "options": ["Paella", "Croissant", "Bratwurst", "Baguette"]},
+    {"q": "What famous German festival celebrates beer?", "a": "Oktoberfest", "options": ["Bastille Day", "Carnival", "Fiesta", "Oktoberfest"]},
+    {"q": "A person from Germany is called what?", "a": "German", "options": ["Swiss", "German", "Dutch", "Austrian"]},
+    {"q": "What is the German word for 'Germany' itself?", "a": "Deutschland", "options": ["Deutschland", "Allemagne", "Germania", "Deutscheland"]},
+    {"q": "What famous wall divided a German city until 1989?", "a": "The Berlin Wall", "options": ["The Berlin Wall", "The Great Wall", "Hadrian's Wall", "The Iron Curtain"]},
+    {"q": "What sport is Germany especially famous for?", "a": "Football", "options": ["Cricket", "Baseball", "Football", "Rugby"]}
+  ],
+    }
+  },
+  latin: {
+    key: "latin", label: "Latin", desc: "Roman vocabulary, numerals, English word derivatives and Roman culture", icon: "ti-book-2",
+    questions: {
+  KS1: [
+    {"q": "What is the Latin word for 'one'?", "a": "Unus", "options": ["Quattuor", "Novem", "Unus", "Duo"]},
+    {"q": "What is the Latin word for 'two'?", "a": "Duo", "options": ["Tres", "Septem", "Sex", "Duo"]},
+    {"q": "What is the Latin word for 'three'?", "a": "Tres", "options": ["Decem", "Novem", "Tres", "Unus"]},
+    {"q": "What is the Latin word for 'four'?", "a": "Quattuor", "options": ["Tres", "Octo", "Quattuor", "Sex"]},
+    {"q": "What is the Latin word for 'five'?", "a": "Quinque", "options": ["Sex", "Septem", "Decem", "Quinque"]},
+    {"q": "What is the Latin word for 'six'?", "a": "Sex", "options": ["Tres", "Sex", "Decem", "Duo"]},
+    {"q": "What is the Latin word for 'seven'?", "a": "Septem", "options": ["Novem", "Decem", "Octo", "Septem"]},
+    {"q": "What is the Latin word for 'eight'?", "a": "Octo", "options": ["Decem", "Quinque", "Octo", "Unus"]},
+    {"q": "What is the Latin word for 'nine'?", "a": "Novem", "options": ["Octo", "Quinque", "Tres", "Novem"]},
+    {"q": "What is the Latin word for 'ten'?", "a": "Decem", "options": ["Septem", "Quinque", "Decem", "Novem"]},
+    {"q": "What is the Latin word for 'cat'?", "a": "Feles", "options": ["Feles", "Canis", "Vacca", "Piscis"]},
+    {"q": "What is the Latin word for 'dog'?", "a": "Canis", "options": ["Canis", "Feles", "Porcus", "Cuniculus"]},
+    {"q": "What is the Latin word for 'bird'?", "a": "Avis", "options": ["Avis", "Leo", "Piscis", "Cuniculus"]},
+    {"q": "What is the Latin word for 'fish'?", "a": "Piscis", "options": ["Mus", "Porcus", "Piscis", "Equus"]},
+    {"q": "What is the Latin word for 'horse'?", "a": "Equus", "options": ["Vacca", "Porcus", "Equus", "Leo"]},
+    {"q": "What is the Latin word for 'rabbit'?", "a": "Cuniculus", "options": ["Cuniculus", "Leo", "Equus", "Porcus"]},
+    {"q": "What is the Latin word for 'cow'?", "a": "Vacca", "options": ["Canis", "Piscis", "Vacca", "Leo"]},
+    {"q": "What is the Latin word for 'pig'?", "a": "Porcus", "options": ["Porcus", "Canis", "Leo", "Piscis"]},
+    {"q": "What is the Latin word for 'lion'?", "a": "Leo", "options": ["Leo", "Avis", "Equus", "Mus"]},
+    {"q": "What is the Latin word for 'mouse'?", "a": "Mus", "options": ["Mus", "Feles", "Piscis", "Leo"]},
+    {"q": "What is the Latin word for 'mother'?", "a": "Mater", "options": ["Pater", "Filius", "Mater", "Filia"]},
+    {"q": "What is the Latin word for 'father'?", "a": "Pater", "options": ["Filia", "Filius", "Pater", "Soror"]},
+    {"q": "What is the Latin word for 'brother'?", "a": "Frater", "options": ["Pater", "Soror", "Frater", "Filius"]},
+    {"q": "What is the Latin word for 'sister'?", "a": "Soror", "options": ["Pater", "Filius", "Soror", "Mater"]},
+    {"q": "What is the Latin word for 'son'?", "a": "Filius", "options": ["Pater", "Mater", "Frater", "Filius"]},
+    {"q": "What is the Latin word for 'daughter'?", "a": "Filia", "options": ["Mater", "Filius", "Filia", "Frater"]},
+    {"q": "What is the Latin word for 'red'?", "a": "Ruber", "options": ["Viridis", "Canus", "Aureus", "Ruber"]},
+    {"q": "What is the Latin word for 'blue'?", "a": "Caeruleus", "options": ["Caeruleus", "Albus", "Argenteus", "Purpureus"]},
+    {"q": "What is the Latin word for 'green'?", "a": "Viridis", "options": ["Caeruleus", "Canus", "Argenteus", "Viridis"]},
+    {"q": "What is the Latin word for 'yellow'?", "a": "Flavus", "options": ["Flavus", "Caeruleus", "Argenteus", "Niger"]},
+    {"q": "What is the Latin word for 'black'?", "a": "Niger", "options": ["Niger", "Canus", "Argenteus", "Ruber"]},
+    {"q": "What is the Latin word for 'white'?", "a": "Albus", "options": ["Caeruleus", "Albus", "Ruber", "Aureus"]},
+    {"q": "What is the Latin word for 'purple'?", "a": "Purpureus", "options": ["Purpureus", "Canus", "Aureus", "Niger"]},
+    {"q": "What is the Latin word for 'grey'?", "a": "Canus", "options": ["Canus", "Flavus", "Niger", "Albus"]},
+    {"q": "What is the Latin word for 'gold'?", "a": "Aureus", "options": ["Aureus", "Flavus", "Purpureus", "Viridis"]},
+    {"q": "What is the Latin word for 'silver'?", "a": "Argenteus", "options": ["Flavus", "Purpureus", "Argenteus", "Canus"]}
+  ],
+  LKS2: [
+    {"q": "What is the Latin word for 'table'?", "a": "Mensa", "options": ["Fenestra", "Sella", "Mensa", "Via"]},
+    {"q": "What is the Latin word for 'book'?", "a": "Liber", "options": ["Liber", "Via", "Mensa", "Hortus"]},
+    {"q": "What is the Latin word for 'chair'?", "a": "Sella", "options": ["Sella", "Domus", "Fenestra", "Via"]},
+    {"q": "What is the Latin word for 'door'?", "a": "Ianua", "options": ["Liber", "Via", "Ianua", "Sella"]},
+    {"q": "What is the Latin word for 'house'?", "a": "Domus", "options": ["Lectus", "Ianua", "Domus", "Sella"]},
+    {"q": "What is the Latin word for 'wall'?", "a": "Murus", "options": ["Murus", "Liber", "Ianua", "Hortus"]},
+    {"q": "What is the Latin word for 'road'?", "a": "Via", "options": ["Fenestra", "Sella", "Murus", "Via"]},
+    {"q": "What is the Latin word for 'garden'?", "a": "Hortus", "options": ["Hortus", "Fenestra", "Mensa", "Lectus"]},
+    {"q": "What is the Latin word for 'window'?", "a": "Fenestra", "options": ["Fenestra", "Hortus", "Ianua", "Via"]},
+    {"q": "What is the Latin word for 'bed'?", "a": "Lectus", "options": ["Murus", "Lectus", "Ianua", "Fenestra"]},
+    {"q": "What is the Latin word for 'sun'?", "a": "Sol", "options": ["Arbor", "Aqua", "Stella", "Sol"]},
+    {"q": "What is the Latin word for 'moon'?", "a": "Luna", "options": ["Luna", "Mare", "Aqua", "Terra"]},
+    {"q": "What is the Latin word for 'star'?", "a": "Stella", "options": ["Stella", "Aqua", "Ignis", "Caelum"]},
+    {"q": "What is the Latin word for 'water'?", "a": "Aqua", "options": ["Ignis", "Aqua", "Mare", "Stella"]},
+    {"q": "What is the Latin word for 'fire'?", "a": "Ignis", "options": ["Ignis", "Terra", "Luna", "Stella"]},
+    {"q": "What is the Latin word for 'earth'?", "a": "Terra", "options": ["Ignis", "Aqua", "Terra", "Stella"]},
+    {"q": "What is the Latin word for 'sea'?", "a": "Mare", "options": ["Mare", "Ignis", "Luna", "Stella"]},
+    {"q": "What is the Latin word for 'tree'?", "a": "Arbor", "options": ["Arbor", "Aqua", "Sol", "Ignis"]},
+    {"q": "What is the Latin word for 'mountain'?", "a": "Mons", "options": ["Sol", "Terra", "Mons", "Stella"]},
+    {"q": "What is the Latin word for 'sky'?", "a": "Caelum", "options": ["Aqua", "Sol", "Luna", "Caelum"]},
+    {"q": "What is the Latin word for 'head'?", "a": "Caput", "options": ["Oculus", "Caput", "Auris", "Os"]},
+    {"q": "What is the Latin word for 'hand'?", "a": "Manus", "options": ["Caput", "Brachium", "Oculus", "Manus"]},
+    {"q": "What is the Latin word for 'foot'?", "a": "Pes", "options": ["Manus", "Cor", "Pes", "Brachium"]},
+    {"q": "What is the Latin word for 'eye'?", "a": "Oculus", "options": ["Oculus", "Os", "Crus", "Caput"]},
+    {"q": "What is the Latin word for 'ear'?", "a": "Auris", "options": ["Auris", "Os", "Cor", "Caput"]},
+    {"q": "What is the Latin word for 'mouth'?", "a": "Os", "options": ["Os", "Auris", "Manus", "Oculus"]},
+    {"q": "What is the Latin word for 'arm'?", "a": "Brachium", "options": ["Capillus", "Cor", "Brachium", "Auris"]},
+    {"q": "What is the Latin word for 'leg'?", "a": "Crus", "options": ["Auris", "Oculus", "Caput", "Crus"]},
+    {"q": "What is the Latin word for 'heart'?", "a": "Cor", "options": ["Manus", "Cor", "Pes", "Crus"]},
+    {"q": "What is the Latin word for 'hair'?", "a": "Capillus", "options": ["Caput", "Cor", "Auris", "Capillus"]},
+    {"q": "What is the Latin phrase for 'I am'?", "a": "Sum", "options": ["Dico", "Ambulo", "Habeo", "Sum"]},
+    {"q": "What is the Latin phrase for 'I have'?", "a": "Habeo", "options": ["Amo", "Dico", "Video", "Habeo"]},
+    {"q": "What is the Latin phrase for 'I love'?", "a": "Amo", "options": ["Habeo", "Sum", "Video", "Amo"]},
+    {"q": "What is the Latin phrase for 'I see'?", "a": "Video", "options": ["Video", "Habeo", "Sum", "Dico"]},
+    {"q": "What is the Latin phrase for 'I walk'?", "a": "Ambulo", "options": ["Video", "Habeo", "Dico", "Ambulo"]},
+    {"q": "What is the Latin phrase for 'I say'?", "a": "Dico", "options": ["Video", "Dico", "Habeo", "Sum"]}
+  ],
+  UKS2: [
+    {"q": "The Latin word 'aqua' means water. Which English word comes from it?", "a": "Aquarium", "options": ["Aquarium", "Lunar", "Solar", "Terrain"]},
+    {"q": "The Latin word 'luna' means moon. Which English word comes from it?", "a": "Lunar", "options": ["Lunar", "Solar", "Aquatic", "Stellar"]},
+    {"q": "The Latin word 'sol' means sun. Which English word comes from it?", "a": "Solar", "options": ["Lunar", "Solar", "Aquatic", "Terrestrial"]},
+    {"q": "The Latin word 'terra' means earth. Which English word comes from it?", "a": "Territory", "options": ["Marine", "Aquarium", "Lunar", "Territory"]},
+    {"q": "The Latin word 'mare' means sea. Which English word comes from it?", "a": "Marine", "options": ["Solar", "Marine", "Terrestrial", "Lunar"]},
+    {"q": "The Latin word 'video' means 'I see'. Which English word comes from it?", "a": "Video", "options": ["Audio", "Ambulance", "Dictate", "Video"]},
+    {"q": "The Latin word 'audio' means 'I hear'. Which English word comes from it?", "a": "Audio", "options": ["Video", "Manual", "Audio", "Pedal"]},
+    {"q": "The Latin word 'manus' means hand. Which English word comes from it?", "a": "Manual", "options": ["Pedal", "Manual", "Ocular", "Dental"]},
+    {"q": "The Latin word 'pes' means foot. Which English word comes from it?", "a": "Pedal", "options": ["Cordial", "Pedal", "Dental", "Manual"]},
+    {"q": "The Latin word 'dens' means tooth. Which English word comes from it?", "a": "Dental", "options": ["Manual", "Pedal", "Dental", "Ocular"]},
+    {"q": "The Latin word 'oculus' means eye. Which English word comes from it?", "a": "Ocular", "options": ["Ocular", "Dental", "Manual", "Pedal"]},
+    {"q": "The Latin word 'porto' means 'I carry'. Which English word comes from it?", "a": "Portable", "options": ["Portable", "Durable", "Visible", "Audible"]},
+    {"q": "What number does the Roman numeral I represent?", "a": "1", "options": ["1", "50", "10", "5"]},
+    {"q": "What number does the Roman numeral V represent?", "a": "5", "options": ["10", "50", "5", "1"]},
+    {"q": "What number does the Roman numeral X represent?", "a": "10", "options": ["100", "5", "10", "50"]},
+    {"q": "What number does the Roman numeral L represent?", "a": "50", "options": ["100", "10", "500", "50"]},
+    {"q": "What number does the Roman numeral C represent?", "a": "100", "options": ["500", "1000", "100", "50"]},
+    {"q": "What number does the Roman numeral D represent?", "a": "500", "options": ["1000", "100", "50", "500"]},
+    {"q": "What number does the Roman numeral M represent?", "a": "1000", "options": ["100", "1000", "10", "500"]},
+    {"q": "What number does the Roman numeral IV represent?", "a": "4", "options": ["14", "4", "9", "6"]},
+    {"q": "What number does the Roman numeral IX represent?", "a": "9", "options": ["19", "9", "4", "11"]},
+    {"q": "What number does the Roman numeral XX represent?", "a": "20", "options": ["10", "2", "20", "200"]},
+    {"q": "What does the Latin phrase 'Veni, vidi, vici' mean?", "a": "I came, I saw, I conquered", "options": ["I came, I saw, I conquered", "I win, I lose, I try", "I came, I ate, I left", "I run, I jump, I fall"]},
+    {"q": "What does the Latin phrase 'Carpe diem' mean?", "a": "Seize the day", "options": ["End the day", "Seize the day", "Waste the day", "Save the day"]},
+    {"q": "What does the Latin abbreviation 'etc.' stand for?", "a": "And so on / and the rest", "options": ["Every time counts", "End the class", "Extra time comes", "And so on / and the rest"]},
+    {"q": "What does the Latin phrase 'E pluribus unum' mean?", "a": "Out of many, one", "options": ["Many are one", "Out of one, many", "One for all", "Out of many, one"]},
+    {"q": "What does the Latin phrase 'In memoriam' mean?", "a": "In memory of", "options": ["In memory of", "In writing", "In the future", "In the moment"]},
+    {"q": "What does the Latin phrase 'Alma mater' mean?", "a": "Nourishing mother (a person's old school)", "options": ["Home town", "Family tree", "Best friend", "Nourishing mother (a person's old school)"]},
+    {"q": "What does the Latin phrase 'Status quo' mean?", "a": "The existing state of affairs", "options": ["A final decision", "A new beginning", "A state of chaos", "The existing state of affairs"]},
+    {"q": "What does the Latin phrase 'Vice versa' mean?", "a": "The other way around", "options": ["At the same time", "In addition to", "Never again", "The other way around"]},
+    {"q": "What did the Romans call their capital city?", "a": "Rome (Roma)", "options": ["Rome (Roma)", "Pompeii", "Carthage", "Athens"]},
+    {"q": "What was a Roman army unit of soldiers called?", "a": "A legion", "options": ["A legion", "A militia", "A cohort of knights", "A fleet"]},
+    {"q": "What structure did the Romans build to carry water across land?", "a": "An aqueduct", "options": ["A dam", "A well", "A canal", "An aqueduct"]},
+    {"q": "What did Roman citizens wear as an outer garment?", "a": "A toga", "options": ["A cloak of fur", "A suit of armour", "A toga", "A kilt"]},
+    {"q": "What was the Colosseum mainly used for?", "a": "Gladiator fights and public games", "options": ["Grain storage", "Government meetings", "Gladiator fights and public games", "Religious worship only"]},
+    {"q": "Who was the first Roman Emperor?", "a": "Augustus", "options": ["Constantine", "Augustus", "Nero", "Julius Caesar"]}
+  ],
+    }
+  },
+};
 var currentTopicKey = null;
 var tpIdx = 0, tpQResults = {};
 var currentTpQuestions = [], currentTpTier = 'KS1';
@@ -11824,6 +12473,10 @@ function buildPlayItems(){
     var tRe = RE_TOPICS[s.checkType];
     var qs4 = pickQuestions(tRe ? (tRe.questions[s.tier] || tRe.questions.KS1) : [], 12);
     playItems = qs4.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
+  } else if(s.subject === 'mfl'){
+    var tMf = MFL_TOPICS[s.checkType];
+    var qs5 = pickQuestions(tMf ? (tMf.questions[s.tier] || tMf.questions.KS1) : [], 12);
+    playItems = qs5.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
   }
 }
 
@@ -11976,6 +12629,383 @@ function startLiveReTier(tier){
   startLiveSession('re', currentReKey, tier, t.label, t.label + ' · ' + tier);
 }
 
+/* ---------- MFL (topic-container subject, mirrors Science/RE) ---------- */
+var currentMflKey = null;
+var mfIdx = 0, mfQResults = {};
+var currentMflQuestions = [], currentMflTier = 'KS1';
+var mflResults = [];
+
+function renderMflList(){
+  var el = document.getElementById('mfl-topic-list');
+  if(!el) return;
+  el.innerHTML = '';
+  Object.keys(MFL_TOPICS).forEach(function(key, i){
+    var t = MFL_TOPICS[key];
+    var btn = document.createElement('button');
+    btn.className = 'phase-btn';
+    btn.onclick = function(){ goToMflTopic(key); };
+    var badge = document.createElement('div'); badge.className = 'phase-badge';
+    var icon = document.createElement('i'); icon.className = 'ti ' + (t.icon || 'ti-language'); icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
+    badge.appendChild(icon);
+    var textWrap = document.createElement('div');
+    var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = t.label;
+    var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = t.desc || '';
+    textWrap.appendChild(name); textWrap.appendChild(desc);
+    btn.appendChild(badge); btn.appendChild(textWrap);
+    el.appendChild(btn);
+  });
+}
+
+function goToMflTopic(key){
+  currentMflKey = key;
+  var t = MFL_TOPICS[key];
+  if(!t) return;
+  document.getElementById('mfl-banner-icon').innerHTML = '<i class="ti ' + (t.icon || 'ti-language') + '" aria-hidden="true"></i>';
+  document.getElementById('mfl-banner-title').textContent = t.label;
+  showScreen('screen-mfl-tiers');
+}
+function backToMflTopics(){
+  showScreen('screen-mfl-home');
+}
+
+function startMflCheck(tier){
+  if(!requireActiveSchool())return;
+  if(!requireName())return;
+  var t = MFL_TOPICS[currentMflKey];
+  if(!t) return;
+  currentMflQuestions = pickQuestions(t.questions[tier] || [], 12);
+  currentMflTier = tier;
+  mfIdx = 0; mfQResults = {};
+  showScreen('screen-mfl-check');
+  renderMflQuestion();
+}
+
+function renderMflQuestion(){
+  var item = currentMflQuestions[mfIdx];
+  var total = currentMflQuestions.length;
+  document.getElementById('mfl-prog').style.width = Math.round((mfIdx/total)*100)+'%';
+  document.getElementById('mfl-counter').textContent = 'Question '+(mfIdx+1)+' of '+total;
+  document.getElementById('mfl-question-display').textContent = item.q;
+  renderMcOptions('mfl-answer-display', item);
+}
+
+function markMfl(correct){
+  var item = currentMflQuestions[mfIdx];
+  mfQResults[mfIdx] = { question: item.q, correct: correct };
+  mfIdx++;
+  if(mfIdx >= currentMflQuestions.length){ finishMflCheck(); return; }
+  renderMflQuestion();
+}
+
+async function finishMflCheck(){
+  var name = document.getElementById('pupil-name').value.trim() || 'Unnamed';
+  var year = document.getElementById('pupil-year').value || '';
+  var gender = document.getElementById('pupil-gender').value || '';
+  var dob = document.getElementById('pupil-dob').value || '';
+  var needs = document.getElementById('pupil-needs').value || '';
+  var t = MFL_TOPICS[currentMflKey];
+
+  var correctCount=0, missed=[];
+  Object.keys(mfQResults).forEach(function(k){
+    var r = mfQResults[k];
+    if(r.correct) correctCount++; else missed.push(r.question);
+  });
+  var total = currentMflQuestions.length;
+
+  var row = {
+    school_id: currentProfile.school_id,
+    teacher_id: currentUser.id,
+    pupil_name: name,
+    year_group: year || null,
+    gender: gender || null,
+    dob: dob || null,
+    additional_needs: needs || null,
+    topic_key: currentMflKey,
+    topic_label: t.label,
+    tier: currentMflTier,
+    total_correct: correctCount,
+    total_questions: total,
+    missed_questions: missed,
+    assessed_date: new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+    ts: Date.now()
+  };
+
+  var ins = await sb.from('mfl_results').insert(row).select().single();
+  if(ins.error){
+    if(ins.error.code === '42501' || /row-level security/i.test(ins.error.message)){
+      alert('Your school\'s free trial or subscription isn\'t active, so this MFL check couldn\'t be saved. Please upgrade to continue.');
+    } else {
+      alert('Could not save this MFL check: ' + ins.error.message);
+    }
+    showScreen('screen-home');
+    return;
+  }
+
+  var entry = rowToMflResult(ins.data);
+  mflResults.unshift(entry);
+
+  document.getElementById('mfl-res-name').textContent = name;
+  document.getElementById('mfl-res-label').textContent = t.label + ' · ' + (TOPIC_TIER_LABELS[currentMflTier] || currentMflTier);
+  document.getElementById('mfl-res-total').textContent = correctCount + '/' + total;
+  document.getElementById('mfl-res-total-lbl').textContent = 'Correct (out of ' + total + ')';
+  var missedDiv = document.getElementById('mfl-res-missed-chips'); missedDiv.innerHTML = '';
+  missed.forEach(function(w){ var c=document.createElement('span'); c.className='chip chip-no'; c.textContent=w; missedDiv.appendChild(c); });
+  document.getElementById('mfl-res-missed-wrap').style.display = missed.length ? 'block' : 'none';
+
+  showScreen('screen-mfl-done');
+  renderMflResults();
+}
+
+function rowToMflResult(row){
+  return {
+    id: row.id,
+    name: row.pupil_name,
+    year: row.year_group || '',
+    gender: row.gender || '',
+    dob: row.dob || '',
+    needs: row.additional_needs || '',
+    topicKey: row.topic_key,
+    topicLabel: row.topic_label,
+    tier: row.tier || 'KS1',
+    totalCorrect: row.total_correct,
+    totalQuestions: row.total_questions,
+    missedQuestions: row.missed_questions || [],
+    date: row.assessed_date,
+    ts: row.ts
+  };
+}
+
+async function loadMflResults(){
+  var res = await sb.from('mfl_results').select('*').order('created_at', { ascending:false });
+  if(res.error){ console.error(res.error); mflResults = []; }
+  else { mflResults = res.data.map(rowToMflResult); }
+  renderMflResults();
+}
+
+async function deleteMflResult(id){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its sample data can\'t be deleted.'); return; }
+  if(!confirm('Delete this MFL check?'))return;
+  var del = await sb.from('mfl_results').delete().eq('id', id);
+  if(del.error){ alert('Could not delete: ' + del.error.message); return; }
+  mflResults = mflResults.filter(function(r){return r.id!==id;});
+  renderMflResults();
+}
+
+function mflCheckLabel(r){
+  return (r.topicLabel || r.topicKey) + ' · ' + (TOPIC_TIER_LABELS[r.tier] || r.tier);
+}
+
+function buildMflCard(r){
+  var card = document.createElement('div'); card.className = 'pupil-card';
+  var header = document.createElement('div'); header.className = 'pupil-header';
+  var nb = document.createElement('div'); nb.style.flex = '1';
+  var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
+  var me = document.createElement('div'); me.className = 'pupil-meta';
+  me.textContent = [mflCheckLabel(r), r.date, r.year].filter(function(x){return x;}).join(' / ');
+  nb.appendChild(ne); nb.appendChild(me);
+  var right = document.createElement('div'); right.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;';
+  var pe = document.createElement('div'); pe.className = 'pct-pill';
+  var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
+  pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
+  right.appendChild(pe);
+  if(!isDemoSchool()){
+    var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
+    (function(rr){ editBtn.onclick = function(){ openEditDetails('mfl', rr); }; })(r);
+    right.appendChild(editBtn);
+    var delBtn = document.createElement('button'); delBtn.className = 'delete-row-btn'; delBtn.textContent = 'Delete';
+    (function(id){ delBtn.onclick = function(){ deleteMflResult(id); }; })(r.id);
+    right.appendChild(delBtn);
+  }
+  header.appendChild(nb); header.appendChild(right);
+  card.appendChild(header);
+  if(r.missedQuestions && r.missedQuestions.length){
+    var ms = document.createElement('div'); ms.className = 'sound-section';
+    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Questions to revisit';
+    var mw = document.createElement('div'); mw.className = 'chips-row';
+    r.missedQuestions.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
+    ms.appendChild(mh); ms.appendChild(mw);
+    card.appendChild(ms);
+  }
+  return card;
+}
+
+var mflGroupMode = 'year';
+function setMflGroupMode(mode){
+  mflGroupMode = mode;
+  document.getElementById('mfl-group-year-btn').classList.toggle('active', mode==='year');
+  document.getElementById('mfl-group-term-btn').classList.toggle('active', mode==='term');
+  renderMflResults();
+}
+
+function renderMflResults(){
+  var el = document.getElementById('mfl-list');
+  if(!el) return;
+  el.innerHTML = '';
+  var emptyEl = document.getElementById('mfl-list-empty');
+  var summaryEl = document.getElementById('mfl-summary');
+  var list = filterByClass(mflResults);
+  if(!list.length){
+    if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No MFL checks yet for '+classFilter+'.') : 'No MFL checks yet.'; }
+    if(summaryEl) summaryEl.style.display = 'none';
+    return;
+  }
+  if(emptyEl) emptyEl.style.display = 'none';
+  if(summaryEl) summaryEl.style.display = 'block';
+  document.getElementById('mfl-count').textContent = list.length;
+  var avgMfl = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
+  document.getElementById('mfl-avg').textContent = avgMfl + '%';
+  var keyFn = mflGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
+  var order = mflGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
+  renderGroups(el, list, keyFn, order, buildMflCard, 'child checked', 'children checked', mflGroupMode==='year' && !classFilter ? setClassFilter : null);
+}
+
+function exportMflCSV(){
+  var termFilter = document.getElementById('mfl-export-term') ? document.getElementById('mfl-export-term').value : 'all';
+  var base = filterByClass(mflResults);
+  var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
+  if(!list.length){alert((termFilter==='all' ? 'No MFL checks to export yet' : 'No '+termFilter+' term MFL checks to export yet')+classSuffixText()+'.');return;}
+  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Missed questions'];
+  var rows=[header];
+  list.forEach(function(r){
+    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,(r.missedQuestions||[]).join('; ')]);
+  });
+  var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
+  downloadCSV(rows,'emeejay-mfl'+suffix+'-'+dateStr()+'.csv');
+}
+
+async function clearAllMfl(){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its sample data can\'t be cleared.'); return; }
+  if(!confirm('Clear all MFL checks for your school? This cannot be undone.'))return;
+  var del = await sb.from('mfl_results').delete().not('id','is',null);
+  if(del.error){ alert('Could not clear MFL checks: ' + del.error.message); return; }
+  mflResults=[];
+  renderMflResults();
+  renderMflAnalytics();
+}
+
+function renderMflAnalytics(){
+  var emptyEl = document.getElementById('mfl-an-empty');
+  var contentEl = document.getElementById('mfl-an-content');
+  if(!emptyEl || !contentEl) return;
+  var list = filterByClass(mflResults);
+  if(!list.length){ emptyEl.style.display='block'; emptyEl.textContent = classFilter ? ('No MFL check data yet for '+classFilter+'.') : 'No MFL check data yet. Complete an MFL check first.'; contentEl.style.display='none'; return; }
+  emptyEl.style.display='none'; contentEl.style.display='block';
+
+  var overviewEl = document.getElementById('mfl-an-overview'); overviewEl.innerHTML = '';
+  var avgTotal = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
+  overviewEl.appendChild(makeBar('Overall',avgTotal,barColor(avgTotal)));
+  var byLabel = {};
+  list.forEach(function(r){ var lbl = mflCheckLabel(r); if(!byLabel[lbl])byLabel[lbl]=[]; byLabel[lbl].push(r); });
+  Object.keys(byLabel).sort().forEach(function(lbl){
+    var subList = byLabel[lbl];
+    var subAvg = Math.round(subList.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/subList.length);
+    overviewEl.appendChild(makeBar(lbl, subAvg, barColor(subAvg)));
+  });
+
+  var missedEl = document.getElementById('mfl-an-missed'); missedEl.innerHTML = '';
+  var qCount = {};
+  list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
+  var sortedQs = Object.keys(qCount).sort(function(a,b){return qCount[b]-qCount[a];}).slice(0,12);
+  var maxQCount = sortedQs.length ? qCount[sortedQs[0]] : 1;
+  if(!sortedQs.length){ var wmsg=document.createElement('p'); wmsg.style.cssText='font-size:13px;color:var(--text-muted);'; wmsg.textContent='No missed questions yet.'; missedEl.appendChild(wmsg); }
+  sortedQs.forEach(function(w){
+    var row=document.createElement('div');row.className='sound-freq-row';
+    var chip=document.createElement('span');chip.className='sound-freq-chip';chip.style.cssText='max-width:220px;white-space:normal;line-height:1.3;';chip.textContent=w;
+    var bg=document.createElement('div');bg.className='sound-freq-bar-bg';
+    var fill=document.createElement('div');fill.className='sound-freq-bar-fill';fill.style.width=Math.round((qCount[w]/maxQCount)*100)+'%';
+    bg.appendChild(fill);
+    var cnt=document.createElement('div');cnt.className='sound-freq-count';cnt.textContent=qCount[w]+' '+(qCount[w]===1?'child':'children');
+    row.appendChild(chip);row.appendChild(bg);row.appendChild(cnt);
+    missedEl.appendChild(row);
+  });
+
+  var trendEl = document.getElementById('mfl-an-trends'); trendEl.innerHTML = '';
+  var byName = {};
+  list.forEach(function(r){ var k=r.name.toLowerCase().trim(); if(!byName[k])byName[k]=[]; byName[k].push(r); });
+  var multi = Object.keys(byName).filter(function(k){return byName[k].length>1;});
+  if(!multi.length){ var tmsg=document.createElement('p'); tmsg.style.cssText='font-size:13px;color:var(--text-muted);'; tmsg.textContent='Trends appear here once a child has completed more than one MFL check.'; trendEl.appendChild(tmsg); }
+  else{
+    multi.forEach(function(k){
+      var entries=byName[k].slice().sort(function(a,b){return a.ts-b.ts;});
+      var nameHd=document.createElement('div');nameHd.style.cssText='font-size:14px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:8px;margin-top:12px;';nameHd.textContent=entries[0].name;trendEl.appendChild(nameHd);
+      entries.forEach(function(r,i){
+        var pct=r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
+        var row=document.createElement('div');row.className='trend-row';
+        var dateEl=document.createElement('div');dateEl.className='trend-date';dateEl.textContent=r.date;
+        var setEl=document.createElement('div');setEl.className='trend-set';setEl.textContent=mflCheckLabel(r);
+        var scoreEl=document.createElement('div');scoreEl.className='trend-score';scoreEl.textContent=r.totalCorrect+'/'+r.totalQuestions+' ('+pct+'%)';
+        var arrowEl=document.createElement('div');arrowEl.className='trend-arrow';
+        if(i>0){
+          var prevPct = entries[i-1].totalQuestions ? Math.round(entries[i-1].totalCorrect/entries[i-1].totalQuestions*100) : 0;
+          var diff=pct-prevPct;
+          if(diff>0){arrowEl.textContent='+'+diff+'%';arrowEl.style.color='var(--text-success)';}
+          else if(diff<0){arrowEl.textContent=diff+'%';arrowEl.style.color='var(--text-danger)';}
+          else{arrowEl.textContent='no change';arrowEl.style.color='var(--text-muted)';}
+        }
+        row.appendChild(dateEl);row.appendChild(setEl);row.appendChild(scoreEl);row.appendChild(arrowEl);
+        trendEl.appendChild(row);
+      });
+    });
+  }
+}
+
+function exportMflAnalyticsCSV(){
+  var scoped = filterByClass(mflResults);
+  if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
+  var rows=[];
+  var blank=[''];
+  rows.push(['Emeejay Assess - MFL Analytics Export'+(classFilter?(' ('+classFilter+')'):''),'Generated: '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})]);
+  rows.push(['Total checks',scoped.length]);
+  var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/scoped.length);
+  rows.push(['Overall average',avgTotal+'%']);
+  rows.push(blank);
+
+  rows.push(['BY TOPIC & TIER','','']);
+  rows.push(['Topic check','Checks','Average score']);
+  var byLabel={};
+  scoped.forEach(function(r){var lbl=mflCheckLabel(r);if(!byLabel[lbl])byLabel[lbl]=[];byLabel[lbl].push(r);});
+  Object.keys(byLabel).sort().forEach(function(lbl){
+    var subList=byLabel[lbl];
+    var subAvg=Math.round(subList.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/subList.length);
+    rows.push([lbl,subList.length,subAvg+'%']);
+  });
+  rows.push(blank);
+
+  rows.push(['MOST MISSED QUESTIONS','','']);
+  rows.push(['Question','Children missing it','% of checks']);
+  var qCount={};
+  scoped.forEach(function(r){(r.missedQuestions||[]).forEach(function(q){qCount[q]=(qCount[q]||0)+1;});});
+  Object.keys(qCount).sort(function(a,b){return qCount[b]-qCount[a];}).forEach(function(q){
+    rows.push([q,qCount[q],Math.round((qCount[q]/scoped.length)*100)+'%']);
+  });
+  rows.push(blank);
+
+  rows.push(['TRENDS','','','']);
+  rows.push(['Name','Date','Topic check','Score','Change']);
+  var byName={};
+  scoped.forEach(function(r){var k=r.name.toLowerCase().trim();if(!byName[k])byName[k]=[];byName[k].push(r);});
+  Object.keys(byName).filter(function(k){return byName[k].length>1;}).forEach(function(k){
+    var entries=byName[k].slice().sort(function(a,b){return a.ts-b.ts;});
+    entries.forEach(function(r,i){
+      var pct = r.totalQuestions ? Math.round(r.totalCorrect/r.totalQuestions*100) : 0;
+      var change='';
+      if(i>0){
+        var prevPct = entries[i-1].totalQuestions ? Math.round(entries[i-1].totalCorrect/entries[i-1].totalQuestions*100) : 0;
+        var diff=pct-prevPct;change=(diff>0?'+':'')+diff+'%';
+      }
+      rows.push([r.name,r.date,mflCheckLabel(r),r.totalCorrect+'/'+r.totalQuestions+' ('+pct+'%)',change]);
+    });
+  });
+
+  downloadCSV(rows,'emeejay-mfl-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+}
+
+function startLiveMflTier(tier){
+  var t = MFL_TOPICS[currentMflKey];
+  if(!t) return;
+  startLiveSession('mfl', currentMflKey, tier, t.label, t.label + ' · ' + tier);
+}
+
 function startLivePolling(){
   stopLivePolling();
   pollLiveParticipants();
@@ -12042,6 +13072,7 @@ function checkPlayParam(){
 renderTopicsList();
 renderScienceList();
 renderReList();
+renderMflList();
 renderEnglishList();
 renderMathsList();
 var isPlayMode = checkPlayParam();
