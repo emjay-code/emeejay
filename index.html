@@ -155,6 +155,14 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .trend-badge.trend-up{color:var(--text-success);}
 .trend-badge.trend-down{color:var(--text-danger);}
 .trend-badge.trend-flat{color:var(--text-muted);}
+.sparkline{flex-shrink:0;display:block;}
+.progress-chart-card{background:var(--surface-2);border:0.5px solid var(--border);border-radius:14px;padding:1rem 1.25rem;margin-bottom:0.75rem;}
+.progress-chart-hd{display:flex;align-items:center;justify-content:space-between;gap:0.5rem;margin-bottom:0.5rem;}
+.progress-chart-title{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;}
+.progress-chart-latest{font-size:13px;font-weight:600;color:var(--hp-purple);white-space:nowrap;}
+.progress-chart{width:100%;}
+.progress-chart svg{width:100%;height:70px;display:block;}
+.progress-chart-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:4px;}
 .sort-select{font-size:12px;padding:0.3rem 0.5rem;border:0.5px solid var(--border-strong);border-radius:var(--radius);background:var(--surface-1);color:var(--text-secondary);}
 .sound-section{margin-bottom:0.75rem;}
 .sound-section:last-child{margin-bottom:0;}
@@ -3866,6 +3874,11 @@ function renderProfileSection(key, list, buildFn){
   var wrapEl = document.getElementById('ch-profile-wrap-' + key);
   var countEl = document.getElementById('ch-profile-count-' + key);
   el.innerHTML = '';
+  if(list.length >= 2){
+    var chronological = list.slice().sort(function(a,b){ return (a.ts||0) - (b.ts||0); });
+    var chart = buildProgressChart(chronological, 'Progress over time');
+    if(chart) el.appendChild(chart);
+  }
   list.sort(function(a,b){ return (b.ts||0) - (a.ts||0); });
   list.forEach(function(r){ el.appendChild(buildFn(r)); });
   emptyEl.style.display = list.length ? 'none' : 'block';
@@ -4175,6 +4188,116 @@ function buildTrendBadge(diff){
   span.title = 'Compared to their previous check in this subject';
   return span;
 }
+/* This child's scores for a given subject, oldest first - the raw series
+   both the compact sparkline (Results cards) and the full progress chart
+   (Child Profile) are drawn from. */
+function pupilScoreHistory(list, r){
+  var nm = (r.name||'').trim().toLowerCase();
+  if(!nm) return [];
+  return list.filter(function(x){ return (x.name||'').trim().toLowerCase()===nm; })
+    .slice().sort(function(a,b){ return (a.ts||0)-(b.ts||0); });
+}
+/* Small inline score-over-time line for a Results card. Needs at least two
+   checks to be worth drawing; returns null otherwise so callers can skip it. */
+function buildSparkline(history){
+  if(!history || history.length < 2) return null;
+  var w = 64, h = 22, pad = 2;
+  var pts = history.map(function(r){ return Math.max(0, Math.min(100, pctOf(r))); });
+  var n = pts.length;
+  var stepX = (w - pad*2) / (n-1);
+  var svgNS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(svgNS,'svg');
+  svg.setAttribute('width', w); svg.setAttribute('height', h);
+  svg.setAttribute('viewBox','0 0 '+w+' '+h);
+  svg.setAttribute('aria-hidden','true');
+  svg.classList.add('sparkline');
+  var coords = pts.map(function(p,i){
+    var x = pad + i*stepX;
+    var y = pad + (1 - p/100) * (h - pad*2);
+    return x.toFixed(1)+','+y.toFixed(1);
+  });
+  var poly = document.createElementNS(svgNS,'polyline');
+  poly.setAttribute('points', coords.join(' '));
+  poly.setAttribute('fill','none');
+  poly.setAttribute('stroke','var(--hp-purple)');
+  poly.setAttribute('stroke-width','1.6');
+  poly.setAttribute('stroke-linecap','round');
+  poly.setAttribute('stroke-linejoin','round');
+  svg.appendChild(poly);
+  var lastCoord = coords[coords.length-1].split(',');
+  var dot = document.createElementNS(svgNS,'circle');
+  dot.setAttribute('cx', lastCoord[0]); dot.setAttribute('cy', lastCoord[1]); dot.setAttribute('r','2');
+  dot.setAttribute('fill','var(--hp-purple)');
+  svg.appendChild(dot);
+  return svg;
+}
+/* Fuller score-over-time chart shown at the top of a subject's history on
+   the Child Profile page. `history` must be oldest-first. Returns a ready
+   to insert card, or null if there's fewer than two checks to plot. */
+function buildProgressChart(history, title){
+  if(!history || history.length < 2) return null;
+  var w = 300, h = 70, padX = 6, padY = 8;
+  var pts = history.map(function(r){ return Math.max(0, Math.min(100, pctOf(r))); });
+  var n = pts.length;
+  var stepX = (w - padX*2) / (n-1);
+  var svgNS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(svgNS,'svg');
+  svg.setAttribute('viewBox','0 0 '+w+' '+h);
+  svg.setAttribute('preserveAspectRatio','none');
+  svg.setAttribute('aria-hidden','true');
+
+  var midY = padY + 0.5*(h-padY*2);
+  var mid = document.createElementNS(svgNS,'line');
+  mid.setAttribute('x1', padX); mid.setAttribute('x2', w-padX);
+  mid.setAttribute('y1', midY.toFixed(1)); mid.setAttribute('y2', midY.toFixed(1));
+  mid.setAttribute('stroke','var(--border)'); mid.setAttribute('stroke-width','1'); mid.setAttribute('stroke-dasharray','3,3');
+  svg.appendChild(mid);
+
+  var coords = pts.map(function(p,i){
+    var x = padX + i*stepX;
+    var y = padY + (1-p/100)*(h-padY*2);
+    return [x,y];
+  });
+  var poly = document.createElementNS(svgNS,'polyline');
+  poly.setAttribute('points', coords.map(function(c){return c[0].toFixed(1)+','+c[1].toFixed(1);}).join(' '));
+  poly.setAttribute('fill','none');
+  poly.setAttribute('stroke','var(--hp-purple)');
+  poly.setAttribute('stroke-width','2');
+  poly.setAttribute('stroke-linecap','round');
+  poly.setAttribute('stroke-linejoin','round');
+  svg.appendChild(poly);
+
+  coords.forEach(function(c, i){
+    var dot = document.createElementNS(svgNS,'circle');
+    var isLast = i===coords.length-1;
+    dot.setAttribute('cx', c[0].toFixed(1)); dot.setAttribute('cy', c[1].toFixed(1)); dot.setAttribute('r', isLast ? '3.5' : '2.5');
+    dot.setAttribute('fill', isLast ? 'var(--hp-purple)' : 'var(--surface-1)');
+    dot.setAttribute('stroke','var(--hp-purple)'); dot.setAttribute('stroke-width','1.5');
+    var titleEl = document.createElementNS(svgNS,'title');
+    titleEl.textContent = (history[i].date || '') + ': ' + Math.round(pts[i]) + '%';
+    dot.appendChild(titleEl);
+    svg.appendChild(dot);
+  });
+
+  var wrap = document.createElement('div'); wrap.className = 'progress-chart-card';
+  var hd = document.createElement('div'); hd.className = 'progress-chart-hd';
+  var titleEl2 = document.createElement('div'); titleEl2.className = 'progress-chart-title'; titleEl2.textContent = title || 'Progress over time';
+  var latestEl = document.createElement('div'); latestEl.className = 'progress-chart-latest';
+  var firstPct = Math.round(pts[0]), lastPct = Math.round(pts[pts.length-1]);
+  var diff = lastPct - firstPct;
+  latestEl.textContent = lastPct + '%' + (diff!==0 ? ' (' + (diff>0?'+':'') + diff + '% since first check)' : '');
+  hd.appendChild(titleEl2); hd.appendChild(latestEl);
+  wrap.appendChild(hd);
+  var chartWrap = document.createElement('div'); chartWrap.className = 'progress-chart';
+  chartWrap.appendChild(svg);
+  wrap.appendChild(chartWrap);
+  var labels = document.createElement('div'); labels.className = 'progress-chart-labels';
+  var firstLbl = document.createElement('span'); firstLbl.textContent = history[0].date || '';
+  var lastLbl = document.createElement('span'); lastLbl.textContent = history[history.length-1].date || '';
+  labels.appendChild(firstLbl); labels.appendChild(lastLbl);
+  wrap.appendChild(labels);
+  return wrap;
+}
 
 function showRvScreen(containerId, id){
   var container = document.getElementById(containerId);
@@ -4276,6 +4399,7 @@ function buildPupilCard(r){
   var pe=document.createElement('div');pe.className='pct-pill';pe.textContent=r.ok.length+'/'+r.total+' ('+r.pct+'%)';
   right.appendChild(pe);
   var trendRv = buildTrendBadge(computeTrendDiff(results, r)); if(trendRv) right.appendChild(trendRv);
+  var sparkRv = buildSparkline(pupilScoreHistory(results, r)); if(sparkRv) right.appendChild(sparkRv);
   if(!isDemoSchool()){
     var editBtn=document.createElement('button');editBtn.className='edit-row-btn';editBtn.textContent='Edit details';
     (function(rr){editBtn.onclick=function(){openEditDetails('phonics', rr);};})(r);
@@ -4592,6 +4716,7 @@ function buildBlendingCard(r){
   pe.textContent = r.totalCorrect + '/' + r.totalWords + ' (real ' + r.realCorrect + '/' + r.realTotal + ', pseudo ' + r.pseudoCorrect + '/' + r.pseudoTotal + ')';
   right.appendChild(pe);
   var trendBc = buildTrendBadge(computeTrendDiff(blendingResults, r)); if(trendBc) right.appendChild(trendBc);
+  var sparkBc = buildSparkline(pupilScoreHistory(blendingResults, r)); if(sparkBc) right.appendChild(sparkBc);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('blending', rr); }; })(r);
@@ -4936,6 +5061,7 @@ function buildTimesTablesCard(r){
   pe.textContent = r.totalCorrect + '/' + r.totalFacts + ' (' + pct + '%)';
   right.appendChild(pe);
   var trendTt = buildTrendBadge(computeTrendDiff(timesTablesResults, r)); if(trendTt) right.appendChild(trendTt);
+  var sparkTt = buildSparkline(pupilScoreHistory(timesTablesResults, r)); if(sparkTt) right.appendChild(sparkTt);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('times_tables', rr); }; })(r);
@@ -7112,6 +7238,7 @@ function buildMathsCard(r){
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
   var trendMt = buildTrendBadge(computeTrendDiff(mathsResults, r)); if(trendMt) right.appendChild(trendMt);
+  var sparkMt = buildSparkline(pupilScoreHistory(mathsResults, r)); if(sparkMt) right.appendChild(sparkMt);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('maths', rr); }; })(r);
@@ -8337,6 +8464,7 @@ function buildEnglishCard(r){
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
   var trendEn = buildTrendBadge(computeTrendDiff(englishResults, r)); if(trendEn) right.appendChild(trendEn);
+  var sparkEn = buildSparkline(pupilScoreHistory(englishResults, r)); if(sparkEn) right.appendChild(sparkEn);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('english', rr); }; })(r);
@@ -8848,6 +8976,7 @@ function buildHandwritingCard(r){
   pe.textContent = r.itemsOk.length + '/' + r.total + ' (' + r.pct + '%)';
   right.appendChild(pe);
   var trendHw = buildTrendBadge(computeTrendDiff(handwritingResults, r)); if(trendHw) right.appendChild(trendHw);
+  var sparkHw = buildSparkline(pupilScoreHistory(handwritingResults, r)); if(sparkHw) right.appendChild(sparkHw);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('handwriting', rr); }; })(r);
@@ -9176,6 +9305,7 @@ function buildEyCard(r){
   pe.textContent = r.itemsOk.length + '/' + r.total + ' (' + r.pct + '%)';
   right.appendChild(pe);
   var trendEy = buildTrendBadge(computeTrendDiff(earlyYearsResults, r)); if(trendEy) right.appendChild(trendEy);
+  var sparkEy = buildSparkline(pupilScoreHistory(earlyYearsResults, r)); if(sparkEy) right.appendChild(sparkEy);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('early_years', rr); }; })(r);
@@ -16092,6 +16222,7 @@ function buildTopicCard(r){
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
   var trendTp = buildTrendBadge(computeTrendDiff(topicResults, r)); if(trendTp) right.appendChild(trendTp);
+  var sparkTp = buildSparkline(pupilScoreHistory(topicResults, r)); if(sparkTp) right.appendChild(sparkTp);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('topics', rr); }; })(r);
@@ -16468,6 +16599,7 @@ function buildScienceCard(r){
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
   var trendSc = buildTrendBadge(computeTrendDiff(scienceResults, r)); if(trendSc) right.appendChild(trendSc);
+  var sparkSc = buildSparkline(pupilScoreHistory(scienceResults, r)); if(sparkSc) right.appendChild(sparkSc);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('science', rr); }; })(r);
@@ -16844,6 +16976,7 @@ function buildReCard(r){
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
   var trendRe = buildTrendBadge(computeTrendDiff(reResults, r)); if(trendRe) right.appendChild(trendRe);
+  var sparkRe = buildSparkline(pupilScoreHistory(reResults, r)); if(sparkRe) right.appendChild(sparkRe);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('re', rr); }; })(r);
@@ -17541,6 +17674,7 @@ function buildMflCard(r){
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
   var trendMfl = buildTrendBadge(computeTrendDiff(mflResults, r)); if(trendMfl) right.appendChild(trendMfl);
+  var sparkMfl = buildSparkline(pupilScoreHistory(mflResults, r)); if(sparkMfl) right.appendChild(sparkMfl);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('mfl', rr); }; })(r);
@@ -17923,6 +18057,7 @@ function buildMusicCard(r){
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
   var trendMu = buildTrendBadge(computeTrendDiff(musicResults, r)); if(trendMu) right.appendChild(trendMu);
+  var sparkMu = buildSparkline(pupilScoreHistory(musicResults, r)); if(sparkMu) right.appendChild(sparkMu);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('music', rr); }; })(r);
@@ -18305,6 +18440,7 @@ function buildReasoningCard(r){
   pe.textContent = r.totalCorrect + '/' + r.totalQuestions + ' (' + pct + '%)';
   right.appendChild(pe);
   var trendRs = buildTrendBadge(computeTrendDiff(reasoningResults, r)); if(trendRs) right.appendChild(trendRs);
+  var sparkRs = buildSparkline(pupilScoreHistory(reasoningResults, r)); if(sparkRs) right.appendChild(sparkRs);
   if(!isDemoSchool()){
     var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
     (function(rr){ editBtn.onclick = function(){ openEditDetails('reasoning', rr); }; })(r);
