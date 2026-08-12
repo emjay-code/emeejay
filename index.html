@@ -4642,10 +4642,10 @@ function exportBlendingCSV(){
   var base = filterByClass(blendingResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No blending checks to export yet' : 'No '+termFilter+' term blending checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Year group','Gender','Date of birth','Additional needs','Total correct','Total words','Real correct','Real total','Pseudo correct','Pseudo total','Missed words'];
+  var header=['Name','Date','Term','Year group','Gender','Date of birth','Additional needs','Total correct','Total words','Real correct','Real total','Pseudo correct','Pseudo total'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalWords,r.realCorrect,r.realTotal,r.pseudoCorrect,r.pseudoTotal,(r.missedWords||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalWords,r.realCorrect,r.realTotal,r.pseudoCorrect,r.pseudoTotal]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emjay-blending-checks'+suffix+'-'+dateStr()+'.csv');
@@ -4984,10 +4984,10 @@ function exportTimesTablesCSV(){
   var base = filterByClass(timesTablesResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No times tables checks to export yet' : 'No '+termFilter+' term times tables checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Check','Year group','Gender','Date of birth','Additional needs','Total correct','Total facts','Missed facts'];
+  var header=['Name','Date','Term','Check','Year group','Gender','Date of birth','Additional needs','Total correct','Total facts'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.checkLabel||'Mixed',r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalFacts,(r.missedFacts||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.checkLabel||'Mixed',r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalFacts]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-times-tables'+suffix+'-'+dateStr()+'.csv');
@@ -7168,10 +7168,10 @@ function exportMathsCSV(){
   var base = filterByClass(mathsResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Maths checks to export yet' : 'No '+termFilter+' term Maths checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Missed questions'];
+  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel,r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,(r.missedQuestions||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel,r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-maths'+suffix+'-'+dateStr()+'.csv');
@@ -8393,10 +8393,10 @@ function exportEnglishCSV(){
   var base = filterByClass(englishResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No English checks to export yet' : 'No '+termFilter+' term English checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Missed questions'];
+  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel,r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,(r.missedQuestions||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel,r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-english'+suffix+'-'+dateStr()+'.csv');
@@ -8896,10 +8896,10 @@ function exportHandwritingCSV(){
   var base = filterByClass(handwritingResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No handwriting checks to export yet' : 'No '+termFilter+' term handwriting checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Check','Year group','Gender','Date of birth','Additional needs','Formed correctly','Total items','Score','Still practising'];
+  var header=['Name','Date','Term','Check','Year group','Gender','Date of birth','Additional needs','Formed correctly','Total items','Score'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%',(r.itemsNo||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%']);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-handwriting'+suffix+'-'+dateStr()+'.csv');
@@ -9224,10 +9224,10 @@ function exportEyCSV(){
   var base = filterByClass(earlyYearsResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Early Years checks to export yet' : 'No '+termFilter+' term Early Years checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Area of learning','Year group','Gender','Date of birth','Additional needs','Yes','Total items','Score','Not yet'];
+  var header=['Name','Date','Term','Area of learning','Year group','Gender','Date of birth','Additional needs','Yes','Total items','Score'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%',(r.itemsNo||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%']);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-early-years'+suffix+'-'+dateStr()+'.csv');
@@ -16148,10 +16148,10 @@ function exportTopicCSV(){
   var base = filterByClass(topicResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No topic checks to export yet' : 'No '+termFilter+' term topic checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Missed questions'];
+  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,(r.missedQuestions||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-topics'+suffix+'-'+dateStr()+'.csv');
@@ -16524,10 +16524,10 @@ function exportScienceCSV(){
   var base = filterByClass(scienceResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No science checks to export yet' : 'No '+termFilter+' term science checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Missed questions'];
+  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,(r.missedQuestions||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-science'+suffix+'-'+dateStr()+'.csv');
@@ -16900,10 +16900,10 @@ function exportReCSV(){
   var base = filterByClass(reResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No RE checks to export yet' : 'No '+termFilter+' term RE checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Missed questions'];
+  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,(r.missedQuestions||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-re'+suffix+'-'+dateStr()+'.csv');
@@ -17597,10 +17597,10 @@ function exportMflCSV(){
   var base = filterByClass(mflResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Languages checks to export yet' : 'No '+termFilter+' term Languages checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Missed questions'];
+  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,(r.missedQuestions||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-mfl'+suffix+'-'+dateStr()+'.csv');
@@ -17979,10 +17979,10 @@ function exportMusicCSV(){
   var base = filterByClass(musicResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Music checks to export yet' : 'No '+termFilter+' term Music checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Missed questions'];
+  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,(r.missedQuestions||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-music'+suffix+'-'+dateStr()+'.csv');
@@ -18361,10 +18361,10 @@ function exportReasoningCSV(){
   var base = filterByClass(reasoningResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Reasoning checks to export yet' : 'No '+termFilter+' term Reasoning checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Missed questions'];
+  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,(r.missedQuestions||[]).join('; ')]);
+    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-reasoning'+suffix+'-'+dateStr()+'.csv');
