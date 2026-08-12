@@ -4285,8 +4285,6 @@ function buildPupilCard(r){
     right.appendChild(delBtn);
   }
   header.appendChild(nb);header.appendChild(right);card.appendChild(header);
-  if(r.ok.length){var os=document.createElement('div');os.className='sound-section';var oh=document.createElement('div');oh.className='section-hd';oh.textContent='Knows';var ow=document.createElement('div');ow.className='chips-row';r.ok.forEach(function(s){var c=document.createElement('span');c.className='chip chip-ok';c.textContent=s;ow.appendChild(c);});os.appendChild(oh);os.appendChild(ow);card.appendChild(os);}
-  if(r.no.length){var ns=document.createElement('div');ns.className='sound-section';var nh=document.createElement('div');nh.className='section-hd';nh.textContent='Still learning';var nw=document.createElement('div');nw.className='chips-row';r.no.forEach(function(s){var c=document.createElement('span');c.className='chip chip-no';c.textContent=s;nw.appendChild(c);});ns.appendChild(nh);ns.appendChild(nw);card.appendChild(ns);}
   return card;
 }
 
@@ -4604,14 +4602,6 @@ function buildBlendingCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.missedWords && r.missedWords.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Words to revisit';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.missedWords.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
@@ -4956,14 +4946,6 @@ function buildTimesTablesCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.missedFacts && r.missedFacts.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Facts to revisit';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.missedFacts.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
@@ -7140,14 +7122,6 @@ function buildMathsCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.missedQuestions && r.missedQuestions.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Questions to revisit';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.missedQuestions.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
@@ -8373,14 +8347,6 @@ function buildEnglishCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.missedQuestions && r.missedQuestions.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Questions to revisit';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.missedQuestions.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
@@ -8892,14 +8858,6 @@ function buildHandwritingCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.itemsNo && r.itemsNo.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Still practising';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.itemsNo.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
@@ -9228,14 +9186,6 @@ function buildEyCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.itemsNo && r.itemsNo.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Not yet';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.itemsNo.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
@@ -16152,14 +16102,6 @@ function buildTopicCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.missedQuestions && r.missedQuestions.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Questions to revisit';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.missedQuestions.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
@@ -16536,14 +16478,6 @@ function buildScienceCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.missedQuestions && r.missedQuestions.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Questions to revisit';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.missedQuestions.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
@@ -16920,14 +16854,6 @@ function buildReCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.missedQuestions && r.missedQuestions.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Questions to revisit';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.missedQuestions.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
@@ -17625,14 +17551,6 @@ function buildMflCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.missedQuestions && r.missedQuestions.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Questions to revisit';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.missedQuestions.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
@@ -18015,14 +17933,6 @@ function buildMusicCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.missedQuestions && r.missedQuestions.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Questions to revisit';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.missedQuestions.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
@@ -18405,14 +18315,6 @@ function buildReasoningCard(r){
   }
   header.appendChild(nb); header.appendChild(right);
   card.appendChild(header);
-  if(r.missedQuestions && r.missedQuestions.length){
-    var ms = document.createElement('div'); ms.className = 'sound-section';
-    var mh = document.createElement('div'); mh.className = 'section-hd'; mh.textContent = 'Questions to revisit';
-    var mw = document.createElement('div'); mw.className = 'chips-row';
-    r.missedQuestions.forEach(function(w){ var c = document.createElement('span'); c.className = 'chip chip-no'; c.textContent = w; mw.appendChild(c); });
-    ms.appendChild(mh); ms.appendChild(mw);
-    card.appendChild(ms);
-  }
   return card;
 }
 
