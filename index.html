@@ -901,8 +901,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="check-label">Does the child do this?</div>
       <div class="sound-display" id="ey-item-display" style="font-size:17px;"></div>
       <div class="yn-row">
-        <button class="yn-btn yn-yes" onclick="markEy(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Yes</button>
-        <button class="yn-btn yn-no" onclick="markEy(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
+        <button class="yn-btn yn-yes" onclick="markEy(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Met</button>
+        <button class="yn-btn yn-no" onclick="markEy(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Emerging</button>
       </div>
       <a href="javascript:void(0)" class="report-q-link" onclick="reportEyItem()"><i class="ti ti-flag" aria-hidden="true"></i> Report this item</a>
     </div>
@@ -915,12 +915,12 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:1rem;" id="ey-res-name"></div>
       <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="ey-res-label"></div>
       <div class="stat-grid" style="margin-bottom:0;">
-        <div class="stat-card"><div class="stat-val" id="ey-res-got"></div><div class="stat-lbl">Yes</div></div>
-        <div class="stat-card"><div class="stat-val" id="ey-res-not"></div><div class="stat-lbl">Not yet</div></div>
+        <div class="stat-card"><div class="stat-val" id="ey-res-got"></div><div class="stat-lbl">Met</div></div>
+        <div class="stat-card"><div class="stat-val" id="ey-res-not"></div><div class="stat-lbl">Emerging</div></div>
       </div>
     </div>
-    <div class="card" id="ey-res-ok-wrap" style="display:none;"><div class="section-hd">Can do</div><div id="ey-res-ok-chips" class="chips-row"></div></div>
-    <div class="card" id="ey-res-no-wrap" style="display:none;"><div class="section-hd">Not yet</div><div id="ey-res-no-chips" class="chips-row"></div></div>
+    <div class="card" id="ey-res-ok-wrap" style="display:none;"><div class="section-hd">Met</div><div id="ey-res-ok-chips" class="chips-row"></div></div>
+    <div class="card" id="ey-res-no-wrap" style="display:none;"><div class="section-hd">Emerging</div><div id="ey-res-no-chips" class="chips-row"></div></div>
     <button class="btn btn-primary" onclick="goHome()">New Early Years check</button>
   </div>
 
@@ -9694,7 +9694,7 @@ function exportEyCSV(){
   var base = filterByClass(earlyYearsResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Early Years checks to export yet' : 'No '+termFilter+' term Early Years checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Area of learning','Year group','Gender','Date of birth','Additional needs','Yes','Total items','Score','Trend vs previous check'];
+  var header=['Name','Date','Term','Area of learning','Year group','Gender','Date of birth','Additional needs','Met','Total items','Score','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
     rows.push([r.name,r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%',formatTrendForCSV(computeTrendDiff(earlyYearsResults, r))]);
@@ -21423,8 +21423,8 @@ function renderPlayItem(){
       '<div class="check-label">Does the child do this?</div>'+
       '<div class="sound-display" style="font-size:17px;">'+escapeHtml(item.item)+'</div>'+
       '<div class="yn-row">'+
-        '<button class="yn-btn yn-yes" onclick="playMark(true)"><i class="ti ti-check" aria-hidden="true"></i> Yes</button>'+
-        '<button class="yn-btn yn-no" onclick="playMark(false)"><i class="ti ti-x" aria-hidden="true"></i> Not yet</button>'+
+        '<button class="yn-btn yn-yes" onclick="playMark(true)"><i class="ti ti-check" aria-hidden="true"></i> Met</button>'+
+        '<button class="yn-btn yn-no" onclick="playMark(false)"><i class="ti ti-x" aria-hidden="true"></i> Emerging</button>'+
       '</div>';
   } else if(item.kind === 'maths'){
     card.innerHTML =
