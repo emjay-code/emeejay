@@ -254,6 +254,16 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .subject-card .subject-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;}
 .subject-card .subject-name{font-size:15px;font-weight:600;font-family:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
 .subject-card .subject-desc{font-size:12px;line-height:1.4;color:var(--text-secondary);}
+.suggestion-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0.5rem 0;border-bottom:0.5px solid var(--border-strong);}
+.suggestion-row:last-child{border-bottom:none;}
+.target-item{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:0.6rem 0;border-bottom:0.5px solid var(--border-strong);}
+.target-item:last-child{border-bottom:none;}
+.target-text{font-size:13.5px;color:var(--text-primary);line-height:1.4;}
+.target-source{font-size:11.5px;color:var(--text-muted);margin-top:2px;}
+.target-actions{display:flex;gap:10px;flex-shrink:0;align-items:center;flex-wrap:wrap;}
+.target-status-select{font-size:12px;padding:3px 6px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-1);color:var(--text-secondary);}
+.target-status-select.status-achieved{color:var(--text-success);border-color:var(--text-success);}
+.target-status-select.status-in_progress{color:var(--hp-purple);border-color:var(--hp-purple);}
 .subject-banner{border-radius:14px;padding:0.8rem 1rem;margin-bottom:0.85rem;display:flex;align-items:center;gap:10px;}
 .subject-banner .subject-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:15px;}
 .subject-banner-title{font-size:15px;font-weight:600;color:var(--text-primary);}
@@ -553,6 +563,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
   <button class="nav-tab" onclick="switchTab('results')"><i class="ti ti-list" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Results</button>
   <button class="nav-tab" onclick="switchTab('analytics')"><i class="ti ti-chart-bar" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Analytics</button>
   <button class="nav-tab" onclick="switchTab('children')"><i class="ti ti-users" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Children</button>
+  <button class="nav-tab" onclick="switchTab('targets')"><i class="ti ti-target-arrow" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Targets</button>
 </div>
 
 <div id="tab-quiz">
@@ -2528,6 +2539,60 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
   </div>
 </div>
 
+<div id="tab-targets" style="display:none;">
+  <div class="rv-screen active" id="tg-subject-screen">
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Targets</div>
+      <p style="font-size:13px;">Choose a subject, then a child, to see suggested targets based on their assessment history.</p>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.75rem;">Choose a subject</div>
+      <div class="subject-grid" id="tg-subject-grid"></div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="tg-pupil-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsSubjects()">&larr; Back to subjects</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.75rem;" id="tg-pupil-subject-title"></div>
+      <input type="text" id="tg-pupil-search" placeholder="Search by name" oninput="renderTargetsPupilPicker()" style="width:100%;"/>
+    </div>
+    <div id="tg-pupil-empty" class="empty-state" style="display:none;">No active children match.</div>
+    <div id="tg-pupil-list"></div>
+  </div>
+
+  <div class="rv-screen" id="tg-detail-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsPupils()">&larr; Back to children</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="font-size:19px;font-weight:600;color:var(--hp-purple-dark);" id="tg-detail-name"></div>
+      <div class="pupil-meta" id="tg-detail-subject"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <div class="section-hd" style="margin-bottom:0;">Suggested targets</div>
+        <button class="all-btn" onclick="generateTargetSuggestions()">Generate suggestions</button>
+      </div>
+      <div id="tg-suggestions-empty" style="font-size:13px;color:var(--text-muted);">Click &quot;Generate suggestions&quot; to see targets based on this child's assessment history in this subject.</div>
+      <div id="tg-suggestions"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Add a custom target</div>
+      <div class="name-row">
+        <input type="text" id="tg-custom-input" placeholder="e.g. Practise 2-digit subtraction with regrouping" maxlength="200" style="flex:1;"/>
+        <button class="btn btn-primary" style="width:auto;margin-top:0;white-space:nowrap;" onclick="addCustomTarget()">Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Saved targets</div>
+      <div id="tg-saved-empty" class="empty-state" style="display:none;">No targets saved yet for this subject.</div>
+      <div id="tg-saved-list"></div>
+    </div>
+  </div>
+</div>
+
 </div>
 <div class="site-footer">Emeejay Assess &middot; data syncs securely to your school's account<br/><a href="/privacy-policy.html" style="color:var(--hp-purple);">Privacy Policy</a> &middot; <a href="/data-processing-agreement.html" style="color:var(--hp-purple);">Data Processing Agreement</a> &middot; <a href="javascript:void(0)" onclick="openFeedbackModal()" style="color:var(--hp-purple);">Send feedback</a></div>
 </div>
@@ -3168,7 +3233,7 @@ async function loadResults(){
 
 /* ---------- Tabs / screens ---------- */
 async function switchTab(t){
-  ['quiz','results','analytics','children'].forEach(function(id){document.getElementById('tab-'+id).style.display=t===id?'block':'none';});
+  ['quiz','results','analytics','children','targets'].forEach(function(id){document.getElementById('tab-'+id).style.display=t===id?'block':'none';});
   document.querySelectorAll('.nav-tab').forEach(function(n){n.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(n){if(n.getAttribute('onclick').indexOf("'"+t+"'")>-1)n.classList.add('active');});
   if(t==='results' || t==='analytics'){
@@ -3181,6 +3246,10 @@ async function switchTab(t){
   if(t==='children'){
     showRvScreen('tab-children', 'ch-list-screen');
     await loadPupils();
+  }
+  if(t==='targets'){
+    showRvScreen('tab-targets', 'tg-subject-screen');
+    renderTargetsSubjectGrid();
   }
 }
 
@@ -18970,6 +19039,252 @@ function checkPlayParam(){
   var params = new URLSearchParams(window.location.search);
   if(params.get('play') === '1'){ showPlayPortal(); return true; }
   return false;
+}
+
+/* ---------- Targets: suggested + saved targets per child, per subject ----------
+   Reuses the "missed item" arrays already stored on each subject's result
+   rows (the same data that powers each Analytics tab's "Most missed"
+   panel) but scoped to one child's own history rather than the whole
+   class, so a target reflects what that specific child keeps struggling
+   with. Saved targets live in pupil_targets (school-scoped RLS, same
+   pattern as pupils/results) so they persist and can be tracked. */
+var SUBJECT_TABLE_MAP = {
+  phonics: { table:'results', rowFn: rowToResult, missedField:'no' },
+  blending: { table:'blending_results', rowFn: rowToBlendingResult, missedField:'missedWords' },
+  maths: { table:'maths_topics_results', rowFn: rowToMathsResult, missedField:'missedQuestions' },
+  'times-tables': { table:'maths_results', rowFn: rowToTimesTablesResult, missedField:'missedFacts' },
+  english: { table:'english_results', rowFn: rowToEnglishResult, missedField:'missedQuestions' },
+  handwriting: { table:'handwriting_results', rowFn: rowToHandwritingResult, missedField:'itemsNo' },
+  topics: { table:'topic_results', rowFn: rowToTopicResult, missedField:'missedQuestions' },
+  science: { table:'science_results', rowFn: rowToScienceResult, missedField:'missedQuestions' },
+  re: { table:'re_results', rowFn: rowToReResult, missedField:'missedQuestions' },
+  mfl: { table:'mfl_results', rowFn: rowToMflResult, missedField:'missedQuestions' },
+  music: { table:'music_results', rowFn: rowToMusicResult, missedField:'missedQuestions' },
+  early_years: { table:'early_years_results', rowFn: rowToEyResult, missedField:'itemsNo' },
+  reasoning: { table:'reasoning_results', rowFn: rowToReasoningResult, missedField:'missedQuestions' }
+};
+var SUBJ_CARD_CLASS_MAP = {
+  phonics:'subj-phonics', blending:'subj-phonics', maths:'subj-maths', 'times-tables':'subj-times-tables',
+  english:'subj-english', handwriting:'subj-handwriting', topics:'subj-topics', science:'subj-science',
+  re:'subj-re', mfl:'subj-mfl', music:'subj-music', early_years:'subj-early-years', reasoning:'subj-reasoning'
+};
+var targetsSubjectKey = '';
+var targetsPupil = null;
+var targetsPupilId = null;
+var targetSuggestionsCache = [];
+var savedTargetsList = [];
+
+function renderTargetsSubjectGrid(){
+  var grid = document.getElementById('tg-subject-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  CHILD_PROFILE_SUBJECTS.forEach(function(s){
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'subject-card ' + (SUBJ_CARD_CLASS_MAP[s.key] || 'subj-phonics');
+    btn.onclick = function(){ goToTargetsSubject(s.key, s.label); };
+    var icon = document.createElement('div'); icon.className = 'subject-icon';
+    var i = document.createElement('i'); i.className = 'ti ' + s.icon; i.setAttribute('aria-hidden','true');
+    icon.appendChild(i);
+    var name = document.createElement('div'); name.className = 'subject-name'; name.textContent = s.label;
+    btn.appendChild(icon); btn.appendChild(name);
+    grid.appendChild(btn);
+  });
+}
+function goToTargetsSubject(key, label){
+  targetsSubjectKey = key;
+  document.getElementById('tg-pupil-subject-title').textContent = 'Choose a child – ' + label;
+  var searchEl = document.getElementById('tg-pupil-search');
+  if(searchEl) searchEl.value = '';
+  showRvScreen('tab-targets', 'tg-pupil-screen');
+  renderTargetsPupilPicker();
+}
+function backToTargetsSubjects(){
+  showRvScreen('tab-targets', 'tg-subject-screen');
+}
+function backToTargetsPupils(){
+  showRvScreen('tab-targets', 'tg-pupil-screen');
+  renderTargetsPupilPicker();
+}
+function renderTargetsPupilPicker(){
+  var listEl = document.getElementById('tg-pupil-list');
+  var emptyEl = document.getElementById('tg-pupil-empty');
+  if(!listEl) return;
+  var search = (document.getElementById('tg-pupil-search').value || '').trim().toLowerCase();
+  var list = activePupils().filter(function(p){ return !search || p.name.toLowerCase().indexOf(search) > -1; });
+  list.sort(function(a,b){ return a.name.localeCompare(b.name); });
+  listEl.innerHTML = '';
+  emptyEl.style.display = list.length ? 'none' : 'block';
+  list.forEach(function(p){
+    var row = document.createElement('div'); row.className = 'pupil-card'; row.style.cursor = 'pointer';
+    var header = document.createElement('div'); header.className = 'pupil-header';
+    var nb = document.createElement('div'); nb.style.flex = '1';
+    var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = p.name;
+    var me = document.createElement('div'); me.className = 'pupil-meta';
+    me.textContent = [p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet';
+    nb.appendChild(ne); nb.appendChild(me);
+    header.appendChild(nb);
+    row.appendChild(header);
+    row.onclick = function(){ openTargetsDetail(p); };
+    listEl.appendChild(row);
+  });
+}
+async function openTargetsDetail(p){
+  targetsPupil = p;
+  targetsPupilId = p.id;
+  var subj = CHILD_PROFILE_SUBJECTS.find(function(s){ return s.key === targetsSubjectKey; });
+  document.getElementById('tg-detail-name').textContent = p.name;
+  document.getElementById('tg-detail-subject').textContent = (subj ? subj.label : targetsSubjectKey) + (p.year ? ' · ' + p.year : '');
+  var customEl = document.getElementById('tg-custom-input');
+  if(customEl) customEl.value = '';
+  document.getElementById('tg-suggestions').innerHTML = '';
+  var suggEmpty = document.getElementById('tg-suggestions-empty');
+  suggEmpty.style.display = 'block';
+  suggEmpty.textContent = 'Click "Generate suggestions" to see targets based on this child\'s assessment history in this subject.';
+  showRvScreen('tab-targets', 'tg-detail-screen');
+  await loadSavedTargets();
+}
+async function loadSavedTargets(){
+  if(!targetsPupilId) return;
+  var res = await sb.from('pupil_targets').select('*').eq('pupil_id', targetsPupilId).eq('subject_key', targetsSubjectKey).order('created_at', { ascending:false });
+  if(res.error){ console.error(res.error); savedTargetsList = []; }
+  else { savedTargetsList = res.data || []; }
+  renderSavedTargets();
+}
+function targetStatusLabel(status){
+  return status === 'achieved' ? 'Achieved' : (status === 'in_progress' ? 'In progress' : 'Not started');
+}
+function renderSavedTargets(){
+  var listEl = document.getElementById('tg-saved-list');
+  var emptyEl = document.getElementById('tg-saved-empty');
+  if(!listEl) return;
+  listEl.innerHTML = '';
+  emptyEl.style.display = savedTargetsList.length ? 'none' : 'block';
+  savedTargetsList.forEach(function(t){
+    var row = document.createElement('div'); row.className = 'target-item';
+    var left = document.createElement('div'); left.style.flex = '1';
+    var txt = document.createElement('div'); txt.className = 'target-text'; txt.textContent = t.target_text;
+    left.appendChild(txt);
+    if(t.source_item){
+      var src = document.createElement('div'); src.className = 'target-source';
+      src.textContent = 'From assessment data' + (t.source_count ? ' – missed ' + t.source_count + (t.source_count===1?' time':' times') : '');
+      left.appendChild(src);
+    }
+    var actions = document.createElement('div'); actions.className = 'target-actions';
+    var sel = document.createElement('select'); sel.className = 'target-status-select status-' + t.status;
+    ['not_started','in_progress','achieved'].forEach(function(st){
+      var opt = document.createElement('option'); opt.value = st; opt.textContent = targetStatusLabel(st);
+      if(st === t.status) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.onchange = function(){ updateTargetStatus(t.id, sel.value, sel); };
+    var del = document.createElement('a'); del.href = 'javascript:void(0)'; del.textContent = 'Delete';
+    del.style.cssText = 'color:var(--text-danger,#c0392b);font-size:12px;';
+    del.onclick = function(){ deleteTarget(t.id); };
+    actions.appendChild(sel); actions.appendChild(del);
+    row.appendChild(left); row.appendChild(actions);
+    listEl.appendChild(row);
+  });
+}
+async function updateTargetStatus(id, status, selEl){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its sample data can\'t be changed.'); await loadSavedTargets(); return; }
+  var patch = { status: status, achieved_at: status === 'achieved' ? new Date().toISOString() : null };
+  var upd = await sb.from('pupil_targets').update(patch).eq('id', id);
+  if(upd.error){ alert('Could not update: ' + upd.error.message); await loadSavedTargets(); return; }
+  selEl.className = 'target-status-select status-' + status;
+  var t = savedTargetsList.find(function(x){ return x.id === id; });
+  if(t) t.status = status;
+}
+async function deleteTarget(id){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its sample data can\'t be deleted.'); return; }
+  if(!confirm('Delete this target?')) return;
+  var del = await sb.from('pupil_targets').delete().eq('id', id);
+  if(del.error){ alert('Could not delete: ' + del.error.message); return; }
+  savedTargetsList = savedTargetsList.filter(function(x){ return x.id !== id; });
+  renderSavedTargets();
+}
+function buildSuggestionText(subjectKey, item, count){
+  var timesTxt = count + (count===1?' check':' checks');
+  switch(subjectKey){
+    case 'phonics': return 'Practise the sound "' + item + '" – missed in ' + timesTxt + '.';
+    case 'blending': return 'Practise blending the word "' + item + '" – missed in ' + timesTxt + '.';
+    case 'times-tables': return 'Practise the times table fact ' + item + ' – missed in ' + timesTxt + '.';
+    case 'handwriting': return 'Practise forming "' + item + '" – flagged in ' + timesTxt + '.';
+    case 'early_years': return 'Continue developing: ' + item + ' – not yet secure, seen in ' + timesTxt + '.';
+    default: return 'Revisit: "' + item + '" – missed in ' + timesTxt + '.';
+  }
+}
+async function generateTargetSuggestions(){
+  if(!targetsPupil || !targetsSubjectKey) return;
+  var info = SUBJECT_TABLE_MAP[targetsSubjectKey];
+  var emptyEl = document.getElementById('tg-suggestions-empty');
+  var wrapEl = document.getElementById('tg-suggestions');
+  wrapEl.innerHTML = '';
+  emptyEl.style.display = 'block';
+  emptyEl.textContent = 'Loading…';
+  var subj = CHILD_PROFILE_SUBJECTS.find(function(s){ return s.key === targetsSubjectKey; });
+  var subjLabel = subj ? subj.label : targetsSubjectKey;
+  if(!info){ emptyEl.textContent = 'Suggestions aren\'t available for this subject yet.'; return; }
+  var res = await sb.from(info.table).select('*').ilike('pupil_name', targetsPupil.name.trim());
+  if(res.error){ console.error(res.error); emptyEl.textContent = 'Could not load assessment history.'; return; }
+  var history = res.data.map(info.rowFn);
+  if(!history.length){ emptyEl.textContent = 'No ' + subjLabel + ' checks recorded for ' + targetsPupil.name + ' yet – complete an assessment first.'; return; }
+  var counts = {};
+  history.forEach(function(r){ (r[info.missedField]||[]).forEach(function(item){ counts[item] = (counts[item]||0) + 1; }); });
+  var sorted = Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a]; }).slice(0,5);
+  if(!sorted.length){ emptyEl.textContent = targetsPupil.name + ' has no repeated trouble areas in ' + subjLabel + ' yet – nice work! You can still add a target below.'; return; }
+  emptyEl.style.display = 'none';
+  targetSuggestionsCache = sorted.map(function(item){ return { item: item, count: counts[item], text: buildSuggestionText(targetsSubjectKey, item, counts[item]) }; });
+  targetSuggestionsCache.forEach(function(sug, idx){
+    var row = document.createElement('div'); row.className = 'suggestion-row';
+    var txt = document.createElement('div'); txt.className = 'target-text'; txt.style.flex = '1'; txt.textContent = sug.text;
+    var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'all-btn'; btn.textContent = 'Save as target';
+    btn.onclick = function(){ saveSuggestedTarget(idx, btn); };
+    row.appendChild(txt); row.appendChild(btn);
+    wrapEl.appendChild(row);
+  });
+}
+async function saveSuggestedTarget(idx, btnEl){
+  if(isDemoSchool()){ alert('This is the shared demo account, so new targets can\'t be saved here.'); return; }
+  var sug = targetSuggestionsCache[idx];
+  if(!sug || !targetsPupil) return;
+  btnEl.disabled = true; btnEl.textContent = 'Saving…';
+  var row = {
+    school_id: currentProfile.school_id,
+    teacher_id: currentUser.id,
+    pupil_id: targetsPupilId,
+    pupil_name: targetsPupil.name,
+    subject_key: targetsSubjectKey,
+    target_text: sug.text,
+    source_item: sug.item,
+    source_count: sug.count,
+    status: 'not_started'
+  };
+  var ins = await sb.from('pupil_targets').insert(row).select().single();
+  if(ins.error){ alert('Could not save target: ' + ins.error.message); btnEl.disabled = false; btnEl.textContent = 'Save as target'; return; }
+  savedTargetsList.unshift(ins.data);
+  renderSavedTargets();
+  btnEl.textContent = 'Saved';
+}
+async function addCustomTarget(){
+  if(isDemoSchool()){ alert('This is the shared demo account, so new targets can\'t be saved here.'); return; }
+  var input = document.getElementById('tg-custom-input');
+  var text = (input.value || '').trim();
+  if(!text || !targetsPupil) return;
+  var row = {
+    school_id: currentProfile.school_id,
+    teacher_id: currentUser.id,
+    pupil_id: targetsPupilId,
+    pupil_name: targetsPupil.name,
+    subject_key: targetsSubjectKey,
+    target_text: text,
+    status: 'not_started'
+  };
+  var ins = await sb.from('pupil_targets').insert(row).select().single();
+  if(ins.error){ alert('Could not save target: ' + ins.error.message); return; }
+  savedTargetsList.unshift(ins.data);
+  renderSavedTargets();
+  input.value = '';
 }
 
 /* ---------- Boot ---------- */
