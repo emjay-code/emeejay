@@ -2484,6 +2484,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div id="ch-profile-snapshot-empty" class="empty-state" style="display:none;padding:1.5rem 1rem;">No checks recorded for this child yet.</div>
     </div>
 
+    <div class="class-filter-indicator" id="ch-profile-topic-focus-indicator">
+      <i class="ti ti-filter" aria-hidden="true"></i>
+      <span>Showing <span id="ch-profile-topic-focus-text"></span></span>
+      <a href="javascript:void(0)" onclick="clearProfileTopicFocus()">Show full history</a>
+    </div>
     <div class="section-hd" id="ch-profile-history-hd" style="margin:1rem 0 0.5rem;display:none;">Full history by subject</div>
     <details class="year-group" id="ch-profile-wrap-early_years"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Early Years</span><span class="year-group-count" id="ch-profile-count-early_years"></span></summary><div class="year-group-body"><div id="ch-profile-early_years"></div><div id="ch-profile-early_years-empty" style="font-size:13px;color:var(--text-muted);">No Early Years checks yet.</div></div></details>
     <details class="year-group" id="ch-profile-wrap-phonics"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Phonics</span><span class="year-group-count" id="ch-profile-count-phonics"></span></summary><div class="year-group-body"><div id="ch-profile-phonics"></div><div id="ch-profile-phonics-empty" style="font-size:13px;color:var(--text-muted);">No phonics checks yet.</div></div></details>
@@ -3731,13 +3736,33 @@ async function goToChildProfileFromResult(r){
   await switchTab('children');
   openChildProfile(id);
 }
+/* Used from the Topic -> Class pupil list: takes the visitor straight to
+   the child's profile, scrolled to and filtered down to just that subject
+   + topic, rather than the full profile. */
+async function goToChildProfileForTopic(name, year, subjectKey, topicKey){
+  var id = findPupilIdByName(name, year);
+  if(!id) return;
+  await switchTab('children');
+  openChildProfile(id, subjectKey, topicKey);
+}
 
 /* Profile view - full cross-subject history, matched by name */
 var currentPupilId = null;
-async function openChildProfile(id){
+var currentProfileData = null;
+var profileFocusSubject = '';
+var profileFocusTopic = '';
+var PROFILE_BUILDERS = {
+  phonics: buildPupilCard, blending: buildBlendingCard, maths: buildMathsCard,
+  'times-tables': buildTimesTablesCard, english: buildEnglishCard, handwriting: buildHandwritingCard,
+  topics: buildTopicCard, science: buildScienceCard, re: buildReCard, mfl: buildMflCard,
+  music: buildMusicCard, early_years: buildEyCard, reasoning: buildReasoningCard
+};
+async function openChildProfile(id, focusSubject, focusTopic){
   var p = pupilsRoster.find(function(x){ return x.id === id; });
   if(!p) return;
   currentPupilId = id;
+  profileFocusSubject = focusSubject || '';
+  profileFocusTopic = focusTopic || '';
   showRvScreen('tab-children', 'ch-profile-screen');
   document.getElementById('ch-profile-name').textContent = p.name;
   document.getElementById('ch-profile-meta').textContent = [p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet';
@@ -3757,7 +3782,7 @@ async function openChildProfile(id){
   var earlyYears_ = await sb.from('early_years_results').select('*').ilike('pupil_name', nameFilter);
   var reasoning_ = await sb.from('reasoning_results').select('*').ilike('pupil_name', nameFilter);
 
-  var profileData = {
+  currentProfileData = {
     phonics: (results_.data||[]).map(rowToResult),
     blending: (blending_.data||[]).map(rowToBlendingResult),
     maths: (maths_.data||[]).map(rowToMathsResult),
@@ -3772,16 +3797,49 @@ async function openChildProfile(id){
     early_years: (earlyYears_.data||[]).map(rowToEyResult),
     reasoning: (reasoning_.data||[]).map(rowToReasoningResult)
   };
-  var profileBuilders = {
-    phonics: buildPupilCard, blending: buildBlendingCard, maths: buildMathsCard,
-    'times-tables': buildTimesTablesCard, english: buildEnglishCard, handwriting: buildHandwritingCard,
-    topics: buildTopicCard, science: buildScienceCard, re: buildReCard, mfl: buildMflCard,
-    music: buildMusicCard, early_years: buildEyCard, reasoning: buildReasoningCard
-  };
+  renderProfileSections();
+  renderChildSnapshot(currentProfileData);
+  if(profileFocusSubject){
+    var wrap = document.getElementById('ch-profile-wrap-' + profileFocusSubject);
+    if(wrap){
+      wrap.open = true;
+      setTimeout(function(){ wrap.scrollIntoView({behavior:'smooth', block:'start'}); }, 50);
+    }
+  }
+}
+/* Re-renders every subject's full-history section from the currently loaded
+   profile data, applying the topic focus (if any) so a drill-down from
+   Results -> Topic -> Class -> pupil lands on just that slice of the
+   child's history instead of everything they've ever done. */
+function renderProfileSections(){
+  if(!currentProfileData) return;
   CHILD_PROFILE_SUBJECTS.forEach(function(s){
-    renderProfileSection(s.key, profileData[s.key], profileBuilders[s.key]);
+    var list = currentProfileData[s.key] || [];
+    if(profileFocusSubject && profileFocusTopic && s.key === profileFocusSubject){
+      list = list.filter(function(r){ return r.topicKey === profileFocusTopic; });
+    }
+    renderProfileSection(s.key, list, PROFILE_BUILDERS[s.key]);
   });
-  renderChildSnapshot(profileData);
+  updateProfileTopicFocusIndicator();
+}
+function updateProfileTopicFocusIndicator(){
+  var el = document.getElementById('ch-profile-topic-focus-indicator');
+  if(!el) return;
+  if(profileFocusSubject && profileFocusTopic){
+    el.classList.add('active');
+    var subj = CHILD_PROFILE_SUBJECTS.find(function(s){ return s.key === profileFocusSubject; });
+    var topicsObj = getTopicsObjForSubject(profileFocusSubject);
+    var t = topicsObj && topicsObj[profileFocusTopic];
+    var textEl = document.getElementById('ch-profile-topic-focus-text');
+    if(textEl) textEl.textContent = (subj ? subj.label : profileFocusSubject) + ' – ' + (t ? t.label : profileFocusTopic) + ' only';
+  } else {
+    el.classList.remove('active');
+  }
+}
+function clearProfileTopicFocus(){
+  profileFocusSubject = '';
+  profileFocusTopic = '';
+  renderProfileSections();
 }
 /* Ordered list of every subject shown on a child's profile - drives both
    the "Overview" snapshot grid and the full-history sections below it.
@@ -4024,6 +4082,40 @@ function renderTopicFilterPicker(container, list, subjectKey, defaultIcon){
     var msg = document.createElement('div'); msg.className = 'empty-state'; msg.textContent = 'No checks yet.';
     container.appendChild(msg);
   }
+}
+/* Final step of the Subject -> Topic -> Class drill-down: instead of a full
+   list of result cards, show one row per pupil in this class who has a check
+   for this topic. Clicking a pupil skips straight to their Child Profile,
+   scrolled to and filtered down to just that subject + topic. */
+function renderPupilLinksForTopic(container, list, subjectKey){
+  container.innerHTML = '';
+  var seen = {};
+  var pupilsForTopic = [];
+  list.forEach(function(r){
+    var nm = (r.name || '').trim();
+    if(!nm || seen[nm]) return;
+    seen[nm] = true;
+    pupilsForTopic.push(r);
+  });
+  pupilsForTopic.sort(function(a,b){ return (a.name||'').localeCompare(b.name||''); });
+  if(!pupilsForTopic.length){
+    var msg = document.createElement('div'); msg.className = 'empty-state'; msg.textContent = 'No checks yet.';
+    container.appendChild(msg);
+    return;
+  }
+  pupilsForTopic.forEach(function(r){
+    var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'phase-btn';
+    btn.onclick = function(){ goToChildProfileForTopic(r.name, r.year, subjectKey, topicFilters[subjectKey]); };
+    var badge = document.createElement('div'); badge.className = 'phase-badge';
+    var icon = document.createElement('i'); icon.className = 'ti ti-user'; icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
+    badge.appendChild(icon);
+    var textWrap = document.createElement('div');
+    var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = r.name;
+    var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = Math.round(pctOf(r)) + '% most recent – view profile';
+    textWrap.appendChild(name); textWrap.appendChild(desc);
+    btn.appendChild(badge); btn.appendChild(textWrap);
+    container.appendChild(btn);
+  });
 }
 function filterByTermSelect(list, selectId){
   var sel = document.getElementById(selectId);
@@ -7091,6 +7183,7 @@ function renderMathsResults(){
   document.getElementById('mt-count').textContent = list.length;
   var avgMt = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
   document.getElementById('mt-avg').textContent = avgMt + '%';
+  if(classFilter){ renderPupilLinksForTopic(el, list, 'maths'); return; }
   var keyFn = mathsGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
   var order = mathsGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
   renderGroups(el, list, keyFn, order, buildMathsCard, 'child checked', 'children checked', mathsGroupMode==='year' && !classFilter ? setClassFilter : null);
@@ -8323,6 +8416,7 @@ function renderEnglishResults(){
   document.getElementById('en-count').textContent = list.length;
   var avgEn = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
   document.getElementById('en-avg').textContent = avgEn + '%';
+  if(classFilter){ renderPupilLinksForTopic(el, list, 'english'); return; }
   var keyFn = englishGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
   var order = englishGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
   renderGroups(el, list, keyFn, order, buildEnglishCard, 'child checked', 'children checked', englishGroupMode==='year' && !classFilter ? setClassFilter : null);
@@ -16101,6 +16195,7 @@ function renderTopicResults(){
   document.getElementById('tp-count').textContent = list.length;
   var avgTp = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
   document.getElementById('tp-avg').textContent = avgTp + '%';
+  if(classFilter){ renderPupilLinksForTopic(el, list, 'topics'); return; }
   var keyFn = topicGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
   var order = topicGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
   renderGroups(el, list, keyFn, order, buildTopicCard, 'child checked', 'children checked', topicGroupMode==='year' && !classFilter ? setClassFilter : null);
@@ -16484,6 +16579,7 @@ function renderScienceResults(){
   document.getElementById('sc-count').textContent = list.length;
   var avgSc = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
   document.getElementById('sc-avg').textContent = avgSc + '%';
+  if(classFilter){ renderPupilLinksForTopic(el, list, 'science'); return; }
   var keyFn = scienceGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
   var order = scienceGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
   renderGroups(el, list, keyFn, order, buildScienceCard, 'child checked', 'children checked', scienceGroupMode==='year' && !classFilter ? setClassFilter : null);
@@ -16867,6 +16963,7 @@ function renderReResults(){
   document.getElementById('re-count').textContent = list.length;
   var avgRe = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
   document.getElementById('re-avg').textContent = avgRe + '%';
+  if(classFilter){ renderPupilLinksForTopic(el, list, 're'); return; }
   var keyFn = reGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
   var order = reGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
   renderGroups(el, list, keyFn, order, buildReCard, 'child checked', 'children checked', reGroupMode==='year' && !classFilter ? setClassFilter : null);
@@ -17571,6 +17668,7 @@ function renderMflResults(){
   document.getElementById('mfl-count').textContent = list.length;
   var avgMfl = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
   document.getElementById('mfl-avg').textContent = avgMfl + '%';
+  if(classFilter){ renderPupilLinksForTopic(el, list, 'mfl'); return; }
   var keyFn = mflGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
   var order = mflGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
   renderGroups(el, list, keyFn, order, buildMflCard, 'child checked', 'children checked', mflGroupMode==='year' && !classFilter ? setClassFilter : null);
@@ -17960,6 +18058,7 @@ function renderMusicResults(){
   document.getElementById('music-count').textContent = list.length;
   var avgMusic = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
   document.getElementById('music-avg').textContent = avgMusic + '%';
+  if(classFilter){ renderPupilLinksForTopic(el, list, 'music'); return; }
   var keyFn = musicGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
   var order = musicGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
   renderGroups(el, list, keyFn, order, buildMusicCard, 'child checked', 'children checked', musicGroupMode==='year' && !classFilter ? setClassFilter : null);
@@ -18349,6 +18448,7 @@ function renderReasoningResults(){
   document.getElementById('reasoning-count').textContent = list.length;
   var avgRs = Math.round(list.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/list.length);
   document.getElementById('reasoning-avg').textContent = avgRs + '%';
+  if(classFilter){ renderPupilLinksForTopic(el, list, 'reasoning'); return; }
   var keyFn = reasoningGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
   var order = reasoningGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
   renderGroups(el, list, keyFn, order, buildReasoningCard, 'child checked', 'children checked', reasoningGroupMode==='year' && !classFilter ? setClassFilter : null);
