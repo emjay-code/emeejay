@@ -19203,15 +19203,173 @@ async function deleteTarget(id){
   savedTargetsList = savedTargetsList.filter(function(x){ return x.id !== id; });
   renderSavedTargets();
 }
-function buildSuggestionText(subjectKey, item, count){
+/* ---------- Target suggestion broadening ----------
+   Rather than quoting the literal missed question back at a teacher (e.g.
+   "What time is half past 3?"), we try to name the underlying skill it's
+   testing (e.g. "telling the time to the half hour") so a target reads
+   like something a teacher would actually write. This works in two
+   layers:
+     1. Curated keyword/phrase rules per subject - the first rule whose
+        pattern matches the missed question's wording wins. These are a
+        practical, growing set covering common curriculum language, not
+        an exhaustive tag on every question, so unmatched wording is
+        expected and handled by layer 2.
+     2. Fallback to the topic a check was run under (already stored on
+        every result row as topicLabel, e.g. "Weight & Measure") - always
+        broader than one literal question, and needs no curation.
+   Phonics/handwriting/early years already store fairly atomic, broad
+   items (a single sound, letter or EYFS skill statement) so they're left
+   as-is. Blending and times tables get their own light grouping below
+   (by grapheme pattern / times-table number) since those follow simple,
+   reliable rules of their own. */
+var TARGET_KEYWORD_RULES = {
+  maths: [
+    { test:/half past|halfway between (two|the) hours?/i, label:'telling the time to the half hour' },
+    { test:/quarter (past|to)/i, label:'telling the time to the quarter hour' },
+    { test:/twenty.?five (past|to)|twenty (past|to)|ten (past|to)|five (past|to)/i, label:'telling the time to five-minute intervals' },
+    { test:/o.?clock/i, label:'telling the time to the hour' },
+    { test:/\b(analogue|digital) clock\b/i, label:'reading analogue and digital clocks' },
+    { test:/\b(am|pm|24.?hour clock|digital time)\b/i, label:'24-hour and digital time' },
+    { test:/\b(days? of the week|weekend|weekday)\b/i, label:'days of the week' },
+    { test:/\b(months?|calendar)\b/i, label:'months and the calendar' },
+    { test:/\b(kilogram|gram|weigh|heavier|lighter|scales)\b/i, label:'weighing and comparing mass' },
+    { test:/\b(litre|millilitre|capacity|holds more|holds less)\b/i, label:'measuring capacity' },
+    { test:/\b(metre|centimetre|millimetre|length|longer|shorter|taller)\b/i, label:'measuring length' },
+    { test:/\bperimeter\b/i, label:'perimeter' },
+    { test:/\barea\b/i, label:'area' },
+    { test:/\b(fraction|numerator|denominator)\b/i, label:'fractions' },
+    { test:/\bdecimal/i, label:'decimals' },
+    { test:/\bpercent/i, label:'percentages' },
+    { test:/\b(place value|tens|hundreds|thousands|units digit)\b/i, label:'place value' },
+    { test:/\bround(ed|ing)?\s+(to|up|down)/i, label:'rounding numbers' },
+    { test:/\b(angle|degrees|right angle|acute|obtuse)\b/i, label:'angles' },
+    { test:/\bsymmetr/i, label:'symmetry' },
+    { test:/\b(vertices|vertex|edges|faces|3d shape)\b/i, label:'3D shape properties' },
+    { test:/\b(sides|corners|polygon|2d shape)\b/i, label:'2D shape properties' },
+    { test:/\b(money|coins?|pence|pounds|change from)\b/i, label:'money and giving change' },
+    { test:/\b(multiply|multiplication|times table|product)\b/i, label:'multiplication' },
+    { test:/\b(divide|division|divided by|remainder|shared? equally)\b/i, label:'division' },
+    { test:/\b(add(ition)?|\bsum\b|\bplus\b|\btotal\b)/i, label:'addition' },
+    { test:/\b(subtract(ion)?|minus|difference|take away)\b/i, label:'subtraction' },
+    { test:/\b(mean|median|mode|range|average)\b/i, label:'averages and statistics' },
+    { test:/\b(bar chart|pictogram|tally|line graph)\b/i, label:'reading charts and graphs' },
+    { test:/\bratio|\bproportion/i, label:'ratio and proportion' },
+    { test:/\bnegative numbers?\b/i, label:'negative numbers' },
+    { test:/\b(sequence|multiple of|factor)\b/i, label:'number patterns, multiples and factors' },
+    { test:/\bprime numbers?\b/i, label:'prime numbers' },
+    { test:/\b(square number|cube number)\b/i, label:'square and cube numbers' }
+  ],
+  english: [
+    { test:/\bapostrophe/i, label:'using apostrophes' },
+    { test:/\bcomma/i, label:'using commas' },
+    { test:/\bcapital letter/i, label:'capital letters' },
+    { test:/\bfull stop/i, label:'full stops' },
+    { test:/\bquestion mark/i, label:'question marks' },
+    { test:/\bexclamation mark/i, label:'exclamation marks' },
+    { test:/\b(speech marks|inverted commas|direct speech)\b/i, label:'punctuating speech' },
+    { test:/\bnouns?\b/i, label:'identifying nouns' },
+    { test:/\bverbs?\b/i, label:'identifying verbs' },
+    { test:/\badjectives?\b/i, label:'identifying adjectives' },
+    { test:/\badverbs?\b/i, label:'identifying adverbs' },
+    { test:/\bpronouns?\b/i, label:'using pronouns' },
+    { test:/\bconjunctions?\b/i, label:'using conjunctions' },
+    { test:/\bprefix/i, label:'prefixes' },
+    { test:/\bsuffix/i, label:'suffixes' },
+    { test:/\bsynonym/i, label:'synonyms' },
+    { test:/\bantonym/i, label:'antonyms' },
+    { test:/\bhomophone/i, label:'homophones' },
+    { test:/\bplurals?\b/i, label:'forming plurals' },
+    { test:/\bpast tense\b/i, label:'past tense verbs' },
+    { test:/\bpresent tense\b/i, label:'present tense verbs' },
+    { test:/\bsimile/i, label:'similes' },
+    { test:/\bmetaphor/i, label:'metaphors' },
+    { test:/\bpersonification/i, label:'personification' },
+    { test:/\balliteration/i, label:'alliteration' },
+    { test:/\brhym/i, label:'rhyme' },
+    { test:/\b(main character|protagonist)\b/i, label:'identifying characters' },
+    { test:/\bsetting\b/i, label:'identifying the setting' },
+    { test:/\b(main idea|summarise|summary)\b/i, label:'summarising a text' },
+    { test:/\bfact or opinion\b/i, label:'fact vs opinion' },
+    { test:/\binfer/i, label:'making inferences' },
+    { test:/\bsilent letter/i, label:'silent letters' },
+    { test:/\bcompound word/i, label:'compound words' }
+  ]
+};
+var TOPIC_LABEL_SUBJECTS = { maths:1, english:1, topics:1, science:1, re:1, mfl:1, music:1, reasoning:1 };
+function matchKeywordRule(subjectKey, text){
+  var rules = TARGET_KEYWORD_RULES[subjectKey];
+  if(!rules) return null;
+  for(var i=0;i<rules.length;i++){ if(rules[i].test.test(text)) return rules[i].label; }
+  return null;
+}
+function blendingGraphemeBucket(word){
+  var w = (word||'').toLowerCase();
+  var patterns = ['tch','igh','ough','augh','eigh','air','ear','ure',
+    'sh','ch','th','ph','wh','ee','ea','ay','ai','oa','oe','oi','oy','ou','ow','oo','ur','er','ir','or','ar','ng','nk','qu'];
+  for(var i=0;i<patterns.length;i++){ if(w.indexOf(patterns[i]) > -1) return patterns[i]; }
+  return null;
+}
+/* Groups a child's own missed items for one subject into broader "weak
+   area" buckets (see comment above), returning the top 5 by frequency. */
+function computeWeakAreaBuckets(subjectKey, history, info){
+  var buckets = {};
+  function bump(key, label, topicLabel, keywordMatch, sample){
+    if(!buckets[key]) buckets[key] = { label:label, count:0, topicLabel:topicLabel||'', keywordMatch:!!keywordMatch, sample:sample };
+    buckets[key].count++;
+  }
+  if(TOPIC_LABEL_SUBJECTS[subjectKey]){
+    history.forEach(function(r){
+      (r.missedQuestions||[]).forEach(function(q){
+        var kw = matchKeywordRule(subjectKey, q);
+        if(kw) bump('kw:'+kw+'|'+(r.topicLabel||''), kw, r.topicLabel||'', true, q);
+        else { var tl = r.topicLabel || 'this subject'; bump('topic:'+tl, tl, tl, false, q); }
+      });
+    });
+  } else if(subjectKey === 'times-tables'){
+    history.forEach(function(r){
+      (r.missedFacts||[]).forEach(function(f){
+        var m = /^(\d+)\s*[×x]\s*(\d+)$/i.exec((f||'').trim());
+        if(m){
+          bump('tt:'+m[1], 'the ' + m[1] + ' times table', '', true, f);
+          if(m[2] !== m[1]) bump('tt:'+m[2], 'the ' + m[2] + ' times table', '', true, f);
+        } else {
+          bump('ttf:'+f, 'the fact ' + f, '', false, f);
+        }
+      });
+    });
+  } else if(subjectKey === 'blending'){
+    history.forEach(function(r){
+      (r.missedWords||[]).forEach(function(w){
+        var word = (w||'').replace(/\s*\(pseudo\)\s*$/i,'');
+        var g = blendingGraphemeBucket(word);
+        if(g) bump('gr:'+g, 'words containing "' + g + '"', '', true, w);
+        else bump('w:'+w, 'the word "' + word + '"', '', false, w);
+      });
+    });
+  } else {
+    var field = info.missedField;
+    history.forEach(function(r){
+      (r[field]||[]).forEach(function(item){ bump('raw:'+item, item, '', false, item); });
+    });
+  }
+  var arr = Object.keys(buckets).map(function(k){ return buckets[k]; });
+  arr.sort(function(a,b){ return b.count - a.count; });
+  return arr.slice(0,5);
+}
+function buildSuggestionText(subjectKey, bucket){
+  var count = bucket.count;
   var timesTxt = count + (count===1?' check':' checks');
+  if(TOPIC_LABEL_SUBJECTS[subjectKey]){
+    if(bucket.keywordMatch) return 'Revisit ' + bucket.label + (bucket.topicLabel ? ' (' + bucket.topicLabel + ')' : '') + ' – missed in ' + timesTxt + '.';
+    return 'Revisit ' + bucket.label + ' – missed in ' + timesTxt + '.';
+  }
   switch(subjectKey){
-    case 'phonics': return 'Practise the sound "' + item + '" – missed in ' + timesTxt + '.';
-    case 'blending': return 'Practise blending the word "' + item + '" – missed in ' + timesTxt + '.';
-    case 'times-tables': return 'Practise the times table fact ' + item + ' – missed in ' + timesTxt + '.';
-    case 'handwriting': return 'Practise forming "' + item + '" – flagged in ' + timesTxt + '.';
-    case 'early_years': return 'Continue developing: ' + item + ' – not yet secure, seen in ' + timesTxt + '.';
-    default: return 'Revisit: "' + item + '" – missed in ' + timesTxt + '.';
+    case 'phonics': return 'Practise the sound "' + bucket.label + '" – missed in ' + timesTxt + '.';
+    case 'blending': return 'Practise blending ' + bucket.label + ' – missed in ' + timesTxt + '.';
+    case 'times-tables': return 'Practise ' + bucket.label + ' – missed in ' + timesTxt + '.';
+    case 'handwriting': return 'Practise forming "' + bucket.label + '" – flagged in ' + timesTxt + '.';
+    case 'early_years': return 'Continue developing: ' + bucket.label + ' – not yet secure, seen in ' + timesTxt + '.';
+    default: return 'Revisit: "' + bucket.label + '" – missed in ' + timesTxt + '.';
   }
 }
 async function generateTargetSuggestions(){
@@ -19229,12 +19387,10 @@ async function generateTargetSuggestions(){
   if(res.error){ console.error(res.error); emptyEl.textContent = 'Could not load assessment history.'; return; }
   var history = res.data.map(info.rowFn);
   if(!history.length){ emptyEl.textContent = 'No ' + subjLabel + ' checks recorded for ' + targetsPupil.name + ' yet – complete an assessment first.'; return; }
-  var counts = {};
-  history.forEach(function(r){ (r[info.missedField]||[]).forEach(function(item){ counts[item] = (counts[item]||0) + 1; }); });
-  var sorted = Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a]; }).slice(0,5);
-  if(!sorted.length){ emptyEl.textContent = targetsPupil.name + ' has no repeated trouble areas in ' + subjLabel + ' yet – nice work! You can still add a target below.'; return; }
+  var buckets = computeWeakAreaBuckets(targetsSubjectKey, history, info);
+  if(!buckets.length){ emptyEl.textContent = targetsPupil.name + ' has no repeated trouble areas in ' + subjLabel + ' yet – nice work! You can still add a target below.'; return; }
   emptyEl.style.display = 'none';
-  targetSuggestionsCache = sorted.map(function(item){ return { item: item, count: counts[item], text: buildSuggestionText(targetsSubjectKey, item, counts[item]) }; });
+  targetSuggestionsCache = buckets.map(function(b){ return { item: b.sample, count: b.count, text: buildSuggestionText(targetsSubjectKey, b) }; });
   targetSuggestionsCache.forEach(function(sug, idx){
     var row = document.createElement('div'); row.className = 'suggestion-row';
     var txt = document.createElement('div'); txt.className = 'target-text'; txt.style.flex = '1'; txt.textContent = sug.text;
