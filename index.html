@@ -2480,6 +2480,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <div class="pupil-meta" id="ch-profile-meta" style="margin-top:4px;"></div>
         </div>
         <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="all-btn" onclick="exportChildProfileCSV()">Export CSV</button>
           <button class="edit-row-btn" onclick="editCurrentPupil()">Edit details</button>
           <button class="delete-row-btn" onclick="deleteCurrentPupil()">Delete</button>
         </div>
@@ -3923,6 +3924,50 @@ function renderChildSnapshot(profileData){
     if(trend) el.appendChild(trend);
     grid.appendChild(el);
   });
+}
+/* Human-readable label for a single check, matched to what's shown on its
+   Results card, so the profile export reads the same as the on-screen
+   history. */
+function subjectCheckLabel(key, r){
+  switch(key){
+    case 'phonics': return r.set || '';
+    case 'blending': return 'Blending check';
+    case 'times-tables': return r.checkLabel || 'Mixed';
+    case 'handwriting': return r.setLabel || '';
+    case 'early_years': return r.setLabel || '';
+    case 'english': return englishCheckLabel(r);
+    case 'maths': return mathsCheckLabel(r);
+    case 'topics': return topicCheckLabel(r);
+    case 'science': return scienceCheckLabel(r);
+    case 're': return reCheckLabel(r);
+    case 'mfl': return mflCheckLabel(r);
+    case 'music': return musicCheckLabel(r);
+    case 'reasoning': return reasoningCheckLabel(r);
+  }
+  return '';
+}
+/* Exports this child's full cross-subject history as a single CSV, one row
+   per check, in the same subject order as the profile page itself. */
+function exportChildProfileCSV(){
+  if(!currentProfileData || !currentPupilId) return;
+  var p = pupilsRoster.find(function(x){ return x.id === currentPupilId; });
+  if(!p) return;
+  var header = ['Name','Year group','Subject','Date','Term','Check','Percentage','Trend vs previous check'];
+  var rows = [header];
+  var any = false;
+  CHILD_PROFILE_SUBJECTS.forEach(function(s){
+    var list = (currentProfileData[s.key] || []).slice().sort(function(a,b){ return (a.ts||0) - (b.ts||0); });
+    list.forEach(function(r){
+      any = true;
+      rows.push([
+        p.name, p.year || '', s.label, r.date || '', getTerm(r.date), subjectCheckLabel(s.key, r),
+        Math.round(pctOf(r)) + '%', formatTrendForCSV(computeTrendDiff(list, r))
+      ]);
+    });
+  });
+  if(!any){ alert('No checks recorded for this child yet.'); return; }
+  var safeName = (p.name || 'child').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  downloadCSV(rows, 'emeejay-'+safeName+'-profile-'+dateStr()+'.csv');
 }
 function editCurrentPupil(){
   var p = pupilsRoster.find(function(x){ return x.id === currentPupilId; });
