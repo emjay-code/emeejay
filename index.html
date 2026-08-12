@@ -2467,6 +2467,16 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         <button class="btn btn-primary" style="width:auto;margin-top:0;white-space:nowrap;" onclick="openAddPupil()">+ Add child</button>
       </div>
     </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div style="font-size:12px;color:var(--text-muted);" id="ch-rollover-status"></div>
+        <button class="all-btn" onclick="runYearRolloverManual()">Start new school year</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:0.75rem;">
+      <button type="button" class="group-toggle-btn active" id="ch-view-active-btn" onclick="setChildrenViewMode('active')">Active (<span id="ch-active-count">0</span>)</button>
+      <button type="button" class="group-toggle-btn" id="ch-view-leavers-btn" onclick="setChildrenViewMode('leavers')">Leavers (<span id="ch-leavers-count">0</span>)</button>
+    </div>
     <div id="ch-empty" class="empty-state" style="display:none;">No children added yet.</div>
     <div id="ch-list"></div>
   </div>
@@ -2478,11 +2488,14 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         <div>
           <div style="font-size:19px;font-weight:600;color:var(--hp-purple-dark);" id="ch-profile-name"></div>
           <div class="pupil-meta" id="ch-profile-meta" style="margin-top:4px;"></div>
+          <div class="pupil-meta" id="ch-profile-leaver-note" style="display:none;margin-top:4px;color:var(--text-danger);"></div>
         </div>
-        <div style="display:flex;gap:6px;flex-shrink:0;">
+        <div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;">
           <button class="all-btn" onclick="exportChildProfileCSV()">Export CSV</button>
           <button class="edit-row-btn" onclick="editCurrentPupil()">Edit details</button>
-          <button class="delete-row-btn" onclick="deleteCurrentPupil()">Delete</button>
+          <button class="all-btn" id="ch-profile-leave-btn" onclick="openMarkAsLeftModal()">Mark as left</button>
+          <button class="all-btn" id="ch-profile-reinstate-btn" style="display:none;" onclick="reinstatePupil()">Reinstate</button>
+          <button class="delete-row-btn" onclick="deleteCurrentPupil()">Delete permanently</button>
         </div>
       </div>
     </div>
@@ -2639,6 +2652,26 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
       <button class="btn" style="flex:1;" onclick="closeEditDetails()">Cancel</button>
       <button class="btn btn-primary" style="flex:1;" onclick="saveEditDetails()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="mark-left-modal-overlay">
+  <div class="edit-modal-card">
+    <div class="section-hd" style="margin-bottom:0.35rem;">Mark <span id="mark-left-modal-name"></span> as left</div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Their full history stays on file and can still be exported, but they'll be moved out of the active roster and Results pickers.</p>
+    <div class="field">
+      <label>Date left</label>
+      <input type="date" id="mark-left-date"/>
+    </div>
+    <div class="field">
+      <label>Reason (optional)</label>
+      <input type="text" id="mark-left-reason" maxlength="200" placeholder="e.g. Moved to another school, Left after Year 6"/>
+    </div>
+    <div class="error-text" id="mark-left-error" style="display:none;"></div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+      <button class="btn" style="flex:1;" onclick="closeMarkAsLeftModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="confirmMarkAsLeft()">Confirm</button>
     </div>
   </div>
 </div>
@@ -3010,7 +3043,7 @@ async function onSignedIn(){
   }
   currentProfile = profRes.data;
 
-  var schoolRes = await sb.from('schools').select('id, name, join_code, subscription_status, trial_ends_at, is_demo').eq('id', currentProfile.school_id).single();
+  var schoolRes = await sb.from('schools').select('id, name, join_code, subscription_status, trial_ends_at, is_demo, last_rollover_academic_year, leaver_retention_years').eq('id', currentProfile.school_id).single();
   currentSchool = schoolRes.data || null;
 
   document.getElementById('sb-school-name').textContent = currentSchool ? currentSchool.name : 'Your school';
@@ -3046,6 +3079,7 @@ async function onSignedIn(){
   document.getElementById('app-view').style.display = 'block';
 
   goHome();
+  await checkAndApplyYearRollover();
   await loadPupils();
   await loadResults();
   await loadBlendingResults();
@@ -3534,7 +3568,10 @@ function reportReasoningQuestion(){
 /* ---------- Pupils roster / children profiles ---------- */
 var pupilsRoster = [];
 function rowToPupil(row){
-  return { id: row.id, name: row.name, year: row.year_group || '', gender: row.gender || '', dob: row.dob || '', needs: row.additional_needs || '' };
+  return {
+    id: row.id, name: row.name, year: row.year_group || '', gender: row.gender || '', dob: row.dob || '', needs: row.additional_needs || '',
+    status: row.status || 'active', leftDate: row.left_date || '', leftReason: row.left_reason || ''
+  };
 }
 async function loadPupils(){
   var res = await sb.from('pupils').select('*').order('name', { ascending:true });
@@ -3542,6 +3579,7 @@ async function loadPupils(){
   else { pupilsRoster = res.data.map(rowToPupil); }
   if(document.getElementById('ch-list')) renderChildrenList();
   if(document.getElementById('home-pupil-list')) renderHomePupilPicker();
+  renderRolloverStatus();
 }
 
 /* ---------- Assessment home screen: pick a child from the register ---------- */
@@ -3553,7 +3591,8 @@ function renderHomePupilPicker(){
   var panelEl = document.getElementById('home-pupil-search-panel');
   var hintEl = document.getElementById('home-pupil-hint');
   if(!listEl) return;
-  if(!pupilsRoster.length){
+  var eligible = activePupils();
+  if(!eligible.length){
     listEl.innerHTML = '';
     emptyEl.style.display = 'block';
     btnEl.style.display = 'none';
@@ -3571,7 +3610,7 @@ function renderHomePupilPicker(){
     return;
   }
   hintEl.style.display = 'none';
-  var list = pupilsRoster.filter(function(p){ return p.name.toLowerCase().indexOf(search) > -1; });
+  var list = eligible.filter(function(p){ return p.name.toLowerCase().indexOf(search) > -1; });
   if(!list.length){
     var none = document.createElement('div');
     none.style.cssText = 'color:var(--text-secondary);font-size:14px;padding:0.5rem 0;';
@@ -3696,14 +3735,44 @@ async function savePupilModal(){
   }
 }
 
-/* Roster list */
+/* Roster list - active children by default; leavers are kept on file but
+   shown in a separate view so they don't clutter the active roster or any
+   year-group pickers. */
+var childrenViewMode = 'active';
+function setChildrenViewMode(mode){
+  childrenViewMode = mode;
+  document.getElementById('ch-view-active-btn').classList.toggle('active', mode==='active');
+  document.getElementById('ch-view-leavers-btn').classList.toggle('active', mode==='leavers');
+  renderChildrenList();
+}
+function activePupils(){ return pupilsRoster.filter(function(p){ return p.status !== 'left'; }); }
+function leaverPupils(){ return pupilsRoster.filter(function(p){ return p.status === 'left'; }); }
 function renderChildrenList(){
   var el = document.getElementById('ch-list');
   if(!el) return;
+  var activeCountEl = document.getElementById('ch-active-count');
+  var leaversCountEl = document.getElementById('ch-leavers-count');
+  if(activeCountEl) activeCountEl.textContent = activePupils().length;
+  if(leaversCountEl) leaversCountEl.textContent = leaverPupils().length;
   var search = (document.getElementById('ch-search').value || '').trim().toLowerCase();
-  var list = pupilsRoster.filter(function(p){ return !search || p.name.toLowerCase().indexOf(search) > -1; });
-  document.getElementById('ch-empty').style.display = list.length ? 'none' : 'block';
-  renderGroups(el, list, function(p){ return p.year || 'Not recorded'; }, YEAR_GROUP_ORDER, buildChildCard, 'child', 'children');
+  var base = childrenViewMode === 'leavers' ? leaverPupils() : activePupils();
+  var list = base.filter(function(p){ return !search || p.name.toLowerCase().indexOf(search) > -1; });
+  var emptyEl = document.getElementById('ch-empty');
+  emptyEl.style.display = list.length ? 'none' : 'block';
+  emptyEl.textContent = childrenViewMode === 'leavers' ? 'No leavers on file.' : 'No children added yet.';
+  if(childrenViewMode === 'leavers'){
+    var leftYearKeyFn = function(p){ return p.leftDate ? p.leftDate.slice(0,4) : 'Not recorded'; };
+    var leftYears = {};
+    list.forEach(function(p){ leftYears[leftYearKeyFn(p)] = true; });
+    var leftYearOrder = Object.keys(leftYears).sort(function(a,b){
+      if(a==='Not recorded') return 1;
+      if(b==='Not recorded') return -1;
+      return b.localeCompare(a);
+    });
+    renderGroups(el, list, leftYearKeyFn, leftYearOrder, buildChildCard, 'leaver', 'leavers');
+  } else {
+    renderGroups(el, list, function(p){ return p.year || 'Not recorded'; }, YEAR_GROUP_ORDER, buildChildCard, 'child', 'children');
+  }
 }
 function buildChildCard(p){
   var card = document.createElement('div'); card.className = 'pupil-card';
@@ -3714,6 +3783,12 @@ function buildChildCard(p){
   var me = document.createElement('div'); me.className = 'pupil-meta';
   me.textContent = [p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet';
   nb.appendChild(ne); nb.appendChild(me);
+  if(p.status === 'left'){
+    var lm = document.createElement('div'); lm.className = 'pupil-meta'; lm.style.color = 'var(--text-danger)';
+    var info = leaverRetentionInfo(p);
+    lm.textContent = 'Left ' + (p.leftDate || 'unknown date') + (p.leftReason ? ' – ' + p.leftReason : '') + (info ? ' · ' + info.text : '');
+    nb.appendChild(lm);
+  }
   var right = document.createElement('div'); right.style.cssText = 'display:flex;align-items:center;gap:6px;flex-shrink:0;';
   var viewBtn = document.createElement('button'); viewBtn.className = 'edit-row-btn'; viewBtn.textContent = 'View profile';
   viewBtn.onclick = function(){ openChildProfile(p.id); };
@@ -3775,6 +3850,20 @@ async function openChildProfile(id, focusSubject, focusTopic){
   showRvScreen('tab-children', 'ch-profile-screen');
   document.getElementById('ch-profile-name').textContent = p.name;
   document.getElementById('ch-profile-meta').textContent = [p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet';
+  var leaverNoteEl = document.getElementById('ch-profile-leaver-note');
+  var leaveBtn = document.getElementById('ch-profile-leave-btn');
+  var reinstateBtn = document.getElementById('ch-profile-reinstate-btn');
+  if(p.status === 'left'){
+    var info = leaverRetentionInfo(p);
+    leaverNoteEl.textContent = 'Left ' + (p.leftDate || 'unknown date') + (p.leftReason ? ' – ' + p.leftReason : '') + (info ? ' · ' + info.text : '');
+    leaverNoteEl.style.display = 'block';
+    if(leaveBtn) leaveBtn.style.display = 'none';
+    if(reinstateBtn) reinstateBtn.style.display = '';
+  } else {
+    leaverNoteEl.style.display = 'none';
+    if(leaveBtn) leaveBtn.style.display = '';
+    if(reinstateBtn) reinstateBtn.style.display = 'none';
+  }
 
   var nameFilter = p.name.trim();
   var results_ = await sb.from('results').select('*').ilike('pupil_name', nameFilter);
@@ -3976,12 +4065,50 @@ function editCurrentPupil(){
 async function deleteCurrentPupil(){
   if(isDemoSchool()){ alert('This is the shared demo account, so its data can\'t be deleted.'); return; }
   if(!currentPupilId) return;
-  if(!confirm('Remove this child from the roster? Their past results are not affected.')) return;
+  if(!confirm('Permanently remove this child from the roster? Their past results are not affected, but they will no longer be findable as a pupil. If they\'ve just left the school, "Mark as left" keeps them on file instead.')) return;
   var del = await sb.from('pupils').delete().eq('id', currentPupilId);
   if(del.error){ alert('Could not delete: ' + del.error.message); return; }
   currentPupilId = null;
   await loadPupils();
   backToChildrenList();
+}
+/* "Mark as left" keeps the pupil's full history on file (still exportable
+   via Export CSV, and handy if the family asks for records to pass on to
+   a new school) while moving them out of the active roster and check
+   pickers. Reinstate simply reverses it. */
+function openMarkAsLeftModal(){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its data can\'t be changed.'); return; }
+  var p = pupilsRoster.find(function(x){ return x.id === currentPupilId; });
+  if(!p) return;
+  document.getElementById('mark-left-modal-name').textContent = p.name;
+  document.getElementById('mark-left-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('mark-left-reason').value = '';
+  document.getElementById('mark-left-error').style.display = 'none';
+  document.getElementById('mark-left-modal-overlay').classList.add('active');
+}
+function closeMarkAsLeftModal(){
+  document.getElementById('mark-left-modal-overlay').classList.remove('active');
+}
+async function confirmMarkAsLeft(){
+  if(!currentPupilId) return;
+  var errEl = document.getElementById('mark-left-error');
+  var leftDate = document.getElementById('mark-left-date').value;
+  if(!leftDate){ errEl.textContent = 'Please choose the date they left.'; errEl.style.display = 'block'; return; }
+  var reason = document.getElementById('mark-left-reason').value.trim();
+  var upd = await sb.from('pupils').update({ status: 'left', left_date: leftDate, left_reason: reason || null }).eq('id', currentPupilId);
+  if(upd.error){ errEl.textContent = 'Could not save: ' + upd.error.message; errEl.style.display = 'block'; return; }
+  closeMarkAsLeftModal();
+  await loadPupils();
+  openChildProfile(currentPupilId);
+}
+async function reinstatePupil(){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its data can\'t be changed.'); return; }
+  if(!currentPupilId) return;
+  if(!confirm('Move this child back onto the active roster?')) return;
+  var upd = await sb.from('pupils').update({ status: 'active', left_date: null, left_reason: null }).eq('id', currentPupilId);
+  if(upd.error){ alert('Could not reinstate: ' + upd.error.message); return; }
+  await loadPupils();
+  openChildProfile(currentPupilId);
 }
 
 async function deleteResult(id){
@@ -3996,6 +4123,97 @@ async function deleteResult(id){
 
 var YEAR_GROUP_ORDER = ['Under 2s','2-3s','Nursery (3-4s)','Reception','Year 1','Year 2','Year 3','Year 4','Year 5','Year 6','Not recorded'];
 var TERM_ORDER = ['Autumn','Spring','Summer','Not recorded'];
+
+/* ---------- Year-group rollover & leaver retention ----------
+   UK schools' academic year runs 1 September - 31 August. On sign-in we
+   check whether we've crossed 1 September for an academic year this
+   school hasn't rolled over yet and, if so, move every active child up
+   one year group automatically - Year 6 children are marked as leavers
+   rather than deleted, so their history stays on file. A manual "Start
+   new school year" button lets a teacher override/re-run this. */
+var YEAR_PROGRESSION_STEPS = YEAR_GROUP_ORDER.filter(function(y){ return y !== 'Not recorded'; });
+function nextYearGroup(year){
+  var idx = YEAR_PROGRESSION_STEPS.indexOf(year);
+  if(idx === -1) return null; // unrecognised/blank year group - leave untouched
+  if(idx === YEAR_PROGRESSION_STEPS.length - 1) return 'LEAVER'; // was in the final step (Year 6)
+  return YEAR_PROGRESSION_STEPS[idx + 1];
+}
+function currentAcademicYearStartYear(d){
+  d = d || new Date();
+  var y = d.getFullYear();
+  var septFirst = new Date(y, 8, 1); // month index 8 = September
+  return d >= septFirst ? y : y - 1;
+}
+function nextRolloverDateText(){
+  var y = currentAcademicYearStartYear();
+  var applied = currentSchool && currentSchool.last_rollover_academic_year;
+  var nextYear = (applied && applied >= y) ? y + 1 : y;
+  return '1 September ' + nextYear;
+}
+async function checkAndApplyYearRollover(){
+  if(!currentSchool || isDemoSchool()) return;
+  var y = currentAcademicYearStartYear();
+  if(currentSchool.last_rollover_academic_year && currentSchool.last_rollover_academic_year >= y) return;
+  await applyYearRollover(y, false);
+}
+async function runYearRolloverManual(){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its data can\'t be changed.'); return; }
+  var y = currentAcademicYearStartYear();
+  var already = currentSchool && currentSchool.last_rollover_academic_year >= y;
+  var msg = already
+    ? 'This school year\'s rollover has already run. Run it again now? Every active child will be moved up another year group.'
+    : 'Move every active child up one year group now (Year 6 children will be marked as leavers)? This can\'t be undone automatically.';
+  if(!confirm(msg)) return;
+  await applyYearRollover(y, true);
+  alert('Rollover complete.');
+}
+async function applyYearRollover(academicYear, isManual){
+  await loadPupils(); // make sure we're promoting the current roster, not a stale/empty one
+  var toPromote = activePupils();
+  var promotedCount = 0, leftCount = 0;
+  var todayStr = new Date().toISOString().slice(0,10);
+  for(var i=0;i<toPromote.length;i++){
+    var p = toPromote[i];
+    var next = nextYearGroup(p.year);
+    if(next === null) continue;
+    if(next === 'LEAVER'){
+      await sb.from('pupils').update({ status:'left', left_date: todayStr, left_reason: 'Left after Year 6' }).eq('id', p.id);
+      leftCount++;
+    } else {
+      await sb.from('pupils').update({ year_group: next }).eq('id', p.id);
+      promotedCount++;
+    }
+  }
+  if(currentSchool){
+    await sb.rpc('set_school_rollover_year', { p_academic_year: academicYear });
+    currentSchool.last_rollover_academic_year = academicYear;
+  }
+  await loadPupils();
+  renderRolloverStatus();
+  if(!isManual && (promotedCount || leftCount)){
+    alert('New school year: ' + promotedCount + ' ' + (promotedCount===1?'child was':'children were') + ' moved up a year group' + (leftCount ? ', and ' + leftCount + ' ' + (leftCount===1?'child has':'children have') + ' been marked as leavers after Year 6' : '') + '.');
+  }
+}
+function renderRolloverStatus(){
+  var el = document.getElementById('ch-rollover-status');
+  if(!el) return;
+  var applied = currentSchool && currentSchool.last_rollover_academic_year;
+  var lastText = applied ? ('Last rolled over for the ' + applied + '/' + (applied+1) + ' school year.') : 'No school year rollover has run yet.';
+  el.textContent = lastText + ' Next automatic rollover: ' + nextRolloverDateText() + '.';
+}
+/* How long a leaver's record is kept before it's due for a data-protection
+   review, per the school's configured retention period (default 7 years -
+   a guide, not legal advice; schools should confirm the right period
+   under their own data protection policy). */
+function leaverRetentionInfo(p){
+  if(!p.leftDate) return null;
+  var years = (currentSchool && currentSchool.leaver_retention_years) || 7;
+  var leftDate = new Date(p.leftDate);
+  if(isNaN(leftDate.getTime())) return null;
+  var dueDate = new Date(leftDate.getFullYear() + years, leftDate.getMonth(), leftDate.getDate());
+  var due = dueDate <= new Date();
+  return { dueDate: dueDate, due: due, text: due ? 'Due for data-retention review' : ('On file until ' + dueDate.toISOString().slice(0,10)) };
+}
 var YEAR_TIER = {'Reception':'KS1','Year 1':'KS1','Year 2':'KS1','Year 3':'LKS2','Year 4':'LKS2','Year 5':'UKS2','Year 6':'UKS2'};
 var TIER_LABELS = {'KS1':'KS1 (Year 1–2)','LKS2':'LKS2 (Year 3–4)','UKS2':'UKS2 (Year 5–6)'};
 var pendingTierOverrideRetry = null;
