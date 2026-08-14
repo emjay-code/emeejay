@@ -4091,9 +4091,9 @@ function renderChildrenList(){
       if(b==='Not recorded') return -1;
       return b.localeCompare(a);
     });
-    renderGroups(el, list, leftYearKeyFn, leftYearOrder, buildChildCard, 'leaver', 'leavers');
+    renderGroups(el, list, leftYearKeyFn, leftYearOrder, buildChildCard, 'leaver', 'leavers', null, true);
   } else {
-    renderGroups(el, list, function(p){ return p.year || 'Not recorded'; }, YEAR_GROUP_ORDER, buildChildCard, 'child', 'children');
+    renderGroups(el, list, function(p){ return p.year || 'Not recorded'; }, YEAR_GROUP_ORDER, buildChildCard, 'child', 'children', null, true);
   }
 }
 function buildChildCard(p){
@@ -5107,7 +5107,7 @@ function groupByKey(list, keyFn, order){
    grouping by term, or the Children roster which has no class filter),
    the group keeps its original expand/collapse behaviour with cards shown
    inline. */
-function renderGroups(container, list, keyFn, order, buildCard, singularLabel, pluralLabel, onHeaderClick){
+function renderGroups(container, list, keyFn, order, buildCard, singularLabel, pluralLabel, onHeaderClick, startClosed){
   container.innerHTML = '';
   var groups = groupByKey(list, keyFn, order);
   if(onHeaderClick){
@@ -5131,7 +5131,7 @@ function renderGroups(container, list, keyFn, order, buildCard, singularLabel, p
     return;
   }
   groups.forEach(function(g){
-    var details = document.createElement('details'); details.className='year-group'; details.open = true;
+    var details = document.createElement('details'); details.className='year-group'; details.open = !startClosed;
     var summary = document.createElement('summary'); summary.className='year-group-summary';
     var nameSpan = document.createElement('span'); nameSpan.className='year-group-name'; nameSpan.textContent = g.key;
     var countSpan = document.createElement('span'); countSpan.className='year-group-count'; countSpan.textContent = g.items.length + ' ' + (g.items.length===1 ? singularLabel : pluralLabel);
