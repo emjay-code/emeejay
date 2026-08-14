@@ -198,6 +198,12 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .donut-legend-item{display:flex;align-items:center;gap:7px;}
 .donut-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
 .donut-empty{font-size:13px;color:var(--text-muted);}
+.leaderboard-cols{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.leaderboard-col{flex:1;min-width:180px;}
+.leaderboard-col-title{font-size:12.5px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.02em;}
+.leaderboard-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:13px;}
+.leaderboard-row:last-child{border-bottom:none;}
+.leaderboard-name{color:var(--text-primary);}
 .trend-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--border);}
 .trend-row:last-child{border-bottom:none;}
 .trend-date{font-size:12px;color:var(--text-muted);min-width:70px;}
@@ -2331,6 +2337,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by year group</h2><div id="an-year"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="an-leaderboard"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Score trends</h2>
         <p style="font-size:13px;margin-bottom:1rem;">Children assessed more than once, showing change over time.</p>
@@ -2349,6 +2356,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="bc-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="bc-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="bc-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="bc-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed blending words</h2><div id="bc-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Blending check trends</h2>
@@ -2383,6 +2391,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="mt-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="mt-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="mt-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="mt-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mt-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Maths check trends</h2>
@@ -2417,6 +2426,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="tt-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="tt-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="tt-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="tt-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed facts</h2><div id="tt-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Times tables trends</h2>
@@ -2451,6 +2461,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="en-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="en-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="en-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="en-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="en-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">English check trends</h2>
@@ -2484,6 +2495,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="hw-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="hw-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="hw-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="hw-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most difficult letters/words</h2><div id="hw-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Handwriting check trends</h2>
@@ -2517,6 +2529,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="ey-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="ey-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="ey-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="ey-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most-emerging skills</h2><div id="ey-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Early Years check trends</h2>
@@ -2551,6 +2564,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="tp-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="tp-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="tp-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="tp-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="tp-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Topic check trends</h2>
@@ -2585,6 +2599,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="sc-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="sc-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="sc-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="sc-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="sc-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Science check trends</h2>
@@ -2619,6 +2634,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="re-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="re-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="re-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="re-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="re-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">RE check trends</h2>
@@ -2653,6 +2669,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="mfl-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="mfl-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="mfl-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="mfl-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mfl-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Languages check trends</h2>
@@ -2687,6 +2704,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="music-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="music-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="music-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="music-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="music-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Music check trends</h2>
@@ -2721,6 +2739,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="reasoning-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="reasoning-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="reasoning-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="reasoning-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="reasoning-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Reasoning check trends</h2>
@@ -2755,6 +2774,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="computing-an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="computing-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="computing-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="computing-an-leaderboard"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="computing-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Computing check trends</h2>
@@ -4989,6 +5009,63 @@ function appendTermChart(id, list){
   if(chart) el.appendChild(chart);
   else el.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>';
 }
+/* Most-improved / most-declined leaderboard - for each child's most recent
+   check within the (possibly class-filtered) list, compares against their
+   previous check in the full, unfiltered subject history via
+   computeTrendDiff (same comparison as the on-screen trend badges). */
+function buildLeaderboard(list, fullList){
+  if(!list || !list.length) return null;
+  var byName = {};
+  list.forEach(function(r){
+    var k = (r.name||'').trim().toLowerCase();
+    if(!k) return;
+    if(!byName[k] || (r.ts||0) > (byName[k].ts||0)) byName[k] = r;
+  });
+  var entries = Object.keys(byName).map(function(k){
+    var r = byName[k];
+    var diff = computeTrendDiff(fullList, r);
+    return (diff===null || diff===undefined) ? null : {r:r, diff:diff};
+  }).filter(function(x){ return x; });
+  var wrap = document.createElement('div');
+  if(!entries.length){
+    var msg = document.createElement('p'); msg.style.cssText='font-size:13px;color:var(--text-muted);';
+    msg.textContent = 'Trends appear here once children have been checked more than once.';
+    wrap.appendChild(msg);
+    return wrap;
+  }
+  var improved = entries.slice().sort(function(a,b){return b.diff-a.diff;}).filter(function(e){return e.diff>0;}).slice(0,5);
+  var declined = entries.slice().sort(function(a,b){return a.diff-b.diff;}).filter(function(e){return e.diff<0;}).slice(0,5);
+  var cols = document.createElement('div'); cols.className = 'leaderboard-cols';
+  function buildCol(title, items){
+    var col = document.createElement('div'); col.className = 'leaderboard-col';
+    var h = document.createElement('div'); h.className = 'leaderboard-col-title'; h.textContent = title;
+    col.appendChild(h);
+    if(!items.length){
+      var e = document.createElement('p'); e.style.cssText='font-size:12.5px;color:var(--text-muted);'; e.textContent = 'None yet.';
+      col.appendChild(e);
+    } else {
+      items.forEach(function(item){
+        var row = document.createElement('div'); row.className = 'leaderboard-row';
+        var name = document.createElement('span'); name.className = 'leaderboard-name'; name.textContent = item.r.name;
+        row.appendChild(name);
+        var badge = buildTrendBadge(item.diff); if(badge) row.appendChild(badge);
+        col.appendChild(row);
+      });
+    }
+    return col;
+  }
+  cols.appendChild(buildCol('Most improved', improved));
+  cols.appendChild(buildCol('Most declined', declined));
+  wrap.appendChild(cols);
+  return wrap;
+}
+function appendLeaderboard(id, list, fullList){
+  var el = document.getElementById(id); if(!el) return;
+  el.innerHTML = '';
+  var board = buildLeaderboard(list, fullList);
+  if(board) el.appendChild(board);
+  else el.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">No repeat checks yet.</p>';
+}
 function sortResultList(list, mode){
   var arr = list.slice();
   if(mode==='score-desc') arr.sort(function(a,b){ return pctOf(b)-pctOf(a); });
@@ -5431,6 +5508,7 @@ function renderAnalytics(){
   var needsG={};list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);});
   Object.keys(needsG).sort().forEach(function(n){needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avgPct(needsG[n]),barColor(avgPct(needsG[n]))));});
   appendTermChart('an-terms', list);
+  appendLeaderboard('an-leaderboard', list, results);
 
   var trendEl=document.getElementById('an-trends');trendEl.innerHTML='';
   var byName={};list.forEach(function(r){var k=r.name.toLowerCase().trim();if(!byName[k])byName[k]=[];byName[k].push(r);});
@@ -5686,6 +5764,7 @@ function renderBlendingAnalytics(){
   var genderEl = document.getElementById('bc-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('bc-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('bc-an-terms', list);
+  appendLeaderboard('bc-an-leaderboard', list, blendingResults);
   var missedEl = document.getElementById('bc-an-missed'); missedEl.innerHTML = '';
   var wordCount = {};
   list.forEach(function(r){ (r.missedWords||[]).forEach(function(w){ wordCount[w]=(wordCount[w]||0)+1; }); });
@@ -6032,6 +6111,7 @@ function renderTimesTablesAnalytics(){
   var genderEl = document.getElementById('tt-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('tt-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('tt-an-terms', list);
+  appendLeaderboard('tt-an-leaderboard', list, timesTablesResults);
   var missedEl = document.getElementById('tt-an-missed'); missedEl.innerHTML = '';
   var factCount = {};
   list.forEach(function(r){ (r.missedFacts||[]).forEach(function(w){ factCount[w]=(factCount[w]||0)+1; }); });
@@ -8948,6 +9028,7 @@ function renderMathsAnalytics(){
   var genderEl = document.getElementById('mt-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('mt-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('mt-an-terms', list);
+  appendLeaderboard('mt-an-leaderboard', list, mathsResults);
   var missedEl = document.getElementById('mt-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -11541,6 +11622,7 @@ function renderEnglishAnalytics(){
   var genderEl = document.getElementById('en-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('en-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('en-an-terms', list);
+  appendLeaderboard('en-an-leaderboard', list, englishResults);
   var missedEl = document.getElementById('en-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -12041,6 +12123,7 @@ function renderHandwritingAnalytics(){
   var genderEl = document.getElementById('hw-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('hw-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('hw-an-terms', list);
+  appendLeaderboard('hw-an-leaderboard', list, handwritingResults);
   var missedEl = document.getElementById('hw-an-missed'); missedEl.innerHTML = '';
   var iCount = {};
   list.forEach(function(r){ (r.itemsNo||[]).forEach(function(w){ iCount[w]=(iCount[w]||0)+1; }); });
@@ -12377,6 +12460,7 @@ function renderEyAnalytics(){
   var genderEl = document.getElementById('ey-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('ey-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('ey-an-terms', list);
+  appendLeaderboard('ey-an-leaderboard', list, earlyYearsResults);
   var missedEl = document.getElementById('ey-an-missed'); missedEl.innerHTML = '';
   var iCount = {};
   list.forEach(function(r){ (r.itemsNo||[]).forEach(function(w){ iCount[w]=(iCount[w]||0)+1; }); });
@@ -31335,6 +31419,7 @@ function renderTopicAnalytics(){
   var genderEl = document.getElementById('tp-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('tp-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('tp-an-terms', list);
+  appendLeaderboard('tp-an-leaderboard', list, topicResults);
   var missedEl = document.getElementById('tp-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -31719,6 +31804,7 @@ function renderScienceAnalytics(){
   var genderEl = document.getElementById('sc-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('sc-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('sc-an-terms', list);
+  appendLeaderboard('sc-an-leaderboard', list, scienceResults);
   var missedEl = document.getElementById('sc-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -32103,6 +32189,7 @@ function renderReAnalytics(){
   var genderEl = document.getElementById('re-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('re-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('re-an-terms', list);
+  appendLeaderboard('re-an-leaderboard', list, reResults);
   var missedEl = document.getElementById('re-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -32812,6 +32899,7 @@ function renderMflAnalytics(){
   var genderEl = document.getElementById('mfl-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('mfl-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('mfl-an-terms', list);
+  appendLeaderboard('mfl-an-leaderboard', list, mflResults);
   var missedEl = document.getElementById('mfl-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -33202,6 +33290,7 @@ function renderMusicAnalytics(){
   var genderEl = document.getElementById('music-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('music-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('music-an-terms', list);
+  appendLeaderboard('music-an-leaderboard', list, musicResults);
   var missedEl = document.getElementById('music-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -33592,6 +33681,7 @@ function renderComputingAnalytics(){
   var genderEl = document.getElementById('computing-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('computing-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('computing-an-terms', list);
+  appendLeaderboard('computing-an-leaderboard', list, computingResults);
   var missedEl = document.getElementById('computing-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -33982,6 +34072,7 @@ function renderReasoningAnalytics(){
   var genderEl = document.getElementById('reasoning-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
   var needsEl = document.getElementById('reasoning-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('reasoning-an-terms', list);
+  appendLeaderboard('reasoning-an-leaderboard', list, reasoningResults);
   var missedEl = document.getElementById('reasoning-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
