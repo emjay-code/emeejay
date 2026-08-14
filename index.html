@@ -204,6 +204,15 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .leaderboard-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:13px;}
 .leaderboard-row:last-child{border-bottom:none;}
 .leaderboard-name{color:var(--text-primary);}
+.heatmap-wrap{overflow-x:auto;}
+.heatmap-table{border-collapse:collapse;width:100%;font-size:12.5px;}
+.heatmap-table th,.heatmap-table td{padding:6px 8px;text-align:center;border:0.5px solid var(--border);white-space:nowrap;}
+.heatmap-table th{background:var(--surface-3);font-weight:600;color:var(--text-secondary);}
+.heatmap-topic-col{text-align:left !important;font-weight:500;color:var(--text-primary);max-width:220px;white-space:normal !important;}
+.heatmap-cell.band-green{background:var(--bg-success);color:var(--text-success);font-weight:600;}
+.heatmap-cell.band-amber{background:var(--bg-warning);color:var(--text-warning);font-weight:600;}
+.heatmap-cell.band-red{background:var(--bg-danger);color:var(--text-danger);font-weight:600;}
+.heatmap-empty{color:var(--text-muted);}
 .trend-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--border);}
 .trend-row:last-child{border-bottom:none;}
 .trend-date{font-size:12px;color:var(--text-muted);min-width:70px;}
@@ -2392,6 +2401,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="mt-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="mt-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="mt-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="mt-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mt-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Maths check trends</h2>
@@ -2462,6 +2472,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="en-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="en-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="en-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="en-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="en-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">English check trends</h2>
@@ -2565,6 +2576,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="tp-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="tp-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="tp-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="tp-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="tp-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Topic check trends</h2>
@@ -2600,6 +2612,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="sc-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="sc-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="sc-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="sc-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="sc-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Science check trends</h2>
@@ -2635,6 +2648,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="re-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="re-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="re-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="re-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="re-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">RE check trends</h2>
@@ -2670,6 +2684,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="mfl-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="mfl-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="mfl-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="mfl-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mfl-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Languages check trends</h2>
@@ -2705,6 +2720,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="music-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="music-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="music-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="music-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="music-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Music check trends</h2>
@@ -2740,6 +2756,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="reasoning-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="reasoning-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="reasoning-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="reasoning-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="reasoning-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Reasoning check trends</h2>
@@ -2775,6 +2792,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="computing-an-needs"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="computing-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="computing-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="computing-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="computing-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Computing check trends</h2>
@@ -5065,6 +5083,69 @@ function appendLeaderboard(id, list, fullList){
   var board = buildLeaderboard(list, fullList);
   if(board) el.appendChild(board);
   else el.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">No repeat checks yet.</p>';
+}
+/* Topic x tier heatmap for the subjects whose result records carry both a
+   topic and a tier (Maths, English, Topics, Science, RE, Languages, Music,
+   Computing, Reasoning) - shows whole-school (or class-filtered) average
+   score per topic/tier combination, colour-coded red/amber/green. */
+function buildTopicHeatmap(list, topicFn, tierFn){
+  if(!list || !list.length) return null;
+  var TIER_ORDER = ['KS1','LKS2','UKS2'];
+  var cells = {};
+  var topicsSeen = [];
+  list.forEach(function(r){
+    var topic = topicFn(r) || 'Unknown';
+    var tier = tierFn(r) || 'Unknown';
+    if(!cells[topic]){ cells[topic] = {}; topicsSeen.push(topic); }
+    if(!cells[topic][tier]) cells[topic][tier] = [];
+    cells[topic][tier].push(pctOf(r));
+  });
+  topicsSeen.sort();
+  var tiersPresent = TIER_ORDER.filter(function(t){ return topicsSeen.some(function(topic){ return cells[topic][t]; }); });
+  var extraTiers = [];
+  topicsSeen.forEach(function(topic){ Object.keys(cells[topic]).forEach(function(t){ if(TIER_ORDER.indexOf(t)===-1 && extraTiers.indexOf(t)===-1) extraTiers.push(t); }); });
+  var allTiers = tiersPresent.concat(extraTiers.sort());
+  if(!allTiers.length) return null;
+
+  var wrap = document.createElement('div'); wrap.className = 'heatmap-wrap';
+  var table = document.createElement('table'); table.className = 'heatmap-table';
+  var thead = document.createElement('thead');
+  var headRow = document.createElement('tr');
+  var thTopic = document.createElement('th'); thTopic.textContent = 'Topic'; thTopic.className = 'heatmap-topic-col';
+  headRow.appendChild(thTopic);
+  allTiers.forEach(function(t){ var th = document.createElement('th'); th.textContent = t; headRow.appendChild(th); });
+  thead.appendChild(headRow); table.appendChild(thead);
+  var tbody = document.createElement('tbody');
+  topicsSeen.forEach(function(topic){
+    var tr = document.createElement('tr');
+    var tdTopic = document.createElement('td'); tdTopic.className = 'heatmap-topic-col'; tdTopic.textContent = topic;
+    tr.appendChild(tdTopic);
+    allTiers.forEach(function(t){
+      var td = document.createElement('td'); td.className = 'heatmap-cell';
+      var arr = cells[topic][t];
+      if(arr && arr.length){
+        var avg = Math.round(arr.reduce(function(a,b){return a+b;},0)/arr.length);
+        td.textContent = avg+'%';
+        td.classList.add(scoreBandClass(avg));
+        td.title = arr.length+(arr.length===1?' check':' checks');
+      } else {
+        td.textContent = '–';
+        td.classList.add('heatmap-empty');
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+  return wrap;
+}
+function appendTopicHeatmap(id, list, topicFn, tierFn){
+  var el = document.getElementById(id); if(!el) return;
+  el.innerHTML = '';
+  var chart = buildTopicHeatmap(list, topicFn, tierFn);
+  if(chart) el.appendChild(chart);
+  else el.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>';
 }
 function sortResultList(list, mode){
   var arr = list.slice();
@@ -9029,6 +9110,7 @@ function renderMathsAnalytics(){
   var needsEl = document.getElementById('mt-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('mt-an-terms', list);
   appendLeaderboard('mt-an-leaderboard', list, mathsResults);
+  appendTopicHeatmap('mt-an-heatmap', list, function(r){return r.topicLabel;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   var missedEl = document.getElementById('mt-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -11623,6 +11705,7 @@ function renderEnglishAnalytics(){
   var needsEl = document.getElementById('en-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('en-an-terms', list);
   appendLeaderboard('en-an-leaderboard', list, englishResults);
+  appendTopicHeatmap('en-an-heatmap', list, function(r){return r.topicLabel;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   var missedEl = document.getElementById('en-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -31420,6 +31503,7 @@ function renderTopicAnalytics(){
   var needsEl = document.getElementById('tp-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('tp-an-terms', list);
   appendLeaderboard('tp-an-leaderboard', list, topicResults);
+  appendTopicHeatmap('tp-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   var missedEl = document.getElementById('tp-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -31805,6 +31889,7 @@ function renderScienceAnalytics(){
   var needsEl = document.getElementById('sc-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('sc-an-terms', list);
   appendLeaderboard('sc-an-leaderboard', list, scienceResults);
+  appendTopicHeatmap('sc-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   var missedEl = document.getElementById('sc-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -32190,6 +32275,7 @@ function renderReAnalytics(){
   var needsEl = document.getElementById('re-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('re-an-terms', list);
   appendLeaderboard('re-an-leaderboard', list, reResults);
+  appendTopicHeatmap('re-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   var missedEl = document.getElementById('re-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -32900,6 +32986,7 @@ function renderMflAnalytics(){
   var needsEl = document.getElementById('mfl-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('mfl-an-terms', list);
   appendLeaderboard('mfl-an-leaderboard', list, mflResults);
+  appendTopicHeatmap('mfl-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   var missedEl = document.getElementById('mfl-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -33291,6 +33378,7 @@ function renderMusicAnalytics(){
   var needsEl = document.getElementById('music-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('music-an-terms', list);
   appendLeaderboard('music-an-leaderboard', list, musicResults);
+  appendTopicHeatmap('music-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   var missedEl = document.getElementById('music-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -33682,6 +33770,7 @@ function renderComputingAnalytics(){
   var needsEl = document.getElementById('computing-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('computing-an-terms', list);
   appendLeaderboard('computing-an-leaderboard', list, computingResults);
+  appendTopicHeatmap('computing-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   var missedEl = document.getElementById('computing-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -34073,6 +34162,7 @@ function renderReasoningAnalytics(){
   var needsEl = document.getElementById('reasoning-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
   appendTermChart('reasoning-an-terms', list);
   appendLeaderboard('reasoning-an-leaderboard', list, reasoningResults);
+  appendTopicHeatmap('reasoning-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   var missedEl = document.getElementById('reasoning-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
