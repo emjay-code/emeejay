@@ -186,9 +186,18 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .form-grid select,.form-grid input{width:100%;font-size:14px;}
 .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
 .bar-label{font-size:13px;color:var(--text-secondary);min-width:90px;}
-.bar-bg{flex:1;height:8px;background:var(--surface-3);border-radius:4px;overflow:hidden;}
+.bar-bg{flex:1;height:8px;background:var(--surface-3);border-radius:4px;overflow:hidden;background-image:linear-gradient(to right, var(--border-strong) 0 1px, transparent 1px),linear-gradient(to right, var(--border-strong) 0 1px, transparent 1px),linear-gradient(to right, var(--border-strong) 0 1px, transparent 1px);background-size:100% 100%;background-position:25% 0,50% 0,75% 0;background-repeat:no-repeat;}
 .bar-fill{height:100%;border-radius:4px;}
 .bar-val{font-size:13px;font-weight:500;color:var(--text-primary);min-width:36px;text-align:right;}
+.bar-chart-axis{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-muted);margin:-2px 0 10px 100px;}
+.donut-wrap{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.donut-chart-col{flex-shrink:0;}
+.donut-svg{width:110px;height:110px;transform:rotate(-90deg);transform-origin:50% 50%;display:block;}
+.donut-center-text{font-size:6px;font-weight:600;fill:var(--text-secondary);}
+.donut-legend{display:flex;flex-direction:column;gap:7px;font-size:12.5px;color:var(--text-secondary);}
+.donut-legend-item{display:flex;align-items:center;gap:7px;}
+.donut-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+.donut-empty{font-size:13px;color:var(--text-muted);}
 .trend-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--border);}
 .trend-row:last-child{border-bottom:none;}
 .trend-date{font-size:12px;color:var(--text-muted);min-width:70px;}
@@ -2302,6 +2311,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     </div>
     <div id="an-empty" class="empty-state" style="display:none;">No data yet. Complete some assessments first.</div>
     <div id="an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed sounds</h2><div id="an-missed"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="an-gender"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by year group</h2><div id="an-year"></div></div>
@@ -2320,6 +2330,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div id="bc-an-empty" class="empty-state" style="display:none;">No blending check data yet. Complete a blending check first.</div>
     <div id="bc-an-content" style="display:none;">
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Blending check overview</h2><div id="bc-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="bc-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed blending words</h2><div id="bc-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Blending check trends</h2>
@@ -2350,6 +2361,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div id="mt-an-empty" class="empty-state" style="display:none;">No Maths check data yet. Complete a Maths check first.</div>
     <div id="mt-an-content" style="display:none;">
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Maths check overview</h2><div id="mt-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="mt-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mt-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Maths check trends</h2>
@@ -2380,6 +2392,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div id="tt-an-empty" class="empty-state" style="display:none;">No times tables data yet. Complete a Times Tables Check first.</div>
     <div id="tt-an-content" style="display:none;">
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Times tables overview</h2><div id="tt-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="tt-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed facts</h2><div id="tt-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Times tables trends</h2>
@@ -2410,6 +2423,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div id="en-an-empty" class="empty-state" style="display:none;">No English check data yet. Complete an English check first.</div>
     <div id="en-an-content" style="display:none;">
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">English check overview</h2><div id="en-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="en-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="en-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">English check trends</h2>
@@ -2439,6 +2453,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     </div>
     <div id="hw-an-empty" class="empty-state" style="display:none;">No handwriting check data yet. Complete a handwriting check first.</div>
     <div id="hw-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="hw-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most difficult letters/words</h2><div id="hw-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Handwriting check trends</h2>
@@ -2498,6 +2513,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div id="tp-an-empty" class="empty-state" style="display:none;">No topic check data yet. Complete a topic check first.</div>
     <div id="tp-an-content" style="display:none;">
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic check overview</h2><div id="tp-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="tp-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="tp-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Topic check trends</h2>
@@ -2528,6 +2544,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div id="sc-an-empty" class="empty-state" style="display:none;">No science check data yet. Complete a science check first.</div>
     <div id="sc-an-content" style="display:none;">
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Science check overview</h2><div id="sc-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="sc-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="sc-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Science check trends</h2>
@@ -2558,6 +2575,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div id="re-an-empty" class="empty-state" style="display:none;">No RE check data yet. Complete a RE check first.</div>
     <div id="re-an-content" style="display:none;">
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">RE check overview</h2><div id="re-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="re-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="re-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">RE check trends</h2>
@@ -2588,6 +2606,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div id="mfl-an-empty" class="empty-state" style="display:none;">No Languages check data yet. Complete a Languages check first.</div>
     <div id="mfl-an-content" style="display:none;">
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Languages check overview</h2><div id="mfl-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="mfl-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mfl-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Languages check trends</h2>
@@ -2618,6 +2637,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div id="music-an-empty" class="empty-state" style="display:none;">No Music check data yet. Complete a Music check first.</div>
     <div id="music-an-content" style="display:none;">
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Music check overview</h2><div id="music-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="music-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="music-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Music check trends</h2>
@@ -2648,6 +2668,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div id="reasoning-an-empty" class="empty-state" style="display:none;">No Reasoning check data yet. Complete a Reasoning check first.</div>
     <div id="reasoning-an-content" style="display:none;">
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Reasoning check overview</h2><div id="reasoning-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="reasoning-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="reasoning-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Reasoning check trends</h2>
@@ -2678,6 +2699,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div id="computing-an-empty" class="empty-state" style="display:none;">No Computing check data yet. Complete a Computing check first.</div>
     <div id="computing-an-content" style="display:none;">
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Computing check overview</h2><div id="computing-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="computing-an-bands"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="computing-an-missed"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Computing check trends</h2>
@@ -4774,6 +4796,81 @@ function buildScoreDistribution(list){
   wrap.appendChild(row);
   return wrap;
 }
+/* Generic donut/pie chart built from plain SVG (no external chart library),
+   consistent with the sparkline/score-distribution approach used elsewhere
+   in this file. segments: [{label, count, color}]. centerText is shown in
+   the middle of the ring (e.g. total number of children). Returns null if
+   every segment is empty. */
+function buildDonutChart(segments, centerText){
+  var total = segments.reduce(function(a,s){return a+s.count;},0);
+  if(!total) return null;
+  var svgNS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(svgNS,'svg');
+  svg.setAttribute('viewBox','0 0 42 42');
+  svg.classList.add('donut-svg');
+  var bg = document.createElementNS(svgNS,'circle');
+  bg.setAttribute('cx','21'); bg.setAttribute('cy','21'); bg.setAttribute('r','15.9155');
+  bg.setAttribute('fill','transparent'); bg.setAttribute('stroke','var(--surface-3)'); bg.setAttribute('stroke-width','7');
+  svg.appendChild(bg);
+  var cumulative = 0;
+  segments.forEach(function(seg){
+    if(!seg.count) return;
+    var pct = (seg.count/total)*100;
+    var circle = document.createElementNS(svgNS,'circle');
+    circle.setAttribute('cx','21'); circle.setAttribute('cy','21'); circle.setAttribute('r','15.9155');
+    circle.setAttribute('fill','transparent');
+    circle.setAttribute('stroke', seg.color);
+    circle.setAttribute('stroke-width','7');
+    circle.setAttribute('stroke-dasharray', pct.toFixed(2)+' '+(100-pct).toFixed(2));
+    circle.setAttribute('stroke-dashoffset', (-cumulative).toFixed(2));
+    var title = document.createElementNS(svgNS,'title');
+    title.textContent = seg.label+': '+seg.count+(seg.count===1?' child':' children')+' ('+Math.round(pct)+'%)';
+    circle.appendChild(title);
+    svg.appendChild(circle);
+    cumulative += pct;
+  });
+  if(centerText){
+    var text = document.createElementNS(svgNS,'text');
+    text.setAttribute('x','21'); text.setAttribute('y','23.5'); text.setAttribute('text-anchor','middle');
+    text.setAttribute('transform','rotate(90 21 21)');
+    text.classList.add('donut-center-text');
+    text.textContent = centerText;
+    svg.appendChild(text);
+  }
+  var wrap = document.createElement('div'); wrap.className = 'donut-wrap';
+  var chartCol = document.createElement('div'); chartCol.className = 'donut-chart-col';
+  chartCol.appendChild(svg);
+  wrap.appendChild(chartCol);
+  var legend = document.createElement('div'); legend.className = 'donut-legend';
+  segments.forEach(function(seg){
+    var pct = Math.round((seg.count/total)*100);
+    var item = document.createElement('div'); item.className = 'donut-legend-item';
+    var swatch = document.createElement('span'); swatch.className = 'donut-swatch'; swatch.style.background = seg.color;
+    var lbl = document.createElement('span'); lbl.textContent = seg.label+' – '+seg.count+(seg.count===1?' child':' children')+' ('+pct+'%)';
+    item.appendChild(swatch); item.appendChild(lbl);
+    legend.appendChild(item);
+  });
+  wrap.appendChild(legend);
+  return wrap;
+}
+/* Red/amber/green score-band pie chart for an Analytics screen, using the
+   same pctOf()/scoreBandClass() thresholds as the pct pills elsewhere. */
+function buildScoreBandPie(list){
+  if(!list || !list.length) return null;
+  var bands = {green:0, amber:0, red:0};
+  list.forEach(function(r){
+    var cls = scoreBandClass(pctOf(r));
+    if(cls==='band-green') bands.green++;
+    else if(cls==='band-amber') bands.amber++;
+    else bands.red++;
+  });
+  var segments = [
+    {label:'80-100% (secure)', count:bands.green, color:'var(--fill-success)'},
+    {label:'50-79% (developing)', count:bands.amber, color:'var(--fill-warning)'},
+    {label:'Below 50% (needs support)', count:bands.red, color:'var(--fill-danger)'}
+  ];
+  return buildDonutChart(segments, list.length+(list.length===1?' child':' children'));
+}
 function sortResultList(list, mode){
   var arr = list.slice();
   if(mode==='score-desc') arr.sort(function(a,b){ return pctOf(b)-pctOf(a); });
@@ -5190,6 +5287,7 @@ function renderAnalytics(){
   if(!list.length){document.getElementById('an-empty').style.display='block';document.getElementById('an-empty').textContent = classFilter ? ('No data yet for '+classFilter+'.') : 'No data yet. Complete some assessments first.';document.getElementById('an-content').style.display='none';return;}
   document.getElementById('an-empty').style.display='none';document.getElementById('an-content').style.display='block';
 
+  var bandsEl = document.getElementById('an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl=document.getElementById('an-missed');missedEl.innerHTML='';
   var soundCount={};list.forEach(function(r){r.no.forEach(function(s){soundCount[s]=(soundCount[s]||0)+1;});});
   var sorted=Object.keys(soundCount).sort(function(a,b){return soundCount[b]-soundCount[a];}).slice(0,12);
@@ -5465,6 +5563,7 @@ function renderBlendingAnalytics(){
   overviewEl.appendChild(makeBar('Real words',avgReal,barColor(avgReal)));
   overviewEl.appendChild(makeBar('Pseudo-words',avgPseudo,barColor(avgPseudo)));
 
+  var bandsEl = document.getElementById('bc-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('bc-an-missed'); missedEl.innerHTML = '';
   var wordCount = {};
   list.forEach(function(r){ (r.missedWords||[]).forEach(function(w){ wordCount[w]=(wordCount[w]||0)+1; }); });
@@ -5807,6 +5906,7 @@ function renderTimesTablesAnalytics(){
   var avgTotal = Math.round(list.reduce(function(a,r){return a+(r.totalFacts? r.totalCorrect/r.totalFacts*100 : 0);},0)/list.length);
   overviewEl.appendChild(makeBar('Overall',avgTotal,barColor(avgTotal)));
 
+  var bandsEl = document.getElementById('tt-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('tt-an-missed'); missedEl.innerHTML = '';
   var factCount = {};
   list.forEach(function(r){ (r.missedFacts||[]).forEach(function(w){ factCount[w]=(factCount[w]||0)+1; }); });
@@ -8719,6 +8819,7 @@ function renderMathsAnalytics(){
     overviewEl.appendChild(makeBar(lbl, tierAvg, barColor(tierAvg)));
   });
 
+  var bandsEl = document.getElementById('mt-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('mt-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -11308,6 +11409,7 @@ function renderEnglishAnalytics(){
     overviewEl.appendChild(makeBar(lbl, tierAvg, barColor(tierAvg)));
   });
 
+  var bandsEl = document.getElementById('en-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('en-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -11804,6 +11906,7 @@ function renderHandwritingAnalytics(){
   if(!list.length){ emptyEl.style.display='block'; emptyEl.textContent = classFilter ? ('No handwriting check data yet for '+classFilter+'.') : 'No handwriting check data yet. Complete a handwriting check first.'; contentEl.style.display='none'; return; }
   emptyEl.style.display='none'; contentEl.style.display='block';
 
+  var bandsEl = document.getElementById('hw-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('hw-an-missed'); missedEl.innerHTML = '';
   var iCount = {};
   list.forEach(function(r){ (r.itemsNo||[]).forEach(function(w){ iCount[w]=(iCount[w]||0)+1; }); });
@@ -31090,6 +31193,7 @@ function renderTopicAnalytics(){
     overviewEl.appendChild(makeBar(lbl, subAvg, barColor(subAvg)));
   });
 
+  var bandsEl = document.getElementById('tp-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('tp-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -31470,6 +31574,7 @@ function renderScienceAnalytics(){
     overviewEl.appendChild(makeBar(lbl, subAvg, barColor(subAvg)));
   });
 
+  var bandsEl = document.getElementById('sc-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('sc-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -31850,6 +31955,7 @@ function renderReAnalytics(){
     overviewEl.appendChild(makeBar(lbl, subAvg, barColor(subAvg)));
   });
 
+  var bandsEl = document.getElementById('re-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('re-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -32555,6 +32661,7 @@ function renderMflAnalytics(){
     overviewEl.appendChild(makeBar(lbl, subAvg, barColor(subAvg)));
   });
 
+  var bandsEl = document.getElementById('mfl-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('mfl-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -32941,6 +33048,7 @@ function renderMusicAnalytics(){
     overviewEl.appendChild(makeBar(lbl, subAvg, barColor(subAvg)));
   });
 
+  var bandsEl = document.getElementById('music-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('music-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -33327,6 +33435,7 @@ function renderComputingAnalytics(){
     overviewEl.appendChild(makeBar(lbl, subAvg, barColor(subAvg)));
   });
 
+  var bandsEl = document.getElementById('computing-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('computing-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
@@ -33713,6 +33822,7 @@ function renderReasoningAnalytics(){
     overviewEl.appendChild(makeBar(lbl, subAvg, barColor(subAvg)));
   });
 
+  var bandsEl = document.getElementById('reasoning-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No score data yet.</p>'; } }
   var missedEl = document.getElementById('reasoning-an-missed'); missedEl.innerHTML = '';
   var qCount = {};
   list.forEach(function(r){ (r.missedQuestions||[]).forEach(function(w){ qCount[w]=(qCount[w]||0)+1; }); });
