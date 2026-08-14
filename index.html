@@ -2920,6 +2920,16 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 
     <div class="card" style="margin-bottom:0.75rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <div class="section-hd" style="margin-bottom:0;">Progress report</div>
+        <button class="all-btn" onclick="generateProgressReport()">Generate report</button>
+      </div>
+      <div id="tg-report-empty" style="font-size:13px;color:var(--text-muted);">Click &quot;Generate report&quot; for a short, parent-report-style paragraph summarising this child's progress in this subject, based on their assessment history.</div>
+      <p id="tg-report-text" style="font-size:13.5px;line-height:1.5;color:var(--text-primary);display:none;"></p>
+      <button class="all-btn" id="tg-report-copy" style="display:none;margin-top:0.5rem;" onclick="copyProgressReport(this)">Copy text</button>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
         <div class="section-hd" style="margin-bottom:0;">Suggested targets</div>
         <button class="all-btn" onclick="generateTargetSuggestions()">Generate suggestions</button>
       </div>
@@ -34502,6 +34512,12 @@ async function openTargetsDetail(p){
   var suggEmpty = document.getElementById('tg-suggestions-empty');
   suggEmpty.style.display = 'block';
   suggEmpty.textContent = 'Click "Generate suggestions" to see targets based on this child\'s assessment history in this subject.';
+  var reportText = document.getElementById('tg-report-text');
+  var reportEmpty = document.getElementById('tg-report-empty');
+  var reportCopy = document.getElementById('tg-report-copy');
+  if(reportText){ reportText.style.display = 'none'; reportText.textContent = ''; }
+  if(reportCopy) reportCopy.style.display = 'none';
+  if(reportEmpty){ reportEmpty.style.display = 'block'; reportEmpty.textContent = 'Click "Generate report" for a short, parent-report-style paragraph summarising this child\'s progress in this subject, based on their assessment history.'; }
   showRvScreen('tab-targets', 'tg-detail-screen');
   await loadSavedTargets();
 }
@@ -34759,6 +34775,112 @@ async function generateTargetSuggestions(){
     btn.onclick = function(){ saveSuggestedTarget(idx, btn); };
     row.appendChild(txt); row.appendChild(btn);
     wrapEl.appendChild(row);
+  });
+}
+function pronounFor(pupil){
+  var g = ((pupil && pupil.gender) || '').toLowerCase();
+  if(g === 'boy') return { subj:'he', obj:'him', poss:'his' };
+  if(g === 'girl') return { subj:'she', obj:'her', poss:'her' };
+  return { subj:'they', obj:'them', poss:'their' };
+}
+function buildReportWeakPhrase(subjectKey, bucket){
+  if(TOPIC_LABEL_SUBJECTS[subjectKey]){
+    return bucket.keywordMatch ? (bucket.label + (bucket.topicLabel ? ' in ' + bucket.topicLabel : '')) : bucket.label;
+  }
+  switch(subjectKey){
+    case 'phonics': return 'the sound "' + bucket.label + '"';
+    case 'blending': return 'blending ' + bucket.label;
+    case 'times-tables': return bucket.label;
+    case 'handwriting': return 'forming "' + bucket.label + '"';
+    case 'early_years': return bucket.label;
+    default: return '"' + bucket.label + '"';
+  }
+}
+async function generateProgressReport(){
+  if(!targetsPupil || !targetsSubjectKey) return;
+  var info = SUBJECT_TABLE_MAP[targetsSubjectKey];
+  var emptyEl = document.getElementById('tg-report-empty');
+  var textEl = document.getElementById('tg-report-text');
+  var copyBtn = document.getElementById('tg-report-copy');
+  textEl.style.display = 'none';
+  copyBtn.style.display = 'none';
+  emptyEl.style.display = 'block';
+  emptyEl.textContent = 'Loading…';
+  var subj = CHILD_PROFILE_SUBJECTS.find(function(s){ return s.key === targetsSubjectKey; });
+  var subjLabel = subj ? subj.label : targetsSubjectKey;
+  if(!info){ emptyEl.textContent = 'A progress report isn\'t available for this subject yet.'; return; }
+  var res = await sb.from(info.table).select('*').ilike('pupil_name', targetsPupil.name.trim());
+  if(res.error){ console.error(res.error); emptyEl.textContent = 'Could not load assessment history.'; return; }
+  var history = res.data.map(info.rowFn);
+  if(!history.length){ emptyEl.textContent = 'No ' + subjLabel + ' checks recorded for ' + targetsPupil.name + ' yet – complete an assessment first.'; return; }
+  history.sort(function(a,b){ return (a.ts||0) - (b.ts||0); });
+  var name = targetsPupil.name;
+  var pn = pronounFor(targetsPupil);
+  var have = pn.subj === 'they' ? 'have' : 'has';
+  var are = pn.subj === 'they' ? 'are' : 'is';
+  var checkCount = history.length;
+  var avgPct = Math.round(history.reduce(function(a,r){ return a + pctOf(r); }, 0) / checkCount);
+  var first = history[0], last = history[history.length - 1];
+  var firstDate = first.date || '', lastDate = last.date || '';
+  var band = scoreBandClass(avgPct);
+  var bandPhrase = band === 'band-green' ? 'working confidently in this subject' : (band === 'band-amber' ? 'making steady progress in this subject' : 'finding this subject challenging at the moment and would benefit from extra support');
+
+  var sentences = [];
+  sentences.push('Since ' + (firstDate || 'their first check') + ', ' + name + ' has completed ' + checkCount + (checkCount === 1 ? ' check' : ' checks') + ' in ' + subjLabel + (checkCount > 1 ? (', most recently on ' + lastDate) : '') + '.');
+  sentences.push(pn.subj.charAt(0).toUpperCase() + pn.subj.slice(1) + ' ' + have + ' an average score of ' + avgPct + '%, and ' + are + ' currently ' + bandPhrase + '.');
+
+  if(checkCount >= 2){
+    var pf = Math.round(pctOf(first)), pl = Math.round(pctOf(last));
+    var delta = pl - pf;
+    if(delta >= 6) sentences.push('Scores have improved from ' + pf + '% to ' + pl + '%, a pleasing upward trend.');
+    else if(delta <= -6) sentences.push('Scores have moved from ' + pf + '% to ' + pl + '%, a dip that may be worth keeping an eye on.');
+    else sentences.push('Scores have stayed fairly consistent, moving from ' + pf + '% to ' + pl + '%.');
+  }
+
+  if(TOPIC_LABEL_SUBJECTS[targetsSubjectKey]){
+    var topicGroups = {};
+    history.forEach(function(r){
+      var tl = r.topicLabel || null;
+      if(!tl) return;
+      if(!topicGroups[tl]) topicGroups[tl] = [];
+      topicGroups[tl].push(pctOf(r));
+    });
+    var topicKeys = Object.keys(topicGroups);
+    if(topicKeys.length >= 2){
+      var topicAvgs = topicKeys.map(function(k){ return { label:k, avg: topicGroups[k].reduce(function(a,b){ return a + b; }, 0) / topicGroups[k].length }; });
+      topicAvgs.sort(function(a,b){ return b.avg - a.avg; });
+      var best = topicAvgs[0], worst = topicAvgs[topicAvgs.length - 1];
+      if(best.label !== worst.label && (best.avg - worst.avg) >= 10){
+        sentences.push(pn.subj.charAt(0).toUpperCase() + pn.subj.slice(1) + ' ' + are + ' particularly confident with ' + best.label + ', while ' + worst.label + ' remains an area for development.');
+      }
+    }
+  }
+
+  var buckets = computeWeakAreaBuckets(targetsSubjectKey, history, info);
+  if(buckets.length){
+    var phrase = buildReportWeakPhrase(targetsSubjectKey, buckets[0]);
+    sentences.push('Further practice with ' + phrase + ' would be beneficial, as this has come up more than once in recent checks.');
+  }
+
+  if(savedTargetsList && savedTargetsList.length){
+    var achieved = savedTargetsList.filter(function(t){ return t.status === 'achieved'; }).length;
+    sentences.push(achieved + ' of ' + savedTargetsList.length + ' target' + (savedTargetsList.length === 1 ? '' : 's') + ' set for ' + subjLabel + ' ' + (savedTargetsList.length === 1 ? 'has' : 'have') + ' been achieved so far.');
+  }
+
+  emptyEl.style.display = 'none';
+  textEl.textContent = sentences.join(' ');
+  textEl.style.display = 'block';
+  copyBtn.style.display = 'inline-block';
+}
+function copyProgressReport(btnEl){
+  var textEl = document.getElementById('tg-report-text');
+  if(!textEl || !textEl.textContent) return;
+  navigator.clipboard.writeText(textEl.textContent).then(function(){
+    var orig = btnEl.textContent;
+    btnEl.textContent = 'Copied!';
+    setTimeout(function(){ btnEl.textContent = orig; }, 1500);
+  }).catch(function(){
+    alert('Could not copy automatically – please select and copy the text manually.');
   });
 }
 async function saveSuggestedTarget(idx, btnEl){
