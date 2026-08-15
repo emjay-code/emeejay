@@ -302,6 +302,14 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .target-status-select{font-size:12px;padding:3px 6px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-1);color:var(--text-secondary);}
 .target-status-select.status-achieved{color:var(--text-success);border-color:var(--text-success);}
 .target-status-select.status-in_progress{color:var(--hp-purple);border-color:var(--hp-purple);}
+.report-history-item{padding:0.55rem 0;border-bottom:0.5px solid var(--border-strong);}
+.report-history-item:last-child{border-bottom:none;}
+.report-history-date{font-size:11.5px;color:var(--text-muted);margin-bottom:2px;}
+.report-history-text{font-size:12.5px;color:var(--text-primary);white-space:pre-wrap;line-height:1.45;}
+.report-history-actions{margin-top:4px;display:flex;gap:12px;}
+.report-history-actions a{font-size:12px;}
+.report-term-select{font-size:12px;padding:4px 6px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-1);color:var(--text-secondary);}
+.report-textarea{width:100%;box-sizing:border-box;display:block;font-size:13.5px;line-height:1.5;color:var(--text-primary);font-family:inherit;padding:0.55rem;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-1);resize:vertical;}
 .subject-banner{border-radius:14px;padding:0.8rem 1rem;margin-bottom:0.85rem;display:flex;align-items:center;gap:10px;}
 .subject-banner .subject-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:15px;}
 .subject-banner-title{font-size:15px;font-weight:600;color:var(--text-primary);}
@@ -2906,9 +2914,36 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="card" style="margin-bottom:0.75rem;">
       <div class="section-hd" style="margin-bottom:0.75rem;" id="tg-pupil-subject-title"></div>
       <input type="text" id="tg-pupil-search" placeholder="Search by name" oninput="renderTargetsPupilPicker()" style="width:100%;"/>
+      <div style="margin-top:0.6rem;">
+        <a href="javascript:void(0)" onclick="openBatchReportScreen()" style="font-size:12.5px;">Generate progress reports for a whole class &rarr;</a>
+      </div>
     </div>
     <div id="tg-pupil-empty" class="empty-state" style="display:none;">No active children match.</div>
     <div id="tg-pupil-list"></div>
+  </div>
+
+  <div class="rv-screen" id="tg-batch-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsPupils()">&larr; Back to children</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;" id="tg-batch-title">Generate reports for a class</div>
+      <p style="font-size:13px;margin-bottom:0.6rem;">Choose a class and term to generate an editable progress report for every active child in that year group.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <select id="tg-batch-year" style="flex:1;min-width:140px;"></select>
+        <select id="tg-batch-term" class="report-term-select">
+          <option value="all">All time</option>
+          <option value="Autumn">Autumn term</option>
+          <option value="Spring">Spring term</option>
+          <option value="Summer">Summer term</option>
+        </select>
+        <button class="btn btn-primary" style="width:auto;margin-top:0;white-space:nowrap;" onclick="generateBatchReports()">Generate</button>
+      </div>
+    </div>
+    <div id="tg-batch-loading" style="display:none;font-size:13px;color:var(--text-muted);margin-bottom:0.75rem;">Generating&hellip;</div>
+    <div id="tg-batch-empty" class="empty-state" style="display:none;"></div>
+    <div id="tg-batch-toolbar" style="display:none;margin-bottom:0.75rem;">
+      <button class="all-btn" onclick="copyAllBatchReports(this)">Copy all</button>
+    </div>
+    <div id="tg-batch-results"></div>
   </div>
 
   <div class="rv-screen" id="tg-detail-screen">
@@ -2921,11 +2956,27 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="card" style="margin-bottom:0.75rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
         <div class="section-hd" style="margin-bottom:0;">Progress report</div>
-        <button class="all-btn" onclick="generateProgressReport()">Generate report</button>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <select id="tg-report-term" class="report-term-select">
+            <option value="all">All time</option>
+            <option value="Autumn">Autumn term</option>
+            <option value="Spring">Spring term</option>
+            <option value="Summer">Summer term</option>
+          </select>
+          <button class="all-btn" onclick="generateProgressReport()">Generate report</button>
+        </div>
       </div>
-      <div id="tg-report-empty" style="font-size:13px;color:var(--text-muted);">Click &quot;Generate report&quot; for a short, parent-report-style paragraph summarising this child's progress in this subject, based on their assessment history.</div>
-      <p id="tg-report-text" style="font-size:13.5px;line-height:1.5;color:var(--text-primary);display:none;"></p>
-      <button class="all-btn" id="tg-report-copy" style="display:none;margin-top:0.5rem;" onclick="copyProgressReport(this)">Copy text</button>
+      <div id="tg-report-empty" style="font-size:13px;color:var(--text-muted);">Click &quot;Generate report&quot; for a short, parent-report-style paragraph summarising this child's progress in this subject, based on their assessment history. You can edit the wording before copying.</div>
+      <textarea id="tg-report-text" class="report-textarea" style="display:none;min-height:110px;"></textarea>
+      <div id="tg-report-actions" style="display:none;gap:8px;margin-top:0.5rem;flex-wrap:wrap;">
+        <button class="all-btn" onclick="copyProgressReport(this)">Copy text</button>
+        <button class="all-btn" onclick="saveProgressReport(this)">Save to history</button>
+      </div>
+      <div style="margin-top:0.85rem;padding-top:0.75rem;border-top:0.5px solid var(--border-strong);">
+        <div class="section-hd" style="margin-bottom:0.4rem;font-size:13px;">Past reports</div>
+        <div id="tg-report-history-empty" style="font-size:12.5px;color:var(--text-muted);">No reports saved yet for this subject.</div>
+        <div id="tg-report-history"></div>
+      </div>
     </div>
 
     <div class="card" style="margin-bottom:0.75rem;">
@@ -34444,6 +34495,7 @@ var targetsPupil = null;
 var targetsPupilId = null;
 var targetSuggestionsCache = [];
 var savedTargetsList = [];
+var reportHistoryList = [];
 
 function renderTargetsSubjectGrid(){
   var grid = document.getElementById('tg-subject-grid');
@@ -34514,12 +34566,15 @@ async function openTargetsDetail(p){
   suggEmpty.textContent = 'Click "Generate suggestions" to see targets based on this child\'s assessment history in this subject.';
   var reportText = document.getElementById('tg-report-text');
   var reportEmpty = document.getElementById('tg-report-empty');
-  var reportCopy = document.getElementById('tg-report-copy');
-  if(reportText){ reportText.style.display = 'none'; reportText.textContent = ''; }
-  if(reportCopy) reportCopy.style.display = 'none';
-  if(reportEmpty){ reportEmpty.style.display = 'block'; reportEmpty.textContent = 'Click "Generate report" for a short, parent-report-style paragraph summarising this child\'s progress in this subject, based on their assessment history.'; }
+  var reportActions = document.getElementById('tg-report-actions');
+  var reportTerm = document.getElementById('tg-report-term');
+  if(reportText){ reportText.style.display = 'none'; reportText.value = ''; }
+  if(reportActions) reportActions.style.display = 'none';
+  if(reportTerm) reportTerm.value = 'all';
+  if(reportEmpty){ reportEmpty.style.display = 'block'; reportEmpty.textContent = 'Click "Generate report" for a short, parent-report-style paragraph summarising this child\'s progress in this subject, based on their assessment history. You can edit the wording before copying.'; }
   showRvScreen('tab-targets', 'tg-detail-screen');
   await loadSavedTargets();
+  await loadReportHistory();
 }
 async function loadSavedTargets(){
   if(!targetsPupilId) return;
@@ -34777,6 +34832,11 @@ async function generateTargetSuggestions(){
     wrapEl.appendChild(row);
   });
 }
+function hashStr(s){
+  var h = 0; s = String(s);
+  for(var i = 0; i < s.length; i++){ h = (h * 31 + s.charCodeAt(i)) | 0; }
+  return Math.abs(h);
+}
 function pronounFor(pupil){
   var g = ((pupil && pupil.gender) || '').toLowerCase();
   if(g === 'boy') return { subj:'he', obj:'him', poss:'his' };
@@ -34796,48 +34856,74 @@ function buildReportWeakPhrase(subjectKey, bucket){
     default: return '"' + bucket.label + '"';
   }
 }
-async function generateProgressReport(){
-  if(!targetsPupil || !targetsSubjectKey) return;
-  var info = SUBJECT_TABLE_MAP[targetsSubjectKey];
-  var emptyEl = document.getElementById('tg-report-empty');
-  var textEl = document.getElementById('tg-report-text');
-  var copyBtn = document.getElementById('tg-report-copy');
-  textEl.style.display = 'none';
-  copyBtn.style.display = 'none';
-  emptyEl.style.display = 'block';
-  emptyEl.textContent = 'Loading…';
-  var subj = CHILD_PROFILE_SUBJECTS.find(function(s){ return s.key === targetsSubjectKey; });
-  var subjLabel = subj ? subj.label : targetsSubjectKey;
-  if(!info){ emptyEl.textContent = 'A progress report isn\'t available for this subject yet.'; return; }
-  var res = await sb.from(info.table).select('*').ilike('pupil_name', targetsPupil.name.trim());
-  if(res.error){ console.error(res.error); emptyEl.textContent = 'Could not load assessment history.'; return; }
-  var history = res.data.map(info.rowFn);
-  if(!history.length){ emptyEl.textContent = 'No ' + subjLabel + ' checks recorded for ' + targetsPupil.name + ' yet – complete an assessment first.'; return; }
-  history.sort(function(a,b){ return (a.ts||0) - (b.ts||0); });
-  var name = targetsPupil.name;
-  var pn = pronounFor(targetsPupil);
+/* Pure text-building function shared by the single-child and whole-class
+   report flows. `history` is this pupil's own (already term-filtered,
+   chronologically-sorted) results for the subject; `classHistory` is the
+   term-filtered results of *other* pupils in the same year group (used for
+   the cohort-average sentence, pass [] to skip it); `targetsForPupil` is
+   this pupil's saved targets for the subject (pass [] to skip that line).
+   Sentence wording is varied deterministically per pupil+subject so the
+   same child's report is stable across regenerations but different
+   children don't all read identically. */
+function buildReportSentences(pupil, subjectKey, subjLabel, history, classHistory, termScope, targetsForPupil){
+  if(!history.length) return '';
+  var name = pupil.name;
+  var pn = pronounFor(pupil);
   var have = pn.subj === 'they' ? 'have' : 'has';
   var are = pn.subj === 'they' ? 'are' : 'is';
+  var Pn = pn.subj.charAt(0).toUpperCase() + pn.subj.slice(1);
+  var seed = hashStr((pupil.id || name) + subjectKey);
   var checkCount = history.length;
   var avgPct = Math.round(history.reduce(function(a,r){ return a + pctOf(r); }, 0) / checkCount);
   var first = history[0], last = history[history.length - 1];
   var firstDate = first.date || '', lastDate = last.date || '';
   var band = scoreBandClass(avgPct);
   var bandPhrase = band === 'band-green' ? 'working confidently in this subject' : (band === 'band-amber' ? 'making steady progress in this subject' : 'finding this subject challenging at the moment and would benefit from extra support');
+  var termPrefix = termScope === 'all' ? '' : (termScope + ' term ');
 
   var sentences = [];
-  sentences.push('Since ' + (firstDate || 'their first check') + ', ' + name + ' has completed ' + checkCount + (checkCount === 1 ? ' check' : ' checks') + ' in ' + subjLabel + (checkCount > 1 ? (', most recently on ' + lastDate) : '') + '.');
-  sentences.push(pn.subj.charAt(0).toUpperCase() + pn.subj.slice(1) + ' ' + have + ' an average score of ' + avgPct + '%, and ' + are + ' currently ' + bandPhrase + '.');
+
+  var openTemplates = [
+    function(){ return 'Since ' + (firstDate || 'their first check') + ', ' + name + ' has completed ' + checkCount + (checkCount === 1 ? ' check' : ' checks') + ' in ' + termPrefix + subjLabel + (checkCount > 1 ? (', most recently on ' + lastDate) : '') + '.'; },
+    function(){ return name + ' has been checked ' + (checkCount === 1 ? 'once' : (checkCount + ' times')) + ' in ' + termPrefix + subjLabel + (checkCount > 1 ? (', with the most recent check on ' + lastDate) : (' on ' + firstDate)) + '.'; },
+    function(){ return 'In ' + termPrefix + subjLabel + ', ' + name + ' has ' + checkCount + (checkCount === 1 ? ' recorded check' : ' recorded checks') + (checkCount > 1 ? (', running from ' + firstDate + ' to ' + lastDate) : (' so far, on ' + firstDate)) + '.'; }
+  ];
+  sentences.push(openTemplates[seed % openTemplates.length]());
+
+  var avgTemplates = [
+    function(){ return Pn + ' ' + have + ' an average score of ' + avgPct + '%, and ' + are + ' currently ' + bandPhrase + '.'; },
+    function(){ return 'Across these checks, ' + pn.subj + ' ' + have + ' averaged ' + avgPct + '%, and ' + are + ' currently ' + bandPhrase + '.'; },
+    function(){ return avgPct + '% is the average score across these checks, meaning ' + pn.subj + ' ' + are + ' currently ' + bandPhrase + '.'; }
+  ];
+  sentences.push(avgTemplates[seed % avgTemplates.length]());
+
+  if(classHistory && classHistory.length){
+    var classAvg = Math.round(classHistory.reduce(function(a,r){ return a + pctOf(r); }, 0) / classHistory.length);
+    var diff = avgPct - classAvg;
+    if(Math.abs(diff) >= 3) sentences.push('This is ' + Math.abs(diff) + ' percentage point' + (Math.abs(diff) === 1 ? '' : 's') + (diff > 0 ? ' above' : ' below') + ' the year group average of ' + classAvg + '%.');
+    else sentences.push('This is in line with the year group average of ' + classAvg + '%.');
+  }
 
   if(checkCount >= 2){
     var pf = Math.round(pctOf(first)), pl = Math.round(pctOf(last));
     var delta = pl - pf;
-    if(delta >= 6) sentences.push('Scores have improved from ' + pf + '% to ' + pl + '%, a pleasing upward trend.');
-    else if(delta <= -6) sentences.push('Scores have moved from ' + pf + '% to ' + pl + '%, a dip that may be worth keeping an eye on.');
-    else sentences.push('Scores have stayed fairly consistent, moving from ' + pf + '% to ' + pl + '%.');
+    var trendTemplates;
+    if(delta >= 6) trendTemplates = [
+      function(){ return 'Scores have improved from ' + pf + '% to ' + pl + '%, a pleasing upward trend.'; },
+      function(){ return Pn + ' scores have risen from ' + pf + '% to ' + pl + '%, which is great progress.'; }
+    ];
+    else if(delta <= -6) trendTemplates = [
+      function(){ return 'Scores have moved from ' + pf + '% to ' + pl + '%, a dip that may be worth keeping an eye on.'; },
+      function(){ return 'There has been a slight fall from ' + pf + '% to ' + pl + '%, which we will keep monitoring.'; }
+    ];
+    else trendTemplates = [
+      function(){ return 'Scores have stayed fairly consistent, moving from ' + pf + '% to ' + pl + '%.'; },
+      function(){ return pf + '% to ' + pl + '% shows a steady, consistent picture across these checks.'; }
+    ];
+    sentences.push(trendTemplates[seed % trendTemplates.length]());
   }
 
-  if(TOPIC_LABEL_SUBJECTS[targetsSubjectKey]){
+  if(TOPIC_LABEL_SUBJECTS[subjectKey]){
     var topicGroups = {};
     history.forEach(function(r){
       var tl = r.topicLabel || null;
@@ -34851,36 +34937,247 @@ async function generateProgressReport(){
       topicAvgs.sort(function(a,b){ return b.avg - a.avg; });
       var best = topicAvgs[0], worst = topicAvgs[topicAvgs.length - 1];
       if(best.label !== worst.label && (best.avg - worst.avg) >= 10){
-        sentences.push(pn.subj.charAt(0).toUpperCase() + pn.subj.slice(1) + ' ' + are + ' particularly confident with ' + best.label + ', while ' + worst.label + ' remains an area for development.');
+        sentences.push(Pn + ' ' + are + ' particularly confident with ' + best.label + ', while ' + worst.label + ' remains an area for development.');
       }
     }
   }
 
-  var buckets = computeWeakAreaBuckets(targetsSubjectKey, history, info);
+  var info = SUBJECT_TABLE_MAP[subjectKey];
+  var buckets = computeWeakAreaBuckets(subjectKey, history, info);
   if(buckets.length){
-    var phrase = buildReportWeakPhrase(targetsSubjectKey, buckets[0]);
-    sentences.push('Further practice with ' + phrase + ' would be beneficial, as this has come up more than once in recent checks.');
+    var phrase = buildReportWeakPhrase(subjectKey, buckets[0]);
+    var practiceTemplates = [
+      function(){ return 'Further practice with ' + phrase + ' would be beneficial, as this has come up more than once in recent checks.'; },
+      function(){ return 'Going forward, focusing on ' + phrase + ' should help build on this progress.'; }
+    ];
+    sentences.push(practiceTemplates[seed % practiceTemplates.length]());
   }
 
-  if(savedTargetsList && savedTargetsList.length){
-    var achieved = savedTargetsList.filter(function(t){ return t.status === 'achieved'; }).length;
-    sentences.push(achieved + ' of ' + savedTargetsList.length + ' target' + (savedTargetsList.length === 1 ? '' : 's') + ' set for ' + subjLabel + ' ' + (savedTargetsList.length === 1 ? 'has' : 'have') + ' been achieved so far.');
+  if(targetsForPupil && targetsForPupil.length){
+    var achieved = targetsForPupil.filter(function(t){ return t.status === 'achieved'; }).length;
+    sentences.push(achieved + ' of ' + targetsForPupil.length + ' target' + (targetsForPupil.length === 1 ? '' : 's') + ' set for ' + subjLabel + ' ' + (targetsForPupil.length === 1 ? 'has' : 'have') + ' been achieved so far.');
   }
 
+  return sentences.join(' ');
+}
+async function generateProgressReport(){
+  if(!targetsPupil || !targetsSubjectKey) return;
+  var info = SUBJECT_TABLE_MAP[targetsSubjectKey];
+  var emptyEl = document.getElementById('tg-report-empty');
+  var textEl = document.getElementById('tg-report-text');
+  var actionsEl = document.getElementById('tg-report-actions');
+  var termScope = (document.getElementById('tg-report-term') || {}).value || 'all';
+  textEl.style.display = 'none';
+  actionsEl.style.display = 'none';
+  emptyEl.style.display = 'block';
+  emptyEl.textContent = 'Loading…';
+  var subj = CHILD_PROFILE_SUBJECTS.find(function(s){ return s.key === targetsSubjectKey; });
+  var subjLabel = subj ? subj.label : targetsSubjectKey;
+  if(!info){ emptyEl.textContent = 'A progress report isn\'t available for this subject yet.'; return; }
+  var res = await sb.from(info.table).select('*').ilike('pupil_name', targetsPupil.name.trim());
+  if(res.error){ console.error(res.error); emptyEl.textContent = 'Could not load assessment history.'; return; }
+  var history = res.data.map(info.rowFn);
+  if(termScope !== 'all') history = history.filter(function(r){ return getTerm(r.date) === termScope; });
+  if(!history.length){ emptyEl.textContent = 'No ' + subjLabel + ' checks recorded for ' + targetsPupil.name + (termScope !== 'all' ? ' in the ' + termScope + ' term' : '') + ' yet.'; return; }
+  history.sort(function(a,b){ return (a.ts||0) - (b.ts||0); });
+
+  var classHistory = [];
+  if(targetsPupil.year){
+    var cres = await sb.from(info.table).select('*').eq('year_group', targetsPupil.year);
+    if(!cres.error){
+      classHistory = cres.data.map(info.rowFn).filter(function(r){ return (r.name||'').trim().toLowerCase() !== targetsPupil.name.trim().toLowerCase(); });
+      if(termScope !== 'all') classHistory = classHistory.filter(function(r){ return getTerm(r.date) === termScope; });
+    }
+  }
+
+  var text = buildReportSentences(targetsPupil, targetsSubjectKey, subjLabel, history, classHistory, termScope, savedTargetsList);
   emptyEl.style.display = 'none';
-  textEl.textContent = sentences.join(' ');
+  textEl.value = text;
   textEl.style.display = 'block';
-  copyBtn.style.display = 'inline-block';
+  actionsEl.style.display = 'flex';
 }
 function copyProgressReport(btnEl){
   var textEl = document.getElementById('tg-report-text');
-  if(!textEl || !textEl.textContent) return;
-  navigator.clipboard.writeText(textEl.textContent).then(function(){
+  if(!textEl || !textEl.value) return;
+  navigator.clipboard.writeText(textEl.value).then(function(){
     var orig = btnEl.textContent;
     btnEl.textContent = 'Copied!';
     setTimeout(function(){ btnEl.textContent = orig; }, 1500);
   }).catch(function(){
     alert('Could not copy automatically – please select and copy the text manually.');
+  });
+}
+async function saveProgressReport(btnEl){
+  if(isDemoSchool()){ alert('This is the shared demo account, so reports can\'t be saved here.'); return; }
+  var textEl = document.getElementById('tg-report-text');
+  if(!textEl || !textEl.value.trim() || !targetsPupil) return;
+  var termScope = (document.getElementById('tg-report-term') || {}).value || 'all';
+  var orig = btnEl.textContent;
+  btnEl.disabled = true; btnEl.textContent = 'Saving…';
+  var row = {
+    school_id: currentProfile.school_id,
+    teacher_id: currentUser.id,
+    pupil_id: targetsPupilId,
+    pupil_name: targetsPupil.name,
+    subject_key: targetsSubjectKey,
+    term_scope: termScope,
+    report_text: textEl.value.trim()
+  };
+  var ins = await sb.from('progress_reports').insert(row).select().single();
+  btnEl.disabled = false; btnEl.textContent = orig;
+  if(ins.error){ alert('Could not save report: ' + ins.error.message); return; }
+  await loadReportHistory();
+}
+async function loadReportHistory(){
+  var listEl = document.getElementById('tg-report-history');
+  var emptyEl = document.getElementById('tg-report-history-empty');
+  if(!listEl || !targetsPupilId) return;
+  var res = await sb.from('progress_reports').select('*').eq('pupil_id', targetsPupilId).eq('subject_key', targetsSubjectKey).order('created_at', { ascending:false });
+  if(res.error){ console.error(res.error); reportHistoryList = []; }
+  else { reportHistoryList = res.data || []; }
+  listEl.innerHTML = '';
+  emptyEl.style.display = reportHistoryList.length ? 'none' : 'block';
+  reportHistoryList.forEach(function(r){
+    var item = document.createElement('div'); item.className = 'report-history-item';
+    var dateEl = document.createElement('div'); dateEl.className = 'report-history-date';
+    var d = new Date(r.created_at);
+    var dateStr = isNaN(d) ? '' : d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+    dateEl.textContent = dateStr + ' · ' + (r.term_scope && r.term_scope !== 'all' ? (r.term_scope + ' term') : 'all time');
+    var txtEl = document.createElement('div'); txtEl.className = 'report-history-text'; txtEl.textContent = r.report_text;
+    var actions = document.createElement('div'); actions.className = 'report-history-actions';
+    var useBtn = document.createElement('a'); useBtn.href = 'javascript:void(0)'; useBtn.textContent = 'Load into editor';
+    useBtn.onclick = function(){
+      var te = document.getElementById('tg-report-text');
+      te.value = r.report_text; te.style.display = 'block';
+      document.getElementById('tg-report-empty').style.display = 'none';
+      document.getElementById('tg-report-actions').style.display = 'flex';
+    };
+    var delBtn = document.createElement('a'); delBtn.href = 'javascript:void(0)'; delBtn.textContent = 'Delete'; delBtn.style.color = 'var(--text-danger,#c0392b)';
+    delBtn.onclick = function(){ deleteReportHistoryItem(r.id); };
+    actions.appendChild(useBtn); actions.appendChild(delBtn);
+    item.appendChild(dateEl); item.appendChild(txtEl); item.appendChild(actions);
+    listEl.appendChild(item);
+  });
+}
+async function deleteReportHistoryItem(id){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its sample data can\'t be changed.'); return; }
+  if(!confirm('Delete this saved report?')) return;
+  var del = await sb.from('progress_reports').delete().eq('id', id);
+  if(del.error){ alert('Could not delete: ' + del.error.message); return; }
+  await loadReportHistory();
+}
+function openBatchReportScreen(){
+  if(!targetsSubjectKey) return;
+  var subj = CHILD_PROFILE_SUBJECTS.find(function(s){ return s.key === targetsSubjectKey; });
+  document.getElementById('tg-batch-title').textContent = 'Generate reports for a class – ' + (subj ? subj.label : targetsSubjectKey);
+  var yearSel = document.getElementById('tg-batch-year');
+  yearSel.innerHTML = '';
+  var years = {};
+  activePupils().forEach(function(p){ if(p.year) years[p.year] = true; });
+  YEAR_GROUP_ORDER.forEach(function(y){
+    if(!years[y]) return;
+    var opt = document.createElement('option'); opt.value = y; opt.textContent = y;
+    yearSel.appendChild(opt);
+  });
+  document.getElementById('tg-batch-results').innerHTML = '';
+  document.getElementById('tg-batch-toolbar').style.display = 'none';
+  document.getElementById('tg-batch-empty').style.display = 'none';
+  showRvScreen('tab-targets', 'tg-batch-screen');
+}
+async function generateBatchReports(){
+  if(!targetsSubjectKey) return;
+  var info = SUBJECT_TABLE_MAP[targetsSubjectKey];
+  var subj = CHILD_PROFILE_SUBJECTS.find(function(s){ return s.key === targetsSubjectKey; });
+  var subjLabel = subj ? subj.label : targetsSubjectKey;
+  var year = document.getElementById('tg-batch-year').value;
+  var termScope = document.getElementById('tg-batch-term').value;
+  var resultsEl = document.getElementById('tg-batch-results');
+  var emptyEl = document.getElementById('tg-batch-empty');
+  var loadingEl = document.getElementById('tg-batch-loading');
+  var toolbarEl = document.getElementById('tg-batch-toolbar');
+  resultsEl.innerHTML = ''; toolbarEl.style.display = 'none'; emptyEl.style.display = 'none';
+  if(!info || !year) return;
+  loadingEl.style.display = 'block';
+  var pupils = activePupils().filter(function(p){ return p.year === year; }).sort(function(a,b){ return a.name.localeCompare(b.name); });
+  var res = await sb.from(info.table).select('*').eq('year_group', year);
+  if(res.error){ console.error(res.error); loadingEl.style.display = 'none'; emptyEl.textContent = 'Could not load assessment history.'; emptyEl.style.display = 'block'; return; }
+  var allHistory = res.data.map(info.rowFn);
+  if(termScope !== 'all') allHistory = allHistory.filter(function(r){ return getTerm(r.date) === termScope; });
+
+  var pupilIds = pupils.map(function(p){ return p.id; });
+  var targetsByPupil = {};
+  if(pupilIds.length){
+    var tres = await sb.from('pupil_targets').select('*').eq('subject_key', targetsSubjectKey).in('pupil_id', pupilIds);
+    if(!tres.error){
+      (tres.data || []).forEach(function(t){ (targetsByPupil[t.pupil_id] = targetsByPupil[t.pupil_id] || []).push(t); });
+    }
+  }
+
+  var any = false;
+  pupils.forEach(function(p){
+    var mine = allHistory.filter(function(r){ return (r.name||'').trim().toLowerCase() === p.name.trim().toLowerCase(); }).sort(function(a,b){ return (a.ts||0) - (b.ts||0); });
+    if(!mine.length) return;
+    var others = allHistory.filter(function(r){ return (r.name||'').trim().toLowerCase() !== p.name.trim().toLowerCase(); });
+    var text = buildReportSentences(p, targetsSubjectKey, subjLabel, mine, others, termScope, targetsByPupil[p.id] || []);
+    any = true;
+    resultsEl.appendChild(buildBatchResultCard(p, text));
+  });
+  loadingEl.style.display = 'none';
+  emptyEl.textContent = 'No children in this class have ' + subjLabel + ' checks' + (termScope !== 'all' ? ' in the ' + termScope + ' term' : '') + ' yet.';
+  emptyEl.style.display = any ? 'none' : 'block';
+  toolbarEl.style.display = any ? 'block' : 'none';
+}
+function buildBatchResultCard(pupil, text){
+  var card = document.createElement('div'); card.className = 'card'; card.style.marginBottom = '0.75rem';
+  var nameEl = document.createElement('div'); nameEl.className = 'batch-report-name'; nameEl.style.cssText = 'font-weight:600;margin-bottom:0.4rem;';
+  nameEl.textContent = pupil.name;
+  var ta = document.createElement('textarea');
+  ta.className = 'report-textarea batch-report-textarea';
+  ta.value = text;
+  ta.style.minHeight = '100px';
+  var actions = document.createElement('div'); actions.style.cssText = 'display:flex;gap:8px;margin-top:0.5rem;';
+  var copyBtn = document.createElement('button'); copyBtn.type = 'button'; copyBtn.className = 'all-btn'; copyBtn.textContent = 'Copy';
+  copyBtn.onclick = function(){
+    navigator.clipboard.writeText(ta.value).then(function(){ copyBtn.textContent = 'Copied!'; setTimeout(function(){ copyBtn.textContent = 'Copy'; }, 1500); });
+  };
+  var saveBtn = document.createElement('button'); saveBtn.type = 'button'; saveBtn.className = 'all-btn'; saveBtn.textContent = 'Save to history';
+  saveBtn.onclick = function(){ saveBatchReport(pupil, ta, saveBtn); };
+  actions.appendChild(copyBtn); actions.appendChild(saveBtn);
+  card.appendChild(nameEl); card.appendChild(ta); card.appendChild(actions);
+  return card;
+}
+async function saveBatchReport(pupil, textareaEl, btnEl){
+  if(isDemoSchool()){ alert('This is the shared demo account, so reports can\'t be saved here.'); return; }
+  var termScope = document.getElementById('tg-batch-term').value;
+  var orig = btnEl.textContent;
+  btnEl.disabled = true; btnEl.textContent = 'Saving…';
+  var row = {
+    school_id: currentProfile.school_id,
+    teacher_id: currentUser.id,
+    pupil_id: pupil.id,
+    pupil_name: pupil.name,
+    subject_key: targetsSubjectKey,
+    term_scope: termScope,
+    report_text: textareaEl.value.trim()
+  };
+  var ins = await sb.from('progress_reports').insert(row).select().single();
+  btnEl.disabled = false;
+  btnEl.textContent = ins.error ? 'Failed' : 'Saved';
+  if(ins.error) alert('Could not save report: ' + ins.error.message);
+  setTimeout(function(){ btnEl.textContent = orig; }, 1500);
+}
+function copyAllBatchReports(btnEl){
+  var resultsEl = document.getElementById('tg-batch-results');
+  var parts = [];
+  resultsEl.querySelectorAll(':scope > div').forEach(function(card){
+    var nameEl = card.querySelector('.batch-report-name');
+    var ta = card.querySelector('.batch-report-textarea');
+    if(ta) parts.push((nameEl ? nameEl.textContent : '') + '\n' + ta.value);
+  });
+  var orig = btnEl.textContent;
+  navigator.clipboard.writeText(parts.join('\n\n')).then(function(){
+    btnEl.textContent = 'Copied!';
+    setTimeout(function(){ btnEl.textContent = orig; }, 1500);
   });
 }
 async function saveSuggestedTarget(idx, btnEl){
