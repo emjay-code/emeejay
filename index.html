@@ -2981,6 +2981,24 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 
     <div class="card" style="margin-bottom:0.75rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <div class="section-hd" style="margin-bottom:0;">Full year report (all subjects)</div>
+        <button class="all-btn" onclick="generateFullYearReport()">Generate full year report</button>
+      </div>
+      <div id="tg-fullyear-empty" style="font-size:13px;color:var(--text-muted);">Click &quot;Generate full year report&quot; for one combined report covering every subject this child has been assessed in this year, grouped by term (Autumn, Spring, Summer). You can edit the wording before copying.</div>
+      <textarea id="tg-fullyear-text" class="report-textarea" style="display:none;min-height:220px;"></textarea>
+      <div id="tg-fullyear-actions" style="display:none;gap:8px;margin-top:0.5rem;flex-wrap:wrap;">
+        <button class="all-btn" onclick="copyFullYearReport(this)">Copy text</button>
+        <button class="all-btn" onclick="saveFullYearReport(this)">Save to history</button>
+      </div>
+      <div style="margin-top:0.85rem;padding-top:0.75rem;border-top:0.5px solid var(--border-strong);">
+        <div class="section-hd" style="margin-bottom:0.4rem;font-size:13px;">Past full year reports</div>
+        <div id="tg-fullyear-history-empty" style="font-size:12.5px;color:var(--text-muted);">No full year reports saved yet.</div>
+        <div id="tg-fullyear-history"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
         <div class="section-hd" style="margin-bottom:0;">Suggested targets</div>
         <button class="all-btn" onclick="generateTargetSuggestions()">Generate suggestions</button>
       </div>
@@ -34293,9 +34311,16 @@ async function openTargetsDetail(p){
   if(reportActions) reportActions.style.display = 'none';
   if(reportTerm) reportTerm.value = 'all';
   if(reportEmpty){ reportEmpty.style.display = 'block'; reportEmpty.textContent = 'Click "Generate report" for a short, parent-report-style paragraph summarising this child\'s progress in this subject, based on their assessment history. You can edit the wording before copying.'; }
+  var fyText = document.getElementById('tg-fullyear-text');
+  var fyEmpty = document.getElementById('tg-fullyear-empty');
+  var fyActions = document.getElementById('tg-fullyear-actions');
+  if(fyText){ fyText.style.display = 'none'; fyText.value = ''; }
+  if(fyActions) fyActions.style.display = 'none';
+  if(fyEmpty){ fyEmpty.style.display = 'block'; fyEmpty.textContent = 'Click "Generate full year report" for one combined report covering every subject this child has been assessed in this year, grouped by term (Autumn, Spring, Summer). You can edit the wording before copying.'; }
   showRvScreen('tab-targets', 'tg-detail-screen');
   await loadSavedTargets();
   await loadReportHistory();
+  await loadFullYearReportHistory();
 }
 async function loadSavedTargets(){
   if(!targetsPupilId) return;
@@ -35044,6 +35069,136 @@ async function deleteReportHistoryItem(id){
   var del = await sb.from('progress_reports').delete().eq('id', id);
   if(del.error){ alert('Could not delete: ' + del.error.message); return; }
   await loadReportHistory();
+}
+/* Whole-year, all-subject report: loops every subject this pupil has any
+   assessment data for, groups each subject's history by term, and builds
+   one combined report grouped Autumn -> Spring -> Summer, subject by
+   subject within each term. Reuses buildReportSentences per subject+term
+   (no class-average or target-achievement line, to keep it a readable
+   overview rather than repeating the same detail as the per-subject
+   report). Saved to progress_reports with a 'full_year' sentinel subject
+   key so it doesn't mix into any single subject's report history. */
+var FULL_YEAR_TERM_ORDER = ['Autumn', 'Spring', 'Summer'];
+async function generateFullYearReport(){
+  if(!targetsPupil) return;
+  var emptyEl = document.getElementById('tg-fullyear-empty');
+  var textEl = document.getElementById('tg-fullyear-text');
+  var actionsEl = document.getElementById('tg-fullyear-actions');
+  textEl.style.display = 'none';
+  actionsEl.style.display = 'none';
+  emptyEl.style.display = 'block';
+  emptyEl.textContent = 'Loading…';
+
+  var fetches = CHILD_PROFILE_SUBJECTS.map(function(subj){
+    var info = SUBJECT_TABLE_MAP[subj.key];
+    if(!info) return Promise.resolve(null);
+    return sb.from(info.table).select('*').ilike('pupil_name', targetsPupil.name.trim()).then(function(res){
+      return { subj: subj, info: info, res: res };
+    });
+  });
+  var results;
+  try { results = await Promise.all(fetches); }
+  catch(e){ console.error(e); emptyEl.textContent = 'Could not load assessment history.'; return; }
+
+  var sections = {}; FULL_YEAR_TERM_ORDER.forEach(function(t){ sections[t] = []; });
+  results.forEach(function(r){
+    if(!r || r.res.error || !r.res.data || !r.res.data.length) return;
+    var history = r.res.data.map(r.info.rowFn);
+    history.sort(function(a,b){ return (a.ts||0) - (b.ts||0); });
+    FULL_YEAR_TERM_ORDER.forEach(function(term){
+      var termHistory = history.filter(function(row){ return getTerm(row.date) === term; });
+      if(!termHistory.length) return;
+      var text = buildReportSentences(targetsPupil, r.subj.key, r.subj.label, termHistory, [], term, []);
+      if(text) sections[term].push({ label: r.subj.label, text: text });
+    });
+  });
+
+  var hasAny = FULL_YEAR_TERM_ORDER.some(function(t){ return sections[t].length; });
+  if(!hasAny){
+    emptyEl.textContent = 'No assessments recorded for ' + targetsPupil.name + ' yet this year.';
+    return;
+  }
+
+  var parts = [];
+  FULL_YEAR_TERM_ORDER.forEach(function(term){
+    if(!sections[term].length) return;
+    parts.push(term.toUpperCase() + ' TERM');
+    sections[term].forEach(function(s){ parts.push(s.label + ': ' + s.text); });
+  });
+  var fullText = parts.join('\n\n');
+
+  emptyEl.style.display = 'none';
+  textEl.value = fullText;
+  textEl.style.display = 'block';
+  actionsEl.style.display = 'flex';
+}
+function copyFullYearReport(btnEl){
+  var textEl = document.getElementById('tg-fullyear-text');
+  if(!textEl || !textEl.value) return;
+  navigator.clipboard.writeText(textEl.value).then(function(){
+    var orig = btnEl.textContent;
+    btnEl.textContent = 'Copied!';
+    setTimeout(function(){ btnEl.textContent = orig; }, 1500);
+  }).catch(function(){
+    alert('Could not copy automatically – please select and copy the text manually.');
+  });
+}
+async function saveFullYearReport(btnEl){
+  if(isDemoSchool()){ alert('This is the shared demo account, so reports can\'t be saved here.'); return; }
+  var textEl = document.getElementById('tg-fullyear-text');
+  if(!textEl || !textEl.value.trim() || !targetsPupil) return;
+  var orig = btnEl.textContent;
+  btnEl.disabled = true; btnEl.textContent = 'Saving…';
+  var row = {
+    school_id: currentProfile.school_id,
+    teacher_id: currentUser.id,
+    pupil_id: targetsPupilId,
+    pupil_name: targetsPupil.name,
+    subject_key: 'full_year',
+    term_scope: 'all',
+    report_text: textEl.value.trim()
+  };
+  var ins = await sb.from('progress_reports').insert(row).select().single();
+  btnEl.disabled = false; btnEl.textContent = orig;
+  if(ins.error){ alert('Could not save report: ' + ins.error.message); return; }
+  await loadFullYearReportHistory();
+}
+async function loadFullYearReportHistory(){
+  var listEl = document.getElementById('tg-fullyear-history');
+  var emptyEl = document.getElementById('tg-fullyear-history-empty');
+  if(!listEl || !targetsPupilId) return;
+  var res = await sb.from('progress_reports').select('*').eq('pupil_id', targetsPupilId).eq('subject_key', 'full_year').order('created_at', { ascending:false });
+  var list = res.error ? [] : (res.data || []);
+  if(res.error) console.error(res.error);
+  listEl.innerHTML = '';
+  emptyEl.style.display = list.length ? 'none' : 'block';
+  list.forEach(function(r){
+    var item = document.createElement('div'); item.className = 'report-history-item';
+    var dateEl = document.createElement('div'); dateEl.className = 'report-history-date';
+    var d = new Date(r.created_at);
+    dateEl.textContent = isNaN(d) ? '' : d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+    var txtEl = document.createElement('div'); txtEl.className = 'report-history-text'; txtEl.textContent = r.report_text;
+    var actions = document.createElement('div'); actions.className = 'report-history-actions';
+    var useBtn = document.createElement('a'); useBtn.href = 'javascript:void(0)'; useBtn.textContent = 'Load into editor';
+    useBtn.onclick = function(){
+      var te = document.getElementById('tg-fullyear-text');
+      te.value = r.report_text; te.style.display = 'block';
+      document.getElementById('tg-fullyear-empty').style.display = 'none';
+      document.getElementById('tg-fullyear-actions').style.display = 'flex';
+    };
+    var delBtn = document.createElement('a'); delBtn.href = 'javascript:void(0)'; delBtn.textContent = 'Delete'; delBtn.style.color = 'var(--text-danger,#c0392b)';
+    delBtn.onclick = function(){ deleteFullYearReportHistoryItem(r.id); };
+    actions.appendChild(useBtn); actions.appendChild(delBtn);
+    item.appendChild(dateEl); item.appendChild(txtEl); item.appendChild(actions);
+    listEl.appendChild(item);
+  });
+}
+async function deleteFullYearReportHistoryItem(id){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its sample data can\'t be changed.'); return; }
+  if(!confirm('Delete this saved report?')) return;
+  var del = await sb.from('progress_reports').delete().eq('id', id);
+  if(del.error){ alert('Could not delete: ' + del.error.message); return; }
+  await loadFullYearReportHistory();
 }
 function openBatchReportScreen(){
   if(!targetsSubjectKey) return;
