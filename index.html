@@ -462,7 +462,28 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 <body>
 <div class="page">
 
-<div id="landing-view">
+<div id="entry-chooser-view">
+  <div class="auth-wrap landing-wrap">
+    <div class="brand-header" style="border-bottom:none;margin-bottom:0.5rem;justify-content:center;">
+      <div class="brand-badge"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="38" height="38"><defs><linearGradient id="g-badge0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A50E6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="120" height="120" rx="32" fill="url(#g-badge0)"/><g transform="matrix(0.03454 0 0 -0.03454 26.00 67.17)"><path d="M1001.0 326V0H831.0V303Q831.0 357 802.5 386.5Q774.0 416 724.0 416Q674.0 416 645.5 386.5Q617.0 357 617.0 303V0H447.0V303Q447.0 357 418.5 386.5Q390.0 416 340.0 416Q290.0 416 261.5 386.5Q233.0 357 233.0 303V0H62.0V558H233.0V488Q259.0 523 301.0 543.5Q343.0 564 396.0 564Q459.0 564 508.5 537.0Q558.0 510 586.0 460Q615.0 506 665.0 535.0Q715.0 564 774.0 564Q878.0 564 939.5 501.0Q1001.0 438 1001.0 326Z M1644.0 238H1257.0Q1261.0 186 1290.5 158.5Q1320.0 131 1363.0 131Q1427.0 131 1452.0 185H1634.0Q1620.0 130 1583.5 86.0Q1547.0 42 1492.0 17.0Q1437.0 -8 1369.0 -8Q1287.0 -8 1223.0 27.0Q1159.0 62 1123.0 127.0Q1087.0 192 1087.0 279Q1087.0 366 1122.5 431.0Q1158.0 496 1222.0 531.0Q1286.0 566 1369.0 566Q1450.0 566 1513.0 532.0Q1576.0 498 1611.5 435.0Q1647.0 372 1647.0 288Q1647.0 264 1644.0 238ZM1472.0 333Q1472.0 377 1442.0 403.0Q1412.0 429 1367.0 429Q1324.0 429 1294.5 404.0Q1265.0 379 1258.0 333Z M1720.0 708Q1720.0 748 1748.5 774.5Q1777.0 801 1822.0 801Q1866.0 801 1894.5 774.5Q1923.0 748 1923.0 708Q1923.0 669 1894.5 642.5Q1866.0 616 1822.0 616Q1777.0 616 1748.5 642.5Q1720.0 669 1720.0 708ZM1908.0 -72Q1908.0 -175 1856.0 -220.5Q1804.0 -266 1711.0 -266H1644.0V-121H1685.0Q1713.0 -121 1725.0 -110.0Q1737.0 -99 1737.0 -74V558H1908.0Z" fill="#FFFFFF"/></g></svg></div>
+      <div>
+        <div class="brand-title">Emeejay Assess</div>
+        <div class="brand-sub">All your assessments in one place</div>
+      </div>
+    </div>
+
+    <div class="landing-hero" style="padding:1.5rem 0 0.5rem;text-align:center;">
+      <div class="hero-title" style="font-size:21px;">Who's this for?</div>
+      <p class="hero-sub" style="max-width:380px;margin-left:auto;margin-right:auto;">Choose an option to continue.</p>
+      <div class="cta-row" style="max-width:360px;margin:1.25rem auto 0;">
+        <button class="btn btn-primary" onclick="chooseTeacherEntry()">I'm a teacher or school staff</button>
+        <button class="btn btn-ghost" onclick="showPlayPortal()">I'm a student with a class code</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="landing-view" style="display:none;">
   <div class="auth-wrap landing-wrap">
     <div class="brand-header" style="border-bottom:none;margin-bottom:0.5rem;">
       <div class="brand-badge"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="38" height="38"><defs><linearGradient id="g-badge1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A50E6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="120" height="120" rx="32" fill="url(#g-badge1)"/><g transform="matrix(0.03454 0 0 -0.03454 26.00 67.17)"><path d="M1001.0 326V0H831.0V303Q831.0 357 802.5 386.5Q774.0 416 724.0 416Q674.0 416 645.5 386.5Q617.0 357 617.0 303V0H447.0V303Q447.0 357 418.5 386.5Q390.0 416 340.0 416Q290.0 416 261.5 386.5Q233.0 357 233.0 303V0H62.0V558H233.0V488Q259.0 523 301.0 543.5Q343.0 564 396.0 564Q459.0 564 508.5 537.0Q558.0 510 586.0 460Q615.0 506 665.0 535.0Q715.0 564 774.0 564Q878.0 564 939.5 501.0Q1001.0 438 1001.0 326Z M1644.0 238H1257.0Q1261.0 186 1290.5 158.5Q1320.0 131 1363.0 131Q1427.0 131 1452.0 185H1634.0Q1620.0 130 1583.5 86.0Q1547.0 42 1492.0 17.0Q1437.0 -8 1369.0 -8Q1287.0 -8 1223.0 27.0Q1159.0 62 1123.0 127.0Q1087.0 192 1087.0 279Q1087.0 366 1122.5 431.0Q1158.0 496 1222.0 531.0Q1286.0 566 1369.0 566Q1450.0 566 1513.0 532.0Q1576.0 498 1611.5 435.0Q1647.0 372 1647.0 288Q1647.0 264 1644.0 238ZM1472.0 333Q1472.0 377 1442.0 403.0Q1412.0 429 1367.0 429Q1324.0 429 1294.5 404.0Q1265.0 379 1258.0 333Z M1720.0 708Q1720.0 748 1748.5 774.5Q1777.0 801 1822.0 801Q1866.0 801 1894.5 774.5Q1923.0 748 1923.0 708Q1923.0 669 1894.5 642.5Q1866.0 616 1822.0 616Q1777.0 616 1748.5 642.5Q1720.0 669 1720.0 708ZM1908.0 -72Q1908.0 -175 1856.0 -220.5Q1804.0 -266 1711.0 -266H1644.0V-121H1685.0Q1713.0 -121 1725.0 -110.0Q1737.0 -99 1737.0 -74V558H1908.0Z" fill="#FFFFFF"/></g></svg></div>
@@ -482,11 +503,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
         <button class="btn btn-ghost" onclick="viewDemo(this)">Try a demo &ndash; no sign up needed</button>
       </div>
       <a href="javascript:void(0)" class="mini-link" onclick="goToAuth('signin')">Already have an account? Sign in</a>
-      <a href="javascript:void(0)" class="student-code-cta" onclick="showPlayPortal()">
-        <i class="ti ti-keyboard" aria-hidden="true"></i>
-        <span>Student? Enter your class code</span>
-        <i class="ti ti-arrow-right" aria-hidden="true"></i>
-      </a>
+      <a href="javascript:void(0)" class="mini-link" onclick="goToChooser()">Not school staff? Go back</a>
 
       <div class="landing-stat-row">
         <div class="landing-stat"><div class="landing-stat-val">12</div><div class="landing-stat-lbl">subjects covered</div></div>
@@ -1511,7 +1528,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;" id="live-session-label">Live session</div>
       <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.5rem;">Join code</div>
       <div style="font-size:48px;font-weight:700;letter-spacing:8px;color:var(--hp-purple);" id="live-session-code">-----</div>
-      <div style="font-size:13px;color:var(--text-muted);margin-top:0.5rem;">Children go to emeejay.com and tap &ldquo;Student? Enter your class code&rdquo;</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-top:0.5rem;">Children go to emeejay.com, tap &ldquo;I'm a student with a class code&rdquo;, then enter this code</div>
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Live progress</h2>
@@ -3810,6 +3827,7 @@ sb.auth.onAuthStateChange(function(event){
 });
 function showResetPasswordView(){
   isPasswordRecovery = true;
+  document.getElementById('entry-chooser-view').style.display = 'none';
   document.getElementById('landing-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'none';
   document.getElementById('app-view').style.display = 'none';
@@ -3821,8 +3839,14 @@ var currentUser = null;
 var currentProfile = null; // {school_id, display_name, is_owner, can_edit_delete, is_app_admin}
 var currentSchool = null;  // {id, name, join_code}
 
-/* ---------- Landing / auth screen wiring ---------- */
+/* ---------- Entry chooser / landing / auth screen wiring ---------- */
+function chooseTeacherEntry(){
+  document.getElementById('entry-chooser-view').style.display = 'none';
+  document.getElementById('landing-view').style.display = 'block';
+  window.scrollTo(0,0);
+}
 function goToAuth(tab, mode){
+  document.getElementById('entry-chooser-view').style.display = 'none';
   document.getElementById('landing-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'block';
   setAuthTab(tab || 'signin');
@@ -3830,8 +3854,16 @@ function goToAuth(tab, mode){
   window.scrollTo(0,0);
 }
 function showLanding(){
+  document.getElementById('entry-chooser-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'none';
   document.getElementById('landing-view').style.display = 'block';
+  window.scrollTo(0,0);
+}
+function goToChooser(){
+  document.getElementById('landing-view').style.display = 'none';
+  document.getElementById('auth-view').style.display = 'none';
+  document.getElementById('app-view').style.display = 'none';
+  document.getElementById('entry-chooser-view').style.display = 'block';
   window.scrollTo(0,0);
 }
 
@@ -4175,6 +4207,7 @@ async function onSignedIn(){
   if(clearReasoningBtn) clearReasoningBtn.style.display = isDemoSchool() ? 'none' : '';
   if(clearComputingBtn) clearComputingBtn.style.display = isDemoSchool() ? 'none' : '';
 
+  document.getElementById('entry-chooser-view').style.display = 'none';
   document.getElementById('landing-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'none';
   document.getElementById('app-view').style.display = 'block';
@@ -33077,6 +33110,7 @@ function exportReAnalyticsCSV(){
 function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function showPlayPortal(){
+  document.getElementById('entry-chooser-view').style.display = 'none';
   document.getElementById('landing-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'none';
   document.getElementById('app-view').style.display = 'none';
@@ -33085,7 +33119,7 @@ function showPlayPortal(){
 }
 function exitPlayPortal(){
   document.getElementById('play-view').style.display = 'none';
-  showLanding();
+  goToChooser();
 }
 
 var playParticipantId = null;
@@ -35464,6 +35498,7 @@ function checkPracticeParam(){
 }
 
 function showPracticePortal(token){
+  document.getElementById('entry-chooser-view').style.display = 'none';
   document.getElementById('landing-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'none';
   document.getElementById('app-view').style.display = 'none';
@@ -35472,7 +35507,7 @@ function showPracticePortal(token){
 }
 function exitPracticePortal(){
   document.getElementById('practice-view').style.display = 'none';
-  showLanding();
+  goToChooser();
 }
 function showPracticeScreen(id){
   document.querySelectorAll('.practice-screen').forEach(function(s){ s.classList.remove('active'); });
