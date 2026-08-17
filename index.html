@@ -3226,11 +3226,9 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     </div>
 
     <div class="play-screen active" id="play-join">
-      <div class="card" style="text-align:center;">
+      <div class="card" style="text-align:center;" id="play-join-step1">
         <div class="section-hd" style="margin-bottom:0.75rem;">Enter your code</div>
         <input type="text" id="play-code-input" maxlength="5" placeholder="ABCDE" style="text-align:center;font-size:28px;letter-spacing:6px;text-transform:uppercase;font-weight:700;width:100%;"/>
-        <div style="height:0.75rem;"></div>
-        <input type="text" id="play-name-input" placeholder="Your first name" maxlength="30" style="width:100%;"/>
         <div style="height:0.75rem;"></div>
         <select id="play-year-input" style="display:none;"><option value="">Your year group</option><option>Under 2s</option><option>2-3s</option><option>Nursery (3-4s)</option><option>Reception</option><option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option><option>Year 5</option><option>Year 6</option></select>
         <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.4rem;">Your year group</div>
@@ -3247,7 +3245,24 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <button type="button" class="year-btn" data-year="Year 6" onclick="selectYearBtn('play-year-input',this)">Year 6</button>
         </div>
         <div id="play-join-error" style="color:var(--text-danger, #c0392b);font-size:13px;margin-top:0.5rem;display:none;"></div>
-        <button class="btn btn-primary" style="margin-top:1rem;" onclick="playJoin()">Start</button>
+        <button class="btn btn-primary" style="margin-top:1rem;" onclick="playFindRoster()">Continue</button>
+      </div>
+
+      <div class="card" id="play-join-step2" style="display:none;">
+        <a href="javascript:void(0)" onclick="playBackToStep1()" style="font-size:12.5px;color:var(--hp-purple);font-weight:500;">&larr; Wrong code or year group?</a>
+        <div class="section-hd" style="margin:0.6rem 0 0.5rem;text-align:center;">Which one are you?</div>
+        <input type="text" id="play-roster-search" placeholder="Search your name..." oninput="renderPlayRosterList()" style="width:100%;margin-bottom:0.5rem;"/>
+        <div id="play-roster-list" style="max-height:280px;overflow-y:auto;"></div>
+        <div id="play-roster-empty" style="display:none;font-size:13px;color:var(--text-muted);text-align:center;padding:0.75rem 0;">No one found. Try a different search, or ask your teacher.</div>
+        <div style="text-align:center;margin-top:0.6rem;">
+          <a href="javascript:void(0)" onclick="playToggleFallback()" id="play-fallback-link" style="font-size:12.5px;color:var(--text-muted);">Can't find your name?</a>
+        </div>
+        <div id="play-fallback-panel" style="display:none;margin-top:0.6rem;text-align:center;">
+          <input type="text" id="play-name-input" placeholder="Type your first name" maxlength="30" style="width:100%;"/>
+          <div style="height:0.6rem;"></div>
+          <button class="btn btn-primary" style="width:100%;" onclick="playJoin(null)">Start anyway</button>
+        </div>
+        <div id="play-join-error-2" style="color:var(--text-danger, #c0392b);font-size:13px;margin-top:0.5rem;display:none;text-align:center;"></div>
       </div>
     </div>
 
@@ -32829,25 +32844,96 @@ function showPlayScreen(id){
   document.getElementById(id).classList.add('active');
 }
 
+var playRosterCache = [];
+var playRosterYear = '';
+var playRosterCode = '';
+
 function playReset(){
   playParticipantId = null; playSession = null; playItems = []; playIdx = 0; playAnswers = {};
+  playRosterCache = []; playRosterYear = ''; playRosterCode = '';
   var codeEl = document.getElementById('play-code-input'); if(codeEl) codeEl.value = '';
   var nameEl = document.getElementById('play-name-input'); if(nameEl) nameEl.value = '';
   var yearEl = document.getElementById('play-year-input'); if(yearEl) yearEl.value = '';
   syncYearButtons('play-year-input');
+  var searchEl = document.getElementById('play-roster-search'); if(searchEl) searchEl.value = '';
+  var fallbackEl = document.getElementById('play-fallback-panel'); if(fallbackEl) fallbackEl.style.display = 'none';
+  var fallbackLinkEl = document.getElementById('play-fallback-link'); if(fallbackLinkEl) fallbackLinkEl.textContent = "Can't find your name?";
   var errEl = document.getElementById('play-join-error'); if(errEl) errEl.style.display = 'none';
+  var err2El = document.getElementById('play-join-error-2'); if(err2El) err2El.style.display = 'none';
+  document.getElementById('play-join-step1').style.display = 'block';
+  document.getElementById('play-join-step2').style.display = 'none';
   showPlayScreen('play-join');
 }
 
-async function playJoin(){
+/* Step 1 -> Step 2: instead of the child typing their own name (which two
+   same-named classmates would both type, muddling whose result is whose),
+   they pick themselves from their year group's roster. Requires a valid,
+   open session code - get_live_session_roster re-validates the code
+   server-side so this can't be used to browse the register without one. */
+async function playFindRoster(){
   var code = document.getElementById('play-code-input').value.trim();
-  var name = document.getElementById('play-name-input').value.trim();
-  var year = document.getElementById('play-year-input').value || null;
+  var year = document.getElementById('play-year-input').value || '';
   var errEl = document.getElementById('play-join-error');
   errEl.style.display = 'none';
-  if(!code || !name){ errEl.textContent = 'Please enter both a code and your name.'; errEl.style.display = 'block'; return; }
+  if(!code){ errEl.textContent = 'Please enter your code.'; errEl.style.display = 'block'; return; }
   if(!year){ errEl.textContent = 'Please choose your year group.'; errEl.style.display = 'block'; return; }
-  var res = await sb.rpc('join_live_session', { p_code: code, p_child_name: name, p_year_group: year });
+  var res = await sb.rpc('get_live_session_roster', { p_code: code, p_year_group: year });
+  if(res.error){ errEl.textContent = res.error.message || 'That code is not active. Please check with your teacher.'; errEl.style.display = 'block'; return; }
+  playRosterCache = res.data || [];
+  playRosterYear = year;
+  playRosterCode = code;
+  document.getElementById('play-roster-search').value = '';
+  document.getElementById('play-fallback-panel').style.display = 'none';
+  document.getElementById('play-fallback-link').textContent = "Can't find your name?";
+  document.getElementById('play-name-input').value = '';
+  document.getElementById('play-join-error-2').style.display = 'none';
+  renderPlayRosterList();
+  document.getElementById('play-join-step1').style.display = 'none';
+  document.getElementById('play-join-step2').style.display = 'block';
+}
+
+function playBackToStep1(){
+  document.getElementById('play-join-step1').style.display = 'block';
+  document.getElementById('play-join-step2').style.display = 'none';
+}
+
+function renderPlayRosterList(){
+  var listEl = document.getElementById('play-roster-list');
+  var emptyEl = document.getElementById('play-roster-empty');
+  if(!listEl) return;
+  var search = (document.getElementById('play-roster-search').value || '').trim().toLowerCase();
+  var list = playRosterCache.filter(function(p){ return !search || p.name.toLowerCase().indexOf(search) > -1; });
+  listEl.innerHTML = '';
+  emptyEl.style.display = list.length ? 'none' : 'block';
+  list.forEach(function(p){
+    var row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'phase-btn';
+    row.style.fontSize = '15px';
+    row.style.fontWeight = '500';
+    row.textContent = p.name;
+    row.onclick = function(){ playJoin(p.id, p.name); };
+    listEl.appendChild(row);
+  });
+}
+
+function playToggleFallback(){
+  var panel = document.getElementById('play-fallback-panel');
+  var show = panel.style.display === 'none';
+  panel.style.display = show ? 'block' : 'none';
+  document.getElementById('play-fallback-link').textContent = show ? 'Hide' : "Can't find your name?";
+  if(show) document.getElementById('play-name-input').focus();
+}
+
+async function playJoin(pupilId, pupilName){
+  var errEl = document.getElementById('play-join-error-2');
+  errEl.style.display = 'none';
+  var code = playRosterCode || document.getElementById('play-code-input').value.trim();
+  var year = playRosterYear || document.getElementById('play-year-input').value || null;
+  var typedName = (document.getElementById('play-name-input').value || '').trim();
+  var name = pupilName || typedName;
+  if(!pupilId && !typedName){ errEl.textContent = 'Please choose your name from the list, or type it below.'; errEl.style.display = 'block'; return; }
+  var res = await sb.rpc('join_live_session', { p_code: code, p_child_name: pupilId ? null : typedName, p_year_group: year, p_pupil_id: pupilId || null });
   if(res.error){ errEl.textContent = res.error.message || 'That code is not active. Please check with your teacher.'; errEl.style.display = 'block'; return; }
   var row = res.data && res.data[0];
   if(!row){ errEl.textContent = 'That code is not active. Please check with your teacher.'; errEl.style.display = 'block'; return; }
