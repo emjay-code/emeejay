@@ -678,6 +678,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
   </div>
   <div class="school-bar-actions">
     <button class="icon-btn export-btn" id="sb-code-btn" onclick="copyJoinCode()">Code: ------</button>
+    <button class="icon-btn" onclick="openStaffModal()">Staff</button>
     <button class="icon-btn danger-btn" onclick="doSignOut()">Sign out</button>
   </div>
 </div>
@@ -3693,6 +3694,20 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
   </div>
 </div>
 
+<div class="edit-modal-overlay" id="staff-modal-overlay">
+  <div class="edit-modal-card" style="max-width:420px;">
+    <div class="section-hd" style="margin-bottom:0.35rem;">School staff</div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Everyone signed in at your school. The owner is the only account that can review reported and suggested questions.</p>
+    <div id="staff-list"></div>
+    <div id="staff-owner-gone-note" style="display:none;font-size:12.5px;color:var(--text-secondary);background:var(--surface-1);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.6rem 0.75rem;margin-top:0.6rem;">
+      Not the owner, and they're no longer around to hand it off themselves? <a href="javascript:void(0)" onclick="requestOwnershipHelp()" style="color:var(--hp-purple);">Contact us</a> and we'll help transfer it.
+    </div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.85rem;">
+      <button class="btn" style="flex:1;" onclick="closeStaffModal()">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="edit-modal-overlay" id="select-child-modal-overlay">
   <div class="edit-modal-card">
     <div class="section-hd" style="margin-bottom:0.75rem;">Select a child</div>
@@ -4153,15 +4168,7 @@ async function switchTab(t){
   if(t==='targets'){
     showRvScreen('tab-targets', 'tg-subject-screen');
     renderTargetsSubjectGrid();
-    /* Reported/suggested question review is an admin action, restricted
-       (client-side and via RLS) to the school's owner account - other
-       teachers who joined via the school's join code shouldn't see it. */
-    var isOwnerAccount = !!(currentProfile && currentProfile.is_owner);
-    var reportedCardEl = document.getElementById('tg-reported-card');
-    var suggestedReviewBtnEl = document.getElementById('tg-suggested-review-btn');
-    if(reportedCardEl) reportedCardEl.style.display = isOwnerAccount ? '' : 'none';
-    if(suggestedReviewBtnEl) suggestedReviewBtnEl.style.display = isOwnerAccount ? '' : 'none';
-    if(isOwnerAccount){
+    if(applyOwnerVisibility()){
       refreshReportedQuestionsCount();
       refreshSuggestedQuestionsCount();
     }
@@ -35706,6 +35713,20 @@ function backToTargetsSubjects(){
 var REPORTED_SUBJECT_LABELS = { phonics:'Phonics', blending:'Blending', times_tables:'Times Tables', maths:'Maths', english:'English', handwriting:'Handwriting', topics:'Topics', science:'Science', re:'RE', mfl:'Languages', music:'Music', early_years:'Early Years', reasoning:'Reasoning', computing:'Computing' };
 var reportedQuestionsCache = [];
 
+/* Shows/hides the owner-only bits of the Targets & Reporting screen based on
+   currentProfile.is_owner. Called on tab switch, and again right after a
+   successful ownership transfer so the UI updates immediately for whoever
+   just gained or lost the flag - without needing a full page reload.
+   Returns whether the current account is the owner. */
+function applyOwnerVisibility(){
+  var isOwnerAccount = !!(currentProfile && currentProfile.is_owner);
+  var reportedCardEl = document.getElementById('tg-reported-card');
+  var suggestedReviewBtnEl = document.getElementById('tg-suggested-review-btn');
+  if(reportedCardEl) reportedCardEl.style.display = isOwnerAccount ? '' : 'none';
+  if(suggestedReviewBtnEl) suggestedReviewBtnEl.style.display = isOwnerAccount ? '' : 'none';
+  return isOwnerAccount;
+}
+
 async function refreshReportedQuestionsCount(){
   var res = await sb.from('question_reports').select('id').eq('status','open');
   var el = document.getElementById('tg-reported-open-count');
@@ -35903,6 +35924,71 @@ function exportSuggestedQuestionsCSV(){
   a.href = url; a.download = 'suggested_questions.csv';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+/* ---------- School staff + ownership transfer. Every account only ever
+   gets school_id + is_owner from RLS-restricted profiles; this screen uses
+   the list_school_staff()/transfer_school_ownership() RPCs (both SECURITY
+   DEFINER, scoped server-side to the caller's own school) so any teacher
+   can see who else is at their school, and the current owner can hand the
+   flag to a colleague themselves instead of needing a database fix. ---------- */
+var staffListCache = [];
+
+async function openStaffModal(){
+  document.getElementById('staff-modal-overlay').classList.add('active');
+  document.getElementById('staff-list').innerHTML = '<p style="font-size:13px;color:var(--text-muted);">Loading...</p>';
+  var res = await sb.rpc('list_school_staff');
+  if(res.error){
+    document.getElementById('staff-list').innerHTML = '<p style="font-size:13px;color:var(--text-danger);">Could not load staff: ' + escapeHtml(res.error.message) + '</p>';
+    return;
+  }
+  staffListCache = res.data || [];
+  renderStaffList();
+}
+function closeStaffModal(){
+  document.getElementById('staff-modal-overlay').classList.remove('active');
+}
+function renderStaffList(){
+  var listEl = document.getElementById('staff-list');
+  var noteEl = document.getElementById('staff-owner-gone-note');
+  var iAmOwner = !!(currentProfile && currentProfile.is_owner);
+  listEl.innerHTML = '';
+  staffListCache.forEach(function(person){
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:0.6rem;padding:0.5rem 0;border-bottom:0.5px solid var(--border);';
+    var isMe = currentUser && person.id === currentUser.id;
+    var nameHtml = '<div style="font-size:13.5px;font-weight:500;">' + escapeHtml(person.display_name || 'Unnamed') + (isMe ? ' <span style="color:var(--text-muted);font-weight:400;">(you)</span>' : '') + '</div>' +
+      '<div style="font-size:12px;color:var(--text-muted);">' + escapeHtml(person.email || '') + '</div>';
+    var actionHtml;
+    if(person.is_owner){
+      actionHtml = '<span style="font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:6px;background:var(--hp-purple-light);color:var(--hp-purple-dark);flex-shrink:0;">Owner</span>';
+    } else if(iAmOwner){
+      actionHtml = '<button class="all-btn" style="flex-shrink:0;" onclick="makeOwner(\'' + person.id + '\',\'' + escapeHtml(person.display_name || 'this teacher').replace(/'/g,"\\'") + '\')">Make owner</button>';
+    } else {
+      actionHtml = '';
+    }
+    row.innerHTML = '<div>' + nameHtml + '</div>' + actionHtml;
+    listEl.appendChild(row);
+  });
+  if(noteEl) noteEl.style.display = iAmOwner ? 'none' : 'block';
+}
+async function makeOwner(newOwnerId, name){
+  if(!confirm('Make ' + name + ' the school owner? You will lose owner-only access (Reported/Suggested question review) immediately.')) return;
+  var res = await sb.rpc('transfer_school_ownership', { p_new_owner_id: newOwnerId });
+  if(res.error){ alert('Could not transfer ownership: ' + res.error.message); return; }
+  currentProfile.is_owner = false;
+  applyOwnerVisibility();
+  var reportedScreen = document.getElementById('tg-reported-screen');
+  var suggestedScreen = document.getElementById('tg-suggested-screen');
+  if((reportedScreen && reportedScreen.classList.contains('active')) || (suggestedScreen && suggestedScreen.classList.contains('active'))){
+    backToTargetsSubjects();
+  }
+  await openStaffModal();
+}
+function requestOwnershipHelp(){
+  closeStaffModal();
+  openFeedbackModal('Other');
+  document.getElementById('feedback-message').value = "I'd like to transfer school ownership to a different account - the current owner is no longer available to do this themselves. My account: " + (currentUser ? currentUser.email : '') + '.';
 }
 
 /* ---------- "Create your own assessment" authoring + management ---------- */
