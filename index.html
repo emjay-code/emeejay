@@ -129,6 +129,13 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .phase-desc{font-family:var(--phonics-font);font-size:12px;color:var(--text-secondary);margin-top:2px;}
 .sound-display{font-family:var(--phonics-font);font-size:80px;font-weight:700;text-align:center;padding:1.5rem 0 1rem;color:var(--hp-purple);line-height:1;}
 .gr-question-display{font-family:var(--phonics-font);font-size:23px;font-weight:600;text-align:center;padding:1.25rem 0.5rem 0.25rem;color:var(--hp-purple);line-height:1.4;}
+.pictogram-wrap{margin:0.75rem auto 0.25rem;max-width:420px;background:var(--surface-2);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.9rem 1rem;text-align:left;}
+.pictogram-key{font-size:12.5px;color:var(--text-secondary);text-align:center;margin-bottom:0.7rem;font-weight:500;}
+.pictogram-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.pictogram-row:last-child{margin-bottom:0;}
+.pictogram-row-label{font-size:13px;font-weight:600;color:var(--text-primary);flex-shrink:0;min-width:88px;}
+.pictogram-icons{display:flex;flex-wrap:wrap;gap:3px;font-size:19px;line-height:1;}
+.pictogram-icon-half{display:inline-block;width:0.52em;overflow:hidden;}
 .gr-answer-hint{font-size:13px;color:var(--text-muted);text-align:center;padding-bottom:0.75rem;}
 .sound-counter{font-size:13px;color:var(--text-muted);text-align:center;margin-bottom:1rem;}
 .progress-bar{height:4px;background:var(--surface-3);border-radius:2px;overflow:hidden;margin-bottom:1.25rem;}
@@ -1577,6 +1584,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="card" style="text-align:center;">
       <div class="check-label">Ask the child this question, then tap the answer they give</div>
       <div class="gr-question-display" id="mt-question-display"></div>
+      <div id="mt-pictogram-display"></div>
       <div class="mc-grid mc-grid-text" id="mt-answer-display"></div>
       <a href="javascript:void(0)" class="report-q-link" onclick="reportMathsQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
     </div>
@@ -3473,6 +3481,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="card" style="text-align:center;">
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:0.4rem;" id="practice-quiz-topic-name"></div>
         <div class="gr-question-display" id="practice-question-display"></div>
+        <div id="practice-pictogram-display"></div>
         <div class="mc-grid mc-grid-text" id="practice-mc-options"></div>
       </div>
     </div>
@@ -5597,6 +5606,29 @@ function buildAvatarBadge(name){
   badge.style.background = avatarColorForName(name);
   badge.textContent = initialsForName(name);
   return badge;
+}
+/* Renders an actual pictogram (icon grid + key) instead of making pupils
+   read a sentence describing one. pg = { icon, keyValue, unit, categories:
+   [{label,count}] } - count is the number of icons/symbols shown (which may
+   be fractional, e.g. 3.5 stars, handled as a half-width clipped icon).
+   Used in three places a pupil can see a Statistics question: the
+   teacher-led assessment screen, the pupil practice-link quiz, and Live
+   Session self-check-in - so the HTML-string form is the single source of
+   truth and the DOM helper just assigns it via innerHTML. */
+function pictogramHtml(pg){
+  if(!pg || !pg.categories || !pg.categories.length) return '';
+  var rows = pg.categories.map(function(cat){
+    var full = Math.floor(cat.count);
+    var icons = '';
+    for(var i=0;i<full;i++){ icons += '<span>'+pg.icon+'</span>'; }
+    if(Math.round((cat.count % 1) * 100) !== 0){ icons += '<span class="pictogram-icon-half">'+pg.icon+'</span>'; }
+    return '<div class="pictogram-row"><div class="pictogram-row-label">'+escapeHtml(cat.label)+'</div><div class="pictogram-icons">'+icons+'</div></div>';
+  }).join('');
+  return '<div class="pictogram-wrap"><div class="pictogram-key">Key: '+pg.icon+' = '+pg.keyValue+' '+escapeHtml(pg.unit||'children')+'</div>'+rows+'</div>';
+}
+function renderPictogram(container, pg){
+  if(!container) return;
+  container.innerHTML = pg ? pictogramHtml(pg) : '';
 }
 /* Red/amber/green banding for a single score, used on Results card pills
    and to flag struggling pupils. Thresholds: under 50% = red, 50-79% = amber,
@@ -9286,14 +9318,14 @@ var MATHS_TOPICS = {
   KS1: [
     {q:'5 children chose apples and 3 children chose bananas as their favourite fruit. How many children chose a fruit in total?', a:'8', options:['8','7','9','5']},
     {q:'A tally chart shows 4 tally marks for cats and 3 tally marks for dogs. How many more children chose cats than dogs?', a:'1', options:['1','7','4','3']},
-    {q:'A pictogram shows 3 stars for Monday and 5 stars for Tuesday, where each star means 1 child. Which day had more children?', a:'Tuesday', options:['Tuesday','Monday','Both the same','Cannot tell']},
+    {q:'Which had more children, Monday or Tuesday?', a:'Tuesday', options:['Tuesday','Monday','Both the same','Cannot tell'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Monday',count:3},{label:'Tuesday',count:5}]}},
     {q:'A tally chart shows 6 tally marks for red and 2 tally marks for blue. How many more children chose red than blue?', a:'4', options:['4','3','8','2']},
     {q:'A block diagram shows 6 red blocks and 2 blue blocks. How many blocks are there in total?', a:'8', options:['8','6','4','2']},
     {q:'7 children chose football and 4 children chose swimming as their favourite sport. How many children were asked in total?', a:'11', options:['11','10','12','3']},
-    {q:"A pictogram shows 6 apple pictures next to 'Year 1', where each apple means 1 child. How many Year 1 children does this show?", a:'6', options:['6','5','7','1']},
+    {q:'How many Year 1 children does this show?', a:'6', options:['6','5','7','1'], pictogram:{icon:'🍎',keyValue:1,unit:'child',categories:[{label:'Year 1',count:6}]}},
     {q:"A tally chart shows 9 tally marks for 'yes' and 5 tally marks for 'no'. How many more children said yes?", a:'4', options:['4','5','9','14']},
     {q:'A table shows 4 visitors on Monday and 7 visitors on Tuesday. Which day had more visitors?', a:'Tuesday', options:['Tuesday','Monday','Both the same','Cannot tell']},
-    {q:'A pictogram shows 2 pictures for red and 5 pictures for blue, where each picture means 1 child. How many more children chose blue?', a:'3', options:['3','2','7','5']},
+    {q:'How many more children chose blue?', a:'3', options:['3','2','7','5'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Red',count:2},{label:'Blue',count:5}]}},
     {q:'A block diagram shows: Apples 3, Bananas 5, Oranges 2. Which fruit was the most popular?', a:'Bananas', options:['Bananas','Apples','Oranges','They are all equal']},
     {q:'In a class of 20 children, 12 are boys. How many are girls?', a:'8', options:['8','12','20','9']},
     {q:'6 children chose apples and 4 children chose bananas as their favourite fruit. How many children chose a fruit in total?', a:'10', options:['10','11','9','6']},
@@ -9316,16 +9348,16 @@ var MATHS_TOPICS = {
     {q:'A tally chart shows 6 tally marks for football and 4 tally marks for rugby. How many more children chose football than rugby?', a:'2', options:['2','3','10','4']},
     {q:'A tally chart shows 9 tally marks for milk and 3 tally marks for juice. How many more children chose milk than juice?', a:'6', options:['6','7','12','3']},
     {q:'A tally chart shows 8 tally marks for cats and 5 tally marks for rabbits. How many more children chose cats than rabbits?', a:'3', options:['3','4','13','5']},
-    {q:'A pictogram shows 3 stars for Monday and 5 stars for Tuesday, where each star means 1 child. Which had more children, Monday or Tuesday?', a:'Tuesday', options:['Tuesday','Monday','Both the same','Cannot tell']},
-    {q:'A pictogram shows 4 stars for Class A and 7 stars for Class B, where each star means 1 child. Which had more children, Class A or Class B?', a:'Class B', options:['Class B','Class A','Both the same','Cannot tell']},
-    {q:'A pictogram shows 6 stars for red and 2 stars for blue, where each star means 1 child. Which had more children, red or blue?', a:'red', options:['red','blue','Both the same','Cannot tell']},
-    {q:'A pictogram shows 8 stars for Monday and 3 stars for Friday, where each star means 1 child. Which had more children, Monday or Friday?', a:'Monday', options:['Monday','Friday','Both the same','Cannot tell']},
-    {q:'A pictogram shows 5 stars for summer and 9 stars for winter, where each star means 1 child. Which had more children, summer or winter?', a:'winter', options:['winter','summer','Both the same','Cannot tell']},
-    {q:'A pictogram shows 7 stars for cats and 4 stars for dogs, where each star means 1 child. Which had more children, cats or dogs?', a:'cats', options:['cats','dogs','Both the same','Cannot tell']},
-    {q:'A pictogram shows 2 stars for apples and 6 stars for bananas, where each star means 1 child. Which had more children, apples or bananas?', a:'bananas', options:['bananas','apples','Both the same','Cannot tell']},
-    {q:'A pictogram shows 9 stars for Year 1 and 5 stars for Year 2, where each star means 1 child. Which had more children, Year 1 or Year 2?', a:'Year 1', options:['Year 1','Year 2','Both the same','Cannot tell']},
-    {q:'A pictogram shows 3 stars for football and 8 stars for swimming, where each star means 1 child. Which had more children, football or swimming?', a:'swimming', options:['swimming','football','Both the same','Cannot tell']},
-    {q:'A pictogram shows 10 stars for red and 6 stars for green, where each star means 1 child. Which had more children, red or green?', a:'red', options:['red','green','Both the same','Cannot tell']},
+    {q:'Which had more children, Monday or Tuesday?', a:'Tuesday', options:['Tuesday','Monday','Both the same','Cannot tell'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Monday',count:3},{label:'Tuesday',count:5}]}},
+    {q:'Which had more children, Class A or Class B?', a:'Class B', options:['Class B','Class A','Both the same','Cannot tell'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Class A',count:4},{label:'Class B',count:7}]}},
+    {q:'Which had more children, red or blue?', a:'red', options:['red','blue','Both the same','Cannot tell'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Red',count:6},{label:'Blue',count:2}]}},
+    {q:'Which had more children, Monday or Friday?', a:'Monday', options:['Monday','Friday','Both the same','Cannot tell'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Monday',count:8},{label:'Friday',count:3}]}},
+    {q:'Which had more children, summer or winter?', a:'winter', options:['winter','summer','Both the same','Cannot tell'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Summer',count:5},{label:'Winter',count:9}]}},
+    {q:'Which had more children, cats or dogs?', a:'cats', options:['cats','dogs','Both the same','Cannot tell'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Cats',count:7},{label:'Dogs',count:4}]}},
+    {q:'Which had more children, apples or bananas?', a:'bananas', options:['bananas','apples','Both the same','Cannot tell'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Apples',count:2},{label:'Bananas',count:6}]}},
+    {q:'Which had more children, Year 1 or Year 2?', a:'Year 1', options:['Year 1','Year 2','Both the same','Cannot tell'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Year 1',count:9},{label:'Year 2',count:5}]}},
+    {q:'Which had more children, football or swimming?', a:'swimming', options:['swimming','football','Both the same','Cannot tell'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Football',count:3},{label:'Swimming',count:8}]}},
+    {q:'Which had more children, red or green?', a:'red', options:['red','green','Both the same','Cannot tell'], pictogram:{icon:'⭐',keyValue:1,unit:'child',categories:[{label:'Red',count:10},{label:'Green',count:6}]}},
     {q:'A block diagram shows 7 red blocks and 3 blue blocks. How many blocks are there in total?', a:'10', options:['10','11','9','7']},
     {q:'A block diagram shows 5 green blocks and 4 yellow blocks. How many blocks are there in total?', a:'9', options:['9','10','8','5']},
     {q:'A block diagram shows 7 circles blocks and 3 squares blocks. How many blocks are there in total?', a:'10', options:['10','11','9','7']},
@@ -9395,16 +9427,16 @@ var MATHS_TOPICS = {
   ],
   LKS2: [
     {q:'A bar chart shows votes for favourite subject: Reading 15, Maths 20, Art 10. How many children voted in total?', a:'45', options:['45','35','44','50']},
-    {q:'A pictogram shows 4 symbols for children who walk to school, where each symbol means 2 children. How many children walk to school?', a:'8', options:['8','6','4','2']},
+    {q:'How many children walk to school?', a:'8', options:['8','6','4','2'], pictogram:{icon:'⭐',keyValue:2,unit:'children',categories:[{label:'Walk to school',count:4}]}},
     {q:'A table shows book sales: January 120, February 150, March 90. Which month sold the most books?', a:'February', options:['February','January','March','They are all equal']},
     {q:'A bar chart shows Football with 24 votes and Tennis with 18 votes. How many more votes does Football have?', a:'6', options:['6','5','7','42']},
-    {q:'A pictogram shows 5 symbols for Class B, where each symbol means 5 children. How many children are in Class B?', a:'25', options:['25','15','20','8']},
+    {q:'How many children are in Class B?', a:'25', options:['25','15','20','8'], pictogram:{icon:'⭐',keyValue:5,unit:'children',categories:[{label:'Class B',count:5}]}},
     {q:'A table shows rainfall over four days: 4mm, 7mm, 2mm, 9mm. What is the total rainfall for the four days?', a:'22mm', options:['22mm','20mm','24mm','18mm']},
     {q:'A bar chart has a scale that goes up in 2s. A bar reaches the 5th gridline. What value does it show?', a:'10', options:['10','5','8','12']},
-    {q:'A pictogram uses 1 star to mean 10 books. Year 3 has 3.5 stars. How many books does that represent?', a:'35', options:['35','30','40','3.5']},
+    {q:'How many books does that represent?', a:'35', options:['35','30','40','3.5'], pictogram:{icon:'⭐',keyValue:10,unit:'books',categories:[{label:'Year 3',count:3.5}]}},
     {q:'A table shows scores: Team A 45, Team B 38, Team C 52. What is the difference between the highest and lowest scores?', a:'14', options:['14','13','15','7']},
     {q:'60 children were asked their favourite colour. A bar chart shows 25 chose blue and 15 chose red, and the rest chose green. How many chose green?', a:'20', options:['20','15','25','10']},
-    {q:'A pictogram shows 6 symbols for children who travel by bus, where each symbol means 4 children. How many children travel by bus?', a:'24', options:['24','10','20','30']},
+    {q:'How many children travel by bus?', a:'24', options:['24','10','20','30'], pictogram:{icon:'⭐',keyValue:4,unit:'children',categories:[{label:'Travel by bus',count:6}]}},
     {q:'A table shows sales over 4 weeks: 30, 45, 25, 40. What is the total for all 4 weeks?', a:'140', options:['140','130','150','100']},
     {q:'A bar chart shows votes for favourite subject: Reading 16, Maths 22, Art 11. How many children voted in total?', a:'49', options:['49','48','50','38']},
     {q:'A bar chart shows votes for favourite sport: Football 24, Tennis 18, Rugby 12. How many children voted in total?', a:'54', options:['54','53','55','42']},
@@ -9418,18 +9450,18 @@ var MATHS_TOPICS = {
     {q:'A bar chart shows votes for favourite game: Chess 26, Football 21, Netball 17. How many children voted in total?', a:'64', options:['64','63','65','47']},
     {q:'A bar chart shows votes for favourite sport: Cycling 14, Running 19, Swimming 27. How many children voted in total?', a:'60', options:['60','59','61','33']},
     {q:'A bar chart shows votes for favourite pet: Cats 31, Rabbits 22, Hamsters 17. How many children voted in total?', a:'70', options:['70','69','71','53']},
-    {q:'A pictogram shows 5 symbols for children who walk to school, where each symbol means 2 children. How many children walk to school?', a:'10', options:['10','8','12','5']},
-    {q:'A pictogram shows 6 symbols for Class D, where each symbol means 5 children. How many children are in Class D?', a:'30', options:['30','25','35','6']},
-    {q:'A pictogram shows 7 symbols for children who travel by bus, where each symbol means 4 children. How many children travel by bus?', a:'28', options:['28','24','32','7']},
-    {q:'A pictogram shows 3 symbols for children who read every day, where each symbol means 10 children. How many children read every day?', a:'30', options:['30','20','40','3']},
-    {q:'A pictogram shows 7 symbols for children who play football, where each symbol means 3 children. How many children play football?', a:'21', options:['21','18','24','7']},
-    {q:'A pictogram shows 8 symbols for children who have a pet, where each symbol means 2 children. How many children have a pet?', a:'16', options:['16','14','18','8']},
-    {q:'A pictogram shows 4 symbols for children who cycle to school, where each symbol means 5 children. How many children cycle to school?', a:'20', options:['20','15','25','4']},
-    {q:'A pictogram shows 6 symbols for children who like swimming, where each symbol means 3 children. How many children like swimming?', a:'18', options:['18','15','21','6']},
-    {q:'A pictogram shows 5 symbols for children who go to the park, where each symbol means 4 children. How many children go to the park?', a:'20', options:['20','16','24','5']},
-    {q:'A pictogram shows 9 symbols for children who eat fruit daily, where each symbol means 2 children. How many children eat fruit daily?', a:'18', options:['18','16','20','9']},
-    {q:'A pictogram shows 3 symbols for children who play an instrument, where each symbol means 6 children. How many children play an instrument?', a:'18', options:['18','12','24','3']},
-    {q:'A pictogram shows 7 symbols for children who like painting, where each symbol means 4 children. How many children like painting?', a:'28', options:['28','24','32','7']},
+    {q:'How many children walk to school?', a:'10', options:['10','8','12','5'], pictogram:{icon:'⭐',keyValue:2,unit:'children',categories:[{label:'Walk to school',count:5}]}},
+    {q:'How many children are in Class D?', a:'30', options:['30','25','35','6'], pictogram:{icon:'⭐',keyValue:5,unit:'children',categories:[{label:'Class D',count:6}]}},
+    {q:'How many children travel by bus?', a:'28', options:['28','24','32','7'], pictogram:{icon:'⭐',keyValue:4,unit:'children',categories:[{label:'Travel by bus',count:7}]}},
+    {q:'How many children read every day?', a:'30', options:['30','20','40','3'], pictogram:{icon:'⭐',keyValue:10,unit:'children',categories:[{label:'Read every day',count:3}]}},
+    {q:'How many children play football?', a:'21', options:['21','18','24','7'], pictogram:{icon:'⭐',keyValue:3,unit:'children',categories:[{label:'Play football',count:7}]}},
+    {q:'How many children have a pet?', a:'16', options:['16','14','18','8'], pictogram:{icon:'⭐',keyValue:2,unit:'children',categories:[{label:'Have a pet',count:8}]}},
+    {q:'How many children cycle to school?', a:'20', options:['20','15','25','4'], pictogram:{icon:'⭐',keyValue:5,unit:'children',categories:[{label:'Cycle to school',count:4}]}},
+    {q:'How many children like swimming?', a:'18', options:['18','15','21','6'], pictogram:{icon:'⭐',keyValue:3,unit:'children',categories:[{label:'Like swimming',count:6}]}},
+    {q:'How many children go to the park?', a:'20', options:['20','16','24','5'], pictogram:{icon:'⭐',keyValue:4,unit:'children',categories:[{label:'Go to the park',count:5}]}},
+    {q:'How many children eat fruit daily?', a:'18', options:['18','16','20','9'], pictogram:{icon:'⭐',keyValue:2,unit:'children',categories:[{label:'Eat fruit daily',count:9}]}},
+    {q:'How many children play an instrument?', a:'18', options:['18','12','24','3'], pictogram:{icon:'⭐',keyValue:6,unit:'children',categories:[{label:'Play an instrument',count:3}]}},
+    {q:'How many children like painting?', a:'28', options:['28','24','32','7'], pictogram:{icon:'⭐',keyValue:4,unit:'children',categories:[{label:'Like painting',count:7}]}},
     {q:'A table shows books: January 120, February 150, March 90. Which had the most?', a:'February', options:['February','January','March','They are all equal']},
     {q:'A table shows tickets: April 200, May 180, June 220. Which had the most?', a:'June', options:['June','April','May','They are all equal']},
     {q:'A table shows cakes: Monday 75, Tuesday 95, Wednesday 60. Which had the most?', a:'Tuesday', options:['Tuesday','Monday','Wednesday','They are all equal']},
@@ -9466,18 +9498,18 @@ var MATHS_TOPICS = {
     {q:'A table shows attendance over four days: 17, 23, 15, 25. What is the total attendance for the four days?', a:'80', options:['80','78','82','76']},
     {q:'A table shows runs scored over four days: 40, 55, 35, 50. What is the total runs scored for the four days?', a:'180', options:['180','178','182','176']},
     {q:'A table shows cakes baked over four days: 9, 13, 8, 16. What is the total cakes baked for the four days?', a:'46', options:['46','44','48','42']},
-    {q:'A pictogram shows 4 symbols for a class, where each symbol means 3 children. How many children are in the class?', a:'12', options:['12','15','16','9']},
+    {q:'How many children are in the class?', a:'12', options:['12','15','16','9'], pictogram:{icon:'⭐',keyValue:3,unit:'children',categories:[{label:'The class',count:4}]}},
     {q:'A bar chart shows Team A with 27 votes and Team B with 12 votes. How many more votes does Team A have?', a:'15', options:['42','16','14','15']},
     {q:'A bar chart shows votes for favourite thing: Blue 28, Dogs 28, Swimming 11. How many children voted in total?', a:'67', options:['123','68','66','67']},
     {q:'A bar chart shows votes for favourite thing: Red 17, Bikes 23, Winter 13. How many children voted in total?', a:'53', options:['53','93','52','54']},
-    {q:'A pictogram shows 2 symbols for a class, where each symbol means 4 children. How many children are in the class?', a:'8', options:['10','12','8','4']},
-    {q:'A pictogram shows 3 symbols for a class, where each symbol means 5 children. How many children are in the class?', a:'15', options:['10','20','15','18']},
-    {q:'A pictogram shows 3 symbols for a class, where each symbol means 2 children. How many children are in the class?', a:'6', options:['6','8','4','9']},
+    {q:'How many children are in the class?', a:'8', options:['10','12','8','4'], pictogram:{icon:'⭐',keyValue:4,unit:'children',categories:[{label:'The class',count:2}]}},
+    {q:'How many children are in the class?', a:'15', options:['10','20','15','18'], pictogram:{icon:'⭐',keyValue:5,unit:'children',categories:[{label:'The class',count:3}]}},
+    {q:'How many children are in the class?', a:'6', options:['6','8','4','9'], pictogram:{icon:'⭐',keyValue:2,unit:'children',categories:[{label:'The class',count:3}]}},
     {q:'A bar chart shows Team A with 34 votes and Team B with 27 votes. How many more votes does Team A have?', a:'7', options:['7','8','6','41']},
     {q:'A bar chart shows votes for favourite thing: Red 14, Dogs 14, Apples 14. How many children voted in total?', a:'42', options:['42','43','70','41']},
-    {q:'A pictogram shows 2 symbols for a class, where each symbol means 3 children. How many children are in the class?', a:'6', options:['6','3','9','8']},
-    {q:'A pictogram shows 4 symbols for a class, where each symbol means 2 children. How many children are in the class?', a:'8', options:['10','6','12','8']},
-    {q:'A pictogram shows 4 symbols for a class, where each symbol means 10 children. How many children are in the class?', a:'40', options:['40','44','30','50']},
+    {q:'How many children are in the class?', a:'6', options:['6','3','9','8'], pictogram:{icon:'⭐',keyValue:3,unit:'children',categories:[{label:'The class',count:2}]}},
+    {q:'How many children are in the class?', a:'8', options:['10','6','12','8'], pictogram:{icon:'⭐',keyValue:2,unit:'children',categories:[{label:'The class',count:4}]}},
+    {q:'How many children are in the class?', a:'40', options:['40','44','30','50'], pictogram:{icon:'⭐',keyValue:10,unit:'children',categories:[{label:'The class',count:4}]}},
     {q:'A bar chart shows votes for favourite thing: Red 18, Apples 17, Swimming 14. How many children voted in total?', a:'49', options:['50','84','48','49']},
     {q:'A bar chart shows Team A with 19 votes and Team B with 16 votes. How many more votes does Team A have?', a:'3', options:['2','22','4','3']},
     {q:'A bar chart shows votes for favourite thing: Apples 12, Bananas 14, Football 25. How many children voted in total?', a:'51', options:['77','50','51','52']},
@@ -9495,10 +9527,10 @@ var MATHS_TOPICS = {
     {q:'A bar chart shows Team A with 34 votes and Team B with 13 votes. How many more votes does Team A have?', a:'21', options:['55','20','22','21']},
     {q:'A bar chart shows Team A with 39 votes and Team B with 27 votes. How many more votes does Team A have?', a:'12', options:['13','11','51','12']},
     {q:'A bar chart shows Team A with 39 votes and Team B with 11 votes. How many more votes does Team A have?', a:'28', options:['29','27','28','67']},
-    {q:'A pictogram shows 3 symbols for a class, where each symbol means 10 children. How many children are in the class?', a:'30', options:['30','33','40','20']},
+    {q:'How many children are in the class?', a:'30', options:['30','33','40','20'], pictogram:{icon:'⭐',keyValue:10,unit:'children',categories:[{label:'The class',count:3}]}},
     {q:'A bar chart shows votes for favourite thing: Bananas 13, Dogs 10, Scooters 25. How many children voted in total?', a:'48', options:['48','47','71','49']},
     {q:'A bar chart shows Team A with 22 votes and Team B with 17 votes. How many more votes does Team A have?', a:'5', options:['4','6','5','27']},
-    {q:'A pictogram shows 3 symbols for a class, where each symbol means 4 children. How many children are in the class?', a:'12', options:['15','12','16','8']},
+    {q:'How many children are in the class?', a:'12', options:['15','12','16','8'], pictogram:{icon:'⭐',keyValue:4,unit:'children',categories:[{label:'The class',count:3}]}},
     {q:'A bar chart shows Team A with 39 votes and Team B with 31 votes. How many more votes does Team A have?', a:'8', options:['9','47','8','7']},
     {q:'A bar chart shows votes for favourite thing: Painting 18, Reading 10, Summer 28. How many children voted in total?', a:'56', options:['55','57','84','56']},
     {q:'A bar chart shows Team A with 16 votes and Team B with 12 votes. How many more votes does Team A have?', a:'4', options:['3','5','20','4']}
@@ -9685,6 +9717,7 @@ function renderMtQuestion(){
   document.getElementById('mt-prog').style.width = Math.round((mtIdx/total)*100)+'%';
   document.getElementById('mt-counter').textContent = 'Question '+(mtIdx+1)+' of '+total;
   document.getElementById('mt-question-display').textContent = item.q;
+  renderPictogram(document.getElementById('mt-pictogram-display'), item.pictogram);
   renderMcOptions('mt-answer-display', item, markMt);
 }
 
@@ -33116,7 +33149,7 @@ function buildItemsForCheck(subject, checkType, tier){
   } else if(QA_TOPIC_VARS[subject]){
     var t = QA_TOPIC_VARS[subject][checkType];
     var poolQs = t ? (t.questions[tier] || t.questions.KS1) : [];
-    pool = shuffleArray(poolQs).map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
+    pool = shuffleArray(poolQs).map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]), pictogram: item.pictogram }; });
     items = pool.slice(0, 12);
   }
   return { items: items, pool: pool };
@@ -33178,6 +33211,7 @@ function renderPlayItem(){
     card.innerHTML =
       '<div class="check-label">Choose the right answer</div>'+
       '<div class="gr-question-display">'+escapeHtml(item.display)+'</div>'+
+      (item.pictogram ? pictogramHtml(item.pictogram) : '')+
       '<div class="mc-grid mc-grid-text">'+
         item.options.map(function(opt){ return '<button class="mc-btn" onclick="playChoose(this,\''+escapeHtml(opt).replace(/'/g,"\\'")+'\')">'+escapeHtml(opt)+'</button>'; }).join('')+
       '</div>';
@@ -35567,6 +35601,7 @@ function renderPracticeItem(){
   document.getElementById('practice-counter').textContent = 'Question '+(practiceIdx+1)+' of '+total;
   var item = practiceItems[practiceIdx];
   document.getElementById('practice-question-display').textContent = item.q;
+  renderPictogram(document.getElementById('practice-pictogram-display'), item.pictogram);
   renderMcOptions('practice-mc-options', item, practiceAnswer);
 }
 
