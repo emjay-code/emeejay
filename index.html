@@ -3070,10 +3070,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="section-hd" style="margin-bottom:0.75rem;">Choose a subject</div>
       <div class="subject-grid" id="tg-subject-grid"></div>
     </div>
-    <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+    <div class="card" id="tg-reported-card" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.75rem;">
       <div>
         <div class="section-hd" style="margin-bottom:2px;">Reported questions</div>
-        <div style="font-size:12.5px;color:var(--text-muted);">Questions teachers have flagged as too hard, too easy, or not quite right.</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Questions teachers have flagged as too hard, too easy, or not quite right. Only visible to you, the school owner.</div>
       </div>
       <button class="all-btn" onclick="openReportedQuestionsScreen()">Review <span id="tg-reported-open-count"></span></button>
     </div>
@@ -3084,7 +3084,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;">
         <button class="all-btn" onclick="openSuggestQuestionModal(null)">Suggest one</button>
-        <button class="all-btn" onclick="openSuggestedQuestionsScreen()">Review <span id="tg-suggested-open-count"></span></button>
+        <button class="all-btn" id="tg-suggested-review-btn" onclick="openSuggestedQuestionsScreen()">Review <span id="tg-suggested-open-count"></span></button>
       </div>
     </div>
     <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-top:0.75rem;">
@@ -3728,7 +3728,7 @@ var SUPABASE_KEY = 'sb_publishable_PWWJmW5XT0DSXYOVzAtp6w_NIME1V5b';
 var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 var currentUser = null;
-var currentProfile = null; // {school_id, display_name}
+var currentProfile = null; // {school_id, display_name, is_owner}
 var currentSchool = null;  // {id, name, join_code}
 
 /* ---------- Landing / auth screen wiring ---------- */
@@ -3999,7 +3999,7 @@ async function onSignedIn(){
   currentUser = sess.data.session ? sess.data.session.user : null;
   if(!currentUser) return;
 
-  var profRes = await sb.from('profiles').select('school_id, display_name').eq('id', currentUser.id).single();
+  var profRes = await sb.from('profiles').select('school_id, display_name, is_owner').eq('id', currentUser.id).single();
   if(profRes.error || !profRes.data){
     showAuthError('si-error', 'Could not load your profile. Please try signing in again.');
     await sb.auth.signOut();
@@ -4153,8 +4153,18 @@ async function switchTab(t){
   if(t==='targets'){
     showRvScreen('tab-targets', 'tg-subject-screen');
     renderTargetsSubjectGrid();
-    refreshReportedQuestionsCount();
-    refreshSuggestedQuestionsCount();
+    /* Reported/suggested question review is an admin action, restricted
+       (client-side and via RLS) to the school's owner account - other
+       teachers who joined via the school's join code shouldn't see it. */
+    var isOwnerAccount = !!(currentProfile && currentProfile.is_owner);
+    var reportedCardEl = document.getElementById('tg-reported-card');
+    var suggestedReviewBtnEl = document.getElementById('tg-suggested-review-btn');
+    if(reportedCardEl) reportedCardEl.style.display = isOwnerAccount ? '' : 'none';
+    if(suggestedReviewBtnEl) suggestedReviewBtnEl.style.display = isOwnerAccount ? '' : 'none';
+    if(isOwnerAccount){
+      refreshReportedQuestionsCount();
+      refreshSuggestedQuestionsCount();
+    }
     refreshCustomTopicsCount();
   }
 }
@@ -7403,7 +7413,7 @@ var MATHS_TOPICS = {
     {q:'How many hours are there in a day?', a:'24', options:['24','12','60','7']},
     {q:'If a clock shows 6 o’clock, where does the big hand point?', a:'To the 12', options:['To the 12','To the 6','To the 3','To the 9']},
     {q:'If a clock shows 6 o’clock, where does the small hand point?', a:'To the 6', options:['To the 6','To the 12','To the 3','To the 9']},
-    {q:'What unit would you use to weigh an apple: grams or kilograms?', a:'Grams', options:['Grams','Kilograms','Litres','Metres']},
+    {q:'What unit would you use to weigh an apple?', a:'Grams', options:['Grams','Kilograms','Litres','Metres']},
     {q:'What unit would you use to weigh a person: grams or kilograms?', a:'Kilograms', options:['Kilograms','Grams','Litres','Metres']},
     {q:'Which is longer: 1 metre or 1 centimetre?', a:'1 metre', options:['1 metre','1 centimetre','They are the same','Cannot tell']},
     {q:'Which weighs more: 1 kilogram or 1 gram?', a:'1 kilogram', options:['1 kilogram','1 gram','They are the same','Cannot tell']},
@@ -35705,6 +35715,7 @@ async function refreshReportedQuestionsCount(){
 }
 
 function openReportedQuestionsScreen(){
+  if(!(currentProfile && currentProfile.is_owner)){ alert("Reported questions are only visible to your school's owner account."); return; }
   showRvScreen('tab-targets', 'tg-reported-screen');
   var subjEl = document.getElementById('tg-reported-subject-filter');
   if(subjEl && subjEl.options.length <= 1){
@@ -35807,6 +35818,7 @@ async function refreshSuggestedQuestionsCount(){
 }
 
 function openSuggestedQuestionsScreen(){
+  if(!(currentProfile && currentProfile.is_owner)){ alert("Reviewing suggested questions is only available to your school's owner account."); return; }
   showRvScreen('tab-targets', 'tg-suggested-screen');
   var subjEl = document.getElementById('tg-suggested-subject-filter');
   if(subjEl && subjEl.options.length <= 1){
