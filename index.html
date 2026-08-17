@@ -398,6 +398,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .cta-row{display:flex;flex-direction:column;gap:0.5rem;margin-top:1.25rem;}
 .cta-row .btn{margin-top:0;}
 .mini-link{display:block;text-align:center;font-size:13px;color:var(--hp-purple);margin-top:0.75rem;cursor:pointer;text-decoration:none;}
+.student-code-cta{display:flex;align-items:center;gap:10px;max-width:340px;margin:0.85rem auto 0;padding:0.7rem 1rem;border-radius:var(--radius);border:1.5px solid var(--hp-purple-border);background:var(--hp-purple-light);color:var(--hp-purple-dark);font-size:14px;font-weight:600;cursor:pointer;transition:transform 0.12s,box-shadow 0.12s,border-color 0.12s;text-decoration:none;}
+.student-code-cta i:first-child{font-size:17px;color:var(--hp-purple);flex-shrink:0;}
+.student-code-cta i:last-child{font-size:15px;color:var(--hp-purple);flex-shrink:0;margin-left:auto;}
+.student-code-cta:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(90,80,230,0.18);border-color:var(--hp-purple);}
 .back-link{display:inline-block;font-size:13px;color:var(--hp-purple);margin-bottom:0.75rem;cursor:pointer;text-decoration:none;}
 .feature-row{display:flex;align-items:flex-start;gap:12px;padding:0.9rem 0;border-bottom:0.5px solid var(--border);}
 .feature-row:last-child{border-bottom:none;}
@@ -458,7 +462,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         <button class="btn btn-ghost" onclick="viewDemo(this)">Try a demo &ndash; no sign up needed</button>
       </div>
       <a href="javascript:void(0)" class="mini-link" onclick="goToAuth('signin')">Already have an account? Sign in</a>
-      <a href="javascript:void(0)" class="mini-link" onclick="showPlayPortal()">Student? Enter your class code</a>
+      <a href="javascript:void(0)" class="student-code-cta" onclick="showPlayPortal()">
+        <i class="ti ti-keyboard" aria-hidden="true"></i>
+        <span>Student? Enter your class code</span>
+        <i class="ti ti-arrow-right" aria-hidden="true"></i>
+      </a>
 
       <div class="landing-stat-row">
         <div class="landing-stat"><div class="landing-stat-val">12</div><div class="landing-stat-lbl">subjects covered</div></div>
