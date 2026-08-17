@@ -5544,11 +5544,14 @@ function renderPupilLinksForTopic(container, list, subjectKey){
     var badge = document.createElement('div'); badge.className = 'phase-badge';
     var icon = document.createElement('i'); icon.className = 'ti ti-user'; icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
     badge.appendChild(icon);
-    var textWrap = document.createElement('div');
+    var textWrap = document.createElement('div'); textWrap.style.flex = '1';
     var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = r.name;
-    var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = Math.round(pctOf(r)) + '% most recent – view profile';
+    var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = 'Most recent – view profile';
     textWrap.appendChild(name); textWrap.appendChild(desc);
-    btn.appendChild(badge); btn.appendChild(textWrap);
+    var pct = Math.round(pctOf(r));
+    var pe = document.createElement('div'); pe.className = 'pct-pill'; pe.style.flexShrink = '0'; pe.textContent = pct + '%';
+    pe.classList.add(scoreBandClass(pct));
+    btn.appendChild(badge); btn.appendChild(textWrap); btn.appendChild(pe);
     container.appendChild(btn);
   });
 }
