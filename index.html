@@ -262,6 +262,17 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .delete-row-btn:hover{background:var(--bg-danger);}
 .edit-row-btn{font-size:12px;padding:2px 8px;border:0.5px solid var(--hp-purple-border);border-radius:var(--radius);background:none;cursor:pointer;color:var(--hp-purple);white-space:nowrap;}
 .edit-row-btn:hover{background:var(--hp-purple-light);}
+.toggle-switch{position:relative;display:inline-block;width:34px;height:20px;flex-shrink:0;}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-switch .toggle-track{position:absolute;inset:0;background:var(--border-strong);border-radius:20px;cursor:pointer;transition:background 0.15s;}
+.toggle-switch .toggle-track:before{position:absolute;content:"";height:14px;width:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform 0.15s;box-shadow:0 1px 2px rgba(0,0,0,0.2);}
+.toggle-switch input:checked + .toggle-track{background:var(--hp-purple);}
+.toggle-switch input:checked + .toggle-track:before{transform:translateX(14px);}
+.toggle-switch input:disabled + .toggle-track{opacity:0.45;cursor:default;}
+.toggle-field{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.02em;}
+body.no-edit-delete .edit-row-btn,
+body.no-edit-delete .delete-row-btn,
+body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 .edit-modal-overlay{display:none;position:fixed;inset:0;background:rgba(20,16,40,0.45);z-index:1000;align-items:center;justify-content:center;padding:1rem;}
 .edit-modal-overlay.active{display:flex;}
 .edit-modal-card{background:var(--surface-2);border-radius:18px;padding:1.25rem;max-width:360px;width:100%;max-height:90vh;overflow-y:auto;}
@@ -678,7 +689,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
   </div>
   <div class="school-bar-actions">
     <button class="icon-btn export-btn" id="sb-code-btn" onclick="copyJoinCode()">Code: ------</button>
-    <button class="icon-btn" onclick="openStaffModal()">Staff</button>
+    <button class="icon-btn export-btn" onclick="openStaffModal()"><i class="ti ti-users" aria-hidden="true" style="font-size:14px;"></i> Staff</button>
     <button class="icon-btn danger-btn" onclick="doSignOut()">Sign out</button>
   </div>
 </div>
@@ -3697,10 +3708,10 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 <div class="edit-modal-overlay" id="staff-modal-overlay">
   <div class="edit-modal-card" style="max-width:420px;">
     <div class="section-hd" style="margin-bottom:0.35rem;">School staff</div>
-    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Everyone signed in at your school. The owner is the only account that can review reported and suggested questions.</p>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Everyone signed in at your school. Owners can review reported and suggested questions. Only staff with "Edit &amp; delete" on can change or remove existing data.</p>
     <div id="staff-list"></div>
     <div id="staff-owner-gone-note" style="display:none;font-size:12.5px;color:var(--text-secondary);background:var(--surface-1);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.6rem 0.75rem;margin-top:0.6rem;">
-      Not the owner, and they're no longer around to hand it off themselves? <a href="javascript:void(0)" onclick="requestOwnershipHelp()" style="color:var(--hp-purple);">Contact us</a> and we'll help transfer it.
+      Not an owner, and no owner is around to grant you access? <a href="javascript:void(0)" onclick="requestOwnershipHelp()" style="color:var(--hp-purple);">Contact us</a> and we'll help sort it out.
     </div>
     <div style="display:flex;gap:0.5rem;margin-top:0.85rem;">
       <button class="btn" style="flex:1;" onclick="closeStaffModal()">Close</button>
@@ -3743,7 +3754,7 @@ var SUPABASE_KEY = 'sb_publishable_PWWJmW5XT0DSXYOVzAtp6w_NIME1V5b';
 var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 var currentUser = null;
-var currentProfile = null; // {school_id, display_name, is_owner}
+var currentProfile = null; // {school_id, display_name, is_owner, can_edit_delete}
 var currentSchool = null;  // {id, name, join_code}
 
 /* ---------- Landing / auth screen wiring ---------- */
@@ -4014,13 +4025,14 @@ async function onSignedIn(){
   currentUser = sess.data.session ? sess.data.session.user : null;
   if(!currentUser) return;
 
-  var profRes = await sb.from('profiles').select('school_id, display_name, is_owner').eq('id', currentUser.id).single();
+  var profRes = await sb.from('profiles').select('school_id, display_name, is_owner, can_edit_delete').eq('id', currentUser.id).single();
   if(profRes.error || !profRes.data){
     showAuthError('si-error', 'Could not load your profile. Please try signing in again.');
     await sb.auth.signOut();
     return;
   }
   currentProfile = profRes.data;
+  applyEditDeleteVisibility();
 
   var schoolRes = await sb.from('schools').select('id, name, join_code, subscription_status, trial_ends_at, is_demo, last_rollover_academic_year, leaver_retention_years').eq('id', currentProfile.school_id).single();
   currentSchool = schoolRes.data || null;
@@ -35718,6 +35730,17 @@ var reportedQuestionsCache = [];
    successful ownership transfer so the UI updates immediately for whoever
    just gained or lost the flag - without needing a full page reload.
    Returns whether the current account is the owner. */
+/* Toggles a body class that the CSS above uses to hide every edit/delete
+   control app-wide (.edit-row-btn, .delete-row-btn, the per-subject "Clear
+   all" buttons). These all share consistent class/id naming across all 14+
+   subjects, so one CSS rule covers every call site instead of editing each
+   individually - actual enforcement still lives in the database RLS
+   policies (can_edit_delete()), this is just keeping the UI honest. */
+function applyEditDeleteVisibility(){
+  var allowed = !!(currentProfile && currentProfile.can_edit_delete);
+  document.body.classList.toggle('no-edit-delete', !allowed);
+}
+
 function applyOwnerVisibility(){
   var isOwnerAccount = !!(currentProfile && currentProfile.is_owner);
   var reportedCardEl = document.getElementById('tg-reported-card');
@@ -35926,12 +35949,13 @@ function exportSuggestedQuestionsCSV(){
   URL.revokeObjectURL(url);
 }
 
-/* ---------- School staff + ownership transfer. Every account only ever
-   gets school_id + is_owner from RLS-restricted profiles; this screen uses
-   the list_school_staff()/transfer_school_ownership() RPCs (both SECURITY
-   DEFINER, scoped server-side to the caller's own school) so any teacher
-   can see who else is at their school, and the current owner can hand the
-   flag to a colleague themselves instead of needing a database fix. ---------- */
+/* ---------- School staff + permission toggles. This screen uses the
+   list_school_staff()/set_owner_flag()/set_edit_delete_flag() RPCs (all
+   SECURITY DEFINER, scoped server-side to the caller's own school) so any
+   teacher can see who else is at their school, and an owner can toggle
+   Owner and Edit & delete access per person themselves instead of needing
+   a database fix. set_owner_flag() blocks removing the last remaining
+   owner from a school. ---------- */
 var staffListCache = [];
 
 async function openStaffModal(){
@@ -35955,33 +35979,46 @@ function renderStaffList(){
   listEl.innerHTML = '';
   staffListCache.forEach(function(person){
     var row = document.createElement('div');
-    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:0.6rem;padding:0.5rem 0;border-bottom:0.5px solid var(--border);';
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:0.75rem;padding:0.6rem 0;border-bottom:0.5px solid var(--border);';
     var isMe = currentUser && person.id === currentUser.id;
     var nameHtml = '<div style="font-size:13.5px;font-weight:500;">' + escapeHtml(person.display_name || 'Unnamed') + (isMe ? ' <span style="color:var(--text-muted);font-weight:400;">(you)</span>' : '') + '</div>' +
       '<div style="font-size:12px;color:var(--text-muted);">' + escapeHtml(person.email || '') + '</div>';
-    var actionHtml;
-    if(person.is_owner){
-      actionHtml = '<span style="font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:6px;background:var(--hp-purple-light);color:var(--hp-purple-dark);flex-shrink:0;">Owner</span>';
-    } else if(iAmOwner){
-      actionHtml = '<button class="all-btn" style="flex-shrink:0;" onclick="makeOwner(\'' + person.id + '\',\'' + escapeHtml(person.display_name || 'this teacher').replace(/'/g,"\\'") + '\')">Make owner</button>';
-    } else {
-      actionHtml = '';
-    }
-    row.innerHTML = '<div>' + nameHtml + '</div>' + actionHtml;
+
+    var ownerToggle = '<label class="toggle-field"><span class="toggle-switch"><input type="checkbox" ' +
+      (person.is_owner ? 'checked ' : '') + (iAmOwner ? '' : 'disabled ') +
+      'onchange="toggleOwnerFlag(\'' + person.id + '\', this.checked)"><span class="toggle-track"></span></span>Owner</label>';
+    var editToggle = '<label class="toggle-field"><span class="toggle-switch"><input type="checkbox" ' +
+      (person.can_edit_delete ? 'checked ' : '') + (iAmOwner ? '' : 'disabled ') +
+      'onchange="toggleEditDeleteFlag(\'' + person.id + '\', this.checked)"><span class="toggle-track"></span></span>Edit &amp; delete</label>';
+
+    row.innerHTML = '<div>' + nameHtml + '</div><div style="display:flex;gap:0.9rem;flex-shrink:0;">' + ownerToggle + editToggle + '</div>';
     listEl.appendChild(row);
   });
   if(noteEl) noteEl.style.display = iAmOwner ? 'none' : 'block';
 }
-async function makeOwner(newOwnerId, name){
-  if(!confirm('Make ' + name + ' the school owner? You will lose owner-only access (Reported/Suggested question review) immediately.')) return;
-  var res = await sb.rpc('transfer_school_ownership', { p_new_owner_id: newOwnerId });
-  if(res.error){ alert('Could not transfer ownership: ' + res.error.message); return; }
-  currentProfile.is_owner = false;
-  applyOwnerVisibility();
-  var reportedScreen = document.getElementById('tg-reported-screen');
-  var suggestedScreen = document.getElementById('tg-suggested-screen');
-  if((reportedScreen && reportedScreen.classList.contains('active')) || (suggestedScreen && suggestedScreen.classList.contains('active'))){
-    backToTargetsSubjects();
+async function toggleOwnerFlag(profileId, makeIt){
+  if(!(currentProfile && currentProfile.is_owner)){ alert('Only an owner can change this.'); await openStaffModal(); return; }
+  if(!makeIt && !confirm('Remove owner access for this account?')) { await openStaffModal(); return; }
+  var res = await sb.rpc('set_owner_flag', { p_profile_id: profileId, p_is_owner: makeIt });
+  if(res.error){ alert('Could not update: ' + res.error.message); await openStaffModal(); return; }
+  if(currentUser && profileId === currentUser.id){
+    currentProfile.is_owner = makeIt;
+    applyOwnerVisibility();
+    var reportedScreen = document.getElementById('tg-reported-screen');
+    var suggestedScreen = document.getElementById('tg-suggested-screen');
+    if(!makeIt && ((reportedScreen && reportedScreen.classList.contains('active')) || (suggestedScreen && suggestedScreen.classList.contains('active')))){
+      backToTargetsSubjects();
+    }
+  }
+  await openStaffModal();
+}
+async function toggleEditDeleteFlag(profileId, allowIt){
+  if(!(currentProfile && currentProfile.is_owner)){ alert('Only an owner can change this.'); await openStaffModal(); return; }
+  var res = await sb.rpc('set_edit_delete_flag', { p_profile_id: profileId, p_can_edit_delete: allowIt });
+  if(res.error){ alert('Could not update: ' + res.error.message); await openStaffModal(); return; }
+  if(currentUser && profileId === currentUser.id){
+    currentProfile.can_edit_delete = allowIt;
+    applyEditDeleteVisibility();
   }
   await openStaffModal();
 }
