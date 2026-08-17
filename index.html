@@ -124,6 +124,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .phase-btn:hover{background:var(--surface-3);border-color:var(--hp-purple-mid);}
 .phase-btn.active{background:var(--hp-purple-light);border-color:var(--hp-purple);}
 .phase-badge{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;flex-shrink:0;background:var(--hp-purple);color:#fff;}
+.phase-badge.avatar-badge{font-size:13px;font-weight:600;letter-spacing:0.2px;color:#fff;}
 .phase-name{font-size:15px;font-weight:500;color:var(--text-primary);font-family:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
 .phase-desc{font-family:var(--phonics-font);font-size:12px;color:var(--text-secondary);margin-top:2px;}
 .sound-display{font-family:var(--phonics-font);font-size:80px;font-weight:700;text-align:center;padding:1.5rem 0 1rem;color:var(--hp-purple);line-height:1;}
@@ -5541,9 +5542,7 @@ function renderPupilLinksForTopic(container, list, subjectKey){
   pupilsForTopic.forEach(function(r){
     var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'phase-btn';
     btn.onclick = function(){ goToChildProfileForTopic(r.name, r.year, subjectKey, topicFilters[subjectKey]); };
-    var badge = document.createElement('div'); badge.className = 'phase-badge';
-    var icon = document.createElement('i'); icon.className = 'ti ti-user'; icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
-    badge.appendChild(icon);
+    var badge = buildAvatarBadge(r.name);
     var textWrap = document.createElement('div'); textWrap.style.flex = '1';
     var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = r.name;
     var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = 'Most recent – view profile';
@@ -5572,6 +5571,32 @@ function pctOf(r){
   if(r.totalWords) return r.totalCorrect / r.totalWords * 100;
   if(r.totalFacts) return r.totalCorrect / r.totalFacts * 100;
   return 0;
+}
+/* Small colour palette for per-pupil initials avatars, kept distinct from
+   the red/amber/green score bands and the per-subject accent colours so
+   there's no confusing overlap in meaning - this colour is purely "which
+   child", nothing else. Picking by a stable hash of the name means the
+   same child always gets the same colour/initials, and two children with
+   the same first name (e.g. two Alfies) are visually distinguishable at a
+   glance instead of both showing an identical generic person icon. */
+var AVATAR_PALETTE = ['#5A50E6','#2E7D6B','#C9750B','#3B5FCC','#B23A6B','#2E8B8B','#8B5FBF','#4A7A3C'];
+function avatarColorForName(name){
+  var str = (name || '').trim();
+  var hash = 0;
+  for(var i=0;i<str.length;i++){ hash = (hash*31 + str.charCodeAt(i)) >>> 0; }
+  return AVATAR_PALETTE[hash % AVATAR_PALETTE.length];
+}
+function initialsForName(name){
+  var parts = (name || '').trim().split(/\s+/).filter(Boolean);
+  if(!parts.length) return '?';
+  if(parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+function buildAvatarBadge(name){
+  var badge = document.createElement('div'); badge.className = 'phase-badge avatar-badge';
+  badge.style.background = avatarColorForName(name);
+  badge.textContent = initialsForName(name);
+  return badge;
 }
 /* Red/amber/green banding for a single score, used on Results card pills
    and to flag struggling pupils. Thresholds: under 50% = red, 50-79% = amber,
@@ -32969,10 +32994,12 @@ function renderPlayRosterList(){
     var row = document.createElement('button');
     row.type = 'button';
     row.className = 'phase-btn';
-    row.style.fontSize = '15px';
-    row.style.fontWeight = '500';
-    row.textContent = p.name;
     row.onclick = function(){ playJoin(p.id, p.name); };
+    var badge = buildAvatarBadge(p.name);
+    var nameEl = document.createElement('div');
+    nameEl.style.cssText = 'font-size:15px;font-weight:500;color:var(--text-primary);';
+    nameEl.textContent = p.name;
+    row.appendChild(badge); row.appendChild(nameEl);
     listEl.appendChild(row);
   });
 }
