@@ -34485,10 +34485,10 @@ var PRACTICE_LEARN_FACTS = {
       "Multiplying by 1 keeps a number the same; multiplying by 0 makes it 0."
     ],
     division: [
-      "Division means sharing a number into equal groups, or finding how many times one number fits into another.",
-      "The number being divided is the dividend, the number you divide by is the divisor, and the answer is the quotient.",
-      "Division is the opposite of multiplication.",
-      "If numbers don't divide exactly, what's left over is called the remainder.",
+      "Division means sharing a number equally into groups, or finding how many equal groups fit inside it.",
+      "In a division like 12 ÷ 3, we're working out how many groups of 3 fit into 12 – the answer is 4.",
+      "Division is the opposite of multiplication – you can check a division by multiplying back up.",
+      "If numbers don't share out exactly, what's left over is called the remainder.",
       "You can't divide any number by zero – it doesn't make sense in maths!"
     ],
     place_value: [
@@ -34661,7 +34661,10 @@ async function loadPracticePupil(token){
     showPracticeScreen('practice-invalid');
     return;
   }
-  practicePupil = { id: row.pupil_id, name: row.name, year: row.year_group, tier: YEAR_TIER[row.year_group] || 'KS1' };
+  practicePupil = {
+    id: row.pupil_id, name: row.name, year: row.year_group, tier: YEAR_TIER[row.year_group] || 'KS1',
+    isYoungest: (row.year_group === 'Reception' || row.year_group === 'Year 1')
+  };
   document.getElementById('practice-welcome-name').textContent = practicePupil.name;
   showPracticeScreen('practice-home');
 }
@@ -34738,6 +34741,46 @@ function practiceLearnNext(){
   else { startPracticeGame(); }
 }
 
+/* KS1 covers Reception through Year 2, which is too wide a range to share
+   one question pool - a Year 2 leaver and a Reception child both get 'KS1'.
+   The teacher-led assessment side is untouched, but on the practice page
+   specifically, Reception/Year 1 pupils get a further-simplified slice of
+   the KS1 pool: for maths topics with a clear numeric jargon/difficulty
+   curve (addition/subtraction/multiplication/division), we cap the size of
+   the numbers that appear in the question text; other maths topics
+   (shape/measure/place_value/statistics) are already appropriately scaled
+   as-is. For non-maths subjects we fall back to a generic "shorter
+   question" filter as a rough simplicity proxy. If filtering would leave
+   too little content to practise with, we fall back to the full KS1 pool
+   rather than starving the child of questions. */
+var PRACTICE_YOUNGEST_MATHS_NUM_CAP = { addition:20, subtraction:20, multiplication:10, division:10 };
+var PRACTICE_YOUNGEST_MATHS_ANSWER_CAP = { multiplication:20 };
+function getPracticePool(subjectKey, topicKey, t){
+  var pool = (t.questions && t.questions[practicePupil.tier]) || [];
+  if(practicePupil.tier !== 'KS1' || !practicePupil.isYoungest) return pool;
+  var filtered;
+  if(subjectKey === 'maths' && PRACTICE_YOUNGEST_MATHS_NUM_CAP[topicKey] != null){
+    var cap = PRACTICE_YOUNGEST_MATHS_NUM_CAP[topicKey];
+    var answerCap = PRACTICE_YOUNGEST_MATHS_ANSWER_CAP[topicKey];
+    filtered = pool.filter(function(it){
+      var m = String(it.q).match(/\d+(\.\d+)?/g);
+      var maxNum = m ? Math.max.apply(null, m.map(Number)) : 0;
+      if(maxNum > cap) return false;
+      if(answerCap != null){
+        var ansNum = parseFloat(it.a);
+        if(!isNaN(ansNum) && ansNum > answerCap) return false;
+      }
+      return true;
+    });
+  } else if(subjectKey === 'maths'){
+    filtered = pool;
+  } else {
+    filtered = pool.filter(function(it){ return String(it.q).length <= 60; });
+    if(filtered.length < 6){ filtered = pool.filter(function(it){ return String(it.q).length <= 90; }); }
+  }
+  return filtered.length >= 6 ? filtered : pool;
+}
+
 /* Memory Match: picks up to 6 question/answer pairs from the topic's own
    question bank (preferring shorter text so it fits neatly on a card) and
    turns them into a face-down matching grid. Falls back to the plain quiz
@@ -34747,7 +34790,7 @@ function startPracticeGame(){
   if(!subj || !practicePupil) return;
   var t = subj.topics()[practiceTopicKey];
   if(!t) return;
-  var pool = (t.questions && t.questions[practicePupil.tier]) || [];
+  var pool = getPracticePool(practiceSubjectKey, practiceTopicKey, t);
   var tight = pool.filter(function(it){ return it.a && String(it.a).length <= 22 && it.q && String(it.q).length <= 70; });
   var candidates = tight.length >= 6 ? tight : pool.filter(function(it){ return it.a && String(it.a).length <= 34 && it.q && String(it.q).length <= 110; });
   if(candidates.length < 3){ startPracticeTopic(practiceTopicKey); return; }
@@ -34838,7 +34881,7 @@ function startPracticeTopic(topicKey){
   var t = topicsObj[topicKey];
   if(!t) return;
   practiceTopicKey = topicKey;
-  var pool = (t.questions && t.questions[practicePupil.tier]) || [];
+  var pool = getPracticePool(practiceSubjectKey, topicKey, t);
   practiceItems = pickQuestions(pool, 10);
   practiceIdx = 0; practiceScore = 0;
   if(!practiceItems.length){ alert('No practice questions are set up for this topic yet.'); return; }
