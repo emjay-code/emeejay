@@ -410,13 +410,37 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .section-title{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;text-align:center;margin-bottom:1rem;}
 .trust-row{display:flex;align-items:flex-start;gap:10px;padding:0.5rem 0;font-size:14px;color:var(--text-secondary);line-height:1.5;}
 .trust-row i{color:var(--text-muted);font-size:16px;flex-shrink:0;margin-top:2px;}
+
+/* Landing page only: wider wrapper than the auth/play/practice screens
+   (which deliberately stay narrow at .auth-wrap's 400px for form
+   legibility). Applied as an extra class alongside auth-wrap so the
+   max-width override just needs to win on source order. */
+.landing-wrap{max-width:980px;}
+.landing-narrow{max-width:640px;margin-left:auto;margin-right:auto;}
+.landing-hero{max-width:640px;margin:0 auto;text-align:center;position:relative;}
+.landing-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:640px;height:420px;background:radial-gradient(ellipse at center, rgba(90,80,230,0.16) 0%, rgba(139,92,246,0.07) 45%, transparent 72%);pointer-events:none;z-index:0;}
+.landing-hero>*{position:relative;z-index:1;}
+.subject-chip-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:1.5rem;position:relative;z-index:1;}
+.subject-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px 6px 8px;border-radius:99px;font-size:12.5px;font-weight:600;color:#fff;box-shadow:0 4px 12px rgba(20,16,50,0.14);}
+.subject-chip i{font-size:13px;}
+.landing-section-card{margin-top:1.75rem;}
+.feature-grid{display:grid;grid-template-columns:1fr;gap:0;}
+@media (min-width:680px){
+  .feature-grid{grid-template-columns:1fr 1fr;gap:0.85rem;}
+  .feature-grid .feature-row{border-bottom:none;border:0.5px solid var(--border);border-radius:14px;padding:1.1rem;background:var(--surface-1);box-shadow:0 6px 18px rgba(40,30,90,.04);transition:transform 0.15s,box-shadow 0.15s;}
+  .feature-grid .feature-row:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(40,30,90,.09);}
+}
+.landing-stat-row{display:flex;flex-wrap:wrap;justify-content:center;gap:1.75rem;margin-top:1.75rem;position:relative;z-index:1;}
+.landing-stat{text-align:center;}
+.landing-stat-val{font-size:22px;font-weight:600;color:var(--hp-purple-dark);font-family:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+.landing-stat-lbl{font-size:12px;color:var(--text-muted);margin-top:2px;}
 </style>
 </head>
 <body>
 <div class="page">
 
 <div id="landing-view">
-  <div class="auth-wrap">
+  <div class="auth-wrap landing-wrap">
     <div class="brand-header" style="border-bottom:none;margin-bottom:0.5rem;">
       <div class="brand-badge"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="38" height="38"><defs><linearGradient id="g-badge1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A50E6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="120" height="120" rx="32" fill="url(#g-badge1)"/><g transform="matrix(0.03454 0 0 -0.03454 26.00 67.17)"><path d="M1001.0 326V0H831.0V303Q831.0 357 802.5 386.5Q774.0 416 724.0 416Q674.0 416 645.5 386.5Q617.0 357 617.0 303V0H447.0V303Q447.0 357 418.5 386.5Q390.0 416 340.0 416Q290.0 416 261.5 386.5Q233.0 357 233.0 303V0H62.0V558H233.0V488Q259.0 523 301.0 543.5Q343.0 564 396.0 564Q459.0 564 508.5 537.0Q558.0 510 586.0 460Q615.0 506 665.0 535.0Q715.0 564 774.0 564Q878.0 564 939.5 501.0Q1001.0 438 1001.0 326Z M1644.0 238H1257.0Q1261.0 186 1290.5 158.5Q1320.0 131 1363.0 131Q1427.0 131 1452.0 185H1634.0Q1620.0 130 1583.5 86.0Q1547.0 42 1492.0 17.0Q1437.0 -8 1369.0 -8Q1287.0 -8 1223.0 27.0Q1159.0 62 1123.0 127.0Q1087.0 192 1087.0 279Q1087.0 366 1122.5 431.0Q1158.0 496 1222.0 531.0Q1286.0 566 1369.0 566Q1450.0 566 1513.0 532.0Q1576.0 498 1611.5 435.0Q1647.0 372 1647.0 288Q1647.0 264 1644.0 238ZM1472.0 333Q1472.0 377 1442.0 403.0Q1412.0 429 1367.0 429Q1324.0 429 1294.5 404.0Q1265.0 379 1258.0 333Z M1720.0 708Q1720.0 748 1748.5 774.5Q1777.0 801 1822.0 801Q1866.0 801 1894.5 774.5Q1923.0 748 1923.0 708Q1923.0 669 1894.5 642.5Q1866.0 616 1822.0 616Q1777.0 616 1748.5 642.5Q1720.0 669 1720.0 708ZM1908.0 -72Q1908.0 -175 1856.0 -220.5Q1804.0 -266 1711.0 -266H1644.0V-121H1685.0Q1713.0 -121 1725.0 -110.0Q1737.0 -99 1737.0 -74V558H1908.0Z" fill="#FFFFFF"/></g></svg></div>
       <div>
@@ -426,20 +450,43 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <a href="javascript:void(0)" onclick="goToAuth('signin')" style="margin-left:auto;font-size:13px;color:var(--hp-purple);font-weight:500;">Sign in</a>
     </div>
 
-    <div style="text-align:center;padding:1.25rem 0 0.25rem;">
+    <div class="landing-hero" style="padding:1.25rem 0 0.25rem;">
+      <div class="landing-glow" aria-hidden="true"></div>
       <div class="hero-title">Assessment that's affordable, easy, and lets teachers teach.</div>
       <p class="hero-sub">Emeejay Assess turns routine checks into evidence that actually shapes teaching &ndash; showing you where the gaps are so you can target them, not just tick a box. It's light enough to fit around the school day, valuable enough to matter in pupil progress meetings, and thorough enough to show ISI and Ofsted real evidence of children's progress.</p>
+
+      <div class="cta-row" style="max-width:340px;margin-left:auto;margin-right:auto;">
+        <button class="btn btn-primary" onclick="goToAuth('signup','create')">Start your free 14-day trial</button>
+        <button class="btn btn-ghost" onclick="viewDemo(this)">Try a demo &ndash; no sign up needed</button>
+      </div>
+      <a href="javascript:void(0)" class="mini-link" onclick="goToAuth('signin')">Already have an account? Sign in</a>
+      <a href="javascript:void(0)" class="mini-link" onclick="showPlayPortal()">Student? Enter your class code</a>
+
+      <div class="landing-stat-row">
+        <div class="landing-stat"><div class="landing-stat-val">12</div><div class="landing-stat-lbl">subjects covered</div></div>
+        <div class="landing-stat"><div class="landing-stat-val">&pound;30</div><div class="landing-stat-lbl">per year, per school</div></div>
+        <div class="landing-stat"><div class="landing-stat-val">14</div><div class="landing-stat-lbl">day free trial</div></div>
+      </div>
+
+      <div class="subject-chip-row">
+        <span class="subject-chip" style="background:var(--hp-purple);"><i class="ti ti-abc" aria-hidden="true"></i>Phonics</span>
+        <span class="subject-chip" style="background:#1E9E76;"><i class="ti ti-calculator" aria-hidden="true"></i>Maths</span>
+        <span class="subject-chip" style="background:#3B5FCC;"><i class="ti ti-book-2" aria-hidden="true"></i>English</span>
+        <span class="subject-chip" style="background:#C9750B;"><i class="ti ti-world" aria-hidden="true"></i>Topics</span>
+        <span class="subject-chip" style="background:#3F8F1F;"><i class="ti ti-leaf" aria-hidden="true"></i>Science</span>
+        <span class="subject-chip" style="background:#C2255C;"><i class="ti ti-star" aria-hidden="true"></i>RE</span>
+        <span class="subject-chip" style="background:#C23B3B;"><i class="ti ti-language" aria-hidden="true"></i>Languages</span>
+        <span class="subject-chip" style="background:#6B3FA0;"><i class="ti ti-music" aria-hidden="true"></i>Music</span>
+        <span class="subject-chip" style="background:#2E5DA8;"><i class="ti ti-brain" aria-hidden="true"></i>Reasoning</span>
+        <span class="subject-chip" style="background:#35495E;"><i class="ti ti-device-desktop" aria-hidden="true"></i>Computing</span>
+        <span class="subject-chip" style="background:#47637A;"><i class="ti ti-pencil" aria-hidden="true"></i>Handwriting</span>
+        <span class="subject-chip" style="background:#8B5CF6;"><i class="ti ti-building-carousel" aria-hidden="true"></i>Early Years</span>
+      </div>
     </div>
 
-    <div class="cta-row">
-      <button class="btn btn-primary" onclick="goToAuth('signup','create')">Start your free 14-day trial</button>
-      <button class="btn btn-ghost" onclick="viewDemo(this)">Try a demo &ndash; no sign up needed</button>
-    </div>
-    <a href="javascript:void(0)" class="mini-link" onclick="goToAuth('signin')">Already have an account? Sign in</a>
-    <a href="javascript:void(0)" class="mini-link" onclick="showPlayPortal()">Student? Enter your class code</a>
-
-    <div class="card" style="margin-top:2rem;">
+    <div class="card landing-section-card">
       <div class="section-title">Why we built this</div>
+      <div class="feature-grid">
       <div class="feature-row">
         <div class="feature-icon"><i class="ti ti-coin" aria-hidden="true"></i></div>
         <div>
@@ -475,10 +522,12 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <p class="feature-desc">Assessment should support teaching, not interrupt it. Checks are quick and unobtrusive, so tracking progress never comes at the expense of teaching it.</p>
         </div>
       </div>
+      </div>
     </div>
 
-    <div class="card" style="margin-top:2rem;">
+    <div class="card landing-section-card">
       <div class="section-title">What it does</div>
+      <div class="feature-grid">
       <div class="feature-row">
         <div class="feature-icon"><i class="ti ti-apps" aria-hidden="true"></i></div>
         <div>
@@ -528,16 +577,17 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <p class="feature-desc">One click gives you a CSV of every result &ndash; ready for pupil progress meetings, moderation, or your MIS.</p>
         </div>
       </div>
+      </div>
     </div>
 
-    <div class="card">
+    <div class="card landing-section-card landing-narrow">
       <div class="section-title">Built for busy schools</div>
       <div class="trust-row"><i class="ti ti-shield-lock" aria-hidden="true"></i> Each school gets its own private, cloud-synced account &ndash; every staff member signs in separately but sees the whole school's data.</div>
       <div class="trust-row"><i class="ti ti-device-laptop" aria-hidden="true"></i> Nothing to install. Works in any browser, on any laptop, tablet or interactive whiteboard.</div>
       <div class="trust-row"><i class="ti ti-refresh" aria-hidden="true"></i> Results save instantly and sync across every device &ndash; no more chasing paper trackers.</div>
     </div>
 
-    <div class="card price-card">
+    <div class="card price-card landing-narrow" style="margin-top:1.75rem;">
       <div class="section-title">Pricing</div>
       <div class="price-amount">&pound;30<span class="price-period">/year, per school</span></div>
       <p style="margin:0.75rem 0;">One flat fee for every subject. Unlimited staff logins, unlimited children, unlimited assessments.</p>
