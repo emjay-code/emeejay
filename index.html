@@ -1319,6 +1319,7 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:0;">These are the <span id="live-review-count"></span> that will be sent to the class. Swap out anything that doesn't look right before you generate the code &ndash; you'll get the chance to say why, which helps us improve the question bank.</p>
     </div>
     <div id="live-review-list" style="margin-bottom:0.75rem;"></div>
+    <button class="all-btn" style="width:100%;margin-bottom:0.75rem;" onclick="openSuggestQuestionModal({subject:liveReviewState.subject, checkType:liveReviewState.checkType, tier:liveReviewState.tier, topicLabel:liveReviewState.topicLabel, fromLiveReview:true})" id="live-review-suggest-btn">+ Suggest a question of your own</button>
     <div style="display:flex;gap:8px;">
       <button class="btn" style="flex:1;" onclick="cancelLiveReview()">Cancel</button>
       <button class="btn btn-primary" style="flex:2;" onclick="confirmStartLiveSession()">Looks good, generate code</button>
@@ -2945,12 +2946,22 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="section-hd" style="margin-bottom:0.75rem;">Choose a subject</div>
       <div class="subject-grid" id="tg-subject-grid"></div>
     </div>
-    <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.75rem;">
       <div>
         <div class="section-hd" style="margin-bottom:2px;">Reported questions</div>
         <div style="font-size:12.5px;color:var(--text-muted);">Questions teachers have flagged as too hard, too easy, or not quite right.</div>
       </div>
       <button class="all-btn" onclick="openReportedQuestionsScreen()">Review <span id="tg-reported-open-count"></span></button>
+    </div>
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+      <div>
+        <div class="section-hd" style="margin-bottom:2px;">Suggested questions</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Question ideas teachers have submitted, waiting to be reviewed and added to the bank.</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="all-btn" onclick="openSuggestQuestionModal(null)">Suggest one</button>
+        <button class="all-btn" onclick="openSuggestedQuestionsScreen()">Review <span id="tg-suggested-open-count"></span></button>
+      </div>
     </div>
   </div>
 
@@ -2974,6 +2985,33 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     </div>
     <div id="tg-reported-empty" class="empty-state" style="display:none;">No reported questions here.</div>
     <div id="tg-reported-list"></div>
+  </div>
+
+  <div class="rv-screen" id="tg-suggested-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsSubjects()">&larr; Back to Targets &amp; Reporting</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div>
+          <div class="section-hd" style="margin-bottom:0.35rem;">Suggested questions</div>
+          <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:0;">Question ideas teachers have submitted. Approving one here is a note-to-self that it's good to add to the shared question bank &ndash; it doesn't add it automatically.</p>
+        </div>
+        <button class="all-btn" style="flex-shrink:0;" onclick="openSuggestQuestionModal(null)">+ Suggest one</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:0.6rem;">
+        <select id="tg-suggested-status-filter" style="min-width:130px;" onchange="loadSuggestedQuestions()">
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+          <option value="all">All</option>
+        </select>
+        <select id="tg-suggested-subject-filter" style="min-width:150px;" onchange="loadSuggestedQuestions()">
+          <option value="">All subjects</option>
+        </select>
+        <button class="all-btn" onclick="exportSuggestedQuestionsCSV()">Export CSV</button>
+      </div>
+    </div>
+    <div id="tg-suggested-empty" class="empty-state" style="display:none;">No suggested questions here.</div>
+    <div id="tg-suggested-list"></div>
   </div>
 
   <div class="rv-screen" id="tg-pupil-screen">
@@ -3441,6 +3479,55 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
   </div>
 </div>
 
+<div class="edit-modal-overlay" id="suggest-modal-overlay">
+  <div class="edit-modal-card" id="suggest-modal-card">
+    <div class="section-hd" style="margin-bottom:0.35rem;">Suggest a question</div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Got a question idea of your own? Add it here. If you're reviewing a Live Session, it'll be added to this test as well as sent for review.</p>
+    <div id="suggest-context-picker">
+      <div class="field">
+        <label>Subject</label>
+        <select id="suggest-subject-select" onchange="onSuggestSubjectChange()"></select>
+      </div>
+      <div class="field">
+        <label>Topic</label>
+        <select id="suggest-topic-select" onchange="onSuggestTopicChange()"></select>
+      </div>
+      <div class="field">
+        <label>Tier</label>
+        <select id="suggest-tier-select">
+          <option value="KS1">KS1 (Reception&ndash;Year 2)</option>
+          <option value="LKS2">LKS2 (Year 3&ndash;4)</option>
+          <option value="UKS2">UKS2 (Year 5&ndash;6)</option>
+        </select>
+      </div>
+    </div>
+    <div id="suggest-context-locked" style="display:none;font-size:13px;color:var(--text-primary);background:var(--surface-1);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.5rem 0.65rem;margin-bottom:0.85rem;"></div>
+    <div class="field">
+      <label>Question</label>
+      <textarea id="suggest-question-text" maxlength="500" placeholder="e.g. What is 12 × 4?"></textarea>
+    </div>
+    <div class="field">
+      <label>Correct answer</label>
+      <input type="text" id="suggest-correct-answer" maxlength="200" placeholder="e.g. 48"/>
+    </div>
+    <div class="field">
+      <label>Wrong answer options (optional &ndash; leave blank for a teacher-marked question with no choices)</label>
+      <input type="text" id="suggest-wrong-1" maxlength="200" placeholder="Wrong answer 1" style="margin-bottom:0.4rem;"/>
+      <input type="text" id="suggest-wrong-2" maxlength="200" placeholder="Wrong answer 2" style="margin-bottom:0.4rem;"/>
+      <input type="text" id="suggest-wrong-3" maxlength="200" placeholder="Wrong answer 3"/>
+    </div>
+    <div class="field">
+      <label>Notes for the reviewer (optional)</label>
+      <textarea id="suggest-notes" maxlength="500" placeholder="Anything that helps us understand the question..."></textarea>
+    </div>
+    <div class="error-text" id="suggest-error" style="display:none;"></div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+      <button class="btn" style="flex:1;" onclick="closeSuggestModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" id="suggest-submit-btn" onclick="submitSuggestedQuestion()">Send</button>
+    </div>
+  </div>
+</div>
+
 <div class="edit-modal-overlay" id="select-child-modal-overlay">
   <div class="edit-modal-card">
     <div class="section-hd" style="margin-bottom:0.75rem;">Select a child</div>
@@ -3901,6 +3988,7 @@ async function switchTab(t){
     showRvScreen('tab-targets', 'tg-subject-screen');
     renderTargetsSubjectGrid();
     refreshReportedQuestionsCount();
+    refreshSuggestedQuestionsCount();
   }
 }
 
@@ -4287,6 +4375,128 @@ function reportReasoningQuestion(){
 }
 function reportComputingQuestion(){
   openReportModal('computing', currentComputingKey, (COMPUTING_TOPICS[currentComputingKey]||{}).label, currentComputingTier, currentComputingQuestions[cpIdx].q);
+}
+
+/* ---------- Suggest a question: lets a teacher contribute their own
+   question rather than just flagging an existing one. Two entry modes:
+   locked (subject/topic/tier already known, e.g. from Live Session review -
+   where the new question is also added to that session's item set so it
+   can be used right away) and standalone (teacher picks subject/topic/tier
+   from dropdowns, e.g. from the Targets & Reporting tab, any time). Either
+   way it's queued in suggested_questions for review - it does NOT get
+   written into the live question bank automatically, since that bank is
+   static content in this file rather than database-driven. Scoped to the
+   9 QA-style topic subjects (reusing PRACTICE_SUBJECTS, defined further
+   down, for the subject/topic list) - phonics/blending/handwriting/times
+   tables/early_years don't fit the question+answer+options shape. */
+var suggestModalState = null;
+
+function openSuggestQuestionModal(context){
+  document.getElementById('suggest-question-text').value = '';
+  document.getElementById('suggest-correct-answer').value = '';
+  document.getElementById('suggest-wrong-1').value = '';
+  document.getElementById('suggest-wrong-2').value = '';
+  document.getElementById('suggest-wrong-3').value = '';
+  document.getElementById('suggest-notes').value = '';
+  document.getElementById('suggest-error').style.display = 'none';
+  var pickerEl = document.getElementById('suggest-context-picker');
+  var lockedEl = document.getElementById('suggest-context-locked');
+  if(context){
+    suggestModalState = { subject: context.subject, checkType: context.checkType, tier: context.tier, topicLabel: context.topicLabel, locked: true, fromLiveReview: !!context.fromLiveReview };
+    pickerEl.style.display = 'none';
+    lockedEl.style.display = 'block';
+    lockedEl.textContent = [(REPORTED_SUBJECT_LABELS[context.subject] || context.subject), context.topicLabel, context.tier].filter(Boolean).join(' · ');
+  } else {
+    suggestModalState = { locked: false, fromLiveReview: false };
+    pickerEl.style.display = 'block';
+    lockedEl.style.display = 'none';
+    populateSuggestSubjectSelect();
+  }
+  document.getElementById('suggest-modal-overlay').classList.add('active');
+}
+function closeSuggestModal(){
+  document.getElementById('suggest-modal-overlay').classList.remove('active');
+}
+function populateSuggestSubjectSelect(){
+  var sel = document.getElementById('suggest-subject-select');
+  if(!sel.options.length){
+    PRACTICE_SUBJECTS.forEach(function(s){
+      var opt = document.createElement('option');
+      opt.value = s.key; opt.textContent = s.label;
+      sel.appendChild(opt);
+    });
+  }
+  onSuggestSubjectChange();
+}
+function onSuggestSubjectChange(){
+  var subjKey = document.getElementById('suggest-subject-select').value;
+  var subj = PRACTICE_SUBJECTS.find(function(s){ return s.key === subjKey; });
+  var topicSel = document.getElementById('suggest-topic-select');
+  topicSel.innerHTML = '';
+  if(!subj) return;
+  var topicsObj = subj.topics();
+  Object.keys(topicsObj).forEach(function(tk){
+    var opt = document.createElement('option');
+    opt.value = tk; opt.textContent = topicsObj[tk].label || tk;
+    topicSel.appendChild(opt);
+  });
+}
+
+async function submitSuggestedQuestion(){
+  var errEl = document.getElementById('suggest-error');
+  errEl.style.display = 'none';
+  var qText = document.getElementById('suggest-question-text').value.trim();
+  var answer = document.getElementById('suggest-correct-answer').value.trim();
+  if(!qText || !answer){
+    errEl.textContent = 'Please fill in the question and the correct answer.';
+    errEl.style.display = 'block';
+    return;
+  }
+  var subject, checkType, tier, topicLabel;
+  if(suggestModalState.locked){
+    subject = suggestModalState.subject; checkType = suggestModalState.checkType; tier = suggestModalState.tier; topicLabel = suggestModalState.topicLabel;
+  } else {
+    subject = document.getElementById('suggest-subject-select').value;
+    checkType = document.getElementById('suggest-topic-select').value;
+    tier = document.getElementById('suggest-tier-select').value;
+    if(!subject || !checkType){ errEl.textContent = 'Please choose a subject and topic.'; errEl.style.display = 'block'; return; }
+    var subj = PRACTICE_SUBJECTS.find(function(s){ return s.key === subject; });
+    var topicsObj = subj ? subj.topics() : {};
+    topicLabel = (topicsObj[checkType] || {}).label || checkType;
+  }
+  var wrongOpts = [
+    document.getElementById('suggest-wrong-1').value.trim(),
+    document.getElementById('suggest-wrong-2').value.trim(),
+    document.getElementById('suggest-wrong-3').value.trim()
+  ].filter(Boolean);
+
+  var btn = document.getElementById('suggest-submit-btn');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  var row = {
+    school_id: currentProfile ? currentProfile.school_id : null,
+    teacher_id: currentUser ? currentUser.id : null,
+    teacher_name: currentProfile ? (currentProfile.display_name || null) : null,
+    teacher_email: currentUser ? currentUser.email : null,
+    school_name: currentSchool ? currentSchool.name : null,
+    subject: subject, topic_key: checkType || null, topic_label: topicLabel || null, tier: tier || null,
+    question_text: qText, correct_answer: answer,
+    options: wrongOpts.length ? wrongOpts : null,
+    notes: document.getElementById('suggest-notes').value.trim() || null
+  };
+  var ins = await sb.from('suggested_questions').insert(row);
+  btn.disabled = false; btn.textContent = 'Send';
+  if(ins.error){
+    errEl.textContent = 'Could not send: ' + ins.error.message;
+    errEl.style.display = 'block';
+    return;
+  }
+  if(suggestModalState.fromLiveReview && liveReviewState){
+    var newItem = { kind:'qa', display: qText, answer: answer, options: shuffleArray([answer].concat(wrongOpts)) };
+    liveReviewState.items.push(newItem);
+    renderLiveReviewScreen();
+  }
+  closeSuggestModal();
+  alert('Thanks! Your question has been sent for review' + (suggestModalState.fromLiveReview ? ', and added to this test.' : '.'));
 }
 
 /* ---------- Pupils roster / children profiles ---------- */
@@ -32843,6 +33053,8 @@ function renderLiveReviewScreen(){
     note.textContent = 'This check uses its full set, so there are no spares to swap in - use "Report this question" during the check if something looks wrong.';
     el.appendChild(note);
   }
+  var suggestBtn = document.getElementById('live-review-suggest-btn');
+  if(suggestBtn) suggestBtn.style.display = PRACTICE_SUBJECTS.some(function(s){ return s.key === state.subject; }) ? 'block' : 'none';
 }
 
 function swapLiveReviewItem(idx){
@@ -35215,6 +35427,109 @@ function exportReportedQuestionsCSV(){
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
+/* ---------- Suggested questions: the review queue for submitQuestionSuggested()
+   above. Mirrors the Reported Questions screen closely. "Approved" here is
+   just a marker for you - since the question bank is static content in this
+   file, turning a suggestion into a real question still means asking me to
+   add it in, but at least nothing submitted is ever lost or invisible. ---------- */
+var suggestedQuestionsCache = [];
+
+async function refreshSuggestedQuestionsCount(){
+  var res = await sb.from('suggested_questions').select('id').eq('status','pending');
+  var el = document.getElementById('tg-suggested-open-count');
+  if(!el) return;
+  if(res.error || !res.data){ el.textContent = ''; return; }
+  el.textContent = res.data.length ? '(' + res.data.length + ' pending)' : '';
+}
+
+function openSuggestedQuestionsScreen(){
+  showRvScreen('tab-targets', 'tg-suggested-screen');
+  var subjEl = document.getElementById('tg-suggested-subject-filter');
+  if(subjEl && subjEl.options.length <= 1){
+    Object.keys(REPORTED_SUBJECT_LABELS).forEach(function(key){
+      var opt = document.createElement('option');
+      opt.value = key; opt.textContent = REPORTED_SUBJECT_LABELS[key];
+      subjEl.appendChild(opt);
+    });
+  }
+  loadSuggestedQuestions();
+}
+
+async function loadSuggestedQuestions(){
+  var listEl = document.getElementById('tg-suggested-list');
+  var emptyEl = document.getElementById('tg-suggested-empty');
+  if(!listEl) return;
+  var statusFilter = document.getElementById('tg-suggested-status-filter').value;
+  var subjectFilter = document.getElementById('tg-suggested-subject-filter').value;
+  var q = sb.from('suggested_questions').select('*').order('created_at', { ascending:false });
+  if(statusFilter !== 'all') q = q.eq('status', statusFilter);
+  if(subjectFilter) q = q.eq('subject', subjectFilter);
+  var res = await q;
+  if(res.error){ listEl.innerHTML = ''; emptyEl.style.display = 'block'; emptyEl.textContent = 'Could not load suggested questions: ' + res.error.message; return; }
+  suggestedQuestionsCache = res.data || [];
+  emptyEl.textContent = 'No suggested questions here.';
+  renderSuggestedQuestionsList();
+  refreshSuggestedQuestionsCount();
+}
+
+function renderSuggestedQuestionsList(){
+  var listEl = document.getElementById('tg-suggested-list');
+  var emptyEl = document.getElementById('tg-suggested-empty');
+  listEl.innerHTML = '';
+  if(!suggestedQuestionsCache.length){ emptyEl.style.display = 'block'; return; }
+  emptyEl.style.display = 'none';
+  suggestedQuestionsCache.forEach(function(r){
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.style.marginBottom = '0.6rem';
+    var topLine = [REPORTED_SUBJECT_LABELS[r.subject] || r.subject, r.topic_label, r.tier].filter(Boolean).join(' · ');
+    var when = r.created_at ? new Date(r.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : '';
+    var optsLine = (r.options && r.options.length) ? ('Wrong answers: ' + r.options.join(', ')) : 'No options given - teacher-marked question';
+    card.innerHTML =
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">' +
+        '<div>' +
+          '<div style="font-size:11.5px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.03em;">' + escapeHtml(topLine) + '</div>' +
+          '<div style="font-size:14px;font-weight:500;margin:2px 0 4px;">' + escapeHtml(r.question_text || '') + '</div>' +
+          '<div style="font-size:12.5px;color:var(--text-secondary);">Answer: <span style="font-weight:600;">' + escapeHtml(r.correct_answer || '') + '</span></div>' +
+          '<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">' + escapeHtml(optsLine) + '</div>' +
+          (r.notes ? '<div style="font-size:12.5px;color:var(--text-secondary);margin-top:2px;">' + escapeHtml(r.notes) + '</div>' : '') +
+          '<div style="font-size:11.5px;color:var(--text-muted);margin-top:4px;">' + escapeHtml(r.teacher_name || r.teacher_email || 'A teacher') + (when ? ' &middot; ' + when : '') + '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;">' +
+          (r.status !== 'approved' ? '<button class="all-btn" onclick="setSuggestionStatus(\''+r.id+'\',\'approved\')">Approve</button>' : '<span style="font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:6px;background:#e9f9ee;color:#1e7e37;">Approved</span>') +
+          (r.status !== 'rejected' ? '<button class="all-btn" onclick="setSuggestionStatus(\''+r.id+'\',\'rejected\')">Reject</button>' : '') +
+          (r.status !== 'pending' ? '<button class="all-btn" onclick="setSuggestionStatus(\''+r.id+'\',\'pending\')">Reset</button>' : '') +
+        '</div>' +
+      '</div>';
+    listEl.appendChild(card);
+  });
+}
+
+async function setSuggestionStatus(id, status){
+  var res = await sb.from('suggested_questions').update({ status: status }).eq('id', id);
+  if(res.error){ alert('Could not update: ' + res.error.message); return; }
+  loadSuggestedQuestions();
+}
+
+function exportSuggestedQuestionsCSV(){
+  if(!suggestedQuestionsCache.length){ alert('Nothing to export for the current filters.'); return; }
+  var cols = ['created_at','subject','topic_label','tier','question_text','correct_answer','options','notes','teacher_name','teacher_email','status'];
+  var lines = [cols.join(',')];
+  suggestedQuestionsCache.forEach(function(r){
+    lines.push(cols.map(function(c){
+      var v = r[c] == null ? '' : (Array.isArray(r[c]) ? r[c].join('; ') : String(r[c]));
+      return '"' + v.replace(/"/g,'""') + '"';
+    }).join(','));
+  });
+  var blob = new Blob([lines.join('\n')], { type:'text/csv' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'suggested_questions.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 function backToTargetsPupils(){
   showRvScreen('tab-targets', 'tg-pupil-screen');
   renderTargetsPupilPicker();
