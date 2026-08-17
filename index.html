@@ -86,6 +86,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 .maths-check-block.active{display:block;}
 .play-screen{display:none;}
 .play-screen.active{display:block;}
+.practice-screen{display:none;}
+.practice-screen.active{display:block;}
 .live-progress-bg{width:80px;height:6px;background:var(--surface-3);border-radius:3px;overflow:hidden;flex-shrink:0;}
 .live-progress-fill{height:100%;background:var(--hp-purple);transition:width 0.3s;}
 .live-status-badge{font-size:11px;padding:2px 8px;border-radius:99px;background:var(--surface-2);color:var(--text-secondary);white-space:nowrap;}
@@ -2868,6 +2870,20 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       </div>
     </div>
 
+    <div class="card" id="ch-profile-practice-card" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div>
+          <div class="section-hd" style="margin-bottom:2px;">Home practice link</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">A private link just for this child to practise at home or in class. Doesn't count as an official assessment.</div>
+        </div>
+        <button class="all-btn" id="ch-profile-practice-btn" onclick="generatePracticeLink()">Get practice link</button>
+      </div>
+      <div id="ch-profile-practice-linkrow" style="display:none;margin-top:0.6rem;gap:6px;flex-wrap:wrap;align-items:center;">
+        <input type="text" id="ch-profile-practice-url" readonly style="flex:1;min-width:220px;font-size:12.5px;" onclick="this.select();"/>
+        <button class="all-btn" onclick="copyPracticeLink()">Copy link</button>
+      </div>
+    </div>
+
     <div class="card" id="ch-profile-snapshot-card" style="margin-bottom:1rem;">
       <div class="section-hd" style="margin-bottom:0.5rem;">Overview</div>
       <div id="ch-profile-snapshot-grid"></div>
@@ -3078,6 +3094,116 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         </div>
       </div>
       <button class="btn btn-primary" onclick="playReset()">Enter another code</button>
+    </div>
+  </div>
+</div>
+
+<div id="practice-view" style="display:none;">
+  <div class="auth-wrap">
+    <div class="brand-header" style="border-bottom:none;margin-bottom:0.5rem;">
+      <div class="brand-badge"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="38" height="38"><defs><linearGradient id="g-badge5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A50E6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="120" height="120" rx="32" fill="url(#g-badge5)"/><g transform="matrix(0.03454 0 0 -0.03454 26.00 67.17)"><path d="M1001.0 326V0H831.0V303Q831.0 357 802.5 386.5Q774.0 416 724.0 416Q674.0 416 645.5 386.5Q617.0 357 617.0 303V0H447.0V303Q447.0 357 418.5 386.5Q390.0 416 340.0 416Q290.0 416 261.5 386.5Q233.0 357 233.0 303V0H62.0V558H233.0V488Q259.0 523 301.0 543.5Q343.0 564 396.0 564Q459.0 564 508.5 537.0Q558.0 510 586.0 460Q615.0 506 665.0 535.0Q715.0 564 774.0 564Q878.0 564 939.5 501.0Q1001.0 438 1001.0 326Z M1644.0 238H1257.0Q1261.0 186 1290.5 158.5Q1320.0 131 1363.0 131Q1427.0 131 1452.0 185H1634.0Q1620.0 130 1583.5 86.0Q1547.0 42 1492.0 17.0Q1437.0 -8 1369.0 -8Q1287.0 -8 1223.0 27.0Q1159.0 62 1123.0 127.0Q1087.0 192 1087.0 279Q1087.0 366 1122.5 431.0Q1158.0 496 1222.0 531.0Q1286.0 566 1369.0 566Q1450.0 566 1513.0 532.0Q1576.0 498 1611.5 435.0Q1647.0 372 1647.0 288Q1647.0 264 1644.0 238ZM1472.0 333Q1472.0 377 1442.0 403.0Q1412.0 429 1367.0 429Q1324.0 429 1294.5 404.0Q1265.0 379 1258.0 333Z M1720.0 708Q1720.0 748 1748.5 774.5Q1777.0 801 1822.0 801Q1866.0 801 1894.5 774.5Q1923.0 748 1923.0 708Q1923.0 669 1894.5 642.5Q1866.0 616 1822.0 616Q1777.0 616 1748.5 642.5Q1720.0 669 1720.0 708ZM1908.0 -72Q1908.0 -175 1856.0 -220.5Q1804.0 -266 1711.0 -266H1644.0V-121H1685.0Q1713.0 -121 1725.0 -110.0Q1737.0 -99 1737.0 -74V558H1908.0Z" fill="#FFFFFF"/></g></svg></div>
+      <div>
+        <div class="brand-title">Emeejay Assess</div>
+        <div class="brand-sub">Home practice</div>
+      </div>
+      <a href="javascript:void(0)" onclick="exitPracticePortal()" style="margin-left:auto;font-size:13px;color:var(--hp-purple);font-weight:500;">Exit</a>
+    </div>
+
+    <div class="practice-screen active" id="practice-loading">
+      <div class="card" style="text-align:center;padding:2rem 1rem;">Loading your practice…</div>
+    </div>
+
+    <div class="practice-screen" id="practice-invalid">
+      <div class="card" style="text-align:center;padding:2rem 1rem;">
+        <div class="section-hd" style="margin-bottom:0.5rem;">Link not recognised</div>
+        <div style="font-size:13px;color:var(--text-muted);">This practice link isn't valid, or it's no longer active. Please ask your teacher for a new link.</div>
+      </div>
+    </div>
+
+    <div class="practice-screen" id="practice-home">
+      <div class="card" style="margin-bottom:0.75rem;">
+        <div style="font-size:13px;color:var(--text-muted);">Hi</div>
+        <div style="font-size:19px;font-weight:600;color:var(--hp-purple-dark);" id="practice-welcome-name"></div>
+        <div style="font-size:12.5px;color:var(--text-muted);margin-top:4px;">Pick something to practise. This is just for you – it doesn't get marked or sent to your teacher.</div>
+      </div>
+      <div class="subject-grid">
+        <button class="subject-card subj-english" onclick="openPracticeSubject('english')">
+          <div class="subject-icon"><i class="ti ti-book-2" aria-hidden="true"></i></div>
+          <div class="subject-name">English</div>
+          <div class="subject-desc">Grammar, Punctuation, Spelling, Vocabulary and Reading Comprehension</div>
+        </button>
+        <button class="subject-card subj-maths" onclick="openPracticeSubject('maths')">
+          <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+          <div class="subject-name">Maths</div>
+          <div class="subject-desc">Shape, measure, the four operations, place value and statistics</div>
+        </button>
+        <button class="subject-card subj-topics" onclick="openPracticeSubject('topics')">
+          <div class="subject-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
+          <div class="subject-name">Topics</div>
+          <div class="subject-desc">Humanities topics</div>
+        </button>
+        <button class="subject-card subj-science" onclick="openPracticeSubject('science')">
+          <div class="subject-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+          <div class="subject-name">Science</div>
+          <div class="subject-desc">Science topics</div>
+        </button>
+        <button class="subject-card subj-re" onclick="openPracticeSubject('re')">
+          <div class="subject-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
+          <div class="subject-name">RE</div>
+          <div class="subject-desc">Religious Education topics</div>
+        </button>
+        <button class="subject-card subj-mfl" onclick="openPracticeSubject('mfl')">
+          <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+          <div class="subject-name">Languages</div>
+          <div class="subject-desc">French, Spanish, German and Latin</div>
+        </button>
+        <button class="subject-card subj-music" onclick="openPracticeSubject('music')">
+          <div class="subject-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
+          <div class="subject-name">Music</div>
+          <div class="subject-desc">Elements, instruments, notation, composers and more</div>
+        </button>
+        <button class="subject-card subj-reasoning" onclick="openPracticeSubject('reasoning')">
+          <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+          <div class="subject-name">Reasoning</div>
+          <div class="subject-desc">Verbal and Non-Verbal Reasoning</div>
+        </button>
+        <button class="subject-card subj-computing" onclick="openPracticeSubject('computing')">
+          <div class="subject-icon"><i class="ti ti-device-desktop" aria-hidden="true"></i></div>
+          <div class="subject-name">Computing</div>
+          <div class="subject-desc">Algorithms, online safety, hardware, data and more</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="practice-screen" id="practice-topic">
+      <a href="javascript:void(0)" class="back-link" onclick="showPracticeScreen('practice-home')">&larr; Back to subjects</a>
+      <div class="section-hd" style="margin:0.5rem 0 0.5rem;" id="practice-topic-subject-name"></div>
+      <div id="practice-topic-grid"></div>
+      <div id="practice-topic-empty" class="empty-state" style="display:none;">No practice topics are set up here yet.</div>
+    </div>
+
+    <div class="practice-screen" id="practice-quiz">
+      <a href="javascript:void(0)" class="back-link" onclick="showPracticeScreen('practice-topic')">&larr; Back to topics</a>
+      <div class="progress-bar"><div class="progress-fill" id="practice-prog"></div></div>
+      <div class="sound-counter" id="practice-counter">Question 1 of 10</div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:0.4rem;" id="practice-quiz-topic-name"></div>
+        <div class="gr-question-display" id="practice-question-display"></div>
+        <div class="mc-grid mc-grid-text" id="practice-mc-options"></div>
+      </div>
+    </div>
+
+    <div class="practice-screen" id="practice-done">
+      <div class="card" style="text-align:center;padding:1.5rem;">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Nice work</div>
+        <div class="stat-grid" style="margin-bottom:0;">
+          <div class="stat-card"><div class="stat-val" id="practice-done-score"></div><div class="stat-lbl">Correct</div></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" style="flex:1;" onclick="practiceAgainSameTopic()">Practise again</button>
+        <button class="btn" style="flex:1;" onclick="practiceChooseAnother()">Choose another topic</button>
+      </div>
     </div>
   </div>
 </div>
@@ -4075,7 +4201,7 @@ var pupilsRoster = [];
 function rowToPupil(row){
   return {
     id: row.id, name: row.name, year: row.year_group || '', gender: row.gender || '', dob: row.dob || '', needs: row.additional_needs || '',
-    status: row.status || 'active', leftDate: row.left_date || '', leftReason: row.left_reason || ''
+    status: row.status || 'active', leftDate: row.left_date || '', leftReason: row.left_reason || '', practiceToken: row.practice_token || ''
   };
 }
 async function loadPupils(){
@@ -4378,6 +4504,13 @@ async function openChildProfile(id, focusSubject, focusTopic){
     if(leaveBtn) leaveBtn.style.display = '';
     if(reinstateBtn) reinstateBtn.style.display = 'none';
   }
+  var practiceRow = document.getElementById('ch-profile-practice-linkrow');
+  var practiceBtn = document.getElementById('ch-profile-practice-btn');
+  if(practiceRow) practiceRow.style.display = 'none';
+  if(practiceBtn) practiceBtn.textContent = 'Get practice link';
+  if(p.practiceToken){
+    setPracticeLinkDisplay(p.practiceToken);
+  }
 
   var nameFilter = p.name.trim();
   var results_ = await sb.from('results').select('*').ilike('pupil_name', nameFilter);
@@ -4420,6 +4553,47 @@ async function openChildProfile(id, focusSubject, focusTopic){
       setTimeout(function(){ wrap.scrollIntoView({behavior:'smooth', block:'start'}); }, 50);
     }
   }
+}
+function practiceLinkUrl(token){
+  return location.origin + location.pathname + '?practice=' + encodeURIComponent(token);
+}
+function setPracticeLinkDisplay(token){
+  var row = document.getElementById('ch-profile-practice-linkrow');
+  var urlEl = document.getElementById('ch-profile-practice-url');
+  var btnEl = document.getElementById('ch-profile-practice-btn');
+  if(!row || !urlEl) return;
+  urlEl.value = practiceLinkUrl(token);
+  row.style.display = 'flex';
+  if(btnEl) btnEl.textContent = 'Practice link ready';
+}
+async function generatePracticeLink(){
+  if(!currentPupilId) return;
+  var btnEl = document.getElementById('ch-profile-practice-btn');
+  var origText = btnEl ? btnEl.textContent : '';
+  if(btnEl){ btnEl.disabled = true; btnEl.textContent = 'Generating…'; }
+  var res = await sb.rpc('get_or_create_practice_token', { p_pupil_id: currentPupilId });
+  if(btnEl) btnEl.disabled = false;
+  if(res.error || !res.data){
+    if(btnEl) btnEl.textContent = origText || 'Get practice link';
+    alert('Could not generate a practice link: ' + (res.error ? res.error.message : 'unknown error'));
+    return;
+  }
+  var token = res.data;
+  var p = pupilsRoster.find(function(x){ return x.id === currentPupilId; });
+  if(p) p.practiceToken = token;
+  setPracticeLinkDisplay(token);
+}
+function copyPracticeLink(){
+  var urlEl = document.getElementById('ch-profile-practice-url');
+  if(!urlEl || !urlEl.value) return;
+  var btnRow = document.getElementById('ch-profile-practice-linkrow');
+  var btnEl = btnRow ? btnRow.querySelector('.all-btn') : null;
+  navigator.clipboard.writeText(urlEl.value).then(function(){
+    if(btnEl){ var orig = btnEl.textContent; btnEl.textContent = 'Copied!'; setTimeout(function(){ btnEl.textContent = orig; }, 1500); }
+  }).catch(function(){
+    urlEl.select();
+    alert('Could not copy automatically – the link is selected, so you can copy it manually.');
+  });
 }
 /* Re-renders every subject's full-history section from the currently loaded
    profile data, applying the topic focus (if any) so a drill-down from
@@ -34201,6 +34375,148 @@ function checkPlayParam(){
   return false;
 }
 
+/* ---------- Home practice (child-facing, self-paced, not an assessment) ----------
+   Reached via a standing per-child link (?practice=TOKEN), generated by a
+   teacher on the child's profile screen (get_or_create_practice_token) and
+   resolved here anonymously (get_practice_pupil). This is deliberately
+   separate from the live-session "Play" system above: it's a standing link
+   rather than a one-off code, it's scoped to a single named child rather
+   than open joining, and - most importantly - nothing it does is written
+   back to Supabase. It only reuses the existing topic-based question banks
+   (the 9 subjects with self-markable multiple-choice questions) and the
+   shared renderMcOptions/pickQuestions helpers, entirely client-side. */
+var PRACTICE_SUBJECTS = [
+  {key:'english', label:'English', topics:function(){ return ENGLISH_TOPICS; }},
+  {key:'maths', label:'Maths', topics:function(){ return MATHS_TOPICS; }},
+  {key:'topics', label:'Topics', topics:function(){ return TOPICS; }},
+  {key:'science', label:'Science', topics:function(){ return SCIENCE_TOPICS; }},
+  {key:'re', label:'RE', topics:function(){ return RE_TOPICS; }},
+  {key:'mfl', label:'Languages', topics:function(){ return MFL_TOPICS; }},
+  {key:'music', label:'Music', topics:function(){ return MUSIC_TOPICS; }},
+  {key:'reasoning', label:'Reasoning', topics:function(){ return REASONING_TOPICS; }},
+  {key:'computing', label:'Computing', topics:function(){ return COMPUTING_TOPICS; }}
+];
+var practicePupil = null;
+var practiceSubjectKey = null;
+var practiceTopicKey = null;
+var practiceItems = [];
+var practiceIdx = 0;
+var practiceScore = 0;
+
+function checkPracticeParam(){
+  var params = new URLSearchParams(window.location.search);
+  var token = params.get('practice');
+  if(token){ showPracticePortal(token); return true; }
+  return false;
+}
+
+function showPracticePortal(token){
+  document.getElementById('landing-view').style.display = 'none';
+  document.getElementById('auth-view').style.display = 'none';
+  document.getElementById('app-view').style.display = 'none';
+  document.getElementById('practice-view').style.display = 'block';
+  loadPracticePupil(token);
+}
+function exitPracticePortal(){
+  document.getElementById('practice-view').style.display = 'none';
+  showLanding();
+}
+function showPracticeScreen(id){
+  document.querySelectorAll('.practice-screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
+
+async function loadPracticePupil(token){
+  showPracticeScreen('practice-loading');
+  var res = await sb.rpc('get_practice_pupil', { p_token: token });
+  var row = res.data && res.data[0];
+  if(res.error || !row){
+    showPracticeScreen('practice-invalid');
+    return;
+  }
+  practicePupil = { id: row.pupil_id, name: row.name, year: row.year_group, tier: YEAR_TIER[row.year_group] || 'KS1' };
+  document.getElementById('practice-welcome-name').textContent = practicePupil.name;
+  showPracticeScreen('practice-home');
+}
+
+function openPracticeSubject(key){
+  var subj = PRACTICE_SUBJECTS.find(function(s){ return s.key === key; });
+  if(!subj || !practicePupil) return;
+  practiceSubjectKey = key;
+  var topicsObj = subj.topics();
+  var tier = practicePupil.tier;
+  document.getElementById('practice-topic-subject-name').textContent = subj.label;
+  var el = document.getElementById('practice-topic-grid');
+  var emptyEl = document.getElementById('practice-topic-empty');
+  el.innerHTML = '';
+  var any = false;
+  Object.keys(topicsObj).forEach(function(tk){
+    var t = topicsObj[tk];
+    var pool = (t.questions && t.questions[tier]) || [];
+    if(!pool.length) return;
+    any = true;
+    var btn = document.createElement('button');
+    btn.className = 'phase-btn';
+    btn.type = 'button';
+    btn.onclick = function(){ startPracticeTopic(tk); };
+    var badge = document.createElement('div'); badge.className = 'phase-badge';
+    var icon = document.createElement('i'); icon.className = 'ti ' + (t.icon || 'ti-notebook'); icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '15px';
+    badge.appendChild(icon);
+    var textWrap = document.createElement('div');
+    var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = t.label;
+    var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = t.desc || '';
+    textWrap.appendChild(name); textWrap.appendChild(desc);
+    btn.appendChild(badge); btn.appendChild(textWrap);
+    el.appendChild(btn);
+  });
+  emptyEl.style.display = any ? 'none' : 'block';
+  showPracticeScreen('practice-topic');
+}
+
+function startPracticeTopic(topicKey){
+  var subj = PRACTICE_SUBJECTS.find(function(s){ return s.key === practiceSubjectKey; });
+  if(!subj || !practicePupil) return;
+  var topicsObj = subj.topics();
+  var t = topicsObj[topicKey];
+  if(!t) return;
+  practiceTopicKey = topicKey;
+  var pool = (t.questions && t.questions[practicePupil.tier]) || [];
+  practiceItems = pickQuestions(pool, 10);
+  practiceIdx = 0; practiceScore = 0;
+  if(!practiceItems.length){ alert('No practice questions are set up for this topic yet.'); return; }
+  document.getElementById('practice-quiz-topic-name').textContent = t.label;
+  showPracticeScreen('practice-quiz');
+  renderPracticeItem();
+}
+
+function renderPracticeItem(){
+  var total = practiceItems.length;
+  document.getElementById('practice-prog').style.width = Math.round((practiceIdx/total)*100)+'%';
+  document.getElementById('practice-counter').textContent = 'Question '+(practiceIdx+1)+' of '+total;
+  var item = practiceItems[practiceIdx];
+  document.getElementById('practice-question-display').textContent = item.q;
+  renderMcOptions('practice-mc-options', item, practiceAnswer);
+}
+
+function practiceAnswer(correct){
+  if(correct) practiceScore++;
+  practiceIdx++;
+  if(practiceIdx >= practiceItems.length){ finishPractice(); return; }
+  renderPracticeItem();
+}
+
+function finishPractice(){
+  document.getElementById('practice-done-score').textContent = practiceScore + '/' + practiceItems.length;
+  showPracticeScreen('practice-done');
+}
+
+function practiceAgainSameTopic(){
+  startPracticeTopic(practiceTopicKey);
+}
+function practiceChooseAnother(){
+  showPracticeScreen('practice-home');
+}
+
 /* ---------- Targets: suggested + saved targets per child, per subject ----------
    Reuses the "missed item" arrays already stored on each subject's result
    rows (the same data that powers each Analytics tab's "Most missed"
@@ -35369,7 +35685,8 @@ renderComputingList();
 renderEnglishList();
 renderMathsList();
 var isPlayMode = checkPlayParam();
-if(!isPlayMode){ initAuth(); }
+var isPracticeMode = !isPlayMode && checkPracticeParam();
+if(!isPlayMode && !isPracticeMode){ initAuth(); }
 checkCheckoutReturn();
 </script>
 </body>
