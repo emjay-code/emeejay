@@ -88,6 +88,13 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 .play-screen.active{display:block;}
 .practice-screen{display:none;}
 .practice-screen.active{display:block;}
+.mm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:0.5rem;}
+@media (min-width:520px){.mm-grid{grid-template-columns:repeat(3,1fr);}}
+.mm-card{min-height:78px;border-radius:12px;border:1px solid var(--border-strong);background:var(--surface-2);display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-size:12.5px;font-weight:500;line-height:1.3;cursor:pointer;transition:transform 0.15s,background 0.15s,border-color 0.15s;color:var(--text-primary);}
+.mm-card:active{transform:scale(0.97);}
+.mm-card.mm-hidden{font-size:24px;color:var(--hp-purple);}
+.mm-card.mm-revealed{background:#fff;border-color:var(--hp-purple);}
+.mm-card.mm-matched{background:#e9f9ee;border-color:#34a853;color:#1e7e37;cursor:default;}
 .live-progress-bg{width:80px;height:6px;background:var(--surface-3);border-radius:3px;overflow:hidden;flex-shrink:0;}
 .live-progress-fill{height:100%;background:var(--hp-purple);transition:width 0.3s;}
 .live-status-badge{font-size:11px;padding:2px 8px;border-radius:99px;background:var(--surface-2);color:var(--text-secondary);white-space:nowrap;}
@@ -3180,6 +3187,45 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="section-hd" style="margin:0.5rem 0 0.5rem;" id="practice-topic-subject-name"></div>
       <div id="practice-topic-grid"></div>
       <div id="practice-topic-empty" class="empty-state" style="display:none;">No practice topics are set up here yet.</div>
+    </div>
+
+    <div class="practice-screen" id="practice-learn">
+      <a href="javascript:void(0)" class="back-link" onclick="showPracticeScreen('practice-topic')">&larr; Back to topics</a>
+      <div class="section-hd" style="margin:0.5rem 0 0.5rem;" id="practice-learn-topic-name"></div>
+      <div class="card" style="text-align:center;padding:1.75rem 1.25rem;min-height:120px;display:flex;align-items:center;justify-content:center;">
+        <div style="font-size:16px;line-height:1.5;" id="practice-learn-fact"></div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:0.5rem;" id="practice-learn-counter"></div>
+      <div style="display:flex;gap:8px;margin-top:0.75rem;">
+        <button class="btn" id="practice-learn-prev" style="flex:1;" onclick="practiceLearnPrev()">Back</button>
+        <button class="btn btn-primary" id="practice-learn-next" style="flex:2;" onclick="practiceLearnNext()">Next fact</button>
+      </div>
+      <div style="text-align:center;margin-top:0.6rem;"><a href="javascript:void(0)" style="font-size:12.5px;color:var(--hp-purple);" onclick="startPracticeGame()">Skip ahead to the game</a></div>
+    </div>
+
+    <div class="practice-screen" id="practice-game">
+      <a href="javascript:void(0)" class="back-link" onclick="showPracticeScreen('practice-topic')">&larr; Back to topics</a>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;margin:0.5rem 0;flex-wrap:wrap;">
+        <div class="section-hd" style="margin-bottom:0;" id="practice-game-topic-name"></div>
+        <div style="font-size:12px;color:var(--text-muted);">Pairs: <span id="practice-game-pairs">0</span> · Moves: <span id="practice-game-moves">0</span></div>
+      </div>
+      <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:0.5rem;">Match each question card to its answer card.</div>
+      <div class="mm-grid" id="practice-game-grid"></div>
+      <div style="text-align:center;margin-top:0.75rem;"><a href="javascript:void(0)" style="font-size:12.5px;color:var(--hp-purple);" onclick="practiceGameQuickQuiz()">Skip to quick quiz instead</a></div>
+    </div>
+
+    <div class="practice-screen" id="practice-game-done">
+      <div class="card" style="text-align:center;padding:1.5rem;">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">All matched!</div>
+        <div class="stat-grid" style="margin-bottom:0;">
+          <div class="stat-card"><div class="stat-val" id="practice-game-done-moves"></div><div class="stat-lbl">Moves</div></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" style="flex:1;" onclick="practiceGamePlayAgain()">Play again</button>
+        <button class="btn" style="flex:1;" onclick="practiceGameQuickQuiz()">Quick quiz</button>
+      </div>
+      <div style="text-align:center;margin-top:0.5rem;"><a href="javascript:void(0)" style="font-size:12.5px;color:var(--hp-purple);" onclick="practiceChooseAnother()">Choose another topic</a></div>
     </div>
 
     <div class="practice-screen" id="practice-quiz">
@@ -34396,12 +34442,193 @@ var PRACTICE_SUBJECTS = [
   {key:'reasoning', label:'Reasoning', topics:function(){ return REASONING_TOPICS; }},
   {key:'computing', label:'Computing', topics:function(){ return COMPUTING_TOPICS; }}
 ];
+/* Pilot: Maths, English and Science get a short "learn" screen (a handful of
+   hand-written key facts) before a Memory Match game, instead of going
+   straight into the multiple-choice quiz. Other subjects are unaffected -
+   enterPracticeTopic() falls back to the plain quiz for any topic that has
+   no entry here. */
+var PRACTICE_LEARN_FACTS = {
+  maths: {
+    shape: [
+      "A shape with 3 sides is called a triangle, and a shape with 4 sides is called a quadrilateral.",
+      "Shapes with straight sides are called polygons – a pentagon has 5 sides, a hexagon has 6, and an octagon has 8.",
+      "A right angle is exactly 90 degrees – like the corner of a square.",
+      "2D shapes are flat, like a circle or triangle. 3D shapes have depth too, like a cube or a sphere.",
+      "A shape is symmetrical if you can fold it in half and both sides match exactly."
+    ],
+    measure: [
+      "We measure length in millimetres, centimetres, metres and kilometres.",
+      "Mass (how heavy something is) is measured in grams and kilograms.",
+      "Capacity (how much liquid something holds) is measured in millilitres and litres.",
+      "Perimeter is the distance all the way around a shape's edge.",
+      "Area is the amount of space inside a flat shape, measured in square units like cm²."
+    ],
+    addition: [
+      "Addition means combining two or more numbers to make a bigger total.",
+      "The numbers being added are called addends, and the answer is called the sum.",
+      "You can add numbers in any order and get the same answer.",
+      "When adding, if a column adds up to 10 or more, you carry the extra ten into the next column.",
+      "Adding zero to any number doesn't change it."
+    ],
+    subtraction: [
+      "Subtraction means taking one number away from another to find the difference.",
+      "Unlike addition, order matters in subtraction – 8 − 3 is not the same as 3 − 8.",
+      "If a digit you're subtracting from is too small, you borrow (exchange) 10 from the next column.",
+      "Subtraction is the opposite of addition – you can check a subtraction by adding back up.",
+      "Counting on from the smaller number is a quick way to work out a subtraction."
+    ],
+    multiplication: [
+      "Multiplication is a fast way of adding the same number lots of times, e.g. 4 × 3 = 4 + 4 + 4.",
+      "The numbers being multiplied are called factors, and the answer is called the product.",
+      "Multiplying by 10 moves each digit one place to the left.",
+      "Just like addition, you can multiply numbers in any order and get the same answer.",
+      "Multiplying by 1 keeps a number the same; multiplying by 0 makes it 0."
+    ],
+    division: [
+      "Division means sharing a number into equal groups, or finding how many times one number fits into another.",
+      "The number being divided is the dividend, the number you divide by is the divisor, and the answer is the quotient.",
+      "Division is the opposite of multiplication.",
+      "If numbers don't divide exactly, what's left over is called the remainder.",
+      "You can't divide any number by zero – it doesn't make sense in maths!"
+    ],
+    place_value: [
+      "Place value means the value of a digit depends on where it sits in a number.",
+      "In the number 452, the 4 is worth 400, the 5 is worth 50, and the 2 is worth 2.",
+      "Each place in a number is 10 times bigger than the place to its right.",
+      "A zero used as a placeholder shows there's nothing in that column, like the 0 in 306.",
+      "Decimals use place value too – the first digit after the point is tenths, the next is hundredths."
+    ],
+    statistics: [
+      "A bar chart uses bars of different heights to show and compare amounts.",
+      "A pictogram uses pictures or symbols to represent data, with a key showing what each symbol is worth.",
+      "The mode is the number that appears most often in a set of data.",
+      "The range is the difference between the smallest and largest number in a set.",
+      "Tally charts use marks – with every 5th mark crossing the rest – to count things quickly."
+    ]
+  },
+  english: {
+    grammar: [
+      "A noun is a naming word – it can name a person, place, thing or idea.",
+      "A verb is a doing or being word, like run, jump or is.",
+      "An adjective describes a noun, like the \"bright\" sun or the \"tiny\" mouse.",
+      "A sentence needs a subject and a verb to make sense on its own.",
+      "Conjunctions like \"and\", \"but\" and \"because\" join words or sentences together."
+    ],
+    punctuation: [
+      "A full stop shows a sentence has ended.",
+      "A question mark replaces a full stop when a sentence asks something.",
+      "Commas separate items in a list or add a pause in a sentence.",
+      "An apostrophe shows a letter is missing (don't) or that something belongs to someone (Sam's book).",
+      "Speech marks go around the exact words someone says out loud."
+    ],
+    spelling: [
+      "\"I before E except after C\" is a spelling rule – though English has plenty of exceptions!",
+      "A prefix is added to the start of a word to change its meaning, like \"un-\" in \"unhappy\".",
+      "A suffix is added to the end of a word, like \"-ful\" in \"careful\".",
+      "Homophones are words that sound the same but are spelled differently and mean different things, like \"there\", \"their\" and \"they're\".",
+      "Many tricky words in English just have to be learned by heart, because they don't follow the usual rules."
+    ],
+    vocabulary: [
+      "A synonym is a word that means almost the same as another word, like \"happy\" and \"joyful\".",
+      "An antonym is a word that means the opposite of another word, like \"hot\" and \"cold\".",
+      "Context clues are hints in a sentence that help you work out what an unfamiliar word means.",
+      "A word's root is its most basic form before prefixes or suffixes are added.",
+      "Reading widely is one of the best ways to pick up new vocabulary naturally."
+    ],
+    reading_comprehension_fiction: [
+      "Fiction stories are made up, even if they're inspired by real life.",
+      "The characters are the people (or animals!) that the story happens to.",
+      "The setting is where and when a story takes place.",
+      "The plot is the sequence of events that make up the story, usually with a problem to solve.",
+      "Inference means using clues in the text to work out something the author didn't say directly."
+    ],
+    reading_comprehension_nonfiction: [
+      "Non-fiction texts give real facts and information rather than telling a made-up story.",
+      "Headings and subheadings help you find information quickly without reading the whole text.",
+      "A glossary at the back of a book explains what tricky words mean.",
+      "Skimming means reading quickly to get the general idea; scanning means looking for one specific piece of information.",
+      "Non-fiction can be written to inform, explain, persuade or instruct."
+    ],
+    figurative_language: [
+      "A simile compares two things using \"like\" or \"as\", e.g. \"as brave as a lion\".",
+      "A metaphor says one thing is another thing, e.g. \"the classroom was a zoo\".",
+      "Personification gives human qualities to something that isn't human, like \"the wind whispered\".",
+      "Alliteration is when words close together start with the same sound, like \"slippery snakes\".",
+      "Onomatopoeia is when a word sounds like the noise it describes, like \"buzz\" or \"crash\"."
+    ]
+  },
+  science: {
+    plants: [
+      "Most plants need light, water, air and the right temperature to grow well.",
+      "Water and nutrients travel up a plant through its roots and stem.",
+      "Pollination happens when pollen moves from one flower to another, often carried by insects like bees.",
+      "Seeds are dispersed (spread) in different ways – by wind, animals, or even bursting pods.",
+      "Photosynthesis is how plants use sunlight to make their own food, using carbon dioxide and water."
+    ],
+    animals_humans: [
+      "Animals can be grouped by what they eat: herbivores eat plants, carnivores eat meat, and omnivores eat both.",
+      "Humans and many animals need the right types of food, water and exercise to stay healthy.",
+      "Animals grow and change through a life cycle, which looks different for different animals.",
+      "The human skeleton supports the body, protects organs, and helps us move.",
+      "The five human senses are sight, hearing, smell, taste and touch."
+    ],
+    materials: [
+      "Materials can be natural (like wood or wool) or man-made (like plastic).",
+      "Some materials are good conductors of heat or electricity, and some are insulators.",
+      "A material's properties include things like hardness, flexibility, and whether it's transparent or opaque.",
+      "Some materials can be changed permanently, like baking clay; others can be changed back, like melting ice.",
+      "We choose materials for a job based on their properties, like using waterproof material for a raincoat."
+    ],
+    living_things_habitats: [
+      "A habitat is the natural home of a plant or animal, providing everything it needs to survive.",
+      "A food chain shows what eats what, usually starting with a plant.",
+      "Living things can be sorted into groups based on features they share, like having wings or fur.",
+      "A micro-habitat is a small habitat, like under a log or in a puddle.",
+      "If a habitat changes a lot, the plants and animals living there can struggle to survive."
+    ],
+    rocks_soils: [
+      "Rocks can be grouped into three types: igneous, sedimentary and metamorphic.",
+      "Sedimentary rocks are made from layers of sediment squashed together over millions of years.",
+      "Fossils are usually found in sedimentary rock and show us plants or animals from long ago.",
+      "Soil is made from tiny bits of broken-down rock mixed with decayed plants and animals.",
+      "Different soils – like sandy, clay and chalky soil – drain water at different speeds."
+    ],
+    light_shadows: [
+      "We see things because light bounces off them and travels into our eyes.",
+      "A shadow forms when an object blocks light from reaching a surface.",
+      "Light travels in straight lines – that's why shadows have sharp edges.",
+      "Some materials are transparent (let light through), some are translucent (let some light through), and some are opaque (block light completely).",
+      "Shadows change size and shape depending on how close the light source is."
+    ],
+    forces_magnets: [
+      "A force is a push or a pull that can make something start, stop, speed up, slow down or change direction.",
+      "Gravity is a force that pulls objects down towards the Earth.",
+      "Friction is a force that slows things down when two surfaces rub together.",
+      "Magnets attract some metals, like iron and steel, but not others, like gold or plastic.",
+      "Every magnet has a north and a south pole – opposite poles attract, and like poles repel."
+    ],
+    earth_space: [
+      "The Earth spins on its axis once a day, which is why we have day and night.",
+      "The Earth takes about 365 days (one year) to orbit the Sun.",
+      "The Moon orbits the Earth roughly once a month and doesn't make its own light – we see sunlight reflecting off it.",
+      "Our Solar System has eight planets that all orbit the Sun.",
+      "Earth is the only planet we know of that has the right conditions to support life."
+    ]
+  }
+};
 var practicePupil = null;
 var practiceSubjectKey = null;
 var practiceTopicKey = null;
 var practiceItems = [];
 var practiceIdx = 0;
 var practiceScore = 0;
+var practiceLearnIdx = 0;
+var practiceGamePairs = [];
+var practiceGameCards = [];
+var practiceGameFlipped = [];
+var practiceGameMoves = 0;
+var practiceGameMatchedCount = 0;
+var practiceGameLock = false;
 
 function checkPracticeParam(){
   var params = new URLSearchParams(window.location.search);
@@ -34458,7 +34685,7 @@ function openPracticeSubject(key){
     var btn = document.createElement('button');
     btn.className = 'phase-btn';
     btn.type = 'button';
-    btn.onclick = function(){ startPracticeTopic(tk); };
+    btn.onclick = function(){ enterPracticeTopic(tk); };
     var badge = document.createElement('div'); badge.className = 'phase-badge';
     var icon = document.createElement('i'); icon.className = 'ti ' + (t.icon || 'ti-notebook'); icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '15px';
     badge.appendChild(icon);
@@ -34471,6 +34698,137 @@ function openPracticeSubject(key){
   });
   emptyEl.style.display = any ? 'none' : 'block';
   showPracticeScreen('practice-topic');
+}
+
+/* Entry point from the topic list. Maths/English/Science topics have a
+   short set of "learn" facts (see PRACTICE_LEARN_FACTS) and go there first,
+   then into the Memory Match game. Every other subject's topics have no
+   entry in PRACTICE_LEARN_FACTS, so they fall straight through to the
+   original plain multiple-choice quiz - unchanged from before. */
+function enterPracticeTopic(topicKey){
+  practiceTopicKey = topicKey;
+  var facts = (PRACTICE_LEARN_FACTS[practiceSubjectKey] || {})[topicKey];
+  if(facts && facts.length){
+    var subj = PRACTICE_SUBJECTS.find(function(s){ return s.key === practiceSubjectKey; });
+    var t = subj && subj.topics()[topicKey];
+    document.getElementById('practice-learn-topic-name').textContent = t ? t.label : '';
+    practiceLearnIdx = 0;
+    renderPracticeLearnCard();
+    showPracticeScreen('practice-learn');
+  } else {
+    startPracticeTopic(topicKey);
+  }
+}
+
+function renderPracticeLearnCard(){
+  var facts = (PRACTICE_LEARN_FACTS[practiceSubjectKey] || {})[practiceTopicKey] || [];
+  document.getElementById('practice-learn-fact').textContent = facts[practiceLearnIdx] || '';
+  document.getElementById('practice-learn-counter').textContent = facts.length ? ('Fact ' + (practiceLearnIdx+1) + ' of ' + facts.length) : '';
+  var prevBtn = document.getElementById('practice-learn-prev');
+  if(prevBtn) prevBtn.disabled = practiceLearnIdx === 0;
+  var nextBtn = document.getElementById('practice-learn-next');
+  if(nextBtn) nextBtn.textContent = (practiceLearnIdx >= facts.length - 1) ? "Let's play!" : 'Next fact';
+}
+function practiceLearnPrev(){
+  if(practiceLearnIdx > 0){ practiceLearnIdx--; renderPracticeLearnCard(); }
+}
+function practiceLearnNext(){
+  var facts = (PRACTICE_LEARN_FACTS[practiceSubjectKey] || {})[practiceTopicKey] || [];
+  if(practiceLearnIdx < facts.length - 1){ practiceLearnIdx++; renderPracticeLearnCard(); }
+  else { startPracticeGame(); }
+}
+
+/* Memory Match: picks up to 6 question/answer pairs from the topic's own
+   question bank (preferring shorter text so it fits neatly on a card) and
+   turns them into a face-down matching grid. Falls back to the plain quiz
+   if the topic doesn't have enough tile-friendly content. */
+function startPracticeGame(){
+  var subj = PRACTICE_SUBJECTS.find(function(s){ return s.key === practiceSubjectKey; });
+  if(!subj || !practicePupil) return;
+  var t = subj.topics()[practiceTopicKey];
+  if(!t) return;
+  var pool = (t.questions && t.questions[practicePupil.tier]) || [];
+  var tight = pool.filter(function(it){ return it.a && String(it.a).length <= 22 && it.q && String(it.q).length <= 70; });
+  var candidates = tight.length >= 6 ? tight : pool.filter(function(it){ return it.a && String(it.a).length <= 34 && it.q && String(it.q).length <= 110; });
+  if(candidates.length < 3){ startPracticeTopic(practiceTopicKey); return; }
+  var chosen = shuffleArray(candidates).slice(0, Math.min(6, candidates.length));
+  practiceGamePairs = chosen;
+  var cards = [];
+  chosen.forEach(function(item, i){
+    cards.push({ pairId:i, text:item.q, matched:false });
+    cards.push({ pairId:i, text:item.a, matched:false });
+  });
+  practiceGameCards = shuffleArray(cards);
+  practiceGameFlipped = [];
+  practiceGameMoves = 0;
+  practiceGameMatchedCount = 0;
+  practiceGameLock = false;
+  document.getElementById('practice-game-topic-name').textContent = t.label;
+  renderPracticeGame();
+  showPracticeScreen('practice-game');
+}
+function renderPracticeGame(){
+  var el = document.getElementById('practice-game-grid');
+  el.innerHTML = '';
+  document.getElementById('practice-game-moves').textContent = practiceGameMoves;
+  document.getElementById('practice-game-pairs').textContent = practiceGameMatchedCount + ' of ' + practiceGamePairs.length;
+  practiceGameCards.forEach(function(card, idx){
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    var isFlipped = practiceGameFlipped.indexOf(idx) > -1;
+    if(card.matched){
+      btn.className = 'mm-card mm-matched';
+      btn.textContent = card.text;
+      btn.disabled = true;
+    } else if(isFlipped){
+      btn.className = 'mm-card mm-revealed';
+      btn.textContent = card.text;
+      btn.onclick = function(){ practiceGameFlip(idx); };
+    } else {
+      btn.className = 'mm-card mm-hidden';
+      btn.textContent = '?';
+      btn.onclick = function(){ practiceGameFlip(idx); };
+    }
+    el.appendChild(btn);
+  });
+}
+function practiceGameFlip(idx){
+  if(practiceGameLock) return;
+  if(practiceGameFlipped.indexOf(idx) > -1) return;
+  if(practiceGameCards[idx].matched) return;
+  practiceGameFlipped.push(idx);
+  renderPracticeGame();
+  if(practiceGameFlipped.length === 2){
+    practiceGameMoves++;
+    var a = practiceGameCards[practiceGameFlipped[0]];
+    var b = practiceGameCards[practiceGameFlipped[1]];
+    if(a.pairId === b.pairId){
+      a.matched = true; b.matched = true;
+      practiceGameMatchedCount++;
+      practiceGameFlipped = [];
+      renderPracticeGame();
+      if(practiceGameMatchedCount === practiceGamePairs.length){
+        setTimeout(finishPracticeGame, 400);
+      }
+    } else {
+      practiceGameLock = true;
+      setTimeout(function(){
+        practiceGameFlipped = [];
+        practiceGameLock = false;
+        renderPracticeGame();
+      }, 900);
+    }
+  }
+}
+function finishPracticeGame(){
+  document.getElementById('practice-game-done-moves').textContent = practiceGameMoves;
+  showPracticeScreen('practice-game-done');
+}
+function practiceGamePlayAgain(){
+  startPracticeGame();
+}
+function practiceGameQuickQuiz(){
+  startPracticeTopic(practiceTopicKey);
 }
 
 function startPracticeTopic(topicKey){
