@@ -88,6 +88,9 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 .play-screen.active{display:block;}
 .practice-screen{display:none;}
 .practice-screen.active{display:block;}
+.lr-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0.6rem 0.75rem;border:0.5px solid var(--border-strong);border-radius:var(--radius);background:var(--surface-2);margin-bottom:0.5rem;}
+.lr-row-text{font-size:13px;color:var(--text-primary);flex:1;}
+.lr-row.lr-swapped{border-color:var(--hp-purple);background:var(--surface-1);}
 .mm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:0.5rem;}
 @media (min-width:520px){.mm-grid{grid-template-columns:repeat(3,1fr);}}
 .mm-card{min-height:78px;border-radius:12px;border:1px solid var(--border-strong);background:var(--surface-2);display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-size:12.5px;font-weight:500;line-height:1.3;cursor:pointer;transition:transform 0.15s,background 0.15s,border-color 0.15s;color:var(--text-primary);}
@@ -1308,6 +1311,18 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     </div>
     <div class="card" id="computing-res-missed-wrap" style="display:none;"><div class="section-hd">Questions to revisit</div><div id="computing-res-missed-chips" class="chips-row"></div></div>
     <button class="btn btn-primary" onclick="goHome()">New Computing check</button>
+  </div>
+
+  <div class="screen" id="screen-live-review">
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.35rem;" id="live-review-label">Review before sending</div>
+      <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:0;">These are the <span id="live-review-count"></span> that will be sent to the class. Swap out anything that doesn't look right before you generate the code &ndash; you'll get the chance to say why, which helps us improve the question bank.</p>
+    </div>
+    <div id="live-review-list" style="margin-bottom:0.75rem;"></div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn" style="flex:1;" onclick="cancelLiveReview()">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;" onclick="confirmStartLiveSession()">Looks good, generate code</button>
+    </div>
   </div>
 
   <div class="screen" id="screen-live-dashboard">
@@ -2930,6 +2945,35 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
       <div class="section-hd" style="margin-bottom:0.75rem;">Choose a subject</div>
       <div class="subject-grid" id="tg-subject-grid"></div>
     </div>
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+      <div>
+        <div class="section-hd" style="margin-bottom:2px;">Reported questions</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Questions teachers have flagged as too hard, too easy, or not quite right.</div>
+      </div>
+      <button class="all-btn" onclick="openReportedQuestionsScreen()">Review <span id="tg-reported-open-count"></span></button>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="tg-reported-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsSubjects()">&larr; Back to Targets &amp; Reporting</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Reported questions</div>
+      <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:0.6rem;">Flagged by teachers either while reviewing a Live Session before sending it, or via "Report this question" during a check.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <select id="tg-reported-status-filter" style="min-width:130px;" onchange="loadReportedQuestions()">
+          <option value="open">Open</option>
+          <option value="resolved">Resolved</option>
+          <option value="dismissed">Dismissed</option>
+          <option value="all">All</option>
+        </select>
+        <select id="tg-reported-subject-filter" style="min-width:150px;" onchange="loadReportedQuestions()">
+          <option value="">All subjects</option>
+        </select>
+        <button class="all-btn" onclick="exportReportedQuestionsCSV()">Export CSV</button>
+      </div>
+    </div>
+    <div id="tg-reported-empty" class="empty-state" style="display:none;">No reported questions here.</div>
+    <div id="tg-reported-list"></div>
   </div>
 
   <div class="rv-screen" id="tg-pupil-screen">
@@ -3377,7 +3421,9 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
     <div class="field">
       <label>What's the issue?</label>
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;" id="report-reason-btns">
-        <button type="button" class="group-toggle-btn" data-reason="Too hard / not suitable" onclick="selectReportReason('Too hard / not suitable')">Too hard / not suitable for this child</button>
+        <button type="button" class="group-toggle-btn" data-reason="Too hard" onclick="selectReportReason('Too hard')">Too hard</button>
+        <button type="button" class="group-toggle-btn" data-reason="Too easy" onclick="selectReportReason('Too easy')">Too easy</button>
+        <button type="button" class="group-toggle-btn" data-reason="Doesn't make sense" onclick="selectReportReason('Doesn\'t make sense')">Doesn&rsquo;t make sense</button>
         <button type="button" class="group-toggle-btn" data-reason="Incorrect" onclick="selectReportReason('Incorrect')">Incorrect</button>
         <button type="button" class="group-toggle-btn" data-reason="Not relevant" onclick="selectReportReason('Not relevant')">Not relevant</button>
         <button type="button" class="group-toggle-btn" data-reason="Other" onclick="selectReportReason('Other')">Other</button>
@@ -3854,6 +3900,7 @@ async function switchTab(t){
   if(t==='targets'){
     showRvScreen('tab-targets', 'tg-subject-screen');
     renderTargetsSubjectGrid();
+    refreshReportedQuestionsCount();
   }
 }
 
@@ -32510,7 +32557,7 @@ async function playJoin(){
   var row = res.data && res.data[0];
   if(!row){ errEl.textContent = 'That code is not active. Please check with your teacher.'; errEl.style.display = 'block'; return; }
   playParticipantId = row.participant_id;
-  playSession = { subject: row.subject, checkType: row.check_type, tier: row.tier, topicLabel: row.topic_label, checkLabel: row.check_label, childName: name };
+  playSession = { subject: row.subject, checkType: row.check_type, tier: row.tier, topicLabel: row.topic_label, checkLabel: row.check_label, childName: name, items: row.items || null };
   buildPlayItems();
   if(!playItems.length){ errEl.textContent = 'This check has no questions set up yet. Please check with your teacher.'; errEl.style.display = 'block'; return; }
   playIdx = 0; playAnswers = {};
@@ -32565,68 +32612,51 @@ function generateMathsDistractors(a, b){
   return shuffleArray(candidates).slice(0,3);
 }
 
-function buildPlayItems(){
-  var s = playSession;
-  playItems = [];
-  if(s.subject === 'phonics'){
+/* Builds the normalized item list for any subject/checkType/tier combination,
+   shared by the child-facing Play flow and the teacher-facing "review before
+   sending" screen. For subjects that sample a fixed-size set from a larger
+   question bank (the 9 qa-style topic subjects, plus times_tables), also
+   returns the full shuffled pool so the review screen can swap an item for
+   another one still in the "leftover" pool. For subjects whose item list is
+   already the complete set (phonics/blending/handwriting/early_years),
+   pool is null - there's nothing bigger to swap in from. */
+function buildItemsForCheck(subject, checkType, tier){
+  var items = [], pool = null;
+  var QA_TOPIC_VARS = { maths:MATHS_TOPICS, english:ENGLISH_TOPICS, topics:TOPICS, science:SCIENCE_TOPICS, re:RE_TOPICS, mfl:MFL_TOPICS, music:MUSIC_TOPICS, reasoning:REASONING_TOPICS, computing:COMPUTING_TOPICS };
+  if(subject === 'phonics'){
     var sounds, keywords;
-    if(s.checkType === 'all'){ sounds = ALL_SOUNDS; keywords = Object.assign({}, SETS.set1.keywords, SETS.set2.keywords, SETS.set3.keywords); }
-    else { var set = SETS[s.checkType] || SETS.set1; sounds = set.sounds; keywords = set.keywords; }
-    playItems = sounds.map(function(snd){ return { kind:'phonics', key: snd, keyword: keywords[snd] || '' }; });
-  } else if(s.subject === 'blending'){
-    playItems = BLENDING_WORDS.map(function(w){ return { kind:'blending', word: w.word, type: w.type }; });
-  } else if(s.subject === 'times_tables'){
-    var facts = (s.checkType === 'mixed' || !s.checkType) ? TIMES_TABLES_FACTS : buildSingleTableFacts(parseInt(s.checkType,10));
-    facts = shuffleArray(facts);
-    playItems = facts.map(function(f){
+    if(checkType === 'all'){ sounds = ALL_SOUNDS; keywords = Object.assign({}, SETS.set1.keywords, SETS.set2.keywords, SETS.set3.keywords); }
+    else { var set = SETS[checkType] || SETS.set1; sounds = set.sounds; keywords = set.keywords; }
+    items = sounds.map(function(snd){ return { kind:'phonics', key: snd, keyword: keywords[snd] || '' }; });
+  } else if(subject === 'blending'){
+    items = BLENDING_WORDS.map(function(w){ return { kind:'blending', word: w.word, type: w.type }; });
+  } else if(subject === 'times_tables'){
+    var facts = (checkType === 'mixed' || !checkType) ? TIMES_TABLES_FACTS : buildSingleTableFacts(parseInt(checkType,10));
+    pool = shuffleArray(facts).map(function(f){
       var correct = String(f[0]*f[1]);
       var opts = shuffleArray([correct].concat(generateMathsDistractors(f[0],f[1]).map(String)));
       return { kind:'maths', display: f[0]+' × '+f[1], answer: correct, options: opts };
     });
-  } else if(s.subject === 'maths'){
-    var tMt = MATHS_TOPICS[s.checkType];
-    var qsMt = pickQuestions(tMt ? (tMt.questions[s.tier] || tMt.questions.KS1) : [], 12);
-    playItems = qsMt.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
-  } else if(s.subject === 'english'){
-    var tEn = ENGLISH_TOPICS[s.checkType];
-    var qsEn = pickQuestions(tEn ? (tEn.questions[s.tier] || tEn.questions.KS1) : [], 12);
-    playItems = qsEn.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
-  } else if(s.subject === 'handwriting'){
-    var hwItems = (HANDWRITING_SETS[s.tier] || HANDWRITING_SETS.KS1).slice();
-    playItems = hwItems.map(function(w){ return { kind:'handwriting', item: w }; });
-  } else if(s.subject === 'early_years'){
-    var eyArea = EARLY_YEARS_AREAS[s.tier] || EARLY_YEARS_AREAS.comm_lang;
+    items = pool.slice(0, 12);
+  } else if(subject === 'handwriting'){
+    var hwItems = (HANDWRITING_SETS[tier] || HANDWRITING_SETS.KS1).slice();
+    items = hwItems.map(function(w){ return { kind:'handwriting', item: w }; });
+  } else if(subject === 'early_years'){
+    var eyArea = EARLY_YEARS_AREAS[tier] || EARLY_YEARS_AREAS.comm_lang;
     var eyItems = eyArea.items.slice();
-    playItems = eyItems.map(function(w){ return { kind:'early_years', item: w }; });
-  } else if(s.subject === 'topics'){
-    var t = TOPICS[s.checkType];
-    var qs2 = pickQuestions(t ? (t.questions[s.tier] || t.questions.KS1) : [], 12);
-    playItems = qs2.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
-  } else if(s.subject === 'science'){
-    var tSc = SCIENCE_TOPICS[s.checkType];
-    var qs3 = pickQuestions(tSc ? (tSc.questions[s.tier] || tSc.questions.KS1) : [], 12);
-    playItems = qs3.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
-  } else if(s.subject === 're'){
-    var tRe = RE_TOPICS[s.checkType];
-    var qs4 = pickQuestions(tRe ? (tRe.questions[s.tier] || tRe.questions.KS1) : [], 12);
-    playItems = qs4.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
-  } else if(s.subject === 'mfl'){
-    var tMf = MFL_TOPICS[s.checkType];
-    var qs5 = pickQuestions(tMf ? (tMf.questions[s.tier] || tMf.questions.KS1) : [], 12);
-    playItems = qs5.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
-  } else if(s.subject === 'music'){
-    var tMu = MUSIC_TOPICS[s.checkType];
-    var qs6 = pickQuestions(tMu ? (tMu.questions[s.tier] || tMu.questions.KS1) : [], 12);
-    playItems = qs6.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
-  } else if(s.subject === 'reasoning'){
-    var tRs = REASONING_TOPICS[s.checkType];
-    var qs7 = pickQuestions(tRs ? (tRs.questions[s.tier] || tRs.questions.KS1) : [], 12);
-    playItems = qs7.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
-  } else if(s.subject === 'computing'){
-    var tCp = COMPUTING_TOPICS[s.checkType];
-    var qs8 = pickQuestions(tCp ? (tCp.questions[s.tier] || tCp.questions.KS1) : [], 12);
-    playItems = qs8.map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
+    items = eyItems.map(function(w){ return { kind:'early_years', item: w }; });
+  } else if(QA_TOPIC_VARS[subject]){
+    var t = QA_TOPIC_VARS[subject][checkType];
+    var poolQs = t ? (t.questions[tier] || t.questions.KS1) : [];
+    pool = shuffleArray(poolQs).map(function(item){ return { kind:'qa', display: item.q, answer: item.a, options: shuffleArray(item.options || [item.a]) }; });
+    items = pool.slice(0, 12);
   }
+  return { items: items, pool: pool };
+}
+
+function buildPlayItems(){
+  var s = playSession;
+  playItems = s.items && s.items.length ? s.items : buildItemsForCheck(s.subject, s.checkType, s.tier).items;
 }
 
 function renderPlayItem(){
@@ -32751,11 +32781,95 @@ var currentLiveSessionId = null;
 var currentLiveSessionCode = null;
 var liveDashboardTimer = null;
 
-async function startLiveSession(subject, checkType, tier, topicLabel, checkLabel){
+/* ---------- Review before sending: a teacher previews exactly what a Live
+   Session will contain before generating the join code, can swap any item
+   for another from the same topic/tier, and optionally says why (which
+   files into the same question_reports table as the in-check "Report this
+   question" links). The finalized set is locked into live_sessions.items so
+   every child who joins with the code gets the identical, reviewed set
+   rather than each device randomly sampling its own. ---------- */
+var liveReviewState = null;
+
+function startLiveSession(subject, checkType, tier, topicLabel, checkLabel){
   if(!requireActiveSchool())return;
+  var built = buildItemsForCheck(subject, checkType, tier);
+  if(!built.items.length){ alert('This check has no questions set up yet.'); return; }
+  liveReviewState = { subject: subject, checkType: checkType, tier: tier, topicLabel: topicLabel, checkLabel: checkLabel, items: built.items, pool: built.pool };
+  renderLiveReviewScreen();
+  showScreen('screen-live-review');
+}
+
+function liveReviewItemKey(item){
+  if(item.kind === 'phonics') return 'phonics:'+item.key;
+  if(item.kind === 'blending') return 'blending:'+item.word;
+  if(item.kind === 'handwriting') return 'handwriting:'+item.item;
+  if(item.kind === 'early_years') return 'early_years:'+item.item;
+  return item.kind + ':' + (item.display||'') + '||' + (item.answer||'');
+}
+function liveReviewItemLabel(item){
+  if(item.kind === 'phonics') return item.key + (item.keyword ? ' (e.g. '+item.keyword+')' : '');
+  if(item.kind === 'blending') return item.word + (item.type==='pseudo' ? ' (not a real word)' : '');
+  if(item.kind === 'handwriting') return item.item;
+  if(item.kind === 'early_years') return item.item;
+  return item.display + (item.answer != null ? ('  →  ' + item.answer) : '');
+}
+
+function renderLiveReviewScreen(){
+  var state = liveReviewState;
+  if(!state) return;
+  document.getElementById('live-review-label').textContent = 'Review before sending: ' + state.checkLabel;
+  document.getElementById('live-review-count').textContent = state.items.length + ' question' + (state.items.length===1?'':'s');
+  var canSwap = !!state.pool && state.pool.length > state.items.length;
+  var el = document.getElementById('live-review-list');
+  el.innerHTML = '';
+  state.items.forEach(function(item, idx){
+    var row = document.createElement('div');
+    row.className = 'lr-row';
+    var textEl = document.createElement('div');
+    textEl.className = 'lr-row-text';
+    textEl.textContent = (idx+1) + '. ' + liveReviewItemLabel(item);
+    row.appendChild(textEl);
+    if(canSwap){
+      var swapBtn = document.createElement('button');
+      swapBtn.type = 'button'; swapBtn.className = 'all-btn'; swapBtn.textContent = 'Swap';
+      swapBtn.onclick = function(){ swapLiveReviewItem(idx); };
+      row.appendChild(swapBtn);
+    }
+    el.appendChild(row);
+  });
+  if(!canSwap && state.items.length){
+    var note = document.createElement('div');
+    note.style.cssText = 'font-size:12px;color:var(--text-muted);margin-top:0.25rem;';
+    note.textContent = 'This check uses its full set, so there are no spares to swap in - use "Report this question" during the check if something looks wrong.';
+    el.appendChild(note);
+  }
+}
+
+function swapLiveReviewItem(idx){
+  var state = liveReviewState;
+  if(!state || !state.pool) return;
+  var usedKeys = {};
+  state.items.forEach(function(it){ usedKeys[liveReviewItemKey(it)] = true; });
+  var replacement = state.pool.find(function(it){ return !usedKeys[liveReviewItemKey(it)]; });
+  if(!replacement){ alert('No more spare questions in this topic/tier to swap in.'); return; }
+  var removedLabel = liveReviewItemLabel(state.items[idx]);
+  state.items[idx] = replacement;
+  renderLiveReviewScreen();
+  openReportModal(state.subject, state.checkType, state.topicLabel, state.tier, removedLabel);
+}
+
+function cancelLiveReview(){
+  liveReviewState = null;
+  goHome();
+}
+
+async function confirmStartLiveSession(){
+  var state = liveReviewState;
+  if(!state) return;
   var res = await sb.rpc('start_live_session', {
-    p_subject: subject, p_check_type: checkType || null, p_tier: tier || null,
-    p_topic_label: topicLabel || null, p_check_label: checkLabel, p_year_group: null
+    p_subject: state.subject, p_check_type: state.checkType || null, p_tier: state.tier || null,
+    p_topic_label: state.topicLabel || null, p_check_label: state.checkLabel, p_year_group: null,
+    p_items: state.items
   });
   if(res.error){ alert('Could not start a live session: ' + res.error.message); return; }
   var row = res.data && res.data[0];
@@ -32764,9 +32878,10 @@ async function startLiveSession(subject, checkType, tier, topicLabel, checkLabel
   currentLiveSessionCode = row.code;
   showScreen('screen-live-dashboard');
   document.getElementById('live-session-code').textContent = row.code;
-  document.getElementById('live-session-label').textContent = checkLabel;
+  document.getElementById('live-session-label').textContent = state.checkLabel;
   document.getElementById('live-participants-list').innerHTML = '';
   document.getElementById('live-empty').style.display = 'block';
+  liveReviewState = null;
   startLivePolling();
 }
 
@@ -34996,6 +35111,109 @@ function goToTargetsSubject(key, label){
 }
 function backToTargetsSubjects(){
   showRvScreen('tab-targets', 'tg-subject-screen');
+}
+
+/* ---------- Reported questions: teacher-visible view over question_reports.
+   Rows are written either from the in-check "Report this question" links
+   (reactive, while running a check) or from swapping an item out during
+   Live Session review (proactive, before sending). Both feed the same
+   table, filtered here to this school via RLS. ---------- */
+var REPORTED_SUBJECT_LABELS = { phonics:'Phonics', blending:'Blending', times_tables:'Times Tables', maths:'Maths', english:'English', handwriting:'Handwriting', topics:'Topics', science:'Science', re:'RE', mfl:'Languages', music:'Music', early_years:'Early Years', reasoning:'Reasoning', computing:'Computing' };
+var reportedQuestionsCache = [];
+
+async function refreshReportedQuestionsCount(){
+  var res = await sb.from('question_reports').select('id').eq('status','open');
+  var el = document.getElementById('tg-reported-open-count');
+  if(!el) return;
+  if(res.error || !res.data){ el.textContent = ''; return; }
+  el.textContent = res.data.length ? '(' + res.data.length + ' open)' : '';
+}
+
+function openReportedQuestionsScreen(){
+  showRvScreen('tab-targets', 'tg-reported-screen');
+  var subjEl = document.getElementById('tg-reported-subject-filter');
+  if(subjEl && subjEl.options.length <= 1){
+    Object.keys(REPORTED_SUBJECT_LABELS).forEach(function(key){
+      var opt = document.createElement('option');
+      opt.value = key; opt.textContent = REPORTED_SUBJECT_LABELS[key];
+      subjEl.appendChild(opt);
+    });
+  }
+  loadReportedQuestions();
+}
+
+async function loadReportedQuestions(){
+  var listEl = document.getElementById('tg-reported-list');
+  var emptyEl = document.getElementById('tg-reported-empty');
+  if(!listEl) return;
+  var statusFilter = document.getElementById('tg-reported-status-filter').value;
+  var subjectFilter = document.getElementById('tg-reported-subject-filter').value;
+  var q = sb.from('question_reports').select('*').order('created_at', { ascending:false });
+  if(statusFilter !== 'all') q = q.eq('status', statusFilter);
+  if(subjectFilter) q = q.eq('subject', subjectFilter);
+  var res = await q;
+  if(res.error){ listEl.innerHTML = ''; emptyEl.style.display = 'block'; emptyEl.textContent = 'Could not load reported questions: ' + res.error.message; return; }
+  reportedQuestionsCache = res.data || [];
+  emptyEl.textContent = 'No reported questions here.';
+  renderReportedQuestionsList();
+  refreshReportedQuestionsCount();
+}
+
+function renderReportedQuestionsList(){
+  var listEl = document.getElementById('tg-reported-list');
+  var emptyEl = document.getElementById('tg-reported-empty');
+  listEl.innerHTML = '';
+  if(!reportedQuestionsCache.length){ emptyEl.style.display = 'block'; return; }
+  emptyEl.style.display = 'none';
+  reportedQuestionsCache.forEach(function(r){
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.style.marginBottom = '0.6rem';
+    var topLine = [REPORTED_SUBJECT_LABELS[r.subject] || r.subject, r.topic_label, r.tier].filter(Boolean).join(' · ');
+    var when = r.created_at ? new Date(r.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : '';
+    card.innerHTML =
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">' +
+        '<div>' +
+          '<div style="font-size:11.5px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.03em;">' + escapeHtml(topLine) + '</div>' +
+          '<div style="font-size:14px;font-weight:500;margin:2px 0 4px;">' + escapeHtml(r.item_text || '') + '</div>' +
+          '<div style="font-size:12.5px;color:var(--text-secondary);">' +
+            '<span style="font-weight:600;">' + escapeHtml(r.reason || '') + '</span>' +
+            (r.notes ? ' &middot; ' + escapeHtml(r.notes) : '') +
+          '</div>' +
+          '<div style="font-size:11.5px;color:var(--text-muted);margin-top:4px;">' + escapeHtml(r.teacher_name || r.teacher_email || 'A teacher') + (when ? ' &middot; ' + when : '') + '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;">' +
+          (r.status !== 'resolved' ? '<button class="all-btn" onclick="setReportStatus(\''+r.id+'\',\'resolved\')">Mark resolved</button>' : '<span style="font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:6px;background:#e9f9ee;color:#1e7e37;">Resolved</span>') +
+          (r.status !== 'dismissed' ? '<button class="all-btn" onclick="setReportStatus(\''+r.id+'\',\'dismissed\')">Dismiss</button>' : '') +
+          (r.status !== 'open' ? '<button class="all-btn" onclick="setReportStatus(\''+r.id+'\',\'open\')">Reopen</button>' : '') +
+        '</div>' +
+      '</div>';
+    listEl.appendChild(card);
+  });
+}
+
+async function setReportStatus(id, status){
+  var res = await sb.from('question_reports').update({ status: status }).eq('id', id);
+  if(res.error){ alert('Could not update: ' + res.error.message); return; }
+  loadReportedQuestions();
+}
+
+function exportReportedQuestionsCSV(){
+  if(!reportedQuestionsCache.length){ alert('Nothing to export for the current filters.'); return; }
+  var cols = ['created_at','subject','topic_label','tier','item_text','reason','notes','teacher_name','teacher_email','status'];
+  var lines = [cols.join(',')];
+  reportedQuestionsCache.forEach(function(r){
+    lines.push(cols.map(function(c){
+      var v = r[c] == null ? '' : String(r[c]);
+      return '"' + v.replace(/"/g,'""') + '"';
+    }).join(','));
+  });
+  var blob = new Blob([lines.join('\n')], { type:'text/csv' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'reported_questions.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 function backToTargetsPupils(){
   showRvScreen('tab-targets', 'tg-pupil-screen');
