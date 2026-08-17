@@ -3708,7 +3708,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 <div class="edit-modal-overlay" id="staff-modal-overlay">
   <div class="edit-modal-card" style="max-width:420px;">
     <div class="section-hd" style="margin-bottom:0.35rem;">School staff</div>
-    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Everyone signed in at your school. Owners can review reported and suggested questions. Only staff with "Edit &amp; delete" on can change or remove existing data.</p>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Everyone signed in at your school. Owners can manage this list and toggle access for others. Only staff with "Edit &amp; delete" on can change or remove existing data.</p>
     <div id="staff-list"></div>
     <div id="staff-owner-gone-note" style="display:none;font-size:12.5px;color:var(--text-secondary);background:var(--surface-1);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.6rem 0.75rem;margin-top:0.6rem;">
       Not an owner, and no owner is around to grant you access? <a href="javascript:void(0)" onclick="requestOwnershipHelp()" style="color:var(--hp-purple);">Contact us</a> and we'll help sort it out.
@@ -3754,7 +3754,7 @@ var SUPABASE_KEY = 'sb_publishable_PWWJmW5XT0DSXYOVzAtp6w_NIME1V5b';
 var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 var currentUser = null;
-var currentProfile = null; // {school_id, display_name, is_owner, can_edit_delete}
+var currentProfile = null; // {school_id, display_name, is_owner, can_edit_delete, is_app_admin}
 var currentSchool = null;  // {id, name, join_code}
 
 /* ---------- Landing / auth screen wiring ---------- */
@@ -4025,7 +4025,7 @@ async function onSignedIn(){
   currentUser = sess.data.session ? sess.data.session.user : null;
   if(!currentUser) return;
 
-  var profRes = await sb.from('profiles').select('school_id, display_name, is_owner, can_edit_delete').eq('id', currentUser.id).single();
+  var profRes = await sb.from('profiles').select('school_id, display_name, is_owner, can_edit_delete, is_app_admin').eq('id', currentUser.id).single();
   if(profRes.error || !profRes.data){
     showAuthError('si-error', 'Could not load your profile. Please try signing in again.');
     await sb.auth.signOut();
@@ -4180,7 +4180,7 @@ async function switchTab(t){
   if(t==='targets'){
     showRvScreen('tab-targets', 'tg-subject-screen');
     renderTargetsSubjectGrid();
-    if(applyOwnerVisibility()){
+    if(applyAdminVisibility()){
       refreshReportedQuestionsCount();
       refreshSuggestedQuestionsCount();
     }
@@ -35717,19 +35717,17 @@ function backToTargetsSubjects(){
   showRvScreen('tab-targets', 'tg-subject-screen');
 }
 
-/* ---------- Reported questions: teacher-visible view over question_reports.
-   Rows are written either from the in-check "Report this question" links
-   (reactive, while running a check) or from swapping an item out during
-   Live Session review (proactive, before sending). Both feed the same
-   table, filtered here to this school via RLS. ---------- */
+/* ---------- Reported questions: app-admin-only view over question_reports,
+   across ALL schools. Rows are written either from the in-check "Report
+   this question" links (reactive, while running a check) or from swapping
+   an item out during Live Session review (proactive, before sending). Both
+   feed the same table. Visible only to is_app_admin (enforced by RLS) since
+   the question bank being reported on is shared, static content in this
+   file - no individual school can act on a report, only whoever edits the
+   codebase. ---------- */
 var REPORTED_SUBJECT_LABELS = { phonics:'Phonics', blending:'Blending', times_tables:'Times Tables', maths:'Maths', english:'English', handwriting:'Handwriting', topics:'Topics', science:'Science', re:'RE', mfl:'Languages', music:'Music', early_years:'Early Years', reasoning:'Reasoning', computing:'Computing' };
 var reportedQuestionsCache = [];
 
-/* Shows/hides the owner-only bits of the Targets & Reporting screen based on
-   currentProfile.is_owner. Called on tab switch, and again right after a
-   successful ownership transfer so the UI updates immediately for whoever
-   just gained or lost the flag - without needing a full page reload.
-   Returns whether the current account is the owner. */
 /* Toggles a body class that the CSS above uses to hide every edit/delete
    control app-wide (.edit-row-btn, .delete-row-btn, the per-subject "Clear
    all" buttons). These all share consistent class/id naming across all 14+
@@ -35741,13 +35739,21 @@ function applyEditDeleteVisibility(){
   document.body.classList.toggle('no-edit-delete', !allowed);
 }
 
-function applyOwnerVisibility(){
-  var isOwnerAccount = !!(currentProfile && currentProfile.is_owner);
+/* Reported/Suggested Questions review is gated on is_app_admin, NOT is_owner.
+   is_owner is a per-school flag (any school can have one or more owners
+   managing their own staff's permissions); is_app_admin is a single global
+   flag that only ever belongs to the Emeejay company account, because the
+   question bank these screens review is shared, static content baked into
+   this file - no school owner can act on it, only the person who edits the
+   codebase. Real enforcement is server-side (is_app_admin() in RLS); this
+   just keeps the UI honest. */
+function applyAdminVisibility(){
+  var isAppAdmin = !!(currentProfile && currentProfile.is_app_admin);
   var reportedCardEl = document.getElementById('tg-reported-card');
   var suggestedReviewBtnEl = document.getElementById('tg-suggested-review-btn');
-  if(reportedCardEl) reportedCardEl.style.display = isOwnerAccount ? '' : 'none';
-  if(suggestedReviewBtnEl) suggestedReviewBtnEl.style.display = isOwnerAccount ? '' : 'none';
-  return isOwnerAccount;
+  if(reportedCardEl) reportedCardEl.style.display = isAppAdmin ? '' : 'none';
+  if(suggestedReviewBtnEl) suggestedReviewBtnEl.style.display = isAppAdmin ? '' : 'none';
+  return isAppAdmin;
 }
 
 async function refreshReportedQuestionsCount(){
@@ -35759,7 +35765,7 @@ async function refreshReportedQuestionsCount(){
 }
 
 function openReportedQuestionsScreen(){
-  if(!(currentProfile && currentProfile.is_owner)){ alert("Reported questions are only visible to your school's owner account."); return; }
+  if(!(currentProfile && currentProfile.is_app_admin)){ alert("Reported questions aren't visible here - they're reviewed centrally."); return; }
   showRvScreen('tab-targets', 'tg-reported-screen');
   var subjEl = document.getElementById('tg-reported-subject-filter');
   if(subjEl && subjEl.options.length <= 1){
@@ -35810,7 +35816,7 @@ function renderReportedQuestionsList(){
             '<span style="font-weight:600;">' + escapeHtml(r.reason || '') + '</span>' +
             (r.notes ? ' &middot; ' + escapeHtml(r.notes) : '') +
           '</div>' +
-          '<div style="font-size:11.5px;color:var(--text-muted);margin-top:4px;">' + escapeHtml(r.teacher_name || r.teacher_email || 'A teacher') + (when ? ' &middot; ' + when : '') + '</div>' +
+          '<div style="font-size:11.5px;color:var(--text-muted);margin-top:4px;">' + escapeHtml(r.teacher_name || r.teacher_email || 'A teacher') + (r.school_name ? ' &middot; ' + escapeHtml(r.school_name) : '') + (when ? ' &middot; ' + when : '') + '</div>' +
         '</div>' +
         '<div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;">' +
           (r.status !== 'resolved' ? '<button class="all-btn" onclick="setReportStatus(\''+r.id+'\',\'resolved\')">Mark resolved</button>' : '<span style="font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:6px;background:#e9f9ee;color:#1e7e37;">Resolved</span>') +
@@ -35830,7 +35836,7 @@ async function setReportStatus(id, status){
 
 function exportReportedQuestionsCSV(){
   if(!reportedQuestionsCache.length){ alert('Nothing to export for the current filters.'); return; }
-  var cols = ['created_at','subject','topic_label','tier','item_text','reason','notes','teacher_name','teacher_email','status'];
+  var cols = ['created_at','school_name','subject','topic_label','tier','item_text','reason','notes','teacher_name','teacher_email','status'];
   var lines = [cols.join(',')];
   reportedQuestionsCache.forEach(function(r){
     lines.push(cols.map(function(c){
@@ -35862,7 +35868,7 @@ async function refreshSuggestedQuestionsCount(){
 }
 
 function openSuggestedQuestionsScreen(){
-  if(!(currentProfile && currentProfile.is_owner)){ alert("Reviewing suggested questions is only available to your school's owner account."); return; }
+  if(!(currentProfile && currentProfile.is_app_admin)){ alert("Suggested questions aren't visible here - they're reviewed centrally."); return; }
   showRvScreen('tab-targets', 'tg-suggested-screen');
   var subjEl = document.getElementById('tg-suggested-subject-filter');
   if(subjEl && subjEl.options.length <= 1){
@@ -35913,7 +35919,7 @@ function renderSuggestedQuestionsList(){
           '<div style="font-size:12.5px;color:var(--text-secondary);">Answer: <span style="font-weight:600;">' + escapeHtml(r.correct_answer || '') + '</span></div>' +
           '<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">' + escapeHtml(optsLine) + '</div>' +
           (r.notes ? '<div style="font-size:12.5px;color:var(--text-secondary);margin-top:2px;">' + escapeHtml(r.notes) + '</div>' : '') +
-          '<div style="font-size:11.5px;color:var(--text-muted);margin-top:4px;">' + escapeHtml(r.teacher_name || r.teacher_email || 'A teacher') + (when ? ' &middot; ' + when : '') + '</div>' +
+          '<div style="font-size:11.5px;color:var(--text-muted);margin-top:4px;">' + escapeHtml(r.teacher_name || r.teacher_email || 'A teacher') + (r.school_name ? ' &middot; ' + escapeHtml(r.school_name) : '') + (when ? ' &middot; ' + when : '') + '</div>' +
         '</div>' +
         '<div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;">' +
           (r.status !== 'approved' ? '<button class="all-btn" onclick="setSuggestionStatus(\''+r.id+'\',\'approved\')">Approve</button>' : '<span style="font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:6px;background:#e9f9ee;color:#1e7e37;">Approved</span>') +
@@ -35933,7 +35939,7 @@ async function setSuggestionStatus(id, status){
 
 function exportSuggestedQuestionsCSV(){
   if(!suggestedQuestionsCache.length){ alert('Nothing to export for the current filters.'); return; }
-  var cols = ['created_at','subject','topic_label','tier','question_text','correct_answer','options','notes','teacher_name','teacher_email','status'];
+  var cols = ['created_at','school_name','subject','topic_label','tier','question_text','correct_answer','options','notes','teacher_name','teacher_email','status'];
   var lines = [cols.join(',')];
   suggestedQuestionsCache.forEach(function(r){
     lines.push(cols.map(function(c){
@@ -36003,12 +36009,9 @@ async function toggleOwnerFlag(profileId, makeIt){
   if(res.error){ alert('Could not update: ' + res.error.message); await openStaffModal(); return; }
   if(currentUser && profileId === currentUser.id){
     currentProfile.is_owner = makeIt;
-    applyOwnerVisibility();
-    var reportedScreen = document.getElementById('tg-reported-screen');
-    var suggestedScreen = document.getElementById('tg-suggested-screen');
-    if(!makeIt && ((reportedScreen && reportedScreen.classList.contains('active')) || (suggestedScreen && suggestedScreen.classList.contains('active')))){
-      backToTargetsSubjects();
-    }
+    /* Note: is_owner only affects Staff-management permissions within this
+       school - it no longer touches Reported/Suggested Questions, which are
+       gated on the separate, non-toggleable is_app_admin flag. */
   }
   await openStaffModal();
 }
