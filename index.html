@@ -742,9 +742,67 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
           <div class="subject-name">Computing</div>
           <div class="subject-desc">Algorithms, online safety, hardware, data and more</div>
         </button>
+        <button class="subject-card" style="border-style:dashed;" onclick="openCustomTopicBuilder()">
+          <div class="subject-icon"><i class="ti ti-plus" aria-hidden="true"></i></div>
+          <div class="subject-name">Create your own</div>
+          <div class="subject-desc">Build your own assessment for Maths, English or another subject</div>
+        </button>
       </div>
       <div style="text-align:center;font-size:13px;color:var(--text-secondary);margin-top:0.85rem;">Can't find what you need? <a href="javascript:void(0)" onclick="openFeedbackModal('Topic or check request')" style="color:var(--hp-purple);font-weight:500;">Request a new topic or check</a></div>
     </div>
+  </div>
+
+  <div class="screen" id="screen-custom-topic-builder">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Create your own assessment</div>
+      <p style="font-size:12.5px;color:var(--text-secondary);">Build a small assessment of your own. It's usable by your school straight away, and it'll also be sent to us to consider adding permanently.</p>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="field">
+        <label>Subject</label>
+        <select id="ct-subject-select"></select>
+      </div>
+      <div class="field">
+        <label>Year group / tier</label>
+        <select id="ct-tier-select">
+          <option value="KS1">KS1 (Reception&ndash;Year 2)</option>
+          <option value="LKS2">LKS2 (Year 3&ndash;4)</option>
+          <option value="UKS2">UKS2 (Year 5&ndash;6)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Title</label>
+        <input type="text" id="ct-title" maxlength="80" placeholder="e.g. Our Local Area"/>
+      </div>
+      <div class="field">
+        <label>Description (optional)</label>
+        <textarea id="ct-desc" maxlength="300" placeholder="What does this assessment cover?"></textarea>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Questions</div>
+      <div id="ct-question-list" style="margin-bottom:0.6rem;"></div>
+      <div id="ct-question-empty" style="font-size:12.5px;color:var(--text-secondary);margin-bottom:0.6rem;">No questions added yet.</div>
+      <div class="field">
+        <label>Question</label>
+        <textarea id="ct-q-text" maxlength="500" placeholder="e.g. What river runs through our town?"></textarea>
+      </div>
+      <div class="field">
+        <label>Correct answer</label>
+        <input type="text" id="ct-q-answer" maxlength="200" placeholder="e.g. The Thames"/>
+      </div>
+      <div class="field">
+        <label>Wrong answer options (optional &ndash; leave blank for a teacher-marked question with no choices)</label>
+        <input type="text" id="ct-q-wrong-1" maxlength="200" placeholder="Wrong answer 1" style="margin-bottom:0.4rem;"/>
+        <input type="text" id="ct-q-wrong-2" maxlength="200" placeholder="Wrong answer 2" style="margin-bottom:0.4rem;"/>
+        <input type="text" id="ct-q-wrong-3" maxlength="200" placeholder="Wrong answer 3"/>
+      </div>
+      <div class="error-text" id="ct-q-error" style="display:none;"></div>
+      <button class="btn" style="width:100%;" onclick="addCustomTopicQuestion()">+ Add question</button>
+    </div>
+    <div class="error-text" id="ct-save-error" style="display:none;margin-bottom:0.5rem;"></div>
+    <button class="btn btn-primary" id="ct-save-btn" style="width:100%;" onclick="saveCustomTopic()">Save assessment</button>
   </div>
 
   <div class="screen" id="screen-phonics-home">
@@ -2963,6 +3021,31 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
         <button class="all-btn" onclick="openSuggestedQuestionsScreen()">Review <span id="tg-suggested-open-count"></span></button>
       </div>
     </div>
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-top:0.75rem;">
+      <div>
+        <div class="section-hd" style="margin-bottom:2px;">Your custom assessments</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Assessments you've built yourself. Usable by your school straight away, and sent to us to consider for the permanent question bank.</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="all-btn" onclick="openCustomTopicBuilder()">Create one</button>
+        <button class="all-btn" onclick="openCustomTopicsScreen()">Manage <span id="tg-custom-topics-count"></span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="tg-custom-topics-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsSubjects()">&larr; Back to Targets &amp; Reporting</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div>
+          <div class="section-hd" style="margin-bottom:0.35rem;">Your custom assessments</div>
+          <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:0;">Built by teachers at your school. Each one is already usable in the relevant subject, and is also visible to us for review towards becoming a permanent topic.</p>
+        </div>
+        <button class="all-btn" style="flex-shrink:0;" onclick="openCustomTopicBuilder()">+ Create one</button>
+      </div>
+    </div>
+    <div id="tg-custom-topics-empty" class="empty-state" style="display:none;">No custom assessments yet.</div>
+    <div id="tg-custom-topics-list"></div>
   </div>
 
   <div class="rv-screen" id="tg-reported-screen">
@@ -3882,6 +3965,7 @@ async function onSignedIn(){
   goHome();
   await checkAndApplyYearRollover();
   await loadPupils();
+  await loadCustomTopics();
   await loadResults();
   await loadBlendingResults();
   await loadMathsResults();
@@ -3989,6 +4073,7 @@ async function switchTab(t){
     renderTargetsSubjectGrid();
     refreshReportedQuestionsCount();
     refreshSuggestedQuestionsCount();
+    refreshCustomTopicsCount();
   }
 }
 
@@ -34769,6 +34854,76 @@ var PRACTICE_SUBJECTS = [
   {key:'reasoning', label:'Reasoning', topics:function(){ return REASONING_TOPICS; }},
   {key:'computing', label:'Computing', topics:function(){ return COMPUTING_TOPICS; }}
 ];
+
+/* ---------- "Create your own assessment" (teacher-authored custom topics) ----------
+   A teacher can build a small multi-question topic of their own under any of the
+   9 QA-style subjects above. It's usable by their own school immediately - saved
+   straight into the same MATHS_TOPICS/ENGLISH_TOPICS/etc objects the built-in
+   content lives in, under a generated custom_ key, so every existing picker/check/
+   Live Session/Results/Analytics screen picks it up with no extra code (they all
+   just do Object.keys(SUBJECT_TOPICS)). Nothing here is destructive to the static
+   content - custom topics are additive, tagged isCustom:true, and only ever
+   removed/re-merged by applyCustomTopics() itself. */
+var CUSTOM_TOPIC_SUBJECT_VARS = { maths:'MATHS_TOPICS', english:'ENGLISH_TOPICS', topics:'TOPICS', science:'SCIENCE_TOPICS', re:'RE_TOPICS', mfl:'MFL_TOPICS', music:'MUSIC_TOPICS', reasoning:'REASONING_TOPICS', computing:'COMPUTING_TOPICS' };
+var customTopicsCache = [];
+
+function slugifyCustomLabel(s){
+  var out = String(s || '').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  return (out || 'topic').slice(0, 40);
+}
+function genCustomTopicKey(label){
+  return 'custom_' + slugifyCustomLabel(label) + '_' + Math.random().toString(36).slice(2,7);
+}
+
+function refreshAllTopicPickers(){
+  if(typeof renderTopicsList === 'function') renderTopicsList();
+  if(typeof renderScienceList === 'function') renderScienceList();
+  if(typeof renderReList === 'function') renderReList();
+  if(typeof renderMflList === 'function') renderMflList();
+  if(typeof renderMusicList === 'function') renderMusicList();
+  if(typeof renderReasoningList === 'function') renderReasoningList();
+  if(typeof renderComputingList === 'function') renderComputingList();
+  if(typeof renderEnglishList === 'function') renderEnglishList();
+  if(typeof renderMathsList === 'function') renderMathsList();
+}
+
+function applyCustomTopics(){
+  Object.keys(CUSTOM_TOPIC_SUBJECT_VARS).forEach(function(subjKey){
+    var obj = window[CUSTOM_TOPIC_SUBJECT_VARS[subjKey]];
+    if(!obj) return;
+    Object.keys(obj).forEach(function(k){ if(obj[k] && obj[k].isCustom) delete obj[k]; });
+  });
+  customTopicsCache.forEach(function(row){
+    var varName = CUSTOM_TOPIC_SUBJECT_VARS[row.subject];
+    if(!varName) return;
+    var obj = window[varName];
+    if(!obj) return;
+    var questions = { KS1: [], LKS2: [], UKS2: [] };
+    questions[row.tier] = (row.questions || []).map(function(item){
+      return { q: item.q, a: item.a, options: item.options && item.options.length ? item.options : undefined };
+    });
+    obj[row.topic_key] = {
+      key: row.topic_key,
+      label: row.label,
+      desc: row.description || 'Custom assessment created by ' + (row.teacher_name || 'a teacher'),
+      icon: 'ti-sparkles',
+      questions: questions,
+      isCustom: true,
+      customId: row.id,
+      customTier: row.tier,
+      customStatus: row.status,
+      customTeacher: row.teacher_name
+    };
+  });
+  refreshAllTopicPickers();
+}
+
+async function loadCustomTopics(){
+  var res = await sb.from('custom_topics').select('*').order('created_at', { ascending:false });
+  if(res.error){ console.error(res.error); customTopicsCache = []; return; }
+  customTopicsCache = res.data || [];
+  applyCustomTopics();
+}
 /* Pilot: Maths, English and Science get a short "learn" screen (a handful of
    hand-written key facts) before a Memory Match game, instead of going
    straight into the multiple-choice quiz. Other subjects are unaffected -
@@ -35528,6 +35683,182 @@ function exportSuggestedQuestionsCSV(){
   a.href = url; a.download = 'suggested_questions.csv';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+/* ---------- "Create your own assessment" authoring + management ---------- */
+var customTopicBuilderState = { questions: [] };
+
+function openCustomTopicBuilder(){
+  if(!requireActiveSchool()) return;
+  customTopicBuilderState = { questions: [] };
+  var subjEl = document.getElementById('ct-subject-select');
+  subjEl.innerHTML = '';
+  PRACTICE_SUBJECTS.forEach(function(s){
+    var opt = document.createElement('option');
+    opt.value = s.key; opt.textContent = s.label;
+    subjEl.appendChild(opt);
+  });
+  document.getElementById('ct-tier-select').value = 'KS1';
+  document.getElementById('ct-title').value = '';
+  document.getElementById('ct-desc').value = '';
+  document.getElementById('ct-q-text').value = '';
+  document.getElementById('ct-q-answer').value = '';
+  document.getElementById('ct-q-wrong-1').value = '';
+  document.getElementById('ct-q-wrong-2').value = '';
+  document.getElementById('ct-q-wrong-3').value = '';
+  document.getElementById('ct-q-error').style.display = 'none';
+  document.getElementById('ct-save-error').style.display = 'none';
+  renderCustomTopicQuestionList();
+  showScreen('screen-custom-topic-builder');
+}
+
+function addCustomTopicQuestion(){
+  var errEl = document.getElementById('ct-q-error');
+  errEl.style.display = 'none';
+  var qText = document.getElementById('ct-q-text').value.trim();
+  var answer = document.getElementById('ct-q-answer').value.trim();
+  if(!qText || !answer){
+    errEl.textContent = 'Please fill in the question and the correct answer.';
+    errEl.style.display = 'block';
+    return;
+  }
+  var wrongOpts = [
+    document.getElementById('ct-q-wrong-1').value.trim(),
+    document.getElementById('ct-q-wrong-2').value.trim(),
+    document.getElementById('ct-q-wrong-3').value.trim()
+  ].filter(Boolean);
+  customTopicBuilderState.questions.push({
+    q: qText, a: answer,
+    options: wrongOpts.length ? shuffleArray([answer].concat(wrongOpts)) : []
+  });
+  document.getElementById('ct-q-text').value = '';
+  document.getElementById('ct-q-answer').value = '';
+  document.getElementById('ct-q-wrong-1').value = '';
+  document.getElementById('ct-q-wrong-2').value = '';
+  document.getElementById('ct-q-wrong-3').value = '';
+  renderCustomTopicQuestionList();
+}
+
+function removeCustomTopicQuestion(idx){
+  customTopicBuilderState.questions.splice(idx, 1);
+  renderCustomTopicQuestionList();
+}
+
+function renderCustomTopicQuestionList(){
+  var listEl = document.getElementById('ct-question-list');
+  var emptyEl = document.getElementById('ct-question-empty');
+  if(!listEl) return;
+  listEl.innerHTML = '';
+  var qs = customTopicBuilderState.questions;
+  emptyEl.style.display = qs.length ? 'none' : 'block';
+  qs.forEach(function(item, idx){
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:flex-start;justify-content:space-between;gap:0.5rem;padding:0.5rem 0;border-bottom:0.5px solid var(--border-strong);';
+    var textWrap = document.createElement('div');
+    textWrap.innerHTML = '<div style="font-size:13.5px;font-weight:500;">' + (idx+1) + '. ' + escapeHtml(item.q) + '</div>' +
+      '<div style="font-size:12px;color:var(--text-secondary);">Answer: ' + escapeHtml(item.a) + (item.options.length ? ' &middot; ' + (item.options.length) + ' options' : ' &middot; teacher-marked') + '</div>';
+    var rmBtn = document.createElement('button');
+    rmBtn.type = 'button'; rmBtn.className = 'all-btn'; rmBtn.textContent = 'Remove';
+    rmBtn.onclick = function(){ removeCustomTopicQuestion(idx); };
+    row.appendChild(textWrap); row.appendChild(rmBtn);
+    listEl.appendChild(row);
+  });
+}
+
+async function saveCustomTopic(){
+  var errEl = document.getElementById('ct-save-error');
+  errEl.style.display = 'none';
+  var subject = document.getElementById('ct-subject-select').value;
+  var tier = document.getElementById('ct-tier-select').value;
+  var title = document.getElementById('ct-title').value.trim();
+  var desc = document.getElementById('ct-desc').value.trim();
+  if(!subject || !tier || !title){
+    errEl.textContent = 'Please choose a subject and tier, and give it a title.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if(!customTopicBuilderState.questions.length){
+    errEl.textContent = 'Please add at least one question.';
+    errEl.style.display = 'block';
+    return;
+  }
+  var btn = document.getElementById('ct-save-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  var row = {
+    school_id: currentProfile ? currentProfile.school_id : null,
+    teacher_id: currentUser ? currentUser.id : null,
+    teacher_name: currentProfile ? (currentProfile.display_name || null) : null,
+    school_name: currentSchool ? currentSchool.name : null,
+    subject: subject,
+    topic_key: genCustomTopicKey(title),
+    label: title,
+    description: desc || null,
+    tier: tier,
+    questions: customTopicBuilderState.questions,
+    status: 'pending'
+  };
+  var ins = await sb.from('custom_topics').insert(row).select().single();
+  btn.disabled = false; btn.textContent = 'Save assessment';
+  if(ins.error){
+    errEl.textContent = 'Could not save: ' + ins.error.message;
+    errEl.style.display = 'block';
+    return;
+  }
+  customTopicsCache.unshift(ins.data);
+  applyCustomTopics();
+  refreshCustomTopicsCount();
+  alert('Saved! "' + title + '" is ready to use under ' + (PRACTICE_SUBJECTS.find(function(s){return s.key===subject;}) || {label:subject}).label + ' straight away, and has also been sent to us for review.');
+  backToSubjects();
+}
+
+async function refreshCustomTopicsCount(){
+  var el = document.getElementById('tg-custom-topics-count');
+  if(!el) return;
+  el.textContent = customTopicsCache.length ? '(' + customTopicsCache.length + ')' : '';
+}
+
+function openCustomTopicsScreen(){
+  showRvScreen('tab-targets', 'tg-custom-topics-screen');
+  renderCustomTopicsManageList();
+}
+
+function renderCustomTopicsManageList(){
+  var listEl = document.getElementById('tg-custom-topics-list');
+  var emptyEl = document.getElementById('tg-custom-topics-empty');
+  if(!listEl) return;
+  listEl.innerHTML = '';
+  if(!customTopicsCache.length){ emptyEl.style.display = 'block'; return; }
+  emptyEl.style.display = 'none';
+  customTopicsCache.forEach(function(r){
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.style.marginBottom = '0.6rem';
+    var topLine = [REPORTED_SUBJECT_LABELS[r.subject] || r.subject, r.tier].filter(Boolean).join(' · ');
+    var when = r.created_at ? new Date(r.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : '';
+    var qCount = (r.questions || []).length;
+    card.innerHTML =
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">' +
+        '<div>' +
+          '<div style="font-size:11.5px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.03em;">' + escapeHtml(topLine) + '</div>' +
+          '<div style="font-size:14px;font-weight:500;margin:2px 0 4px;">' + escapeHtml(r.label || '') + '</div>' +
+          (r.description ? '<div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:4px;">' + escapeHtml(r.description) + '</div>' : '') +
+          '<div style="font-size:12px;color:var(--text-muted);">' + qCount + (qCount===1?' question':' questions') + ' &middot; usable now for your school</div>' +
+          '<div style="font-size:11.5px;color:var(--text-muted);margin-top:4px;">' + escapeHtml(r.teacher_name || 'A teacher') + (when ? ' &middot; ' + when : '') + '</div>' +
+        '</div>' +
+        '<button class="all-btn" onclick="deleteCustomTopic(\''+r.id+'\')">Delete</button>' +
+      '</div>';
+    listEl.appendChild(card);
+  });
+}
+
+async function deleteCustomTopic(id){
+  if(!confirm('Delete this custom assessment? Past results using it will stay in Results/Analytics, but it will no longer be usable for new checks.')) return;
+  var res = await sb.from('custom_topics').delete().eq('id', id);
+  if(res.error){ alert('Could not delete: ' + res.error.message); return; }
+  customTopicsCache = customTopicsCache.filter(function(r){ return r.id !== id; });
+  applyCustomTopics();
+  refreshCustomTopicsCount();
+  renderCustomTopicsManageList();
 }
 
 function backToTargetsPupils(){
