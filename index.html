@@ -34785,14 +34785,30 @@ function getPracticePool(subjectKey, topicKey, t){
    question bank (preferring shorter text so it fits neatly on a card) and
    turns them into a face-down matching grid. Falls back to the plain quiz
    if the topic doesn't have enough tile-friendly content. */
+/* Two items that happen to share the same answer text (e.g. two different
+   division facts that both equal 2) would produce two visually-identical
+   answer cards that aren't a matchable pair - confusing for a child ("but
+   they're both 2!"). So candidates are de-duplicated by answer before
+   picking pairs, which can mean fewer than 6 pairs for narrow pools (like a
+   simplified Year 1 division set), but every card the child sees stays
+   genuinely matchable. */
+function dedupeByAnswer(items){
+  var seen = {};
+  return items.filter(function(it){
+    var key = String(it.a).trim().toLowerCase();
+    if(seen[key]) return false;
+    seen[key] = true;
+    return true;
+  });
+}
 function startPracticeGame(){
   var subj = PRACTICE_SUBJECTS.find(function(s){ return s.key === practiceSubjectKey; });
   if(!subj || !practicePupil) return;
   var t = subj.topics()[practiceTopicKey];
   if(!t) return;
   var pool = getPracticePool(practiceSubjectKey, practiceTopicKey, t);
-  var tight = pool.filter(function(it){ return it.a && String(it.a).length <= 22 && it.q && String(it.q).length <= 70; });
-  var candidates = tight.length >= 6 ? tight : pool.filter(function(it){ return it.a && String(it.a).length <= 34 && it.q && String(it.q).length <= 110; });
+  var tight = dedupeByAnswer(pool.filter(function(it){ return it.a && String(it.a).length <= 22 && it.q && String(it.q).length <= 70; }));
+  var candidates = tight.length >= 6 ? tight : dedupeByAnswer(pool.filter(function(it){ return it.a && String(it.a).length <= 34 && it.q && String(it.q).length <= 110; }));
   if(candidates.length < 3){ startPracticeTopic(practiceTopicKey); return; }
   var chosen = shuffleArray(candidates).slice(0, Math.min(6, candidates.length));
   practiceGamePairs = chosen;
