@@ -33349,20 +33349,62 @@ function pickQuestions(pool, n){
    Uses the browser's built-in Web Speech API so a visually impaired
    child (or anyone who prefers to listen) can hear the question, and
    where relevant the answer choices, read out loud. No external
-   service, API key or network call needed. */
+   service, API key or network call needed.
+   speakParts() speaks a list of chunks (e.g. the question, then each
+   answer choice) as separate utterances with a deliberate pause between
+   them, so options don't run together the way one long sentence would. */
 function ttsSupported(){ return typeof window !== 'undefined' && 'speechSynthesis' in window; }
-function speakText(text){
-  if(!text || !ttsSupported()) return;
-  try{
-    window.speechSynthesis.cancel();
-    var u = new SpeechSynthesisUtterance(String(text));
-    u.lang = 'en-GB';
+/* Picks the clearest available system voice: prefers Chrome's higher-quality
+   "Google UK English" voice, then any UK English voice, then any English
+   voice, falling back to whatever the browser defaults to. Looked up fresh
+   each time (rather than cached) since Chrome often loads its voice list
+   asynchronously a moment after the page loads. */
+function pickTtsVoice(){
+  if(!ttsSupported()) return null;
+  var voices = [];
+  try{ voices = window.speechSynthesis.getVoices() || []; }catch(e){}
+  if(!voices.length) return null;
+  var rules = [
+    function(v){ return /Google UK English/i.test(v.name); },
+    function(v){ return /en[-_]GB/i.test(v.lang) && /(natural|enhanced|neural|online)/i.test(v.name); },
+    function(v){ return /Google/i.test(v.name) && /^en/i.test(v.lang); },
+    function(v){ return /en[-_]GB/i.test(v.lang); },
+    function(v){ return /^en/i.test(v.lang); }
+  ];
+  for(var i=0;i<rules.length;i++){
+    var match = voices.find(rules[i]);
+    if(match) return match;
+  }
+  return voices[0];
+}
+function speakParts(parts, pauseMs){
+  if(!ttsSupported()) return;
+  var queue = (Array.isArray(parts) ? parts : [parts]).filter(Boolean);
+  if(!queue.length) return;
+  pauseMs = (typeof pauseMs === 'number') ? pauseMs : 650;
+  try{ window.speechSynthesis.cancel(); }catch(e){}
+  var voice = pickTtsVoice();
+  var i = 0;
+  function speakNext(){
+    if(i >= queue.length) return;
+    var u = new SpeechSynthesisUtterance(String(queue[i]));
+    u.lang = voice ? voice.lang : 'en-GB';
+    if(voice) u.voice = voice;
     u.rate = 0.92;
-    window.speechSynthesis.speak(u);
-  }catch(e){}
+    i++;
+    var advance = function(){ setTimeout(speakNext, pauseMs); };
+    u.onend = advance;
+    u.onerror = advance;
+    try{ window.speechSynthesis.speak(u); }catch(e){ advance(); }
+  }
+  speakNext();
+}
+function speakText(text){
+  speakParts([text], 0);
 }
 /* Creates (once) or reuses a small "Read aloud" button immediately after
-   the given display element, wired to speak the given text. Safe to call
+   the given display element, wired to speak the given text (a string, or
+   an array of chunks to be read with a pause between each). Safe to call
    on every render since it re-wires the same button's click handler
    rather than duplicating it. */
 function wireSpeakButton(displayElId, text){
@@ -33379,11 +33421,11 @@ function wireSpeakButton(displayElId, text){
     btn.innerHTML = '<i class="ti ti-volume-2" aria-hidden="true"></i> Read aloud';
     el.insertAdjacentElement('afterend', btn);
   }
-  btn.onclick = function(e){ e.preventDefault(); e.stopPropagation(); speakText(text); };
+  btn.onclick = function(e){ e.preventDefault(); e.stopPropagation(); speakParts(text); };
 }
 function mcSpeechText(item){
   var opts = (item.options && item.options.length) ? item.options : (item.a ? [item.a] : []);
-  return item.q + (opts.length ? ('. Choices: ' + opts.join(', ')) : '');
+  return opts.length ? [item.q, 'Choices:'].concat(opts) : [item.q];
 }
 function renderMcOptions(containerId, item, onAnswer){
   var el = document.getElementById(containerId);
@@ -33467,14 +33509,14 @@ function buildPlayItems(){
 function speakCurrentPlayItem(){
   var item = playItems[playIdx];
   if(!item) return;
-  var text = '';
-  if(item.kind === 'phonics') text = item.key + (item.keyword ? ('. For example, ' + item.keyword) : '');
-  else if(item.kind === 'blending') text = item.word;
-  else if(item.kind === 'handwriting') text = item.item;
-  else if(item.kind === 'early_years') text = item.item;
-  else if(item.kind === 'maths') text = item.display + (item.options && item.options.length ? ('. Choices: ' + item.options.join(', ')) : '');
-  else text = item.display + (item.options && item.options.length ? ('. Choices: ' + item.options.join(', ')) : '');
-  speakText(text);
+  var parts = [];
+  if(item.kind === 'phonics') parts = [item.key, item.keyword ? ('For example, ' + item.keyword) : ''];
+  else if(item.kind === 'blending') parts = [item.word];
+  else if(item.kind === 'handwriting') parts = [item.item];
+  else if(item.kind === 'early_years') parts = [item.item];
+  else if(item.options && item.options.length) parts = [item.display, 'Choices:'].concat(item.options);
+  else parts = [item.display];
+  speakParts(parts);
 }
 function renderPlayItem(){
   var total = playItems.length;
