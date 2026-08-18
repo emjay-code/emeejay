@@ -163,6 +163,11 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .phase-desc{font-family:var(--phonics-font);font-size:12px;color:var(--text-secondary);margin-top:2px;}
 .sound-display{font-family:var(--phonics-font);font-size:80px;font-weight:700;text-align:center;padding:1.5rem 0 1rem;color:var(--hp-purple);line-height:1;}
 .gr-question-display{font-family:var(--phonics-font);font-size:23px;font-weight:600;text-align:center;padding:1.25rem 0.5rem 0.25rem;color:var(--hp-purple);line-height:1.4;}
+.tts-btn{display:flex;align-items:center;gap:5px;margin:0.5rem auto 0;padding:0.4rem 0.9rem;border-radius:999px;border:1px solid var(--hp-purple-border);background:var(--hp-purple-light);color:var(--hp-purple);font-size:12.5px;font-weight:600;cursor:pointer;transition:background 0.12s,color 0.12s;}
+.tts-btn:hover{background:var(--hp-purple);color:#fff;}
+.tts-btn.speaking{background:var(--hp-purple);color:#fff;}
+.content-shell .tts-btn{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.24);color:#F5F1FC;}
+.content-shell .tts-btn:hover,.content-shell .tts-btn.speaking{background:var(--hp-purple);color:#fff;}
 .pictogram-wrap{margin:0.75rem auto 0.25rem;max-width:420px;background:var(--surface-2);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.9rem 1rem;text-align:left;}
 .pictogram-key{font-size:12.5px;color:var(--text-secondary);text-align:center;margin-bottom:0.7rem;font-weight:500;}
 .pictogram-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
@@ -4467,6 +4472,7 @@ function renderSound(){
   document.getElementById('sound-counter').textContent='Sound '+(soundIdx+1)+' of '+total;
   document.getElementById('sound-display').textContent=s;
   document.getElementById('keyword-display').textContent=currentKeywords[s]?'e.g. '+currentKeywords[s]:'';
+  wireSpeakButton('sound-display', s + (currentKeywords[s] ? ('. For example, ' + currentKeywords[s]) : ''));
 }
 
 function mark(canSay){soundResults[currentSounds[soundIdx]]=canSay;soundIdx++;if(soundIdx>=currentSounds.length){finishCheck();return;}renderSound();}
@@ -6737,6 +6743,7 @@ function renderBlendingWord(){
   document.getElementById('bc-counter').textContent = 'Word '+(bcIdx+1)+' of '+total;
   document.getElementById('bc-word-display').textContent = w.word;
   document.getElementById('bc-pseudo-badge').style.display = w.type === 'pseudo' ? 'inline-flex' : 'none';
+  wireSpeakButton('bc-word-display', w.word);
 }
 
 function markBlendingWord(correct){
@@ -7095,6 +7102,7 @@ function renderTTFact(){
   document.getElementById('tt-prog').style.width = Math.round((ttIdx/total)*100)+'%';
   document.getElementById('tt-counter').textContent = 'Fact '+(ttIdx+1)+' of '+total;
   document.getElementById('tt-fact-display').textContent = f[0]+' × '+f[1];
+  wireSpeakButton('tt-fact-display', f[0]+' times '+f[1]);
 }
 
 function markTT(correct){
@@ -9965,6 +9973,7 @@ function renderMtQuestion(){
   document.getElementById('mt-prog').style.width = Math.round((mtIdx/total)*100)+'%';
   document.getElementById('mt-counter').textContent = 'Question '+(mtIdx+1)+' of '+total;
   document.getElementById('mt-question-display').textContent = item.q;
+  wireSpeakButton('mt-question-display', mcSpeechText(item));
   renderPictogram(document.getElementById('mt-pictogram-display'), item.pictogram);
   renderMcOptions('mt-answer-display', item, markMt);
 }
@@ -12562,6 +12571,7 @@ function renderEnQuestion(){
   document.getElementById('en-prog').style.width = Math.round((enIdx/total)*100)+'%';
   document.getElementById('en-counter').textContent = 'Question '+(enIdx+1)+' of '+total;
   document.getElementById('en-question-display').textContent = item.q;
+  wireSpeakButton('en-question-display', mcSpeechText(item));
   renderMcOptions('en-answer-display', item, markEn);
 }
 
@@ -13093,6 +13103,7 @@ function renderHwItem(){
   document.getElementById('hw-prog').style.width = Math.round((hwIdx/total)*100)+'%';
   document.getElementById('hw-counter').textContent = 'Item '+(hwIdx+1)+' of '+total;
   document.getElementById('hw-item-display').textContent = item;
+  wireSpeakButton('hw-item-display', String(item));
 }
 
 function markHw(correct){
@@ -13431,6 +13442,7 @@ function renderEyItem(){
   document.getElementById('ey-prog').style.width = Math.round((eyIdx/total)*100)+'%';
   document.getElementById('ey-counter').textContent = 'Item '+(eyIdx+1)+' of '+total;
   document.getElementById('ey-item-display').textContent = item;
+  wireSpeakButton('ey-item-display', String(item));
 }
 
 function markEy(correct){
@@ -32084,6 +32096,7 @@ function renderTpQuestion(){
   document.getElementById('tp-prog').style.width = Math.round((tpIdx/total)*100)+'%';
   document.getElementById('tp-counter').textContent = 'Question '+(tpIdx+1)+' of '+total;
   document.getElementById('tp-question-display').textContent = item.q;
+  wireSpeakButton('tp-question-display', mcSpeechText(item));
   renderMcOptions('tp-answer-display', item, markTp);
 }
 
@@ -32471,6 +32484,7 @@ function renderScQuestion(){
   document.getElementById('sc-prog').style.width = Math.round((scIdx/total)*100)+'%';
   document.getElementById('sc-counter').textContent = 'Question '+(scIdx+1)+' of '+total;
   document.getElementById('sc-question-display').textContent = item.q;
+  wireSpeakButton('sc-question-display', mcSpeechText(item));
   renderMcOptions('sc-answer-display', item, markSc);
 }
 
@@ -32858,6 +32872,7 @@ function renderReQuestion(){
   document.getElementById('re-prog').style.width = Math.round((reIdx/total)*100)+'%';
   document.getElementById('re-counter').textContent = 'Question '+(reIdx+1)+' of '+total;
   document.getElementById('re-question-display').textContent = item.q;
+  wireSpeakButton('re-question-display', mcSpeechText(item));
   renderMcOptions('re-answer-display', item, markRe);
 }
 
@@ -33330,6 +33345,46 @@ function pickQuestions(pool, n){
    "which of these..." make sense to read aloud. Options are shown neutrally,
    with no indication of which is correct - the teacher marks Correct / Not
    Yet based on what the child says. */
+/* ---------- Read-aloud (text-to-speech) for accessibility ----------
+   Uses the browser's built-in Web Speech API so a visually impaired
+   child (or anyone who prefers to listen) can hear the question, and
+   where relevant the answer choices, read out loud. No external
+   service, API key or network call needed. */
+function ttsSupported(){ return typeof window !== 'undefined' && 'speechSynthesis' in window; }
+function speakText(text){
+  if(!text || !ttsSupported()) return;
+  try{
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(String(text));
+    u.lang = 'en-GB';
+    u.rate = 0.92;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+/* Creates (once) or reuses a small "Read aloud" button immediately after
+   the given display element, wired to speak the given text. Safe to call
+   on every render since it re-wires the same button's click handler
+   rather than duplicating it. */
+function wireSpeakButton(displayElId, text){
+  if(!ttsSupported()) return;
+  var el = document.getElementById(displayElId);
+  if(!el) return;
+  var btn = document.getElementById(displayElId + '-tts');
+  if(!btn){
+    btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = displayElId + '-tts';
+    btn.className = 'tts-btn';
+    btn.setAttribute('aria-label', 'Read this aloud');
+    btn.innerHTML = '<i class="ti ti-volume-2" aria-hidden="true"></i> Read aloud';
+    el.insertAdjacentElement('afterend', btn);
+  }
+  btn.onclick = function(e){ e.preventDefault(); e.stopPropagation(); speakText(text); };
+}
+function mcSpeechText(item){
+  var opts = (item.options && item.options.length) ? item.options : (item.a ? [item.a] : []);
+  return item.q + (opts.length ? ('. Choices: ' + opts.join(', ')) : '');
+}
 function renderMcOptions(containerId, item, onAnswer){
   var el = document.getElementById(containerId);
   if(!el) return;
@@ -33409,6 +33464,18 @@ function buildPlayItems(){
   playItems = s.items && s.items.length ? s.items : buildItemsForCheck(s.subject, s.checkType, s.tier).items;
 }
 
+function speakCurrentPlayItem(){
+  var item = playItems[playIdx];
+  if(!item) return;
+  var text = '';
+  if(item.kind === 'phonics') text = item.key + (item.keyword ? ('. For example, ' + item.keyword) : '');
+  else if(item.kind === 'blending') text = item.word;
+  else if(item.kind === 'handwriting') text = item.item;
+  else if(item.kind === 'early_years') text = item.item;
+  else if(item.kind === 'maths') text = item.display + (item.options && item.options.length ? ('. Choices: ' + item.options.join(', ')) : '');
+  else text = item.display + (item.options && item.options.length ? ('. Choices: ' + item.options.join(', ')) : '');
+  speakText(text);
+}
 function renderPlayItem(){
   var total = playItems.length;
   document.getElementById('play-prog').style.width = Math.round((playIdx/total)*100)+'%';
@@ -33420,6 +33487,7 @@ function renderPlayItem(){
       '<div class="check-label">Say this sound out loud</div>'+
       '<div class="sound-display">'+escapeHtml(item.key)+'</div>'+
       (item.keyword ? '<div class="keyword">e.g. '+escapeHtml(item.keyword)+'</div>' : '')+
+      '<button type="button" class="tts-btn" onclick="speakCurrentPlayItem()"><i class="ti ti-volume-2" aria-hidden="true"></i> Read aloud</button>'+
       '<div class="yn-row">'+
         '<button class="yn-btn yn-yes" onclick="playMark(true)"><i class="ti ti-check" aria-hidden="true"></i> I can say it</button>'+
         '<button class="yn-btn yn-no" onclick="playMark(false)"><i class="ti ti-x" aria-hidden="true"></i> Not yet</button>'+
@@ -33429,6 +33497,7 @@ function renderPlayItem(){
       (item.type === 'pseudo' ? '<div class="pseudo-badge"><i class="ti ti-puzzle" aria-hidden="true"></i> Not a real word</div>' : '')+
       '<div class="check-label">Read this word out loud</div>'+
       '<div class="sound-display">'+escapeHtml(item.word)+'</div>'+
+      '<button type="button" class="tts-btn" onclick="speakCurrentPlayItem()"><i class="ti ti-volume-2" aria-hidden="true"></i> Read aloud</button>'+
       '<div class="yn-row">'+
         '<button class="yn-btn yn-yes" onclick="playMark(true)"><i class="ti ti-check" aria-hidden="true"></i> I read it correctly</button>'+
         '<button class="yn-btn yn-no" onclick="playMark(false)"><i class="ti ti-x" aria-hidden="true"></i> Not yet</button>'+
@@ -33437,6 +33506,7 @@ function renderPlayItem(){
     card.innerHTML =
       '<div class="check-label">Write this</div>'+
       '<div class="sound-display">'+escapeHtml(item.item)+'</div>'+
+      '<button type="button" class="tts-btn" onclick="speakCurrentPlayItem()"><i class="ti ti-volume-2" aria-hidden="true"></i> Read aloud</button>'+
       '<div class="yn-row">'+
         '<button class="yn-btn yn-yes" onclick="playMark(true)"><i class="ti ti-check" aria-hidden="true"></i> Formed correctly</button>'+
         '<button class="yn-btn yn-no" onclick="playMark(false)"><i class="ti ti-x" aria-hidden="true"></i> Not yet</button>'+
@@ -33445,6 +33515,7 @@ function renderPlayItem(){
     card.innerHTML =
       '<div class="check-label">Does the child do this?</div>'+
       '<div class="sound-display" style="font-size:17px;">'+escapeHtml(item.item)+'</div>'+
+      '<button type="button" class="tts-btn" onclick="speakCurrentPlayItem()"><i class="ti ti-volume-2" aria-hidden="true"></i> Read aloud</button>'+
       '<div class="yn-row">'+
         '<button class="yn-btn yn-yes" onclick="playMark(true)"><i class="ti ti-check" aria-hidden="true"></i> Met</button>'+
         '<button class="yn-btn yn-no" onclick="playMark(false)"><i class="ti ti-x" aria-hidden="true"></i> Emerging</button>'+
@@ -33453,6 +33524,7 @@ function renderPlayItem(){
     card.innerHTML =
       '<div class="check-label">Choose the right answer</div>'+
       '<div class="sound-display" style="font-size:56px;">'+escapeHtml(item.display)+'</div>'+
+      '<button type="button" class="tts-btn" onclick="speakCurrentPlayItem()"><i class="ti ti-volume-2" aria-hidden="true"></i> Read aloud</button>'+
       '<div class="mc-grid">'+
         item.options.map(function(opt){ return '<button class="mc-btn" onclick="playChoose(this,\''+escapeHtml(opt).replace(/'/g,"\\'")+'\')">'+escapeHtml(opt)+'</button>'; }).join('')+
       '</div>';
@@ -33461,6 +33533,7 @@ function renderPlayItem(){
       '<div class="check-label">Choose the right answer</div>'+
       '<div class="gr-question-display">'+escapeHtml(item.display)+'</div>'+
       (item.pictogram ? pictogramHtml(item.pictogram) : '')+
+      '<button type="button" class="tts-btn" onclick="speakCurrentPlayItem()"><i class="ti ti-volume-2" aria-hidden="true"></i> Read aloud</button>'+
       '<div class="mc-grid mc-grid-text">'+
         item.options.map(function(opt){ return '<button class="mc-btn" onclick="playChoose(this,\''+escapeHtml(opt).replace(/'/g,"\\'")+'\')">'+escapeHtml(opt)+'</button>'; }).join('')+
       '</div>';
@@ -33715,6 +33788,7 @@ function renderMflQuestion(){
   document.getElementById('mfl-prog').style.width = Math.round((mfIdx/total)*100)+'%';
   document.getElementById('mfl-counter').textContent = 'Question '+(mfIdx+1)+' of '+total;
   document.getElementById('mfl-question-display').textContent = item.q;
+  wireSpeakButton('mfl-question-display', mcSpeechText(item));
   renderMcOptions('mfl-answer-display', item, markMfl);
 }
 
@@ -34108,6 +34182,7 @@ function renderMusicQuestion(){
   document.getElementById('music-prog').style.width = Math.round((muIdx/total)*100)+'%';
   document.getElementById('music-counter').textContent = 'Question '+(muIdx+1)+' of '+total;
   document.getElementById('music-question-display').textContent = item.q;
+  wireSpeakButton('music-question-display', mcSpeechText(item));
   renderMcOptions('music-answer-display', item, markMusic);
 }
 
@@ -34501,6 +34576,7 @@ function renderComputingQuestion(){
   document.getElementById('computing-prog').style.width = Math.round((cpIdx/total)*100)+'%';
   document.getElementById('computing-counter').textContent = 'Question '+(cpIdx+1)+' of '+total;
   document.getElementById('computing-question-display').textContent = item.q;
+  wireSpeakButton('computing-question-display', mcSpeechText(item));
   renderMcOptions('computing-answer-display', item, markComputing);
 }
 
@@ -34894,6 +34970,7 @@ function renderReasoningQuestion(){
   document.getElementById('reasoning-prog').style.width = Math.round((rsIdx/total)*100)+'%';
   document.getElementById('reasoning-counter').textContent = 'Question '+(rsIdx+1)+' of '+total;
   document.getElementById('reasoning-question-display').textContent = item.q;
+  wireSpeakButton('reasoning-question-display', mcSpeechText(item));
   renderMcOptions('reasoning-answer-display', item, markReasoning);
 }
 
@@ -35851,6 +35928,7 @@ function renderPracticeItem(){
   document.getElementById('practice-counter').textContent = 'Question '+(practiceIdx+1)+' of '+total;
   var item = practiceItems[practiceIdx];
   document.getElementById('practice-question-display').textContent = item.q;
+  wireSpeakButton('practice-question-display', mcSpeechText(item));
   renderPictogram(document.getElementById('practice-pictogram-display'), item.pictogram);
   renderMcOptions('practice-mc-options', item, practiceAnswer);
 }
