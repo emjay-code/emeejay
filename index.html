@@ -34,7 +34,7 @@
   --text-secondary:#5C5B66;
   --text-muted:#8F8E98;
 
-  --surface-0:#FAFAFA;
+  --surface-0:#3A2352;
   --surface-1:#FFFFFF;
   --surface-2:#FFFFFF;
   --surface-3:#F3F3F4;
@@ -129,15 +129,16 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .card{background:var(--surface-2);border:0.5px solid var(--border);border-radius:16px;padding:1.25rem;margin-bottom:1rem;box-shadow:0 10px 30px rgba(40,30,90,.05);}
 .nav-tabs{display:flex;border-bottom:0.5px solid var(--border-strong);margin-bottom:1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .nav-tabs::-webkit-scrollbar{display:none;}
-.nav-tab{padding:0.5rem 0.85rem;font-size:13px;cursor:pointer;color:var(--text-secondary);border-bottom:2px solid transparent;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap;transition:color 0.12s;flex:0 0 auto;}
-.nav-tab.active{color:var(--hp-purple);border-bottom-color:var(--hp-purple);}
-.nav-tab:hover{color:var(--hp-purple);}
+.nav-tab{padding:0.5rem 0.85rem;font-size:13px;cursor:pointer;color:rgba(255,255,255,0.55);border-bottom:2px solid transparent;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap;transition:color 0.12s;flex:0 0 auto;}
+.nav-tab.active{color:#C8A6FF;border-bottom-color:#C8A6FF;}
+.nav-tab:hover{color:#FFFFFF;}
+.content-shell{background:var(--hp-purple-light);border-radius:20px;padding:1.25rem;box-shadow:0 12px 32px rgba(20,16,50,0.22);}
 .btn{width:100%;padding:0.7rem;border-radius:var(--radius);font-size:15px;font-weight:500;cursor:pointer;margin-top:0.5rem;transition:all 0.12s;border:0.5px solid var(--border-strong);}
 .btn-primary{background:var(--hp-grad);color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(90,80,230,.28);}
 .btn-primary:hover{filter:brightness(0.94);}
 .btn-primary:disabled{opacity:0.6;cursor:default;}
 .btn-ghost{background:var(--surface-1);color:var(--text-primary);}
-.btn-ghost:hover{background:var(--surface-0);}
+.btn-ghost:hover{background:var(--surface-3);}
 .phase-btn{width:100%;text-align:left;background:var(--surface-2);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.75rem 1rem;margin-bottom:0.5rem;cursor:pointer;display:flex;align-items:center;gap:12px;transition:background 0.12s,border-color 0.12s;}
 .phase-btn:hover{background:var(--surface-3);border-color:var(--hp-purple-mid);}
 .phase-btn.active{background:var(--hp-purple-light);border-color:var(--hp-purple);}
@@ -801,6 +802,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   <button class="nav-tab" onclick="switchTab('targets')"><i class="ti ti-target-arrow" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Targets &amp; Reporting</button>
 </div>
 
+<div class="content-shell">
 <div id="tab-quiz">
   <div class="screen active" id="screen-home">
     <p style="margin-bottom:0.75rem;">Select a child from the register, then choose a subject to begin.</p>
@@ -3384,9 +3386,10 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
   </div>
 </div>
+</div>
 
 </div>
-<div class="site-footer">Emeejay Assess &middot; data syncs securely to your school's account<br/><a href="mailto:marc@emeejay.com" style="color:var(--hp-purple);">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:var(--hp-purple);">Privacy Policy</a> &middot; <a href="/data-processing-agreement.html" style="color:var(--hp-purple);">Data Processing Agreement</a> &middot; <a href="javascript:void(0)" onclick="openFeedbackModal()" style="color:var(--hp-purple);">Send feedback</a></div>
+<div class="site-footer" style="color:rgba(255,255,255,0.5);">Emeejay Assess &middot; data syncs securely to your school's account<br/><a href="mailto:marc@emeejay.com" style="color:#C8A6FF;">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:#C8A6FF;">Privacy Policy</a> &middot; <a href="/data-processing-agreement.html" style="color:#C8A6FF;">Data Processing Agreement</a> &middot; <a href="javascript:void(0)" onclick="openFeedbackModal()" style="color:#C8A6FF;">Send feedback</a></div>
 </div>
 
 <div id="play-view" class="page-dark full-bleed" style="display:none;">
