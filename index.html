@@ -37064,13 +37064,6 @@ function buildReportSentences(pupil, subjectKey, subjLabel, history, classHistor
   ];
   sentences.push(avgTemplates[seed % avgTemplates.length]());
 
-  if(classHistory && classHistory.length){
-    var classAvg = Math.round(classHistory.reduce(function(a,r){ return a + pctOf(r); }, 0) / classHistory.length);
-    var diff = avgPct - classAvg;
-    if(Math.abs(diff) >= 3) sentences.push('This is ' + Math.abs(diff) + ' percentage point' + (Math.abs(diff) === 1 ? '' : 's') + (diff > 0 ? ' above' : ' below') + ' the year group average of ' + classAvg + '%.');
-    else sentences.push('This is in line with the year group average of ' + classAvg + '%.');
-  }
-
   if(checkCount >= 2){
     var pf = Math.round(pctOf(first)), pl = Math.round(pctOf(last));
     var delta = pl - pf;
@@ -37148,16 +37141,7 @@ async function generateProgressReport(){
   if(!history.length){ emptyEl.textContent = 'No ' + subjLabel + ' checks recorded for ' + targetsPupil.name + (termScope !== 'all' ? ' in the ' + termScope + ' term' : '') + ' yet.'; return; }
   history.sort(function(a,b){ return (a.ts||0) - (b.ts||0); });
 
-  var classHistory = [];
-  if(targetsPupil.year){
-    var cres = await sb.from(info.table).select('*').eq('year_group', targetsPupil.year);
-    if(!cres.error){
-      classHistory = cres.data.map(info.rowFn).filter(function(r){ return (r.name||'').trim().toLowerCase() !== targetsPupil.name.trim().toLowerCase(); });
-      if(termScope !== 'all') classHistory = classHistory.filter(function(r){ return getTerm(r.date) === termScope; });
-    }
-  }
-
-  var text = buildReportSentences(targetsPupil, targetsSubjectKey, subjLabel, history, classHistory, termScope, savedTargetsList);
+  var text = buildReportSentences(targetsPupil, targetsSubjectKey, subjLabel, history, [], termScope, savedTargetsList);
   emptyEl.style.display = 'none';
   textEl.value = text;
   textEl.style.display = 'block';
@@ -37414,8 +37398,7 @@ async function generateBatchReports(){
   pupils.forEach(function(p){
     var mine = allHistory.filter(function(r){ return (r.name||'').trim().toLowerCase() === p.name.trim().toLowerCase(); }).sort(function(a,b){ return (a.ts||0) - (b.ts||0); });
     if(!mine.length) return;
-    var others = allHistory.filter(function(r){ return (r.name||'').trim().toLowerCase() !== p.name.trim().toLowerCase(); });
-    var text = buildReportSentences(p, targetsSubjectKey, subjLabel, mine, others, termScope, targetsByPupil[p.id] || []);
+    var text = buildReportSentences(p, targetsSubjectKey, subjLabel, mine, [], termScope, targetsByPupil[p.id] || []);
     any = true;
     resultsEl.appendChild(buildBatchResultCard(p, text));
   });
