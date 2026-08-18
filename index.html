@@ -33388,13 +33388,13 @@ function speakParts(parts, pauseMs){
   function speakNext(){
     if(i >= queue.length) return;
     var u = new SpeechSynthesisUtterance(String(queue[i]));
-    u.lang = voice ? voice.lang : 'en-GB';
-    if(voice) u.voice = voice;
+    u.lang = (voice && voice.lang) ? voice.lang : 'en-GB';
     u.rate = 0.92;
     i++;
     var advance = function(){ setTimeout(speakNext, pauseMs); };
     u.onend = advance;
     u.onerror = advance;
+    try{ if(voice) u.voice = voice; }catch(e){}
     try{ window.speechSynthesis.speak(u); }catch(e){ advance(); }
   }
   speakNext();
