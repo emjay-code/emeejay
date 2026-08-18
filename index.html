@@ -106,6 +106,11 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 .brand-badge{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
 .brand-title{font-size:30px;font-weight:700;color:#3A3340;font-family:'Caveat',cursive;line-height:1;}
 .brand-sub{font-size:12px;color:var(--text-muted);margin-top:1px;}
+.brand-lockup{position:relative;background:#3A2352;border-radius:18px;padding:1.5rem 1rem 1.25rem;display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:1.25rem;}
+.brand-lockup-icon{width:60px;height:60px;margin-bottom:2px;}
+.brand-lockup-word{font-family:'Caveat',cursive;font-weight:700;font-size:34px;color:#FCFAFE;line-height:1;}
+.brand-lockup-sub{font-size:12px;color:rgba(255,255,255,0.62);margin-top:3px;}
+.brand-lockup-corner{position:absolute;top:14px;right:16px;font-size:13px;color:#C8A6FF;font-weight:600;}
 h1,h2,h3{font-family:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
 h2{font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:0.75rem;}
 p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75rem;}
@@ -490,12 +495,10 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="chooser-icon small hide-mobile" style="background:#8B5CF6;bottom:2%;left:38%;transform:rotate(4deg);"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
 
       <div class="chooser-card">
-        <div class="brand-header" style="border-bottom:none;margin-bottom:0.5rem;justify-content:center;">
-          <div class="brand-badge"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="38" height="38"><defs><linearGradient id="g-badge0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A50E6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="120" height="120" rx="32" fill="url(#g-badge0)"/><g transform="translate(0 11.5)" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg></div>
-          <div>
-            <div class="brand-title">emeejay</div>
-            <div class="brand-sub">All your assessments in one place</div>
-          </div>
+        <div class="brand-lockup">
+          <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+          <div class="brand-lockup-word">emeejay</div>
+          <div class="brand-lockup-sub">All your assessments in one place</div>
         </div>
 
         <div class="landing-hero" style="padding:1.5rem 0 0.5rem;text-align:center;">
@@ -513,13 +516,11 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
 <div id="landing-view" style="display:none;">
   <div class="auth-wrap landing-wrap">
-    <div class="brand-header" style="border-bottom:none;margin-bottom:0.5rem;">
-      <div class="brand-badge"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="38" height="38"><defs><linearGradient id="g-badge1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A50E6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="120" height="120" rx="32" fill="url(#g-badge1)"/><g transform="translate(0 11.5)" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg></div>
-      <div>
-        <div class="brand-title">emeejay</div>
-        <div class="brand-sub">All your assessments in one place</div>
-      </div>
-      <a href="javascript:void(0)" onclick="goToAuth('signin')" style="margin-left:auto;font-size:13px;color:var(--hp-purple);font-weight:500;">Sign in</a>
+    <div class="brand-lockup">
+      <a href="javascript:void(0)" onclick="goToAuth('signin')" class="brand-lockup-corner">Sign in</a>
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">All your assessments in one place</div>
     </div>
 
     <div class="landing-hero" style="padding:1.25rem 0 0.25rem;">
@@ -685,12 +686,10 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
 <div id="auth-view" style="display:none;">
   <div class="auth-wrap">
-    <div class="brand-header" style="border-bottom:none;margin-bottom:0.5rem;">
-      <div class="brand-badge"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="38" height="38"><defs><linearGradient id="g-badge2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A50E6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="120" height="120" rx="32" fill="url(#g-badge2)"/><g transform="translate(0 11.5)" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg></div>
-      <div>
-        <div class="brand-title">emeejay</div>
-        <div class="brand-sub">All your assessments in one place</div>
-      </div>
+    <div class="brand-lockup">
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">All your assessments in one place</div>
     </div>
 
     <a href="javascript:void(0)" class="back-link" onclick="showLanding()">&larr; Back to home</a>
@@ -742,12 +741,10 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
 <div id="reset-password-view" style="display:none;">
   <div class="auth-wrap">
-    <div class="brand-header" style="border-bottom:none;margin-bottom:0.5rem;">
-      <div class="brand-badge"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="38" height="38"><defs><linearGradient id="g-badge4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A50E6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="120" height="120" rx="32" fill="url(#g-badge4)"/><g transform="translate(0 11.5)" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg></div>
-      <div>
-        <div class="brand-title">emeejay</div>
-        <div class="brand-sub">All your assessments in one place</div>
-      </div>
+    <div class="brand-lockup">
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">All your assessments in one place</div>
     </div>
     <div class="card" id="reset-password-card">
       <div class="section-hd" style="margin-bottom:0.35rem;">Set a new password</div>
@@ -764,12 +761,10 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 <div class="wrap">
 <h2 class="sr-only">Emeejay Assess</h2>
 
-<div class="brand-header">
-  <div class="brand-badge"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="38" height="38"><defs><linearGradient id="g-badge3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A50E6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="120" height="120" rx="32" fill="url(#g-badge3)"/><g transform="translate(0 11.5)" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg></div>
-  <div>
-    <div class="brand-title">emeejay</div>
-    <div class="brand-sub">All your assessments in one place</div>
-  </div>
+<div class="brand-lockup">
+  <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+  <div class="brand-lockup-word">emeejay</div>
+  <div class="brand-lockup-sub">All your assessments in one place</div>
 </div>
 
 <div class="school-bar">
@@ -3384,13 +3379,11 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
 <div id="play-view" style="display:none;">
   <div class="auth-wrap">
-    <div class="brand-header" style="border-bottom:none;margin-bottom:0.5rem;">
-      <div class="brand-badge"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="38" height="38"><defs><linearGradient id="g-badge4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A50E6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="120" height="120" rx="32" fill="url(#g-badge4)"/><g transform="translate(0 11.5)" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg></div>
-      <div>
-        <div class="brand-title">emeejay</div>
-        <div class="brand-sub">Student check-in</div>
-      </div>
-      <a href="javascript:void(0)" onclick="exitPlayPortal()" style="margin-left:auto;font-size:13px;color:var(--hp-purple);font-weight:500;">Exit</a>
+    <div class="brand-lockup">
+      <a href="javascript:void(0)" onclick="exitPlayPortal()" class="brand-lockup-corner">Exit</a>
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">Student check-in</div>
     </div>
 
     <div class="play-screen active" id="play-join">
@@ -3455,13 +3448,11 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
 <div id="practice-view" style="display:none;">
   <div class="auth-wrap">
-    <div class="brand-header" style="border-bottom:none;margin-bottom:0.5rem;">
-      <div class="brand-badge"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="38" height="38"><defs><linearGradient id="g-badge5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A50E6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="120" height="120" rx="32" fill="url(#g-badge5)"/><g transform="translate(0 11.5)" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg></div>
-      <div>
-        <div class="brand-title">emeejay</div>
-        <div class="brand-sub">Home practice</div>
-      </div>
-      <a href="javascript:void(0)" onclick="exitPracticePortal()" style="margin-left:auto;font-size:13px;color:var(--hp-purple);font-weight:500;">Exit</a>
+    <div class="brand-lockup">
+      <a href="javascript:void(0)" onclick="exitPracticePortal()" class="brand-lockup-corner">Exit</a>
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">Home practice</div>
     </div>
 
     <div class="practice-screen active" id="practice-loading">
