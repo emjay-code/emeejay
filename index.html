@@ -5600,6 +5600,31 @@ function leaverRetentionInfo(p){
 }
 var YEAR_TIER = {'Reception':'KS1','Year 1':'KS1','Year 2':'KS1','Year 3':'LKS2','Year 4':'LKS2','Year 5':'UKS2','Year 6':'UKS2'};
 var TIER_LABELS = {'KS1':'KS1 (Year 1–2)','LKS2':'LKS2 (Year 3–4)','UKS2':'UKS2 (Year 5–6)'};
+/* National-Curriculum-appropriate times tables by year group (cumulative –
+   each year includes everything taught in prior years). Used to stop report
+   text and target suggestions recommending focus on a table a child
+   wouldn't actually be expected to know yet (e.g. 12x for a Year 1 child). */
+var TIMES_TABLES_BY_YEAR = {
+  'Reception': [], 'Year 1': [],
+  'Year 2': [2,5,10],
+  'Year 3': [2,3,4,5,8,10],
+  'Year 4': [2,3,4,5,6,7,8,9,10,11,12],
+  'Year 5': [2,3,4,5,6,7,8,9,10,11,12],
+  'Year 6': [2,3,4,5,6,7,8,9,10,11,12]
+};
+/* Filters weak-area buckets so times-tables suggestions never recommend a
+   table beyond what the pupil's year group is expected to have covered.
+   No-op for every other subject. */
+function filterBucketsForPupilYear(buckets, subjectKey, pupilYear){
+  if(subjectKey !== 'times-tables' || !buckets.length) return buckets;
+  var allowed = TIMES_TABLES_BY_YEAR.hasOwnProperty(pupilYear) ? TIMES_TABLES_BY_YEAR[pupilYear] : null;
+  if(!allowed) return buckets; // unknown/no year on file – don't filter
+  return buckets.filter(function(b){
+    var m = /^the (\d+) times table$/.exec(b.label);
+    if(!m) return true; // non-table facts (e.g. odd fact strings) pass through
+    return allowed.indexOf(parseInt(m[1], 10)) > -1;
+  });
+}
 var pendingTierOverrideRetry = null;
 function requireTierMatch(tier, retryFn){
   var pupil = selectedAssessmentPupil;
@@ -36961,7 +36986,7 @@ async function generateTargetSuggestions(){
   if(res.error){ console.error(res.error); emptyEl.textContent = 'Could not load assessment history.'; return; }
   var history = res.data.map(info.rowFn);
   if(!history.length){ emptyEl.textContent = 'No ' + subjLabel + ' checks recorded for ' + targetsPupil.name + ' yet – complete an assessment first.'; return; }
-  var buckets = computeWeakAreaBuckets(targetsSubjectKey, history, info);
+  var buckets = filterBucketsForPupilYear(computeWeakAreaBuckets(targetsSubjectKey, history, info), targetsSubjectKey, targetsPupil.year);
   if(!buckets.length){ emptyEl.textContent = targetsPupil.name + ' has no repeated trouble areas in ' + subjLabel + ' yet – nice work! You can still add a target below.'; return; }
   emptyEl.style.display = 'none';
   targetSuggestionsCache = buckets.map(function(b){ return { item: b.sample, count: b.count, text: buildSuggestionText(targetsSubjectKey, b) }; });
@@ -37085,7 +37110,7 @@ function buildReportSentences(pupil, subjectKey, subjLabel, history, classHistor
   }
 
   var info = SUBJECT_TABLE_MAP[subjectKey];
-  var buckets = computeWeakAreaBuckets(subjectKey, history, info);
+  var buckets = filterBucketsForPupilYear(computeWeakAreaBuckets(subjectKey, history, info), subjectKey, pupil.year);
   if(buckets.length){
     var phrase = buildReportWeakPhrase(subjectKey, buckets[0]);
     var practiceTemplates = [
