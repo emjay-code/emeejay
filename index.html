@@ -353,7 +353,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 .year-btn.active{background:var(--hp-purple);color:#fff;border-color:var(--hp-purple);}
 .subject-card{border-radius:16px;padding:1rem 0.9rem;cursor:pointer;border:1px solid transparent;text-align:left;display:flex;flex-direction:column;gap:8px;transition:transform 0.12s,box-shadow 0.12s;}
 .subject-card:hover{transform:translateY(-2px);box-shadow:0 2px 10px rgba(0,0,0,0.06);}
-.subject-card .subject-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;}
+.subject-card .subject-icon{width:auto;height:auto;border-radius:0;display:flex;align-items:center;justify-content:center;font-size:27px;color:#fff;}
 .subject-card .subject-name{font-size:15px;font-weight:600;font-family:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
 .subject-card .subject-desc{font-size:12px;line-height:1.4;color:var(--text-secondary);}
 .suggestion-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0.5rem 0;border-bottom:0.5px solid var(--border-strong);}
@@ -416,6 +416,19 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 .subj-computing{background:#E7ECF3;border-color:#C3D0DE;}
 .subj-computing .subject-icon{background:#35495E;}
 .subj-computing .subject-name{color:#22303F;}
+.subject-card.subj-phonics .subject-icon{background:none;color:var(--hp-purple-dark);}
+.subject-card.subj-maths .subject-icon{background:none;color:#0F6B4F;}
+.subject-card.subj-english .subject-icon{background:none;color:#26399E;}
+.subject-card.subj-topics .subject-icon{background:none;color:#8A4E06;}
+.subject-card.subj-science .subject-icon{background:none;color:#2A5F14;}
+.subject-card.subj-re .subject-icon{background:none;color:#8A1743;}
+.subject-card.subj-handwriting .subject-icon{background:none;color:#2D4759;}
+.subject-card.subj-times-tables .subject-icon{background:none;color:#0F5A6B;}
+.subject-card.subj-mfl .subject-icon{background:none;color:#8A1F1F;}
+.subject-card.subj-music .subject-icon{background:none;color:#4A2470;}
+.subject-card.subj-early-years .subject-icon{background:none;color:#9A4C15;}
+.subject-card.subj-reasoning .subject-icon{background:none;color:#1E3E73;}
+.subject-card.subj-computing .subject-icon{background:none;color:#22303F;}
 .tt-table-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-top:0.75rem;}
 .tt-table-btn{padding:0.75rem 0;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-2);font-size:15px;font-weight:600;color:var(--text-primary);cursor:pointer;transition:background 0.12s,border-color 0.12s;}
 .tt-table-btn:hover{background:#E5F6F0;border-color:#1E9E76;}
@@ -877,7 +890,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-desc">Letters and Sounds Sets 1&ndash;3, plus the Blending Check</div>
         </button>
         <button class="subject-card subj-times-tables" onclick="goToSubject('times_tables')">
-          <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+          <div class="subject-icon"><i class="ti ti-table" aria-hidden="true"></i></div>
           <div class="subject-name">Times Tables</div>
           <div class="subject-desc">Mixed or single times table checks</div>
         </button>
@@ -892,7 +905,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-desc">Grammar, Punctuation, Spelling, Vocabulary and Reading Comprehension checks</div>
         </button>
         <button class="subject-card subj-maths" onclick="goToSubject('maths')">
-          <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+          <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
           <div class="subject-name">Maths</div>
           <div class="subject-desc">Shape, measure, the four operations, place value and statistics checks</div>
         </button>
@@ -1026,7 +1039,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   <div class="screen" id="screen-maths-home">
     <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
     <div class="subject-banner subj-maths">
-      <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+      <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Maths</div>
     </div>
     <div class="card" id="maths-list-card" style="margin-bottom:0.75rem;">
@@ -1040,7 +1053,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   <div class="screen" id="screen-maths-tiers">
     <a href="javascript:void(0)" class="back-link" onclick="backToMathsTopics()">&larr; Back to topics</a>
     <div class="subject-banner subj-maths">
-      <div class="subject-icon" id="maths-banner-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+      <div class="subject-icon" id="maths-banner-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
       <div class="subject-banner-title" id="maths-banner-title">Topic</div>
     </div>
     <div class="card" id="maths-tier-card" style="margin-bottom:0.75rem;">
@@ -1065,7 +1078,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   <div class="screen" id="screen-times_tables-home">
     <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
     <div class="subject-banner subj-times-tables">
-      <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+      <div class="subject-icon"><i class="ti ti-table" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Times Tables</div>
     </div>
     <div class="card" id="tt-set-card" style="margin-bottom:0.75rem;">
@@ -1903,7 +1916,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-desc">Sound check and Blending Check results</div>
         </button>
         <button class="subject-card subj-times-tables" onclick="goToResultsSubject('times_tables')">
-          <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+          <div class="subject-icon"><i class="ti ti-table" aria-hidden="true"></i></div>
           <div class="subject-name">Times Tables</div>
           <div class="subject-desc">Times Tables Check results</div>
         </button>
@@ -1918,7 +1931,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-desc">English check results</div>
         </button>
         <button class="subject-card subj-maths" onclick="goToResultsSubject('maths')">
-          <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+          <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
           <div class="subject-name">Maths</div>
           <div class="subject-desc">Maths check results</div>
         </button>
@@ -2026,7 +2039,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   <div class="rv-screen" id="rv-maths-section">
     <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
     <div class="subject-banner subj-maths">
-      <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+      <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Maths results</div>
     </div>
     <div class="class-filter-indicator topic-filter-indicator" data-subject="maths">
@@ -2068,7 +2081,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   <div class="rv-screen" id="rv-times-tables-section">
     <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
     <div class="subject-banner subj-times-tables">
-      <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+      <div class="subject-icon"><i class="ti ti-table" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Times Tables results</div>
     </div>
     <div class="class-filter-indicator">
@@ -2543,7 +2556,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-desc">Sound check and Blending Check analytics</div>
         </button>
         <button class="subject-card subj-times-tables" onclick="goToAnalyticsSubject('times_tables')">
-          <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+          <div class="subject-icon"><i class="ti ti-table" aria-hidden="true"></i></div>
           <div class="subject-name">Times Tables</div>
           <div class="subject-desc">Times Tables Check analytics</div>
         </button>
@@ -2558,7 +2571,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-desc">English check analytics</div>
         </button>
         <button class="subject-card subj-maths" onclick="goToAnalyticsSubject('maths')">
-          <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+          <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
           <div class="subject-name">Maths</div>
           <div class="subject-desc">Maths check analytics</div>
         </button>
@@ -2661,7 +2674,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   <div class="rv-screen" id="an-maths-section">
     <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
     <div class="subject-banner subj-maths">
-      <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+      <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Maths analytics</div>
     </div>
     <div class="class-filter-indicator has-select active">
@@ -2698,7 +2711,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   <div class="rv-screen" id="an-times-tables-section">
     <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
     <div class="subject-banner subj-times-tables">
-      <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+      <div class="subject-icon"><i class="ti ti-table" aria-hidden="true"></i></div>
       <div class="subject-banner-title">Times Tables analytics</div>
     </div>
     <div class="class-filter-indicator has-select active">
@@ -3507,7 +3520,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-desc">Grammar, Punctuation, Spelling, Vocabulary and Reading Comprehension</div>
         </button>
         <button class="subject-card subj-maths" onclick="openPracticeSubject('maths')">
-          <div class="subject-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+          <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
           <div class="subject-name">Maths</div>
           <div class="subject-desc">Shape, measure, the four operations, place value and statistics</div>
         </button>
@@ -5324,10 +5337,10 @@ var CHILD_PROFILE_SUBJECTS = [
   {key:'early_years', label:'Early Years', icon:'ti-building-carousel'},
   {key:'phonics', label:'Phonics', icon:'ti-abc'},
   {key:'blending', label:'Blending', icon:'ti-git-merge'},
-  {key:'times-tables', label:'Times Tables', icon:'ti-calculator'},
+  {key:'times-tables', label:'Times Tables', icon:'ti-table'},
   {key:'handwriting', label:'Handwriting', icon:'ti-pencil'},
   {key:'english', label:'English', icon:'ti-book-2'},
-  {key:'maths', label:'Maths', icon:'ti-calculator'},
+  {key:'maths', label:'Maths', icon:'ti-math-symbols'},
   {key:'topics', label:'Topics', icon:'ti-world'},
   {key:'science', label:'Science', icon:'ti-leaf'},
   {key:'re', label:'RE', icon:'ti-star'},
@@ -9882,7 +9895,7 @@ function renderMathsList(){
     btn.className = 'phase-btn';
     btn.onclick = function(){ goToMathsTopic(key); };
     var badge = document.createElement('div'); badge.className = 'phase-badge';
-    var icon = document.createElement('i'); icon.className = 'ti ' + (t.icon || 'ti-calculator'); icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
+    var icon = document.createElement('i'); icon.className = 'ti ' + (t.icon || 'ti-math-symbols'); icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
     badge.appendChild(icon);
     var textWrap = document.createElement('div');
     var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = t.label;
@@ -9897,7 +9910,7 @@ function goToMathsTopic(key){
   currentMathsKey = key;
   var t = MATHS_TOPICS[key];
   if(!t) return;
-  document.getElementById('maths-banner-icon').innerHTML = '<i class="ti ' + (t.icon || 'ti-calculator') + '" aria-hidden="true"></i>';
+  document.getElementById('maths-banner-icon').innerHTML = '<i class="ti ' + (t.icon || 'ti-math-symbols') + '" aria-hidden="true"></i>';
   document.getElementById('maths-banner-title').textContent = t.label;
   ['KS1','LKS2','UKS2'].forEach(function(tier){
     var has = t.questions[tier] && t.questions[tier].length > 0;
