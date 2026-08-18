@@ -111,6 +111,18 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 .brand-lockup-word{font-family:'Caveat',cursive;font-weight:700;font-size:34px;color:#FCFAFE;line-height:1;}
 .brand-lockup-sub{font-size:12px;color:rgba(255,255,255,0.62);margin-top:3px;}
 .brand-lockup-corner{position:absolute;top:14px;right:16px;font-size:13px;color:#C8A6FF;font-weight:600;}
+.page-dark{background:#3A2352;}
+.page-dark.full-bleed{min-height:100vh;}
+.page-dark .brand-lockup{background:none;padding:1.5rem 0 0.5rem;border-radius:0;margin-bottom:0.25rem;}
+.page-dark .hero-title{color:#FCFAFE;}
+.page-dark .hero-sub{color:rgba(255,255,255,0.78);}
+.page-dark .back-link{color:#C8A6FF;}
+.page-dark .mini-link{color:#C8A6FF;}
+.page-dark .auth-tab{color:rgba(255,255,255,0.55);}
+.page-dark .auth-tab.active{color:#FFFFFF;border-bottom-color:#C8A6FF;}
+.page-dark .landing-stat-val{color:#FCFAFE;}
+.page-dark .landing-stat-lbl{color:rgba(255,255,255,0.62);}
+.page-dark .site-footer{color:rgba(255,255,255,0.5);}
 h1,h2,h3{font-family:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
 h2{font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:0.75rem;}
 p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75rem;}
@@ -479,7 +491,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 <body>
 <div class="page">
 
-<div id="entry-chooser-view">
+<div id="entry-chooser-view" class="page-dark full-bleed">
   <div class="auth-wrap landing-wrap">
     <div class="chooser-decor">
       <div class="chooser-icon" style="background:var(--hp-purple);top:2%;left:4%;transform:rotate(-12deg);"><i class="ti ti-abc" aria-hidden="true"></i></div>
@@ -514,7 +526,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   </div>
 </div>
 
-<div id="landing-view" style="display:none;">
+<div id="landing-view" class="page-dark" style="display:none;">
   <div class="auth-wrap landing-wrap">
     <div class="brand-lockup">
       <a href="javascript:void(0)" onclick="goToAuth('signin')" class="brand-lockup-corner">Sign in</a>
@@ -680,11 +692,11 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <button class="btn btn-primary" onclick="goToAuth('signup','create')">Start your free 14-day trial</button>
     </div>
 
-    <div class="site-footer">Emeejay Assess &middot; <a href="mailto:marc@emeejay.com" style="color:var(--hp-purple);">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:var(--hp-purple);">Privacy Policy</a> &middot; <a href="/data-processing-agreement.html" style="color:var(--hp-purple);">Data Processing Agreement</a></div>
+    <div class="site-footer">Emeejay Assess &middot; <a href="mailto:marc@emeejay.com" style="color:#C8A6FF;">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:#C8A6FF;">Privacy Policy</a> &middot; <a href="/data-processing-agreement.html" style="color:#C8A6FF;">Data Processing Agreement</a></div>
   </div>
 </div>
 
-<div id="auth-view" style="display:none;">
+<div id="auth-view" class="page-dark full-bleed" style="display:none;">
   <div class="auth-wrap">
     <div class="brand-lockup">
       <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
@@ -739,7 +751,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   </div>
 </div>
 
-<div id="reset-password-view" style="display:none;">
+<div id="reset-password-view" class="page-dark full-bleed" style="display:none;">
   <div class="auth-wrap">
     <div class="brand-lockup">
       <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
@@ -3377,7 +3389,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 <div class="site-footer">Emeejay Assess &middot; data syncs securely to your school's account<br/><a href="mailto:marc@emeejay.com" style="color:var(--hp-purple);">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:var(--hp-purple);">Privacy Policy</a> &middot; <a href="/data-processing-agreement.html" style="color:var(--hp-purple);">Data Processing Agreement</a> &middot; <a href="javascript:void(0)" onclick="openFeedbackModal()" style="color:var(--hp-purple);">Send feedback</a></div>
 </div>
 
-<div id="play-view" style="display:none;">
+<div id="play-view" class="page-dark full-bleed" style="display:none;">
   <div class="auth-wrap">
     <div class="brand-lockup">
       <a href="javascript:void(0)" onclick="exitPlayPortal()" class="brand-lockup-corner">Exit</a>
@@ -3446,7 +3458,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   </div>
 </div>
 
-<div id="practice-view" style="display:none;">
+<div id="practice-view" class="page-dark full-bleed" style="display:none;">
   <div class="auth-wrap">
     <div class="brand-lockup">
       <a href="javascript:void(0)" onclick="exitPracticePortal()" class="brand-lockup-corner">Exit</a>
