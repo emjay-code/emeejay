@@ -115,6 +115,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 .page-dark{background:#3A2352;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);margin-top:-2rem;margin-bottom:-4rem;padding:2rem 1rem 4rem;box-sizing:border-box;}
 .page-dark.full-bleed{min-height:100vh;}
 .page-dark .brand-lockup{background:none;padding:1.5rem 0 0.5rem;border-radius:0;margin-bottom:0.25rem;}
+/* #app-view isn't a .page-dark screen, but its header brand-lockup sits on the same dark purple background - without this its own solid #3A2352 fill (matching but opaque) silently hides the decorative icons rendered underneath it. */
+#app-view .brand-lockup{background:none;}
 .page-dark .hero-title{color:#FCFAFE;}
 .page-dark .hero-sub{color:rgba(255,255,255,0.78);}
 .page-dark .back-link{color:#C8A6FF;}
