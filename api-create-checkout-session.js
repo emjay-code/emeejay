@@ -21,6 +21,11 @@ module.exports = async (req, res) => {
     const schoolId = body.schoolId;
     const schoolName = body.schoolName || '';
     const email = body.email;
+    // Only passed when a school is completing payment setup for the very first time,
+    // right after signup - see startPaymentSetupCheckout() in the client. Existing
+    // "Upgrade" flows (past_due/canceled schools, or schools that already had a trial)
+    // never send this, so they never get a second free trial.
+    const trialDays = Number(body.trialDays) > 0 ? Math.floor(Number(body.trialDays)) : undefined;
 
     if (!schoolId) {
       res.status(400).json({ error: 'Missing schoolId' });
@@ -28,6 +33,11 @@ module.exports = async (req, res) => {
     }
 
     const origin = req.headers.origin || ('https://' + req.headers.host);
+
+    const subscriptionData = { metadata: { school_id: schoolId } };
+    if (trialDays) {
+      subscriptionData.trial_period_days = trialDays;
+    }
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
@@ -37,9 +47,7 @@ module.exports = async (req, res) => {
       client_reference_id: schoolId,
       customer_email: email || undefined,
       metadata: { school_id: schoolId, school_name: schoolName },
-      subscription_data: {
-        metadata: { school_id: schoolId }
-      },
+      subscription_data: subscriptionData,
       managed_payments: { enabled: false }
     });
 

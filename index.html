@@ -717,7 +717,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <button class="btn btn-primary" onclick="goToAuth('signup','create')">Start your free 14-day trial</button>
     </div>
 
-    <div class="site-footer">&copy; 2026 Marc Jones &middot; Emeejay Assess &middot; <a href="mailto:marc@emeejay.com" style="color:#C8A6FF;">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:#C8A6FF;">Privacy Policy</a> &middot; <a href="/terms-of-service.html" style="color:#C8A6FF;">Terms of Service</a> &middot; <a href="/data-processing-agreement.html" style="color:#C8A6FF;">Data Processing Agreement</a></div>
+    <div class="site-footer">Emeejay Assess &middot; <a href="mailto:marc@emeejay.com" style="color:#C8A6FF;">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:#C8A6FF;">Privacy Policy</a> &middot; <a href="/data-processing-agreement.html" style="color:#C8A6FF;">Data Processing Agreement</a></div>
   </div>
 </div>
 
@@ -790,6 +790,28 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="field"><label>Confirm new password</label><input type="password" id="rp-password-confirm" autocomplete="new-password"/></div>
       <button class="btn btn-primary" id="rp-submit" onclick="doSetNewPassword()">Set new password</button>
       <div class="error-text" id="rp-error" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<div id="payment-setup-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap">
+    <div class="brand-lockup">
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">All your assessments in one place</div>
+    </div>
+    <div class="card" id="ps-owner-block">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Activate your school's free trial</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:0.9rem;">One last step: add a payment method to activate your 14-day free trial. You won't be charged today &mdash; your card is only charged automatically once the trial ends, unless you cancel first.</p>
+      <button class="btn btn-primary" id="ps-checkout-btn" onclick="startPaymentSetupCheckout(this)">Continue to secure checkout</button>
+      <div class="error-text" id="ps-error" style="display:none;"></div>
+      <a href="javascript:void(0)" class="mini-link" onclick="doSignOut()">Sign out</a>
+    </div>
+    <div class="card" id="ps-staff-block" style="display:none;">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Trial not yet activated</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:0.9rem;">Your school's account owner needs to add a payment method to activate the 14-day free trial before staff can start using Emeejay Assess. Ask them to sign in and complete this step.</p>
+      <a href="javascript:void(0)" class="mini-link" onclick="doSignOut()">Sign out</a>
     </div>
   </div>
 </div>
@@ -3413,7 +3435,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 </div>
 
 </div>
-<div class="site-footer" style="color:rgba(255,255,255,0.5);">&copy; 2026 Marc Jones &middot; Emeejay Assess &middot; data syncs securely to your school's account<br/><a href="mailto:marc@emeejay.com" style="color:#C8A6FF;">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:#C8A6FF;">Privacy Policy</a> &middot; <a href="/terms-of-service.html" style="color:#C8A6FF;">Terms of Service</a> &middot; <a href="/data-processing-agreement.html" style="color:#C8A6FF;">Data Processing Agreement</a> &middot; <a href="javascript:void(0)" onclick="openFeedbackModal()" style="color:#C8A6FF;">Send feedback</a></div>
+<div class="site-footer" style="color:rgba(255,255,255,0.5);">Emeejay Assess &middot; data syncs securely to your school's account<br/><a href="mailto:marc@emeejay.com" style="color:#C8A6FF;">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:#C8A6FF;">Privacy Policy</a> &middot; <a href="/data-processing-agreement.html" style="color:#C8A6FF;">Data Processing Agreement</a> &middot; <a href="javascript:void(0)" onclick="openFeedbackModal()" style="color:#C8A6FF;">Send feedback</a></div>
 </div>
 
 <div id="play-view" class="page-dark full-bleed" style="display:none;">
@@ -3833,6 +3855,9 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <div id="staff-owner-gone-note" style="display:none;font-size:12.5px;color:var(--text-secondary);background:var(--surface-1);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.6rem 0.75rem;margin-top:0.6rem;">
       Not an owner, and no owner is around to grant you access? <a href="javascript:void(0)" onclick="requestOwnershipHelp()" style="color:var(--hp-purple);">Contact us</a> and we'll help sort it out.
     </div>
+    <div id="staff-billing-row" style="display:none;margin-top:0.6rem;">
+      <button class="btn" style="width:100%;" onclick="startBillingPortal(this)">Manage subscription &amp; billing</button>
+    </div>
     <div style="display:flex;gap:0.5rem;margin-top:0.85rem;">
       <button class="btn" style="flex:1;" onclick="closeStaffModal()">Close</button>
     </div>
@@ -4125,6 +4150,28 @@ function isSchoolActive(){
   return false;
 }
 
+/* A school's 14-day trial only counts as "activated" once a payment method has been added via
+   Stripe Checkout (stripe_customer_id gets set by the webhook on checkout.session.completed).
+   Until then, access is blocked - see showPaymentSetupBlock(). Demo schools are exempt. */
+function schoolNeedsPaymentSetup(school){
+  return !!(school && !school.is_demo && school.subscription_status === 'trialing' && !school.stripe_customer_id);
+}
+
+function showPaymentSetupBlock(){
+  document.getElementById('entry-chooser-view').style.display = 'none';
+  document.getElementById('landing-view').style.display = 'none';
+  document.getElementById('auth-view').style.display = 'none';
+  document.getElementById('app-view').style.display = 'none';
+  var isOwner = !!(currentProfile && currentProfile.is_owner);
+  document.getElementById('ps-owner-block').style.display = isOwner ? 'block' : 'none';
+  document.getElementById('ps-staff-block').style.display = isOwner ? 'none' : 'block';
+  document.getElementById('payment-setup-view').style.display = 'block';
+}
+
+async function startPaymentSetupCheckout(btn){
+  await startCheckout(btn, { trialDays: 14 });
+}
+
 function isDemoSchool(){
   return !!(currentSchool && currentSchool.is_demo);
 }
@@ -4175,20 +4222,23 @@ function renderTrialBanner(){
   el.style.display = 'flex';
 }
 
-async function startCheckout(btn){
+async function startCheckout(btn, opts){
   if(!currentSchool){ return; }
+  opts = opts || {};
   var oldText = btn.textContent;
   btn.disabled = true;
   btn.textContent = 'Loading...';
   try{
+    var body = {
+      schoolId: currentSchool.id,
+      schoolName: currentSchool.name,
+      email: currentUser ? currentUser.email : undefined
+    };
+    if(opts.trialDays){ body.trialDays = opts.trialDays; }
     var res = await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        schoolId: currentSchool.id,
-        schoolName: currentSchool.name,
-        email: currentUser ? currentUser.email : undefined
-      })
+      body: JSON.stringify(body)
     });
     var data = await res.json();
     if(res.ok && data.url){
@@ -4203,12 +4253,39 @@ async function startCheckout(btn){
   btn.textContent = oldText;
 }
 
+async function startBillingPortal(btn){
+  if(!currentSchool){ return; }
+  var oldText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Loading...';
+  try{
+    var res = await fetch('/api/create-portal-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ schoolId: currentSchool.id })
+    });
+    var data = await res.json();
+    if(res.ok && data.url){
+      window.location.href = data.url;
+      return;
+    }
+    alert('Could not open billing portal: ' + (data.error || 'Please try again shortly.'));
+  } catch(e){
+    alert('Could not open billing portal. Please try again shortly.');
+  }
+  btn.disabled = false;
+  btn.textContent = oldText;
+}
+
 function checkCheckoutReturn(){
   var params = new URLSearchParams(window.location.search);
   var status = params.get('checkout');
   if(!status) return;
   if(status === 'success'){
     alert('Thanks! Your payment was received. Your school\'s subscription is now active.');
+    // The Stripe webhook that records the card on file can take a moment to land -
+    // re-run onSignedIn shortly after so the payment-setup block clears automatically.
+    setTimeout(function(){ onSignedIn(); }, 1800);
   } else if(status === 'cancel'){
     alert('Checkout was cancelled. No payment was taken.');
   }
@@ -4232,8 +4309,13 @@ async function onSignedIn(){
   currentProfile = profRes.data;
   applyEditDeleteVisibility();
 
-  var schoolRes = await sb.from('schools').select('id, name, join_code, subscription_status, trial_ends_at, is_demo, last_rollover_academic_year, leaver_retention_years').eq('id', currentProfile.school_id).single();
+  var schoolRes = await sb.from('schools').select('id, name, join_code, subscription_status, trial_ends_at, stripe_customer_id, is_demo, last_rollover_academic_year, leaver_retention_years').eq('id', currentProfile.school_id).single();
   currentSchool = schoolRes.data || null;
+
+  if(schoolNeedsPaymentSetup(currentSchool)){
+    showPaymentSetupBlock();
+    return;
+  }
 
   document.getElementById('sb-school-name').textContent = currentSchool ? currentSchool.name : 'Your school';
   document.getElementById('sb-teacher-name').textContent = currentProfile.display_name || currentUser.email;
@@ -36308,6 +36390,8 @@ var staffListCache = [];
 async function openStaffModal(){
   document.getElementById('staff-modal-overlay').classList.add('active');
   document.getElementById('staff-list').innerHTML = '<p style="font-size:13px;color:var(--text-muted);">Loading...</p>';
+  var billingRow = document.getElementById('staff-billing-row');
+  billingRow.style.display = (currentProfile && currentProfile.is_owner && currentSchool && currentSchool.stripe_customer_id) ? 'block' : 'none';
   var res = await sb.rpc('list_school_staff');
   if(res.error){
     document.getElementById('staff-list').innerHTML = '<p style="font-size:13px;color:var(--text-danger);">Could not load staff: ' + escapeHtml(res.error.message) + '</p>';

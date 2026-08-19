@@ -56,7 +56,7 @@ li{font-size:15px;color:var(--text-secondary);margin-bottom:0.35rem;}
     <p>Sections covering liability, refunds, and service availability are commercial/legal decisions as much as legal drafting &ndash; they're marked below as open items because they genuinely need your decision (and ideally a solicitor's sign-off) before this is relied on with paying schools, especially larger multi-academy trusts.</p>
     <p>Anything shown in <span class="placeholder">red italics</span> is a remaining open item.</p>
   </div>
-  <div class="updated"><strong>Last updated:</strong> 19 August 2026</div>
+  <div class="updated"><strong>Last updated:</strong> 19 August 2026 (billing terms updated to match live checkout flow)</div>
 
   <h2>1. Who we are and what this covers</h2>
   <p>Marc Jones, trading as <strong>Emeejay Assess</strong> ("we", "us", "the Provider") &ndash; a UK sole trader &ndash; provides a phonics, maths and wider curriculum assessment tracking service for primary schools, available at emeejay.com (the "Service"). These Terms of Service ("Terms") govern use of the Service by any school, member of school staff, or other organisation that creates an account ("you", "the School").</p>
@@ -75,14 +75,16 @@ li{font-size:15px;color:var(--text-secondary);margin-bottom:0.35rem;}
   </ul>
 
   <h2>4. Free trial</h2>
-  <p>New schools can try the Service free for 14 days. <span class="placeholder">Whether a payment card is required to start the trial, and what happens automatically at the end of it (for example, whether the subscription begins automatically or the School is asked to actively subscribe), should be confirmed here to match however the trial is actually configured in Stripe &ndash; this should read the same as what a school actually experiences at checkout.</span></p>
+  <p>New schools can try the Service free for 14 days. To start a trial, the School's account owner adds a payment card via our payment provider, Stripe, when creating the school account &ndash; no payment is taken at this point. If the card step isn't completed, the account stays inactive and can't be used until it is.</p>
+  <p>The trial automatically converts into a paid annual subscription at the end of the 14 days, and the card on file is charged the then-current annual fee, unless the School cancels before the trial ends (see section 5).</p>
 
   <h2>5. Fees and payment</h2>
   <ul>
-    <li>The Service is billed as a single annual fee per school (currently &pound;75/year), covering unlimited staff logins, unlimited children, and unlimited assessments across every subject &ndash; the current price is always shown on the pricing page before checkout.</li>
+    <li>The Service is billed as a single annual fee per school (currently &pound;75/year), covering unlimited staff logins, unlimited children, and unlimited assessments across every subject &ndash; the current price is always shown before checkout.</li>
     <li>Payment is processed by our payment provider, Stripe. We never see or store full card details.</li>
-    <li>Subscriptions <span class="placeholder">renew automatically each year unless cancelled before the renewal date &ndash; confirm this matches how the Stripe subscription is actually configured, and add instructions here for how a school cancels (for example, a link to the Stripe customer billing portal, or emailing us).</span></li>
-    <li><strong>Refunds:</strong> <span class="placeholder">no refund policy has been decided yet. A common approach for small annual SaaS subscriptions is "no refunds for partial years, but you can cancel to stop future renewals" &ndash; decide this and replace this paragraph before relying on these Terms.</span></li>
+    <li>Subscriptions renew automatically each year on the anniversary of the trial starting, and the card on file is charged automatically, unless cancelled before the renewal date.</li>
+    <li>A School's account owner can cancel or manage their subscription at any time via the "Manage subscription &amp; billing" option in the in-app Staff screen, which opens Stripe's secure billing portal &ndash; no need to email us, though you're welcome to if you'd rather.</li>
+    <li><strong>Refunds:</strong> fees already paid are non-refundable, including for the remainder of a partial year. Cancelling stops future renewals but doesn't refund the current year.</li>
   </ul>
 
   <h2>6. Acceptable use</h2>
@@ -114,7 +116,9 @@ li{font-size:15px;color:var(--text-secondary);margin-bottom:0.35rem;}
   </ul>
 
   <h2>11. Liability</h2>
-  <p class="placeholder">This section is a placeholder. A typical approach for a small SaaS provider is to exclude liability for indirect or consequential losses, and cap direct liability at a multiple of fees paid in the previous 12 months &ndash; but the right wording, and whether it's enforceable against different types of school (maintained schools, academies, independent schools), should be confirmed with a solicitor before you rely on it. This is also likely to be a negotiating point for larger multi-academy trusts, who may ask for their own terms instead.</p>
+  <p>To the fullest extent permitted by law, we are not liable for any indirect, special, or consequential loss (for example, loss of profits, data, or goodwill) arising from your use of the Service. Our total liability to a School for any claim arising from these Terms, however caused, is capped at the total fees paid by that School in the 12 months before the claim arose.</p>
+  <p>Nothing in these Terms limits liability for death or personal injury caused by negligence, fraud, or anything else that can't legally be excluded or limited.</p>
+  <p class="placeholder">This wording is a reasonable starting point drawn from standard small-SaaS practice, but it has not been reviewed by a solicitor and its enforceability hasn't been confirmed &ndash; particularly against larger multi-academy trusts, who may have their own procurement terms and greater bargaining power. Get this reviewed before relying on it at scale, and expect larger trusts to negotiate their own liability terms.</p>
 
   <h2>12. Changes to these Terms</h2>
   <p>We may update these Terms from time to time as the Service changes. We'll update the "last updated" date above and, for material changes, aim to let schools know directly (for example, by email).</p>
