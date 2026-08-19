@@ -33437,18 +33437,25 @@ function pickQuestions(pool, n){
    them, so options don't run together the way one long sentence would. */
 function ttsSupported(){ return typeof window !== 'undefined' && 'speechSynthesis' in window; }
 /* Picks the clearest available system voice: prefers Chrome's higher-quality
-   "Google UK English" voice, then any UK English voice, then any English
-   voice, falling back to whatever the browser defaults to. Looked up fresh
-   each time (rather than cached) since Chrome often loads its voice list
-   asynchronously a moment after the page loads. */
+   "Google UK English" voice or Apple's natural-sounding Siri voices, then any
+   named "good" UK voice, then any UK English voice, then any English voice,
+   falling back to whatever the browser defaults to. Explicitly excludes
+   macOS/Safari's built-in novelty/effects voices (Zarvox, Bells, Bad News,
+   etc.) which are technically valid "en" voices but sound bizarre for reading
+   out assessment questions. Looked up fresh each time (rather than cached)
+   since browsers often load the voice list asynchronously after page load. */
+var TTS_NOVELTY_VOICE_NAMES = /^(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Good News|Hysterical|Jester|Organ|Pipe Organ|Trinoids|Whisper|Wobble|Zarvox|Superstar|Junior|Kathy|Ralph|Princess|Eddy|Flo|Grandma|Grandpa|Reed|Rocko|Sandy|Shelley)\b/i;
 function pickTtsVoice(){
   if(!ttsSupported()) return null;
   var voices = [];
-  try{ voices = window.speechSynthesis.getVoices() || []; }catch(e){}
+  try{ voices = (window.speechSynthesis.getVoices() || []).filter(function(v){ return !TTS_NOVELTY_VOICE_NAMES.test(v.name); }); }catch(e){}
   if(!voices.length) return null;
   var rules = [
     function(v){ return /Google UK English/i.test(v.name); },
-    function(v){ return /en[-_]GB/i.test(v.lang) && /(natural|enhanced|neural|online)/i.test(v.name); },
+    function(v){ return /Siri/i.test(v.name) && /en[-_]GB/i.test(v.lang); },
+    function(v){ return /Siri/i.test(v.name); },
+    function(v){ return /en[-_]GB/i.test(v.lang) && /(natural|enhanced|neural|online|premium)/i.test(v.name); },
+    function(v){ return /en[-_]GB/i.test(v.lang) && /^(Daniel|Kate|Serena|Stephanie|Arthur)\b/i.test(v.name); },
     function(v){ return /Google/i.test(v.name) && /^en/i.test(v.lang); },
     function(v){ return /en[-_]GB/i.test(v.lang); },
     function(v){ return /^en/i.test(v.lang); }
