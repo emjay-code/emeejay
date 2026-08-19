@@ -175,8 +175,21 @@ td{color:var(--text-secondary);}
     <li>The Processor is currently a single-person operation (Marc Jones); access to the production database, hosting, and payment dashboards is restricted to the Processor personally, secured with unique logins and, where offered by the provider, multi-factor authentication. <span class="placeholder">If the team grows, this Annex should be updated to describe access review cadence and staff confidentiality training.</span></li>
     <li>Card and full payment details are never stored by the Processor &ndash; these are handled entirely within Stripe's PCI-DSS compliant infrastructure.</li>
     <li>Regular backups are maintained by the database hosting provider (Supabase).</li>
-    <li>In the event of a suspected Personal Data Breach, the Processor will assess and contain the incident as soon as reasonably possible, and notify the School in line with clause 4(g) of this Agreement. <span class="placeholder">A more detailed written incident response process has not yet been formalised.</span></li>
+    <li>In the event of a suspected Personal Data Breach, the Processor will assess and contain the incident as soon as reasonably possible, and notify the School in line with clause 4(g) of this Agreement, following the written process set out in Annex 3.</li>
   </ul>
+
+  <h2>Annex 3 &ndash; Incident Response Process</h2>
+  <p>This is the Processor's written process for handling a suspected or confirmed Personal Data Breach.</p>
+  <ol>
+    <li><strong>Detection.</strong> A suspected incident may come to light through an automated alert from Supabase or Vercel, a report from a school or member of staff, a security researcher's disclosure, or the Processor's own routine checks.</li>
+    <li><strong>Immediate containment.</strong> As soon as the Processor becomes aware, they will act to stop ongoing harm &ndash; for example, revoking or rotating any compromised credentials or API keys, disabling affected accounts, or taking an affected feature offline until it can be fixed.</li>
+    <li><strong>Assessment.</strong> The Processor will establish, as far as reasonably possible: what Personal Data was affected, which School(s) and data subjects, whether special category data (for example, the SEND flag) was involved, the likely cause, and the likely consequences for affected individuals.</li>
+    <li><strong>Notification.</strong> The Processor will notify each affected School without undue delay and in any event within 72 hours of becoming aware, per clause 4(g), including: the nature of the incident and when it was discovered; the categories and approximate number of data subjects and records affected; the likely consequences; the measures taken or proposed to address it; and a contact point for further information (marcedwardjones@gmail.com). Schools remain responsible, as Controller, for deciding whether to notify the ICO or affected parents/guardians, and the Processor will support that decision with the information available.</li>
+    <li><strong>Remediation.</strong> The Processor will fix the underlying cause and take reasonable steps to prevent the same type of incident recurring.</li>
+    <li><strong>Record-keeping.</strong> Every suspected or confirmed incident &ndash; including ones assessed as low-risk and not requiring notification &ndash; is logged in a written incident record noting the date detected, a description, the data affected, actions taken, and any notification dates, kept as ongoing evidence of accountability under Article 5(2) UK GDPR.</li>
+    <li><strong>Review.</strong> After any notifiable incident, the Processor will review what happened and whether the security measures in Annex 2 need updating as a result.</li>
+  </ol>
+  <p class="placeholder">This is a practical starting process suited to a single-person operation, not a substitute for formal legal advice on breach response and notification obligations &ndash; worth a solicitor's review alongside the rest of this Agreement, particularly if the team or the volume of schools using the Service grows.</p>
 
   <div class="site-footer">&copy; 2026 Marc Jones. Emeejay Assess &middot; <a href="/terms-of-service.html">Terms of Service</a> &middot; <a href="/privacy-policy.html">Privacy Policy</a></div>
 </div>
