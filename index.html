@@ -620,8 +620,13 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
    marketing landing page so the two screens feel like the same product. */
 .chooser-decor{position:relative;overflow:hidden;padding:1.5rem 0 3rem;}
 .chooser-card{position:relative;z-index:1;}
+/* Any real content placed directly inside a .chooser-decor wrapper (used on
+   auth/reset/payment/landing/app/student screens, not just the entry
+   chooser) must sit above the decorative icons rather than behind them. */
+.chooser-decor>.brand-lockup,.chooser-decor>.card,.chooser-decor>.school-bar,.chooser-decor>.landing-hero,.chooser-decor>.back-link,.chooser-decor>.auth-tabs{position:relative;z-index:1;}
 .chooser-icon{position:absolute;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;box-shadow:0 8px 20px rgba(20,16,50,0.16);z-index:0;opacity:0.92;}
 .chooser-icon.small{width:36px;height:36px;font-size:15px;border-radius:11px;}
+.chooser-icon.tiny{width:28px;height:28px;font-size:12px;border-radius:9px;opacity:0.7;}
 @media (max-width:640px){
   .chooser-icon.hide-mobile{display:none;}
 }
@@ -667,6 +672,8 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
 <div id="landing-view" class="page-dark" style="display:none;">
   <div class="auth-wrap landing-wrap">
+    <div class="chooser-decor">
+    <div class="chooser-decor-icons" data-decor-size="full"></div>
     <div class="brand-lockup">
       <a href="javascript:void(0)" onclick="goToAuth('signin')" class="brand-lockup-corner">Sign in</a>
       <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
@@ -706,6 +713,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
         <span class="subject-chip" style="background:#8B5CF6;"><i class="ti ti-building-carousel ico-early-years" aria-hidden="true"></i>Early Years</span>
       </div>
     </div>
+    </div>
 
     <div class="landing-hero landing-narrow" style="margin-top:2rem;">
       <p class="hero-sub">One flat fee covers every subject &ndash; phonics, maths, English, topics and more &ndash; with live sessions, instant results, gap analysis and parent-ready reports built in. Nothing to install, no per-pupil charges, and everything syncs across every device so tracking progress never gets in the way of teaching it.</p>
@@ -723,7 +731,8 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 </div>
 
 <div id="auth-view" class="page-dark full-bleed" style="display:none;">
-  <div class="auth-wrap">
+  <div class="auth-wrap chooser-decor">
+    <div class="chooser-decor-icons" data-decor-size="full"></div>
     <div class="brand-lockup">
       <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
       <div class="brand-lockup-word">emeejay</div>
@@ -778,7 +787,8 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 </div>
 
 <div id="reset-password-view" class="page-dark full-bleed" style="display:none;">
-  <div class="auth-wrap">
+  <div class="auth-wrap chooser-decor">
+    <div class="chooser-decor-icons" data-decor-size="full"></div>
     <div class="brand-lockup">
       <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
       <div class="brand-lockup-word">emeejay</div>
@@ -796,7 +806,8 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 </div>
 
 <div id="payment-setup-view" class="page-dark full-bleed" style="display:none;">
-  <div class="auth-wrap">
+  <div class="auth-wrap chooser-decor">
+    <div class="chooser-decor-icons" data-decor-size="full"></div>
     <div class="brand-lockup">
       <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
       <div class="brand-lockup-word">emeejay</div>
@@ -821,10 +832,13 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 <div class="wrap">
 <h2 class="sr-only">Emeejay Assess</h2>
 
+<div class="chooser-decor" style="padding:0.5rem 0 0.75rem;">
+<div class="chooser-decor-icons" data-decor-size="header"></div>
 <div class="brand-lockup">
   <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
   <div class="brand-lockup-word">emeejay</div>
   <div class="brand-lockup-sub">All your assessments in one place</div>
+</div>
 </div>
 
 <div class="school-bar">
@@ -3447,11 +3461,14 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
 <div id="play-view" class="page-dark full-bleed" style="display:none;">
   <div class="auth-wrap">
+    <div class="chooser-decor" style="padding:0.5rem 0 0.75rem;">
+    <div class="chooser-decor-icons" data-decor-size="header"></div>
     <div class="brand-lockup">
       <a href="javascript:void(0)" onclick="exitPlayPortal()" class="brand-lockup-corner">Exit</a>
       <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
       <div class="brand-lockup-word">emeejay</div>
       <div class="brand-lockup-sub">Student check-in</div>
+    </div>
     </div>
 
     <div class="play-screen active" id="play-join">
@@ -3516,11 +3533,14 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
 <div id="practice-view" class="page-dark full-bleed" style="display:none;">
   <div class="auth-wrap">
+    <div class="chooser-decor" style="padding:0.5rem 0 0.75rem;">
+    <div class="chooser-decor-icons" data-decor-size="header"></div>
     <div class="brand-lockup">
       <a href="javascript:void(0)" onclick="exitPracticePortal()" class="brand-lockup-corner">Exit</a>
       <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
       <div class="brand-lockup-word">emeejay</div>
       <div class="brand-lockup-sub">Home practice</div>
+    </div>
     </div>
 
     <div class="practice-screen active" id="practice-loading">
@@ -3907,6 +3927,46 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 </div>
 
 <script>
+/* ---------- Decorative scattered subject-icon layer ----------
+   Reused across every marketing/auth/entry screen (and, more subtly, behind
+   the signed-in app and student-facing headers) so the brand feels
+   consistent everywhere, not just on the very first "Who's this for?"
+   screen. "full" is the original 11-icon spread used on roomy screens with
+   an empty margin either side of a narrow centred card. "header" is a
+   smaller 4-icon set sized for the compact, full-width headers of the
+   signed-in app and student portals, kept close to the corners so it never
+   overlaps real buttons/text. */
+var CHOOSER_DECOR_ICONS_FULL = [
+  {cls:'',                  bg:'var(--hp-purple)', style:'top:2%;left:4%;transform:rotate(-12deg);',  icon:'ti-abc ico-phonics'},
+  {cls:'small hide-mobile', bg:'#1E9E76',           style:'top:16%;left:0;transform:rotate(9deg);',     icon:'ti-calculator ico-maths'},
+  {cls:'',                  bg:'#3B5FCC',           style:'top:1%;right:5%;transform:rotate(10deg);',   icon:'ti-book-2 ico-english'},
+  {cls:'small hide-mobile', bg:'#C9750B',           style:'top:18%;right:0;transform:rotate(-8deg);',   icon:'ti-world ico-topics'},
+  {cls:'small',             bg:'#3F8F1F',           style:'top:42%;left:2%;transform:rotate(-6deg);',   icon:'ti-leaf ico-science'},
+  {cls:'small',             bg:'#C2255C',           style:'top:42%;right:2%;transform:rotate(7deg);',   icon:'ti-star ico-re'},
+  {cls:'hide-mobile',       bg:'#C23B3B',           style:'bottom:14%;left:3%;transform:rotate(8deg);', icon:'ti-language ico-mfl'},
+  {cls:'hide-mobile',       bg:'#6B3FA0',           style:'bottom:14%;right:3%;transform:rotate(-9deg);', icon:'ti-music ico-music'},
+  {cls:'small hide-mobile', bg:'#2E5DA8',           style:'bottom:0;left:14%;transform:rotate(-5deg);', icon:'ti-brain ico-reasoning'},
+  {cls:'small hide-mobile', bg:'#35495E',           style:'bottom:0;right:14%;transform:rotate(6deg);', icon:'ti-device-desktop ico-computing'},
+  {cls:'small hide-mobile', bg:'#8B5CF6',           style:'bottom:2%;left:38%;transform:rotate(4deg);', icon:'ti-building-carousel ico-early-years'}
+];
+var CHOOSER_DECOR_ICONS_HEADER = [
+  {cls:'tiny hide-mobile', bg:'var(--hp-purple)', style:'top:6%;left:6%;transform:rotate(-10deg);',  icon:'ti-abc ico-phonics'},
+  {cls:'tiny hide-mobile', bg:'#1E9E76',          style:'top:8%;right:6%;transform:rotate(9deg);',   icon:'ti-calculator ico-maths'},
+  {cls:'tiny hide-mobile', bg:'#3F8F1F',          style:'bottom:6%;left:10%;transform:rotate(6deg);', icon:'ti-leaf ico-science'},
+  {cls:'tiny hide-mobile', bg:'#C2255C',          style:'bottom:6%;right:10%;transform:rotate(-7deg);', icon:'ti-star ico-re'}
+];
+function renderChooserDecorIcons(){
+  document.querySelectorAll('.chooser-decor-icons').forEach(function(el){
+    var set = el.getAttribute('data-decor-size') === 'header' ? CHOOSER_DECOR_ICONS_HEADER : CHOOSER_DECOR_ICONS_FULL;
+    var html = '';
+    set.forEach(function(ic){
+      html += '<div class="chooser-icon ' + ic.cls + '" style="background:' + ic.bg + ';' + ic.style + '"><i class="ti ' + ic.icon + '" aria-hidden="true"></i></div>';
+    });
+    el.innerHTML = html;
+  });
+}
+renderChooserDecorIcons();
+
 /* ---------- Supabase setup ---------- */
 var SUPABASE_URL = 'https://qzbydxxqyqvloeogrycx.supabase.co';
 var SUPABASE_KEY = 'sb_publishable_PWWJmW5XT0DSXYOVzAtp6w_NIME1V5b';
