@@ -354,6 +354,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
    goToSubject('X') call. */
 .subject-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
 @media (min-width:760px){.subject-grid{grid-template-columns:repeat(3,1fr);}}
+.subject-grid.nursery-age-restricted .subject-card:not(.subj-early-years):not(.subj-phonics){display:none;}
 .year-btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:0.6rem;margin-bottom:0.75rem;}
 .year-btn{border-radius:12px;padding:0.9rem 0.6rem;cursor:pointer;border:1px solid var(--hp-purple-border);background:var(--hp-purple-light);text-align:center;font-size:14px;font-weight:600;color:var(--hp-purple-dark);transition:transform 0.12s,box-shadow 0.12s,background 0.12s,border-color 0.12s;}
 .year-btn:hover{transform:translateY(-2px);box-shadow:0 2px 10px rgba(0,0,0,0.08);border-color:var(--hp-purple-mid);}
@@ -898,7 +899,13 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
     <div class="card" style="margin-bottom:0.75rem;">
       <div class="section-hd" style="margin-bottom:0.75rem;">Choose a subject</div>
-      <div class="subject-grid">
+      <div class="card" id="home-nursery-note" style="display:none;margin-bottom:0.75rem;">
+        <div style="display:flex;gap:0.6rem;align-items:flex-start;">
+          <i class="ti ti-info-circle" aria-hidden="true" style="font-size:18px;color:var(--hp-purple);flex-shrink:0;margin-top:1px;"></i>
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.4;">Under 2s, 2-3s and Nursery children are only assessed on Early Years and Phonics for now.</div>
+        </div>
+      </div>
+      <div class="subject-grid" id="home-subject-grid">
         <button class="subject-card subj-early-years" onclick="goToSubject('early_years')">
           <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
           <div class="subject-name">Early Years</div>
@@ -964,7 +971,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-name">Computing</div>
           <div class="subject-desc">Algorithms, online safety, hardware, data and more</div>
         </button>
-        <button class="subject-card" style="border-style:dashed;" onclick="openCustomTopicBuilder()">
+        <button class="subject-card subj-custom" style="border-style:dashed;" onclick="openCustomTopicBuilder()">
           <div class="subject-icon"><i class="ti ti-plus" aria-hidden="true"></i></div>
           <div class="subject-name">Create your own</div>
           <div class="subject-desc">Build your own assessment for Maths, English or another subject</div>
@@ -3527,6 +3534,13 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       </div>
     </div>
 
+    <div class="practice-screen" id="practice-nursery-age">
+      <div class="card" style="text-align:center;padding:2rem 1rem;">
+        <div class="section-hd" style="margin-bottom:0.5rem;">Not quite ready yet</div>
+        <div style="font-size:13px;color:var(--text-muted);">Home practice isn't available for this age group yet. Please ask your teacher.</div>
+      </div>
+    </div>
+
     <div class="practice-screen" id="practice-home">
       <div class="card" style="margin-bottom:0.75rem;">
         <div style="font-size:13px;color:var(--text-muted);">Hi</div>
@@ -5057,6 +5071,13 @@ function closeHomePupilSearch(){
   if(searchEl) searchEl.value = '';
   renderHomePupilPicker();
 }
+function applyNurseryAgeSubjectGrid(pupil){
+  var grid = document.getElementById('home-subject-grid');
+  var note = document.getElementById('home-nursery-note');
+  var restricted = isNurseryAgePupil(pupil);
+  if(grid) grid.classList.toggle('nursery-age-restricted', restricted);
+  if(note) note.style.display = restricted ? 'block' : 'none';
+}
 function selectAssessmentPupil(p){
   selectedAssessmentPupil = p;
   document.getElementById('pupil-name').value = p.name;
@@ -5068,6 +5089,7 @@ function selectAssessmentPupil(p){
   document.getElementById('home-selected-meta').textContent = [p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet';
   document.getElementById('home-pupil-selected').style.display = 'block';
   document.getElementById('home-pupil-picker').style.display = 'none';
+  applyNurseryAgeSubjectGrid(p);
 }
 function clearAssessmentPupil(){
   selectedAssessmentPupil = null;
@@ -5082,6 +5104,7 @@ function clearAssessmentPupil(){
   document.getElementById('home-pupil-selected').style.display = 'none';
   document.getElementById('home-pupil-picker').style.display = 'block';
   renderHomePupilPicker();
+  applyNurseryAgeSubjectGrid(null);
 }
 
 /* Add/edit pupil modal (shared by the Children tab) */
@@ -5285,11 +5308,13 @@ async function openChildProfile(id, focusSubject, focusTopic){
     if(leaveBtn) leaveBtn.style.display = '';
     if(reinstateBtn) reinstateBtn.style.display = 'none';
   }
+  var practiceCard = document.getElementById('ch-profile-practice-card');
   var practiceRow = document.getElementById('ch-profile-practice-linkrow');
   var practiceBtn = document.getElementById('ch-profile-practice-btn');
+  if(practiceCard) practiceCard.style.display = isNurseryAgePupil(p) ? 'none' : '';
   if(practiceRow) practiceRow.style.display = 'none';
   if(practiceBtn) practiceBtn.textContent = 'Get practice link';
-  if(p.practiceToken){
+  if(p.practiceToken && !isNurseryAgePupil(p)){
     setPracticeLinkDisplay(p.practiceToken);
   }
 
@@ -5349,6 +5374,11 @@ function setPracticeLinkDisplay(token){
 }
 async function generatePracticeLink(){
   if(!currentPupilId) return;
+  var pupilCheck = pupilsRoster.find(function(x){ return x.id === currentPupilId; });
+  if(isNurseryAgePupil(pupilCheck)){
+    alert('Home practice links aren\'t available yet for Under 2s, 2-3s and Nursery children.');
+    return;
+  }
   var btnEl = document.getElementById('ch-profile-practice-btn');
   var origText = btnEl ? btnEl.textContent : '';
   if(btnEl){ btnEl.disabled = true; btnEl.textContent = 'Generating…'; }
@@ -5596,6 +5626,17 @@ async function deleteResult(id){
 
 var YEAR_GROUP_ORDER = ['Under 2s','2-3s','Nursery (3-4s)','Reception','Year 1','Year 2','Year 3','Year 4','Year 5','Year 6','Not recorded'];
 var TERM_ORDER = ['Autumn','Spring','Summer','Not recorded'];
+
+/* Under 2s, 2-3s and Nursery (3-4s) are only ready for Early Years and Phonics
+   checks - every other subject, plus Live Sessions and home practice (which
+   assume independent reading/device use), are hidden/blocked for this age band. */
+var NURSERY_AGE_YEARS = ['Under 2s','2-3s','Nursery (3-4s)'];
+function isNurseryAgeYear(year){
+  return NURSERY_AGE_YEARS.indexOf(year) > -1;
+}
+function isNurseryAgePupil(pupil){
+  return !!(pupil && isNurseryAgeYear(pupil.year));
+}
 
 /* ---------- Year-group rollover & leaver retention ----------
    UK schools' academic year runs 1 September - 31 August. On sign-in we
@@ -7113,6 +7154,10 @@ function exportBlendingAnalyticsCSV(){
    in the CSS - no changes needed here. */
 var currentSubject = 'phonics';
 function goToSubject(subj){
+  if(isNurseryAgePupil(selectedAssessmentPupil) && subj !== 'early_years' && subj !== 'phonics'){
+    alert('Under 2s, 2-3s and Nursery children can only be assessed on Early Years and Phonics for now.');
+    return;
+  }
   currentSubject = subj;
   showScreen('screen-'+subj+'-home');
 }
@@ -33341,6 +33386,7 @@ async function playFindRoster(){
   errEl.style.display = 'none';
   if(!code){ errEl.textContent = 'Please enter your code.'; errEl.style.display = 'block'; return; }
   if(!year){ errEl.textContent = 'Please choose your year group.'; errEl.style.display = 'block'; return; }
+  if(isNurseryAgeYear(year)){ errEl.textContent = 'Under 2s, 2-3s and Nursery children don\'t use Live Sessions yet - please ask your teacher for a one-to-one Early Years or Phonics check instead.'; errEl.style.display = 'block'; return; }
   var res = await sb.rpc('get_live_session_roster', { p_code: code, p_year_group: year });
   if(res.error){ errEl.textContent = res.error.message || 'That code is not active. Please check with your teacher.'; errEl.style.display = 'block'; return; }
   playRosterCache = res.data || [];
@@ -35806,6 +35852,10 @@ async function loadPracticePupil(token){
   var row = res.data && res.data[0];
   if(res.error || !row){
     showPracticeScreen('practice-invalid');
+    return;
+  }
+  if(isNurseryAgeYear(row.year_group)){
+    showPracticeScreen('practice-nursery-age');
     return;
   }
   practicePupil = {
