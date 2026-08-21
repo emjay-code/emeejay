@@ -52,15 +52,19 @@ module.exports = async (req, res) => {
           })
           .eq('id', schoolId);
       }
-    } else if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
+        } else if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
       const sub = event.data.object;
       const schoolId = sub.metadata && sub.metadata.school_id;
       const status = event.type === 'customer.subscription.deleted' ? 'canceled' : mapSubStatus(sub.status);
+      const update = {
+        subscription_status: status,
+        canceled_at: status === 'canceled' ? new Date().toISOString() : null
+      };
 
       if (schoolId) {
-        await supabase.from('schools').update({ subscription_status: status }).eq('id', schoolId);
+        await supabase.from('schools').update(update).eq('id', schoolId);
       } else if (sub.customer) {
-        await supabase.from('schools').update({ subscription_status: status }).eq('stripe_customer_id', sub.customer);
+        await supabase.from('schools').update(update).eq('stripe_customer_id', sub.customer);
       }
     }
 
