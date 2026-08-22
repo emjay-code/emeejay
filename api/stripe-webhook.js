@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
       const session = event.data.object;
       const schoolId = session.client_reference_id || (session.metadata && session.metadata.school_id);
       if (schoolId) {
-        await supabase
+        const { error } = await supabase
           .from('schools')
           .update({
             subscription_status: 'active',
@@ -51,6 +51,11 @@ module.exports = async (req, res) => {
             stripe_subscription_id: session.subscription
           })
           .eq('id', schoolId);
+        if (error) {
+          console.error('stripe-webhook: failed to update school after checkout.session.completed', { schoolId, error });
+        }
+      } else {
+        console.error('stripe-webhook: checkout.session.completed had no schoolId (client_reference_id/metadata.school_id)', { sessionId: session.id });
       }
         } else if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
       const sub = event.data.object;
@@ -61,10 +66,14 @@ module.exports = async (req, res) => {
         canceled_at: status === 'canceled' ? new Date().toISOString() : null
       };
 
+      let error;
       if (schoolId) {
-        await supabase.from('schools').update(update).eq('id', schoolId);
+        ({ error } = await supabase.from('schools').update(update).eq('id', schoolId));
       } else if (sub.customer) {
-        await supabase.from('schools').update(update).eq('stripe_customer_id', sub.customer);
+        ({ error } = await supabase.from('schools').update(update).eq('stripe_customer_id', sub.customer));
+      }
+      if (error) {
+        console.error('stripe-webhook: failed to update school after ' + event.type, { schoolId, customer: sub.customer, error });
       }
     }
 
