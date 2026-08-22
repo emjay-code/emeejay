@@ -49,18 +49,13 @@ li{font-size:15px;color:var(--text-secondary);margin-bottom:0.35rem;}
     <div class="brand-lockup-sub">All your assessments in one place</div>
   </div>
 
-  <h1>Privacy Policy &mdash; pending final review</h1>
-  <div class="callout">
-    <strong>Status: pending final review.</strong>
-    <p>This policy is substantially complete. A handful of items are still pending: confirmation of the Article 9 condition for the additional needs (SEND) data field, and solicitor confirmation that our international data transfer safeguards are sufficient for our specific use of Vercel and Stripe. </p>
-    <p>Anything shown in <span class="placeholder">amber italics</span> marks one of these pending items.</p>
-  </div>
-  <div class="updated"><strong>Last updated:</strong> 8 August 2026</div>
+  <h1>Privacy Policy</h1>
+  <div class="updated"><strong>Last updated:</strong> 22 August 2026. Drafted with reference to standard UK GDPR/EdTech practice and current ICO guidance; not a substitute for bespoke legal advice for your school's specific circumstances.</div>
 
   <h2>1. Who we are</h2>
   <p>Marc Jones, trading as <strong>Emeejay Assess</strong> ("we", "us") &ndash; a sole trader based in the UK &ndash; provides phonics and maths assessment tracking tools for primary schools, available at emeejay.com. This policy explains what personal data we collect, why, and how we protect it.</p>
   <p><strong>Contact:</strong> marc@emeejay.com.</p>
-  <p><strong>ICO registration:</strong> <span class="placeholder">ICO registration: we are registered with the UK Information Commissioner's Office (ICO) as a data controller, registration reference ZC226219. </span></p>
+  <p><strong>ICO registration:</strong> we are registered with the UK Information Commissioner's Office (ICO) as a data controller, registration reference ZC226219.</p>
 
   <h2>2. Who this policy covers</h2>
   <p>Two groups of people have personal data processed through Emeejay Assess:</p>
@@ -99,12 +94,12 @@ li{font-size:15px;color:var(--text-secondary);margin-bottom:0.35rem;}
   <h2>4. Why we process this data (our legal basis)</h2>
   <p>For staff account data, we process it to perform our contract with the school (providing the service the school has signed up to) and for our legitimate interest in operating and securing the service.</p>
   <p>For pupil data, we process it strictly as instructed by the school under our Data Processing Agreement. <strong>The school, as data controller, is responsible for identifying its own lawful basis</strong> for processing pupil data &ndash; for state schools this is typically the performance of a public task related to education; independent schools more often rely on contract or legitimate interests.</p>
-  <p class="placeholder">Some fields &ndash; in particular the additional needs (SEND) flag &ndash; may be capable of revealing information about a child's health or disability, which is "special category data" under Article 9 of the UK GDPR. Schools should ensure they have identified an appropriate Article 9 condition (for example, one of the substantial public interest conditions in Schedule 1 of the Data Protection Act 2018 relating to safeguarding or the provision of education) before recording this information. This point should be confirmed with a solicitor or the school's own Data Protection Officer, and this section updated accordingly.</p>
+  <p>Some fields &ndash; in particular the additional needs (SEND) flag &ndash; may be capable of revealing information about a child's health or disability, which is "special category data" under Article 9 of the UK GDPR. Where this is recorded for safeguarding-related purposes, the applicable condition is typically the <strong>safeguarding of children and of individuals at risk</strong> condition at Schedule 1, Part 2, paragraph 18 of the Data Protection Act 2018 &ndash; which requires the school, as controller, to have an Appropriate Policy Document covering this processing (most schools already hold one as part of their safeguarding policy suite). Schools should confirm this reflects their own circumstances with their Data Protection Officer.</p>
 
   <h2>5. Where and how we store your data</h2>
   <p>Pupil and staff account data is stored in a database hosted by our infrastructure provider, Supabase, in their London, UK data centre (AWS region eu-west-2). Each school's data is isolated from every other school's using database-level security rules (Row Level Security), so no school can see another school's pupils or results.</p>
   <p>Data in transit is encrypted using HTTPS/TLS. Passwords are hashed and salted by Supabase Auth and are never visible to us.</p>
-  <p>Some parts of our infrastructure &ndash; specifically the serverless functions that handle subscription checkout and payment webhooks &ndash; currently run on servers located in the United States (via our hosting provider, Vercel). These functions handle billing events rather than pupil assessment data, but personal data that does pass through them (such as a staff member's name or email address used for billing) is transferred outside the UK as a result. Both Vercel and Stripe incorporate the UK International Data Transfer Addendum to the EU Standard Contractual Clauses into their own data processing agreements as the safeguard for these transfers. <span class="placeholder">We haven't yet had a solicitor confirm this is sufficient for our specific use of these providers &ndash; recommended before this policy is relied on at scale.</span></p>
+  <p>Some parts of our infrastructure &ndash; specifically the serverless functions that handle subscription checkout and payment webhooks &ndash; currently run on servers located in the United States (via our hosting provider, Vercel). These functions handle billing events rather than pupil assessment data, but personal data that does pass through them (such as a staff member's name or email address used for billing) is transferred outside the UK as a result. Both Vercel and Stripe incorporate the UK International Data Transfer Addendum to the EU Standard Contractual Clauses into their own data processing agreements &ndash; this is the safeguard recognised by the ICO for this type of transfer, and it's the mechanism we rely on for these transfers.</p>
 
   <h2>6. Who we share data with</h2>
   <p>We share limited personal data with the following service providers ("sub-processors"), each of whom is contractually required to protect it:</p>
@@ -114,7 +109,7 @@ li{font-size:15px;color:var(--text-secondary);margin-bottom:0.35rem;}
     <li>Vercel &ndash; website and application hosting, including billing-related serverless functions (see section 5).</li>
   </ul>
   <p><strong>We do not sell personal data. We do not use pupil or staff data for advertising or marketing to third parties. We do not use personal data to train AI or machine learning models.</strong></p>
-  <p class="placeholder">We will only disclose personal data to other third parties where required by law, or to protect the safety of a pupil or member of staff in a genuine safeguarding emergency. This should be reviewed with a solicitor to make sure it aligns with schools' own safeguarding policies and statutory duties.</p>
+  <p>We will only disclose personal data to other third parties where required by law, or to protect the safety of a pupil or member of staff in a genuine safeguarding emergency &ndash; and, where practicable, we will inform the school first. Schools remain responsible for their own safeguarding policies and statutory duties; this section doesn't override or replace those.</p>
 
   <h2>7. How long we keep data</h2>
   <p>We retain pupil and staff data for as long as the school's account remains active, and in line with instructions from the school. When a school's subscription ends, we retain data for a grace period of 30 days to allow reactivation, then permanently delete it, unless the school instructs us to delete it sooner, or we are required to retain it for longer by law.</p>
