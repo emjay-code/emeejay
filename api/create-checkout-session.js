@@ -1,8 +1,8 @@
 const Stripe = require('stripe');
 
-// The test-mode price for the emjay phonics tracker annual school subscription.
+// The live price for the Emeejay Assess annual school subscription (£100/year GBP).
 // This is a public identifier (not a secret) so it's safe to hardcode.
-const PRICE_ID = 'price_1U1GaiLRHzacWy29LTcuMFNt';
+const PRICE_ID = 'price_1U7DNTPxrDDtMoFva9Yieb6S';
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
