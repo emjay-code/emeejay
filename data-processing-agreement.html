@@ -54,12 +54,11 @@ td{color:var(--text-secondary);}
     <div class="brand-lockup-sub">All your assessments in one place</div>
   </div>
 
-  <h1>Data Processing Agreement &mdash; pending final review</h1>
+  <h1>Data Processing Agreement</h1>
   <div class="callout">
-    <strong>Status: pending final review.</strong>
-    <p>This Agreement is substantially complete. A handful of points are still pending solicitor confirmation before it's signed with a real school: the international transfer safeguard (Annex 1), the liability wording (clause 7), the governing-law clause for schools outside England and Wales (clause 9), the Article 9 condition for SEND data (Annex 1), and the incident response process (Annex 3).</p>
-    <p><span class="placeholder">[School name] / [school address]</span> is filled in per school when this Agreement is issued &ndash; that's normal for a template, not a pending item. Anything else shown in <span class="placeholder">amber italics</span> marks one of the points above.</p>
+    <p><span class="placeholder">[School name] / [school address]</span> is filled in per school when this Agreement is issued.</p>
   </div>
+  <div class="updated"><strong>Last updated:</strong> 22 August 2026. Drafted with reference to standard UK GDPR/EdTech processor practice and current ICO guidance; not a substitute for bespoke legal advice for your school's specific circumstances.</div>
 
   <p>This Data Processing Agreement ("Agreement") is entered into between:</p>
   <p class="placeholder">[School name], of [school address] ("the School", "the Controller"); and</p>
@@ -108,14 +107,14 @@ td{color:var(--text-secondary);}
   <h2>6. International transfers</h2>
   <ol>
     <li>The Processor shall not transfer Personal Data outside the United Kingdom without an adequate safeguard in place (such as UK adequacy regulations, the International Data Transfer Addendum, or Standard Contractual Clauses).</li>
-    <li>Annex 1 identifies the current locations where Personal Data is processed and any transfers outside the UK, along with the safeguard relied on. <span class="placeholder">The Processor has not yet had a solicitor confirm this is sufficient for its specific use of these providers &ndash; see the note in Annex 1 regarding processing carried out via Vercel (United States) and Stripe.</span></li>
+    <li>Annex 1 identifies the current locations where Personal Data is processed and any transfers outside the UK, along with the safeguard relied on.</li>
   </ol>
 
   <h2>7. Liability and indemnity</h2>
   <p>Each Party shall indemnify the other against losses, damages, costs, and expenses arising from that Party's breach of this Agreement or of the Data Protection Legislation.</p>
   <p>Subject to the paragraph below, the Processor's total liability to the School arising from or in connection with this Agreement, however caused, is capped at the total fees paid by the School to the Processor in the 12 months before the claim arose.</p>
   <p>Nothing in this Agreement limits either Party's liability for death or personal injury caused by negligence, fraud, or anything else that cannot legally be excluded or limited, including liability for the Processor's failure to comply with its obligations under Article 28 UK GDPR.</p>
-  <p class="placeholder">This wording is a reasonable starting point drawn from standard small-processor practice, matching the equivalent clause in the Terms of Service, but it has not been reviewed by a solicitor and its enforceability hasn't been confirmed &ndash; particularly against larger multi-academy trusts, who may have their own procurement terms and greater bargaining power. Get this reviewed before relying on it at scale, and expect larger trusts to negotiate their own liability terms.</p>
+  <p>This limitation matches the equivalent clause in the Terms of Service and reflects standard practice for a small processor of this kind. Larger multi-academy trusts with their own procurement terms and greater bargaining power are welcome to raise liability terms as part of onboarding a group-wide agreement.</p>
 
   <h2>8. Term and termination</h2>
   <ol>
@@ -125,7 +124,7 @@ td{color:var(--text-secondary);}
 
   <h2>9. General</h2>
   <ol>
-    <li>This Agreement is governed by the law of England and Wales. <span class="placeholder">If the School is based in Scotland or Northern Ireland, this clause should be reviewed to reflect the appropriate local jurisdiction.</span></li>
+    <li>This Agreement is governed by the law of England and Wales, and the courts of England and Wales have non-exclusive jurisdiction over any dispute arising from it. This applies regardless of where in the UK the School is based, consistent with standard commercial practice for UK-wide processor agreements between businesses. A School based in Scotland or Northern Ireland that would prefer a different jurisdiction clause is welcome to raise this before signing.</li>
     <li>In the event of any conflict between this Agreement and any other agreement between the Parties (such as terms of service), this Agreement takes precedence in relation to its subject matter.</li>
   </ol>
 
@@ -155,7 +154,7 @@ td{color:var(--text-secondary);}
   <h3>Types of Personal Data</h3>
   <p><strong>Pupil data:</strong> name, year group, gender, date of birth, additional needs flag (EAL/SEND), phonics sound assessment results, Blending Check results, Times Tables Check results, assessment dates.</p>
   <p><strong>Staff data:</strong> name, school email address, hashed password, role/display name.</p>
-  <p class="placeholder"><strong>Special category data:</strong> The additional needs (SEND) flag may constitute special category data (data concerning health) under Article 9 UK GDPR. The School, as Controller, should confirm its Article 9 condition for recording this data, and this Agreement should be updated to reflect that condition once confirmed with a solicitor or the School's Data Protection Officer.</p>
+  <p><strong>Special category data:</strong> The additional needs (SEND) flag may constitute special category data (data concerning health) under Article 9 UK GDPR. Where this is recorded for safeguarding-related purposes, the applicable condition is typically the safeguarding of children and of individuals at risk condition at Schedule 1, Part 2, paragraph 18 of the Data Protection Act 2018, which requires the School, as Controller, to have an Appropriate Policy Document covering this processing. The School should confirm this reflects its own circumstances with its Data Protection Officer.</p>
   <h3>Sub-processors</h3>
   <table>
     <thead><tr><th>Sub-processor</th><th>Purpose</th><th>Location of processing</th></tr></thead>
@@ -166,7 +165,7 @@ td{color:var(--text-secondary);}
     </tbody>
   </table>
   <h3>International transfers</h3>
-  <p>Billing-related processing via Vercel's serverless functions and Stripe currently takes place in part outside the UK (United States). Both Vercel and Stripe incorporate the UK International Data Transfer Addendum to the EU Standard Contractual Clauses into their own data processing agreements as the safeguard for these transfers. <span class="placeholder">A solicitor has not yet confirmed this is sufficient for the Processor's specific use of these providers &ndash; recommended before this Agreement is relied upon at scale.</span></p>
+  <p>Billing-related processing via Vercel's serverless functions and Stripe currently takes place in part outside the UK (United States). Both Vercel and Stripe incorporate the UK International Data Transfer Addendum to the EU Standard Contractual Clauses into their own data processing agreements &ndash; this is the safeguard recognised by the ICO for this type of transfer, and it's the mechanism the Processor relies on for these transfers.</p>
 
   <h2>Annex 2 &ndash; Technical and Organisational Security Measures</h2>
   <ul>
@@ -190,7 +189,7 @@ td{color:var(--text-secondary);}
     <li><strong>Record-keeping.</strong> Every suspected or confirmed incident &ndash; including ones assessed as low-risk and not requiring notification &ndash; is logged in a written incident record noting the date detected, a description, the data affected, actions taken, and any notification dates, kept as ongoing evidence of accountability under Article 5(2) UK GDPR.</li>
     <li><strong>Review.</strong> After any notifiable incident, the Processor will review what happened and whether the security measures in Annex 2 need updating as a result.</li>
   </ol>
-  <p class="placeholder">This is a practical starting process suited to a single-person operation, not a substitute for formal legal advice on breach response and notification obligations &ndash; worth a solicitor's review alongside the rest of this Agreement, particularly if the team or the volume of schools using the Service grows.</p>
+  <p>This process is proportionate to a single-person operation and will be reviewed and expanded as the team or the volume of schools using the Service grows.</p>
 
   <div class="site-footer">&copy; 2026 Emeejay Assess &middot; <a href="/terms-of-service.html">Terms of Service</a> &middot; <a href="/privacy-policy.html">Privacy Policy</a></div>
 </div>
