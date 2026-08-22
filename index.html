@@ -888,6 +888,9 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <select id="pupil-gender" style="display:none;"><option value="">Select</option><option>Boy</option><option>Girl</option><option>Other</option><option>Prefer not to say</option></select>
     <input type="date" id="pupil-dob" style="display:none;"/>
     <select id="pupil-needs" style="display:none;"><option value="">None</option><option>EAL</option><option>SEND</option><option>EAL and SEND</option></select>
+    <select id="pupil-fsm" style="display:none;"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+    <select id="pupil-vulnerable" style="display:none;"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+    <select id="pupil-ethnicity" style="display:none;"><option value="">Not specified</option><option>White British</option><option>White Irish</option><option>Gypsy/Roma</option><option>Traveller of Irish Heritage</option><option>White - any other background</option><option>Mixed - White and Black Caribbean</option><option>Mixed - White and Black African</option><option>Mixed - White and Asian</option><option>Mixed - any other background</option><option>Asian or Asian British - Indian</option><option>Asian or Asian British - Pakistani</option><option>Asian or Asian British - Bangladeshi</option><option>Asian or Asian British - any other background</option><option>Black or Black British - Caribbean</option><option>Black or Black British - African</option><option>Black or Black British - any other background</option><option>Chinese</option><option>Any other ethnic group</option><option>Prefer not to say</option></select>
 
     <div class="card" id="home-pupil-selected" style="display:none;margin-bottom:0.75rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;">
@@ -3717,6 +3720,15 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div><label>Additional needs</label>
         <select id="pupil-modal-needs"><option value="">None</option><option>EAL</option><option>SEND</option><option>EAL and SEND</option></select>
       </div>
+      <div><label>Free School Meals</label>
+        <select id="pupil-modal-fsm"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+      </div>
+      <div><label>Vulnerable</label>
+        <select id="pupil-modal-vulnerable"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+      </div>
+      <div><label>Ethnicity</label>
+        <select id="pupil-modal-ethnicity"><option value="">Not specified</option><option>White British</option><option>White Irish</option><option>Gypsy/Roma</option><option>Traveller of Irish Heritage</option><option>White - any other background</option><option>Mixed - White and Black Caribbean</option><option>Mixed - White and Black African</option><option>Mixed - White and Asian</option><option>Mixed - any other background</option><option>Asian or Asian British - Indian</option><option>Asian or Asian British - Pakistani</option><option>Asian or Asian British - Bangladeshi</option><option>Asian or Asian British - any other background</option><option>Black or Black British - Caribbean</option><option>Black or Black British - African</option><option>Black or Black British - any other background</option><option>Chinese</option><option>Any other ethnic group</option><option>Prefer not to say</option></select>
+      </div>
     </div>
     <div id="pupil-modal-error" style="color:var(--text-danger, #c0392b);font-size:13px;margin-top:0.25rem;display:none;"></div>
     <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
@@ -3750,6 +3762,15 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div><label>Date of birth</label><input type="date" id="edit-modal-dob"/></div>
       <div><label>Additional needs</label>
         <select id="edit-modal-needs"><option value="">None</option><option>EAL</option><option>SEND</option><option>EAL and SEND</option></select>
+      </div>
+      <div><label>Free School Meals</label>
+        <select id="edit-modal-fsm"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+      </div>
+      <div><label>Vulnerable</label>
+        <select id="edit-modal-vulnerable"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+      </div>
+      <div><label>Ethnicity</label>
+        <select id="edit-modal-ethnicity"><option value="">Not specified</option><option>White British</option><option>White Irish</option><option>Gypsy/Roma</option><option>Traveller of Irish Heritage</option><option>White - any other background</option><option>Mixed - White and Black Caribbean</option><option>Mixed - White and Black African</option><option>Mixed - White and Asian</option><option>Mixed - any other background</option><option>Asian or Asian British - Indian</option><option>Asian or Asian British - Pakistani</option><option>Asian or Asian British - Bangladeshi</option><option>Asian or Asian British - any other background</option><option>Black or Black British - Caribbean</option><option>Black or Black British - African</option><option>Black or Black British - any other background</option><option>Chinese</option><option>Any other ethnic group</option><option>Prefer not to say</option></select>
       </div>
     </div>
     <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
@@ -3929,6 +3950,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 </div>
 
 <script>
+function ynToBool(v){ return v === 'true' ? true : (v === 'false' ? false : null); }
 /* ---------- Decorative scattered subject-icon layer ----------
    Reused across every marketing/auth/entry screen (and, more subtly, behind
    the signed-in app and student-facing headers) so the brand feels
@@ -4503,6 +4525,7 @@ function rowToResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     set: row.set_label,
     setKey: row.set_key,
     ok: row.sounds_ok || [],
@@ -4750,6 +4773,9 @@ function openEditDetails(subject, r){
   document.getElementById('edit-modal-gender').value = r.gender || '';
   document.getElementById('edit-modal-dob').value = r.dob || '';
   document.getElementById('edit-modal-needs').value = r.needs || '';
+  document.getElementById('edit-modal-fsm').value = r.fsm === true ? 'true' : (r.fsm === false ? 'false' : '');
+  document.getElementById('edit-modal-vulnerable').value = r.vulnerable === true ? 'true' : (r.vulnerable === false ? 'false' : '');
+  document.getElementById('edit-modal-ethnicity').value = r.ethnicity || '';
   document.getElementById('edit-modal-overlay').classList.add('active');
 }
 function closeEditDetails(){
@@ -4763,7 +4789,10 @@ async function saveEditDetails(){
     year_group: document.getElementById('edit-modal-year').value || null,
     gender: document.getElementById('edit-modal-gender').value || null,
     dob: document.getElementById('edit-modal-dob').value || null,
-    additional_needs: document.getElementById('edit-modal-needs').value || null
+    additional_needs: document.getElementById('edit-modal-needs').value || null,
+    fsm: ynToBool(document.getElementById('edit-modal-fsm').value),
+    vulnerable: ynToBool(document.getElementById('edit-modal-vulnerable').value),
+    ethnicity: document.getElementById('edit-modal-ethnicity').value || null
   };
   var res = await sb.from(table).update(payload).eq('id', editModalState.id);
   if(res.error){ alert('Could not save: ' + res.error.message); return; }
@@ -5061,7 +5090,7 @@ async function submitSuggestedQuestion(){
 var pupilsRoster = [];
 function rowToPupil(row){
   return {
-    id: row.id, name: row.name, year: row.year_group || '', gender: row.gender || '', dob: row.dob || '', needs: row.additional_needs || '',
+    id: row.id, name: row.name, year: row.year_group || '', gender: row.gender || '', dob: row.dob || '', needs: row.additional_needs || '', fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     status: row.status || 'active', leftDate: row.left_date || '', leftReason: row.left_reason || '', practiceToken: row.practice_token || ''
   };
 }
@@ -5151,6 +5180,9 @@ function selectAssessmentPupil(p){
   document.getElementById('pupil-gender').value = p.gender || '';
   document.getElementById('pupil-dob').value = p.dob || '';
   document.getElementById('pupil-needs').value = p.needs || '';
+  document.getElementById('pupil-fsm').value = p.fsm === true ? 'true' : (p.fsm === false ? 'false' : '');
+  document.getElementById('pupil-vulnerable').value = p.vulnerable === true ? 'true' : (p.vulnerable === false ? 'false' : '');
+  document.getElementById('pupil-ethnicity').value = p.ethnicity || '';
   document.getElementById('home-selected-name').textContent = p.name;
   document.getElementById('home-selected-meta').textContent = [p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet';
   document.getElementById('home-pupil-selected').style.display = 'block';
@@ -5164,6 +5196,9 @@ function clearAssessmentPupil(){
   document.getElementById('pupil-gender').value = '';
   document.getElementById('pupil-dob').value = '';
   document.getElementById('pupil-needs').value = '';
+  document.getElementById('pupil-fsm').value = '';
+  document.getElementById('pupil-vulnerable').value = '';
+  document.getElementById('pupil-ethnicity').value = '';
   var searchEl = document.getElementById('home-pupil-search');
   if(searchEl) searchEl.value = '';
   document.getElementById('home-pupil-search-panel').style.display = 'none';
@@ -5185,6 +5220,9 @@ function openAddPupil(){
   document.getElementById('pupil-modal-gender').value = '';
   document.getElementById('pupil-modal-dob').value = '';
   document.getElementById('pupil-modal-needs').value = '';
+  document.getElementById('pupil-modal-fsm').value = '';
+  document.getElementById('pupil-modal-vulnerable').value = '';
+  document.getElementById('pupil-modal-ethnicity').value = '';
   document.getElementById('pupil-modal-error').style.display = 'none';
   document.getElementById('pupil-modal-overlay').classList.add('active');
 }
@@ -5198,6 +5236,9 @@ function openEditPupil(p){
   document.getElementById('pupil-modal-gender').value = p.gender || '';
   document.getElementById('pupil-modal-dob').value = p.dob || '';
   document.getElementById('pupil-modal-needs').value = p.needs || '';
+  document.getElementById('pupil-modal-fsm').value = p.fsm === true ? 'true' : (p.fsm === false ? 'false' : '');
+  document.getElementById('pupil-modal-vulnerable').value = p.vulnerable === true ? 'true' : (p.vulnerable === false ? 'false' : '');
+  document.getElementById('pupil-modal-ethnicity').value = p.ethnicity || '';
   document.getElementById('pupil-modal-error').style.display = 'none';
   document.getElementById('pupil-modal-overlay').classList.add('active');
 }
@@ -5216,7 +5257,10 @@ async function savePupilModal(){
     year_group: document.getElementById('pupil-modal-year').value || null,
     gender: document.getElementById('pupil-modal-gender').value || null,
     dob: document.getElementById('pupil-modal-dob').value || null,
-    additional_needs: document.getElementById('pupil-modal-needs').value || null
+    additional_needs: document.getElementById('pupil-modal-needs').value || null,
+    fsm: ynToBool(document.getElementById('pupil-modal-fsm').value),
+    vulnerable: ynToBool(document.getElementById('pupil-modal-vulnerable').value),
+    ethnicity: document.getElementById('pupil-modal-ethnicity').value || null
   };
   var res;
   if(pupilModalState.mode === 'add'){
@@ -6898,6 +6942,7 @@ function rowToBlendingResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     realCorrect: row.real_correct,
     realTotal: row.real_total,
     pseudoCorrect: row.pseudo_correct,
@@ -6949,6 +6994,9 @@ async function finishBlendingCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
 
   var realCorrect=0, realTotal=0, pseudoCorrect=0, pseudoTotal=0, missed=[];
   Object.keys(bcWordResults).forEach(function(k){
@@ -6968,6 +7016,7 @@ async function finishBlendingCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     real_correct: realCorrect,
     real_total: realTotal,
     pseudo_correct: pseudoCorrect,
@@ -7252,6 +7301,7 @@ function rowToTimesTablesResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     totalCorrect: row.total_correct,
     totalFacts: row.total_facts,
     missedFacts: row.missed_facts || [],
@@ -7312,6 +7362,9 @@ async function finishTimesTablesCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
 
   var correctCount=0, missed=[];
   Object.keys(ttFactResults).forEach(function(k){
@@ -7328,6 +7381,7 @@ async function finishTimesTablesCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     total_correct: correctCount,
     total_facts: total,
     missed_facts: missed,
@@ -10185,6 +10239,9 @@ async function finishMathsCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
   var t = MATHS_TOPICS[currentMathsKey];
 
   var correctCount=0, missed=[];
@@ -10202,6 +10259,7 @@ async function finishMathsCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     topic_key: currentMathsKey,
     topic_label: t.label,
     tier: currentMtTier,
@@ -10246,6 +10304,7 @@ function rowToMathsResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     topicKey: row.topic_key,
     topicLabel: row.topic_label,
     tier: row.tier || 'KS1',
@@ -12782,6 +12841,9 @@ async function finishEnglishCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
   var t = ENGLISH_TOPICS[currentEnglishKey];
 
   var correctCount=0, missed=[];
@@ -12799,6 +12861,7 @@ async function finishEnglishCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     topic_key: currentEnglishKey,
     topic_label: t.label,
     tier: currentEnTier,
@@ -12843,6 +12906,7 @@ function rowToEnglishResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     topicKey: row.topic_key,
     topicLabel: row.topic_label,
     tier: row.tier || 'KS1',
@@ -13312,6 +13376,9 @@ async function finishHwCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
   var ok=[], no=[];
   Object.keys(hwItemResults).forEach(function(k){ if(hwItemResults[k]) ok.push(k); else no.push(k); });
   var total = currentHwItems.length, pct = Math.round((ok.length/total)*100);
@@ -13324,6 +13391,7 @@ async function finishHwCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     set_label: HANDWRITING_LABELS[currentHwTier] || currentHwTier,
     set_key: currentHwTier,
     items_ok: ok,
@@ -13371,6 +13439,7 @@ function rowToHandwritingResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     setLabel: row.set_label,
     setKey: row.set_key,
     itemsOk: row.items_ok || [],
@@ -13651,6 +13720,9 @@ async function finishEyCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
   var ok=[], no=[];
   Object.keys(eyItemResults).forEach(function(k){ if(eyItemResults[k]) ok.push(k); else no.push(k); });
   var total = currentEyItems.length, pct = Math.round((ok.length/total)*100);
@@ -13663,6 +13735,7 @@ async function finishEyCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     area_label: (EARLY_YEARS_AREAS[currentEyTier] || {}).label || currentEyTier,
     area_key: currentEyTier,
     items_ok: ok,
@@ -13710,6 +13783,7 @@ function rowToEyResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     setLabel: row.area_label,
     setKey: row.area_key,
     itemsOk: row.items_ok || [],
@@ -32307,6 +32381,9 @@ async function finishTopicCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
   var t = TOPICS[currentTopicKey];
 
   var correctCount=0, missed=[];
@@ -32324,6 +32401,7 @@ async function finishTopicCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     topic_key: currentTopicKey,
     topic_label: t.label,
     tier: currentTpTier,
@@ -32368,6 +32446,7 @@ function rowToTopicResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     topicKey: row.topic_key,
     topicLabel: row.topic_label,
     tier: row.tier || 'KS1',
@@ -32695,6 +32774,9 @@ async function finishScienceCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
   var t = SCIENCE_TOPICS[currentScienceKey];
 
   var correctCount=0, missed=[];
@@ -32712,6 +32794,7 @@ async function finishScienceCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     topic_key: currentScienceKey,
     topic_label: t.label,
     tier: currentScTier,
@@ -32756,6 +32839,7 @@ function rowToScienceResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     topicKey: row.topic_key,
     topicLabel: row.topic_label,
     tier: row.tier || 'KS1',
@@ -33083,6 +33167,9 @@ async function finishReCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
   var t = RE_TOPICS[currentReKey];
 
   var correctCount=0, missed=[];
@@ -33100,6 +33187,7 @@ async function finishReCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     topic_key: currentReKey,
     topic_label: t.label,
     tier: currentReTier,
@@ -33144,6 +33232,7 @@ function rowToReResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     topicKey: row.topic_key,
     topicLabel: row.topic_label,
     tier: row.tier || 'KS1',
@@ -34049,6 +34138,9 @@ async function finishMflCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
   var t = MFL_TOPICS[currentMflKey];
 
   var correctCount=0, missed=[];
@@ -34066,6 +34158,7 @@ async function finishMflCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     topic_key: currentMflKey,
     topic_label: t.label,
     tier: currentMflTier,
@@ -34110,6 +34203,7 @@ function rowToMflResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     topicKey: row.topic_key,
     topicLabel: row.topic_label,
     tier: row.tier || 'KS1',
@@ -34443,6 +34537,9 @@ async function finishMusicCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
   var t = MUSIC_TOPICS[currentMusicKey];
 
   var correctCount=0, missed=[];
@@ -34460,6 +34557,7 @@ async function finishMusicCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     topic_key: currentMusicKey,
     topic_label: t.label,
     tier: currentMusicTier,
@@ -34504,6 +34602,7 @@ function rowToMusicResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     topicKey: row.topic_key,
     topicLabel: row.topic_label,
     tier: row.tier || 'KS1',
@@ -34837,6 +34936,9 @@ async function finishComputingCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
   var t = COMPUTING_TOPICS[currentComputingKey];
 
   var correctCount=0, missed=[];
@@ -34854,6 +34956,7 @@ async function finishComputingCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     topic_key: currentComputingKey,
     topic_label: t.label,
     tier: currentComputingTier,
@@ -34898,6 +35001,7 @@ function rowToComputingResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     topicKey: row.topic_key,
     topicLabel: row.topic_label,
     tier: row.tier || 'KS1',
@@ -35231,6 +35335,9 @@ async function finishReasoningCheck(){
   var gender = document.getElementById('pupil-gender').value || '';
   var dob = document.getElementById('pupil-dob').value || '';
   var needs = document.getElementById('pupil-needs').value || '';
+  var fsm = ynToBool(document.getElementById('pupil-fsm').value);
+  var vulnerable = ynToBool(document.getElementById('pupil-vulnerable').value);
+  var ethnicity = document.getElementById('pupil-ethnicity').value || '';
   var t = REASONING_TOPICS[currentReasoningKey];
 
   var correctCount=0, missed=[];
@@ -35248,6 +35355,7 @@ async function finishReasoningCheck(){
     gender: gender || null,
     dob: dob || null,
     additional_needs: needs || null,
+    fsm: fsm, vulnerable: vulnerable, ethnicity: ethnicity || null,
     topic_key: currentReasoningKey,
     topic_label: t.label,
     tier: currentReasoningTier,
@@ -35292,6 +35400,7 @@ function rowToReasoningResult(row){
     gender: row.gender || '',
     dob: row.dob || '',
     needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     topicKey: row.topic_key,
     topicLabel: row.topic_label,
     tier: row.tier || 'KS1',
