@@ -2593,6 +2593,10 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div id="an-dashboard"></div>
     </div>
     <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.75rem;">Whole-school rankings</div>
+      <div id="an-overall-rankings"></div>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
       <div class="section-hd" style="margin-bottom:0.75rem;">Choose a subject</div>
       <div class="subject-grid">
         <button class="subject-card subj-early-years" onclick="goToAnalyticsSubject('early_years')">
@@ -2700,6 +2704,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="an-coverage"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Score trends</h2>
@@ -2724,6 +2729,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="bc-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="bc-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="bc-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="bc-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="bc-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed blending words</h2><div id="bc-an-missed"></div></div>
       <div class="card">
@@ -2764,6 +2770,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="mt-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="mt-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="mt-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="mt-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="mt-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="mt-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mt-an-missed"></div></div>
@@ -2805,6 +2812,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="tt-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="tt-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="tt-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="tt-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="tt-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed facts</h2><div id="tt-an-missed"></div></div>
       <div class="card">
@@ -2845,6 +2853,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="en-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="en-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="en-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="en-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="en-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="en-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="en-an-missed"></div></div>
@@ -2885,6 +2894,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="hw-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="hw-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="hw-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="hw-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="hw-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most difficult letters/words</h2><div id="hw-an-missed"></div></div>
       <div class="card">
@@ -2924,6 +2934,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="ey-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="ey-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="ey-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="ey-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="ey-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most-emerging skills</h2><div id="ey-an-missed"></div></div>
       <div class="card">
@@ -2964,6 +2975,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="tp-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="tp-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="tp-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="tp-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="tp-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="tp-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="tp-an-missed"></div></div>
@@ -3005,6 +3017,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="sc-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="sc-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="sc-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="sc-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="sc-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="sc-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="sc-an-missed"></div></div>
@@ -3046,6 +3059,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="re-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="re-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="re-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="re-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="re-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="re-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="re-an-missed"></div></div>
@@ -3087,6 +3101,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="mfl-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="mfl-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="mfl-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="mfl-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="mfl-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="mfl-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mfl-an-missed"></div></div>
@@ -3128,6 +3143,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="music-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="music-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="music-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="music-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="music-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="music-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="music-an-missed"></div></div>
@@ -3169,6 +3185,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="reasoning-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="reasoning-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="reasoning-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="reasoning-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="reasoning-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="reasoning-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="reasoning-an-missed"></div></div>
@@ -3210,6 +3227,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="computing-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="computing-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="computing-an-leaderboard"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="computing-an-rankings"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="computing-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="computing-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="computing-an-missed"></div></div>
@@ -6651,6 +6669,7 @@ function renderWholeSchoolDashboard(){
   rows.forEach(function(r){
     el.appendChild(makeBar(r.label+' ('+r.count+(r.count===1?' check':' checks')+')', r.avg, barColor(r.avg)));
   });
+  renderOverallRankings();
 }
 /* Term-over-term average score chart, using the same getTerm() classifier
    that already powers the Results tab's term filter/export. */
@@ -6735,6 +6754,100 @@ function appendLeaderboard(id, list, fullList){
   var board = buildLeaderboard(list, fullList);
   if(board) el.appendChild(board);
   else el.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">No repeat checks yet.</p>';
+}
+/* Per-subject ranking - highest and lowest scoring children by their most
+   recent check in this subject, distinct from the improved/declined
+   leaderboard above (which is about change over time, not current standing). */
+function buildRankings(list){
+  if(!list || !list.length) return null;
+  var byName = {};
+  list.forEach(function(r){
+    var k = (r.name||'').trim().toLowerCase();
+    if(!k) return;
+    if(!byName[k] || (r.ts||0) > (byName[k].ts||0)) byName[k] = r;
+  });
+  var entries = Object.keys(byName).map(function(k){ return byName[k]; });
+  if(!entries.length) return null;
+  entries.sort(function(a,b){ return pctOf(b)-pctOf(a); });
+  var top = entries.slice(0,10);
+  var bottom = entries.length>10 ? entries.slice(-5).reverse() : [];
+  var wrap = document.createElement('div');
+  var cols = document.createElement('div'); cols.className = 'leaderboard-cols';
+  function buildCol(title, items, numbered){
+    var col = document.createElement('div'); col.className = 'leaderboard-col';
+    var h = document.createElement('div'); h.className = 'leaderboard-col-title'; h.textContent = title;
+    col.appendChild(h);
+    if(!items.length){
+      var e = document.createElement('p'); e.style.cssText='font-size:12.5px;color:var(--text-muted);'; e.textContent = 'Not enough data yet.';
+      col.appendChild(e);
+    } else {
+      items.forEach(function(r,i){
+        var row = document.createElement('div'); row.className = 'leaderboard-row';
+        var name = document.createElement('span'); name.className = 'leaderboard-name'; name.textContent = (numbered?(i+1)+'. ':'') + r.name;
+        row.appendChild(name);
+        var val = document.createElement('span'); val.style.cssText = 'font-size:12.5px;font-weight:600;color:var(--text-secondary);'; val.textContent = pctOf(r) + '%';
+        row.appendChild(val);
+        col.appendChild(row);
+      });
+    }
+    return col;
+  }
+  cols.appendChild(buildCol('Top scores', top, true));
+  if(bottom.length) cols.appendChild(buildCol('Lowest scores', bottom, false));
+  wrap.appendChild(cols);
+  return wrap;
+}
+function appendRankings(id, list){
+  var el = document.getElementById(id); if(!el) return;
+  el.innerHTML = '';
+  var board = buildRankings(list);
+  if(board) el.appendChild(board);
+  else el.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">No checks yet.</p>';
+}
+/* Whole-school ranking - each child's average score across every subject
+   they've been assessed in (Blending Check included, attendance excluded
+   since it isn't a score), shown on the Analytics landing screen. */
+function renderOverallRankings(){
+  var el = document.getElementById('an-overall-rankings'); if(!el) return;
+  var SUBJECT_LISTS = [earlyYearsResults, results, blendingResults, timesTablesResults, handwritingResults, englishResults, mathsResults, topicResults, scienceResults, reResults, mflResults, musicResults, reasoningResults, computingResults];
+  var byName = {};
+  SUBJECT_LISTS.forEach(function(subjList){
+    filterByClass(subjList).forEach(function(r){
+      var k = (r.name||'').trim().toLowerCase(); if(!k) return;
+      if(!byName[k]) byName[k] = {name:r.name, total:0, count:0};
+      byName[k].total += pctOf(r);
+      byName[k].count += 1;
+    });
+  });
+  var entries = Object.keys(byName).map(function(k){ var e=byName[k]; return {name:e.name, avg: Math.round(e.total/e.count), count:e.count}; });
+  el.innerHTML = '';
+  if(!entries.length){ el.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">No assessment data yet.</p>'; return; }
+  entries.sort(function(a,b){ return b.avg - a.avg; });
+  var top = entries.slice(0,10);
+  var bottom = entries.length>10 ? entries.slice(-5).reverse() : [];
+  var cols = document.createElement('div'); cols.className = 'leaderboard-cols';
+  function buildCol(title, items, numbered){
+    var col = document.createElement('div'); col.className = 'leaderboard-col';
+    var h = document.createElement('div'); h.className = 'leaderboard-col-title'; h.textContent = title;
+    col.appendChild(h);
+    if(!items.length){
+      var e = document.createElement('p'); e.style.cssText='font-size:12.5px;color:var(--text-muted);'; e.textContent = 'Not enough data yet.';
+      col.appendChild(e);
+    } else {
+      items.forEach(function(it,i){
+        var row = document.createElement('div'); row.className = 'leaderboard-row';
+        var name = document.createElement('span'); name.className = 'leaderboard-name'; name.textContent = (numbered?(i+1)+'. ':'') + it.name + ' (' + it.count + (it.count===1?' check':' checks') + ')';
+        row.appendChild(name);
+        var val = document.createElement('span'); val.style.cssText = 'font-size:12.5px;font-weight:600;color:var(--text-secondary);'; val.textContent = it.avg + '%';
+        row.appendChild(val);
+        col.appendChild(row);
+      });
+    }
+    return col;
+  }
+  cols.appendChild(buildCol('Top overall', top, true));
+  if(bottom.length) cols.appendChild(buildCol('Lowest overall', bottom, false));
+  el.appendChild(cols);
 }
 /* Topic x tier heatmap for the subjects whose result records carry both a
    topic and a tier (Maths, English, Topics, Science, RE, Languages, Music,
@@ -7303,6 +7416,7 @@ function renderAnalytics(){
 
   appendTermChart('an-terms', list);
   appendLeaderboard('an-leaderboard', list, results);
+  appendRankings('an-rankings', list);
   appendCoverage('an-coverage', results);
 
   var trendEl=document.getElementById('an-trends');trendEl.innerHTML='';
@@ -7570,6 +7684,7 @@ function renderBlendingAnalytics(){
   var attBandEl = document.getElementById('bc-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('bc-an-terms', list);
   appendLeaderboard('bc-an-leaderboard', list, blendingResults);
+  appendRankings('bc-an-rankings', list);
   appendCoverage('bc-an-coverage', blendingResults);
   var missedEl = document.getElementById('bc-an-missed'); missedEl.innerHTML = '';
   var wordCount = {};
@@ -7932,6 +8047,7 @@ function renderTimesTablesAnalytics(){
   var attBandEl = document.getElementById('tt-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('tt-an-terms', list);
   appendLeaderboard('tt-an-leaderboard', list, timesTablesResults);
+  appendRankings('tt-an-rankings', list);
   appendCoverage('tt-an-coverage', timesTablesResults);
   var missedEl = document.getElementById('tt-an-missed'); missedEl.innerHTML = '';
   var factCount = {};
@@ -10861,6 +10977,7 @@ function renderMathsAnalytics(){
   var attBandEl = document.getElementById('mt-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('mt-an-terms', list);
   appendLeaderboard('mt-an-leaderboard', list, mathsResults);
+  appendRankings('mt-an-rankings', list);
   appendTopicHeatmap('mt-an-heatmap', list, function(r){return r.topicLabel;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   appendCoverage('mt-an-coverage', mathsResults);
   var missedEl = document.getElementById('mt-an-missed'); missedEl.innerHTML = '';
@@ -13467,6 +13584,7 @@ function renderEnglishAnalytics(){
   var attBandEl = document.getElementById('en-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('en-an-terms', list);
   appendLeaderboard('en-an-leaderboard', list, englishResults);
+  appendRankings('en-an-rankings', list);
   appendTopicHeatmap('en-an-heatmap', list, function(r){return r.topicLabel;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   appendCoverage('en-an-coverage', englishResults);
   var missedEl = document.getElementById('en-an-missed'); missedEl.innerHTML = '';
@@ -13980,6 +14098,7 @@ function renderHandwritingAnalytics(){
   var attBandEl = document.getElementById('hw-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('hw-an-terms', list);
   appendLeaderboard('hw-an-leaderboard', list, handwritingResults);
+  appendRankings('hw-an-rankings', list);
   appendCoverage('hw-an-coverage', handwritingResults);
   var missedEl = document.getElementById('hw-an-missed'); missedEl.innerHTML = '';
   var iCount = {};
@@ -14328,6 +14447,7 @@ function renderEyAnalytics(){
   var attBandEl = document.getElementById('ey-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('ey-an-terms', list);
   appendLeaderboard('ey-an-leaderboard', list, earlyYearsResults);
+  appendRankings('ey-an-rankings', list);
   appendCoverage('ey-an-coverage', earlyYearsResults);
   var missedEl = document.getElementById('ey-an-missed'); missedEl.innerHTML = '';
   var iCount = {};
@@ -33019,6 +33139,7 @@ function renderTopicAnalytics(){
   var attBandEl = document.getElementById('tp-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('tp-an-terms', list);
   appendLeaderboard('tp-an-leaderboard', list, topicResults);
+  appendRankings('tp-an-rankings', list);
   appendTopicHeatmap('tp-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   appendCoverage('tp-an-coverage', topicResults);
   var missedEl = document.getElementById('tp-an-missed'); missedEl.innerHTML = '';
@@ -33416,6 +33537,7 @@ function renderScienceAnalytics(){
   var attBandEl = document.getElementById('sc-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('sc-an-terms', list);
   appendLeaderboard('sc-an-leaderboard', list, scienceResults);
+  appendRankings('sc-an-rankings', list);
   appendTopicHeatmap('sc-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   appendCoverage('sc-an-coverage', scienceResults);
   var missedEl = document.getElementById('sc-an-missed'); missedEl.innerHTML = '';
@@ -33813,6 +33935,7 @@ function renderReAnalytics(){
   var attBandEl = document.getElementById('re-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('re-an-terms', list);
   appendLeaderboard('re-an-leaderboard', list, reResults);
+  appendRankings('re-an-rankings', list);
   appendTopicHeatmap('re-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   appendCoverage('re-an-coverage', reResults);
   var missedEl = document.getElementById('re-an-missed'); missedEl.innerHTML = '';
@@ -34788,6 +34911,7 @@ function renderMflAnalytics(){
   var attBandEl = document.getElementById('mfl-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('mfl-an-terms', list);
   appendLeaderboard('mfl-an-leaderboard', list, mflResults);
+  appendRankings('mfl-an-rankings', list);
   appendTopicHeatmap('mfl-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   appendCoverage('mfl-an-coverage', mflResults);
   var missedEl = document.getElementById('mfl-an-missed'); missedEl.innerHTML = '';
@@ -35191,6 +35315,7 @@ function renderMusicAnalytics(){
   var attBandEl = document.getElementById('music-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('music-an-terms', list);
   appendLeaderboard('music-an-leaderboard', list, musicResults);
+  appendRankings('music-an-rankings', list);
   appendTopicHeatmap('music-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   appendCoverage('music-an-coverage', musicResults);
   var missedEl = document.getElementById('music-an-missed'); missedEl.innerHTML = '';
@@ -35594,6 +35719,7 @@ function renderComputingAnalytics(){
   var attBandEl = document.getElementById('computing-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('computing-an-terms', list);
   appendLeaderboard('computing-an-leaderboard', list, computingResults);
+  appendRankings('computing-an-rankings', list);
   appendTopicHeatmap('computing-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   appendCoverage('computing-an-coverage', computingResults);
   var missedEl = document.getElementById('computing-an-missed'); missedEl.innerHTML = '';
@@ -35997,6 +36123,7 @@ function renderReasoningAnalytics(){
   var attBandEl = document.getElementById('reasoning-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
   appendTermChart('reasoning-an-terms', list);
   appendLeaderboard('reasoning-an-leaderboard', list, reasoningResults);
+  appendRankings('reasoning-an-rankings', list);
   appendTopicHeatmap('reasoning-an-heatmap', list, function(r){return r.topicLabel||r.topicKey;}, function(r){return TOPIC_TIER_LABELS[r.tier]||r.tier;});
   appendCoverage('reasoning-an-coverage', reasoningResults);
   var missedEl = document.getElementById('reasoning-an-missed'); missedEl.innerHTML = '';
