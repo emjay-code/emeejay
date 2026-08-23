@@ -426,6 +426,9 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 .subj-computing{background:#E7ECF3;border-color:#C3D0DE;}
 .subj-computing .subject-icon{background:#35495E;}
 .subj-computing .subject-name{color:#22303F;}
+.subj-attendance{background:#E5F5F1;border-color:#B9E0D6;}
+.subj-attendance .subject-icon{background:#1F7A6C;}
+.subj-attendance .subject-name{color:#155349;}
 .subject-card.subj-phonics .subject-icon{background:none;color:var(--hp-purple-dark);}
 .subject-card.subj-maths .subject-icon{background:none;color:#0F6B4F;}
 .subject-card.subj-english .subject-icon{background:none;color:#26399E;}
@@ -439,6 +442,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 .subject-card.subj-early-years .subject-icon{background:none;color:#9A4C15;}
 .subject-card.subj-reasoning .subject-icon{background:none;color:#1E3E73;}
 .subject-card.subj-computing .subject-icon{background:none;color:#22303F;}
+.subject-card.subj-attendance .subject-icon{background:none;color:#155349;}
 /* Custom mask-based subject icon shapes (exact design export, replaces all Tabler glyph approximations) */
 .subject-card.subj-phonics .subject-icon i,
 .subject-banner.subj-phonics .subject-icon i,
@@ -2656,6 +2660,11 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-name">Computing</div>
           <div class="subject-desc">Computing check analytics</div>
         </button>
+        <button class="subject-card subj-attendance" onclick="goToAnalyticsSubject('attendance')">
+          <div class="subject-icon"><i class="ti ti-calendar-check" aria-hidden="true"></i></div>
+          <div class="subject-name">Attendance</div>
+          <div class="subject-desc">Attendance analytics</div>
+        </button>
       </div>
     </div>
   </div>
@@ -3197,6 +3206,41 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       </div>
     </div>
   </div>
+
+  <div class="rv-screen" id="an-attendance-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-attendance">
+      <div class="subject-icon"><i class="ti ti-calendar-check" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Attendance analytics</div>
+    </div>
+    <div class="class-filter-indicator has-select active">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Filter by class:</span>
+      <select class="class-filter-select" onchange="setClassFilter(this.value)">
+        <option value="">All classes (whole school)</option>
+        <option value="Under 2s">Under 2s</option><option value="2-3s">2-3s</option><option value="Nursery (3-4s)">Nursery (3-4s)</option><option value="Reception">Reception</option><option value="Year 1">Year 1</option><option value="Year 2">Year 2</option><option value="Year 3">Year 3</option><option value="Year 4">Year 4</option><option value="Year 5">Year 5</option><option value="Year 6">Year 6</option><option value="Not recorded">Not recorded</option>
+      </select>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="all-btn" onclick="openAttendanceModal()">Record attendance</button>
+    </div>
+    <div id="an-attendance-empty" class="empty-state" style="display:none;">No attendance recorded yet. Use "Record attendance" above, or on the Children tab, to get started.</div>
+    <div id="an-attendance-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Average attendance by term</h2><div id="an-attendance-trend"></div></div>
+      <p style="font-size:12.5px;color:var(--text-muted);margin:-0.5rem 0 0.75rem;">The breakdowns below are for the most recent term with data: <strong id="an-attendance-recent-term-label"></strong>.</p>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Attendance by year group</h2><div id="an-attendance-year"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Attendance by gender</h2><div id="an-attendance-gender"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Attendance by Free School Meals</h2><div id="an-attendance-fsm"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Attendance by vulnerable status</h2><div id="an-attendance-vulnerable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Attendance by ethnicity</h2><div id="an-attendance-ethnicity"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">Children below 90% attendance</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">90% is the threshold the DfE uses to define "persistent absence" &ndash; a useful early-warning list, not a judgement.</p>
+        <div id="an-attendance-low"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="tab-children" style="display:none;">
@@ -3213,6 +3257,15 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
         <div style="font-size:12px;color:var(--text-muted);" id="ch-rollover-status"></div>
         <button class="all-btn" onclick="runYearRolloverManual()">Start new school year</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div>
+          <div class="section-hd" style="margin-bottom:2px;">Attendance</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">Record every child's attendance percentage for a term, all at once.</div>
+        </div>
+        <button class="all-btn" onclick="openAttendanceModal()">Record attendance</button>
       </div>
     </div>
     <div style="display:flex;gap:6px;margin-bottom:0.75rem;">
@@ -3254,6 +3307,15 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
         <input type="text" id="ch-profile-practice-url" readonly style="flex:1;min-width:220px;font-size:12.5px;" onclick="this.select();"/>
         <button class="all-btn" onclick="copyPracticeLink()">Copy link</button>
       </div>
+    </div>
+
+    <div class="card" id="ch-profile-attendance-card" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <div class="section-hd" style="margin-bottom:0;">Attendance</div>
+        <button class="all-btn" onclick="openAttendanceModal(currentPupilId)">Add / edit</button>
+      </div>
+      <div id="ch-profile-attendance-list"></div>
+      <div id="ch-profile-attendance-empty" style="font-size:13px;color:var(--text-muted);display:none;">No attendance recorded yet for this child.</div>
     </div>
 
     <div class="card" id="ch-profile-snapshot-card" style="margin-bottom:1rem;">
@@ -3978,6 +4040,22 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   </div>
 </div>
 
+<div class="edit-modal-overlay" id="attendance-modal-overlay">
+  <div class="edit-modal-card" style="max-width:480px;">
+    <div class="section-hd" style="margin-bottom:0.75rem;">Record attendance</div>
+    <div class="name-row" style="align-items:center;">
+      <label style="font-size:13px;color:var(--text-secondary);white-space:nowrap;">Term:</label>
+      <select id="attendance-modal-term" onchange="renderAttendanceModalList()" style="flex:1;"></select>
+    </div>
+    <div id="attendance-modal-list" style="max-height:360px;overflow-y:auto;margin:0.5rem 0;"></div>
+    <div id="attendance-modal-empty" style="display:none;color:var(--text-secondary);font-size:14px;padding:0.5rem 0;">No active children in the register yet.</div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+      <button class="btn" style="flex:1;" onclick="closeAttendanceModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="saveAttendanceModal()">Save</button>
+    </div>
+  </div>
+</div>
+
 <div class="edit-modal-overlay" id="tier-warning-modal-overlay">
   <div class="edit-modal-card">
     <div class="section-hd" style="margin-bottom:0.75rem;">Wrong level for this child?</div>
@@ -4596,8 +4674,8 @@ async function switchTab(t){
     /* Re-fetch from Supabase rather than rendering cached arrays - a live
        session writes results from the child's own browser, so this
        teacher's locally-loaded data can be stale until refreshed. */
-    await Promise.all([loadResults(), loadBlendingResults(), loadMathsResults(), loadTimesTablesResults(), loadEnglishResults(), loadHandwritingResults(), loadTopicResults(), loadScienceResults(), loadReResults(), loadMflResults(), loadMusicResults(), loadEyResults(), loadReasoningResults(), loadComputingResults()]);
-    renderAnalytics(); renderBlendingAnalytics(); renderMathsAnalytics(); renderTimesTablesAnalytics(); renderEnglishAnalytics(); renderHandwritingAnalytics(); renderTopicAnalytics(); renderScienceAnalytics(); renderReAnalytics(); renderMflAnalytics(); renderMusicAnalytics(); renderEyAnalytics(); renderReasoningAnalytics(); renderComputingAnalytics(); renderWholeSchoolDashboard();
+    await Promise.all([loadResults(), loadBlendingResults(), loadMathsResults(), loadTimesTablesResults(), loadEnglishResults(), loadHandwritingResults(), loadTopicResults(), loadScienceResults(), loadReResults(), loadMflResults(), loadMusicResults(), loadEyResults(), loadReasoningResults(), loadComputingResults(), loadAttendance()]);
+    renderAnalytics(); renderBlendingAnalytics(); renderMathsAnalytics(); renderTimesTablesAnalytics(); renderEnglishAnalytics(); renderHandwritingAnalytics(); renderTopicAnalytics(); renderScienceAnalytics(); renderReAnalytics(); renderMflAnalytics(); renderMusicAnalytics(); renderEyAnalytics(); renderReasoningAnalytics(); renderComputingAnalytics(); renderWholeSchoolDashboard(); renderAttendanceAnalytics();
   }
   if(t==='children'){
     showRvScreen('tab-children', 'ch-list-screen');
@@ -5145,6 +5223,219 @@ async function loadPupils(){
   renderRolloverStatus();
 }
 
+/* ---------- Attendance ----------
+   pupil_attendance holds one row per pupil per term (unique on pupil_id+term)
+   with a plain attendance_percent (0-100), entered directly by staff rather
+   than derived from an assessment date - so, unlike every subject's results,
+   the term has to be picked explicitly rather than computed from a date. */
+var allAttendance = [];
+async function loadAttendance(){
+  if(!currentSchool){ allAttendance = []; return; }
+  var res = await sb.from('pupil_attendance').select('*').eq('school_id', currentSchool.id);
+  if(res.error){ console.error(res.error); allAttendance = []; }
+  else { allAttendance = res.data || []; }
+}
+function attendanceTermOptions(){
+  var startYear = currentAcademicYearStartYear();
+  var out = [];
+  for(var y = startYear; y >= startYear - 2; y--){
+    ['Summer','Spring','Autumn'].forEach(function(t){ out.push(t + ' ' + y); });
+  }
+  return out;
+}
+function attendanceTermSortKey(term){
+  var parts = (term || '').split(' ');
+  var year = parseInt(parts[1], 10) || 0;
+  var termIdx = {Autumn:0, Spring:1, Summer:2}[parts[0]];
+  if(termIdx === undefined) termIdx = -1;
+  return year * 10 + termIdx;
+}
+function mostRecentAttendanceTerm(){
+  var seen = {};
+  allAttendance.forEach(function(a){ seen[a.term] = true; });
+  var keys = Object.keys(seen);
+  if(!keys.length) return null;
+  keys.sort(function(a,b){ return attendanceTermSortKey(b) - attendanceTermSortKey(a); });
+  return keys[0];
+}
+
+/* Bulk (or single-child) attendance entry modal - shared by the "Record
+   attendance" button on the Children list, the same button on Attendance
+   analytics, and "Add / edit" on a child's own profile. */
+var attendanceModalPupilId = null;
+async function openAttendanceModal(pupilId){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its data can\'t be changed.'); return; }
+  attendanceModalPupilId = pupilId || null;
+  await loadAttendance();
+  var sel = document.getElementById('attendance-modal-term');
+  var options = attendanceTermOptions();
+  var defaultTerm = mostRecentAttendanceTerm() || options[0];
+  sel.innerHTML = options.map(function(t){ return '<option value="'+t+'">'+t+'</option>'; }).join('');
+  sel.value = defaultTerm;
+  renderAttendanceModalList();
+  document.getElementById('attendance-modal-overlay').classList.add('active');
+}
+function closeAttendanceModal(){
+  document.getElementById('attendance-modal-overlay').classList.remove('active');
+  attendanceModalPupilId = null;
+}
+function renderAttendanceModalList(){
+  var listEl = document.getElementById('attendance-modal-list');
+  var emptyEl = document.getElementById('attendance-modal-empty');
+  var term = document.getElementById('attendance-modal-term').value;
+  var pupils = attendanceModalPupilId
+    ? pupilsRoster.filter(function(p){ return p.id === attendanceModalPupilId; })
+    : activePupils();
+  listEl.innerHTML = '';
+  if(!pupils.length){ emptyEl.style.display = 'block'; return; }
+  emptyEl.style.display = 'none';
+  pupils.forEach(function(p){
+    var existing = allAttendance.find(function(a){ return a.pupil_id === p.id && a.term === term; });
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:0.5rem;padding:0.4rem 0;border-bottom:0.5px solid var(--border);';
+    var nameEl = document.createElement('div');
+    nameEl.style.cssText = 'font-size:13.5px;color:var(--text-primary);flex:1;';
+    nameEl.textContent = p.name;
+    var input = document.createElement('input');
+    input.type = 'number'; input.min = '0'; input.max = '100'; input.step = '0.1';
+    input.placeholder = '%';
+    input.style.cssText = 'width:72px;text-align:right;';
+    input.setAttribute('data-pupil-id', p.id);
+    if(existing) input.value = existing.attendance_percent;
+    row.appendChild(nameEl); row.appendChild(input);
+    listEl.appendChild(row);
+  });
+}
+async function saveAttendanceModal(){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its data can\'t be changed.'); return; }
+  var term = document.getElementById('attendance-modal-term').value;
+  var inputs = document.querySelectorAll('#attendance-modal-list input[data-pupil-id]');
+  var upserts = [];
+  inputs.forEach(function(inp){
+    var v = inp.value.trim();
+    if(v === '') return;
+    var pct = parseFloat(v);
+    if(isNaN(pct) || pct < 0 || pct > 100) return;
+    upserts.push({
+      school_id: currentSchool.id,
+      pupil_id: inp.getAttribute('data-pupil-id'),
+      term: term,
+      attendance_percent: pct,
+      created_by: currentProfile ? currentProfile.id : null
+    });
+  });
+  if(!upserts.length){ closeAttendanceModal(); return; }
+  var res = await sb.from('pupil_attendance').upsert(upserts, { onConflict: 'pupil_id,term' });
+  if(res.error){ alert('Sorry, something went wrong saving attendance: ' + res.error.message); return; }
+  await loadAttendance();
+  closeAttendanceModal();
+  if(currentPupilId){
+    var p = pupilsRoster.find(function(x){ return x.id === currentPupilId; });
+    if(p) renderChildAttendance(p);
+  }
+  var attSection = document.getElementById('an-attendance-section');
+  if(attSection && attSection.classList.contains('active')) renderAttendanceAnalytics();
+}
+
+/* Child profile: attendance history, shown as one bar per term (newest first) */
+function renderChildAttendance(p){
+  var listEl = document.getElementById('ch-profile-attendance-list');
+  var emptyEl = document.getElementById('ch-profile-attendance-empty');
+  if(!listEl || !p) return;
+  var rows = allAttendance.filter(function(a){ return a.pupil_id === p.id; })
+    .slice().sort(function(a,b){ return attendanceTermSortKey(b.term) - attendanceTermSortKey(a.term); });
+  listEl.innerHTML = '';
+  if(!rows.length){ emptyEl.style.display = 'block'; return; }
+  emptyEl.style.display = 'none';
+  rows.forEach(function(r){
+    var pct = Math.round(Number(r.attendance_percent) * 10) / 10;
+    listEl.appendChild(makeBar(r.term, pct, barColor(pct)));
+  });
+}
+
+/* Attendance analytics - term-by-term trend across the whole dataset, plus
+   demographic breakdowns and a below-90% list for the most recent term with
+   data (attendance is a termly snapshot, not something to average across
+   terms of different lengths the way subject scores are). */
+function renderAttendanceAnalytics(){
+  var emptyEl = document.getElementById('an-attendance-empty');
+  var contentEl = document.getElementById('an-attendance-content');
+  if(!contentEl) return;
+  if(!allAttendance.length){
+    if(emptyEl) emptyEl.style.display = 'block';
+    contentEl.style.display = 'none';
+    return;
+  }
+  if(emptyEl) emptyEl.style.display = 'none';
+  contentEl.style.display = 'block';
+
+  var byTerm = {};
+  allAttendance.forEach(function(a){ (byTerm[a.term] = byTerm[a.term] || []).push(a); });
+  var termKeys = Object.keys(byTerm).sort(function(a,b){ return attendanceTermSortKey(a) - attendanceTermSortKey(b); });
+
+  var trendEl = document.getElementById('an-attendance-trend');
+  if(trendEl){
+    trendEl.innerHTML = '';
+    termKeys.forEach(function(t){
+      var list = byTerm[t];
+      var avg = Math.round((list.reduce(function(a,r){return a+Number(r.attendance_percent);},0)/list.length)*10)/10;
+      trendEl.appendChild(makeBar(t+' ('+list.length+(list.length===1?' child':' children')+')', avg, barColor(avg)));
+    });
+  }
+
+  var recentTerm = termKeys[termKeys.length-1];
+  var labelEl = document.getElementById('an-attendance-recent-term-label');
+  if(labelEl) labelEl.textContent = recentTerm;
+
+  var recentRows = byTerm[recentTerm].map(function(a){
+    var p = pupilsRoster.find(function(x){ return x.id === a.pupil_id; });
+    return {
+      pct: Number(a.attendance_percent),
+      name: p ? p.name : '(deleted child)',
+      year: p ? (p.year || 'Not recorded') : 'Not recorded',
+      gender: p ? (p.gender || 'Not recorded') : 'Not recorded',
+      fsm: p ? p.fsm === true : false,
+      vulnerable: p ? p.vulnerable === true : false,
+      ethnicity: p && p.ethnicity ? p.ethnicity : 'Not recorded'
+    };
+  });
+  if(classFilter) recentRows = recentRows.filter(function(r){ return r.year === classFilter; });
+
+  function groupBar(el, rows, keyFn, order){
+    if(!el) return;
+    el.innerHTML = '';
+    var groups = {};
+    rows.forEach(function(r){ var k = keyFn(r); (groups[k] = groups[k] || []).push(r); });
+    var keys = order ? order.filter(function(k){ return groups[k]; }) : Object.keys(groups).sort();
+    if(!keys.length){ el.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">No data for '+recentTerm+'.</p>'; return; }
+    keys.forEach(function(k){
+      var list = groups[k];
+      var avg = Math.round((list.reduce(function(a,r){return a+r.pct;},0)/list.length)*10)/10;
+      el.appendChild(makeBar(k+' ('+list.length+(list.length===1?' child':' children')+')', avg, barColor(avg)));
+    });
+  }
+  groupBar(document.getElementById('an-attendance-year'), recentRows, function(r){ return r.year; },
+    ['Under 2s','2-3s','Nursery (3-4s)','Reception','Year 1','Year 2','Year 3','Year 4','Year 5','Year 6','Not recorded']);
+  groupBar(document.getElementById('an-attendance-gender'), recentRows, function(r){ return r.gender; });
+  groupBar(document.getElementById('an-attendance-fsm'), recentRows, function(r){ return r.fsm ? 'FSM eligible' : 'Not FSM eligible'; }, ['FSM eligible','Not FSM eligible']);
+  groupBar(document.getElementById('an-attendance-vulnerable'), recentRows, function(r){ return r.vulnerable ? 'Vulnerable' : 'Not flagged'; }, ['Vulnerable','Not flagged']);
+  groupBar(document.getElementById('an-attendance-ethnicity'), recentRows, function(r){ return r.ethnicity; });
+
+  var lowEl = document.getElementById('an-attendance-low');
+  if(lowEl){
+    lowEl.innerHTML = '';
+    var low = recentRows.filter(function(r){ return r.pct < 90; }).sort(function(a,b){ return a.pct - b.pct; });
+    if(!low.length){
+      lowEl.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">No children below 90% attendance in '+recentTerm+'.</p>';
+    } else {
+      low.forEach(function(r){
+        var pct = Math.round(r.pct*10)/10;
+        lowEl.appendChild(makeBar(r.name, pct, barColor(pct)));
+      });
+    }
+  }
+}
+
 /* ---------- Assessment home screen: pick a child from the register ---------- */
 var selectedAssessmentPupil = null;
 function renderHomePupilPicker(){
@@ -5502,6 +5793,8 @@ async function openChildProfile(id, focusSubject, focusTopic){
     reasoning: (reasoning_.data||[]).map(rowToReasoningResult),
     computing: (computing_.data||[]).map(rowToComputingResult)
   };
+  await loadAttendance();
+  renderChildAttendance(p);
   renderProfileSections();
   renderChildSnapshot(currentProfileData);
   if(profileFocusSubject){
@@ -5983,6 +6276,7 @@ function setClassFilter(val){
   renderReasoningAnalytics();
   renderComputingAnalytics();
   renderWholeSchoolDashboard();
+  renderAttendanceAnalytics();
 }
 function filterByClass(list){
   if(!classFilter) return list;
