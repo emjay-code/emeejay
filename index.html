@@ -2593,8 +2593,10 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div id="an-dashboard"></div>
     </div>
     <div class="card" style="margin-bottom:0.75rem;">
-      <div class="section-hd" style="margin-bottom:0.75rem;">Whole-school rankings</div>
-      <div id="an-overall-rankings"></div>
+      <details class="rankings-toggle">
+        <summary class="section-hd" style="cursor:pointer;margin-bottom:0;display:inline-block;">Whole-school rankings (click to view all children)</summary>
+        <div id="an-overall-rankings" style="margin-top:0.75rem;"></div>
+      </details>
     </div>
     <div class="card" style="margin-bottom:0.75rem;">
       <div class="section-hd" style="margin-bottom:0.75rem;">Choose a subject</div>
@@ -2704,7 +2706,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="an-coverage"></div></div>
       <div class="card">
         <h2 style="font-size:16px;margin-bottom:0.5rem;">Score trends</h2>
@@ -2729,7 +2731,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="bc-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="bc-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="bc-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="bc-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="bc-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="bc-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed blending words</h2><div id="bc-an-missed"></div></div>
       <div class="card">
@@ -2770,7 +2772,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="mt-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="mt-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="mt-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="mt-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="mt-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="mt-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="mt-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mt-an-missed"></div></div>
@@ -2812,7 +2814,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="tt-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="tt-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="tt-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="tt-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="tt-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="tt-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed facts</h2><div id="tt-an-missed"></div></div>
       <div class="card">
@@ -2853,7 +2855,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="en-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="en-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="en-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="en-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="en-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="en-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="en-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="en-an-missed"></div></div>
@@ -2894,7 +2896,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="hw-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="hw-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="hw-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="hw-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="hw-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="hw-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most difficult letters/words</h2><div id="hw-an-missed"></div></div>
       <div class="card">
@@ -2934,7 +2936,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="ey-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="ey-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="ey-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="ey-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="ey-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="ey-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most-emerging skills</h2><div id="ey-an-missed"></div></div>
       <div class="card">
@@ -2975,7 +2977,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="tp-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="tp-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="tp-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="tp-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="tp-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="tp-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="tp-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="tp-an-missed"></div></div>
@@ -3017,7 +3019,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="sc-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="sc-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="sc-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="sc-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="sc-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="sc-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="sc-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="sc-an-missed"></div></div>
@@ -3059,7 +3061,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="re-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="re-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="re-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="re-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="re-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="re-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="re-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="re-an-missed"></div></div>
@@ -3101,7 +3103,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="mfl-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="mfl-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="mfl-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="mfl-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="mfl-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="mfl-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="mfl-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mfl-an-missed"></div></div>
@@ -3143,7 +3145,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="music-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="music-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="music-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="music-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="music-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="music-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="music-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="music-an-missed"></div></div>
@@ -3185,7 +3187,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="reasoning-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="reasoning-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="reasoning-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="reasoning-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="reasoning-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="reasoning-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="reasoning-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="reasoning-an-missed"></div></div>
@@ -3227,7 +3229,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="computing-an-attendance-band"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="computing-an-terms"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="computing-an-leaderboard"></div></div>
-      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rankings</h2><div id="computing-an-rankings"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="computing-an-rankings" style="margin-top:0.75rem;"></div></details></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="computing-an-heatmap"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="computing-an-coverage"></div></div>
       <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="computing-an-missed"></div></div>
@@ -6758,6 +6760,21 @@ function appendLeaderboard(id, list, fullList){
 /* Per-subject ranking - highest and lowest scoring children by their most
    recent check in this subject, distinct from the improved/declined
    leaderboard above (which is about change over time, not current standing). */
+function buildRankingList(entries, labelFn){
+  if(!entries.length) return null;
+  var col = document.createElement('div');
+  col.className = 'leaderboard-col';
+  col.style.cssText = 'max-height:420px;overflow-y:auto;';
+  entries.forEach(function(it,i){
+    var row = document.createElement('div'); row.className = 'leaderboard-row';
+    var name = document.createElement('span'); name.className = 'leaderboard-name'; name.textContent = (i+1) + '. ' + labelFn(it);
+    row.appendChild(name);
+    var val = document.createElement('span'); val.style.cssText = 'font-size:12.5px;font-weight:600;color:var(--text-secondary);'; val.textContent = it.pct + '%';
+    row.appendChild(val);
+    col.appendChild(row);
+  });
+  return col;
+}
 function buildRankings(list){
   if(!list || !list.length) return null;
   var byName = {};
@@ -6766,36 +6783,10 @@ function buildRankings(list){
     if(!k) return;
     if(!byName[k] || (r.ts||0) > (byName[k].ts||0)) byName[k] = r;
   });
-  var entries = Object.keys(byName).map(function(k){ return byName[k]; });
+  var entries = Object.keys(byName).map(function(k){ var r = byName[k]; return {name:r.name, pct:pctOf(r)}; });
   if(!entries.length) return null;
-  entries.sort(function(a,b){ return pctOf(b)-pctOf(a); });
-  var top = entries.slice(0,10);
-  var bottom = entries.length>10 ? entries.slice(-5).reverse() : [];
-  var wrap = document.createElement('div');
-  var cols = document.createElement('div'); cols.className = 'leaderboard-cols';
-  function buildCol(title, items, numbered){
-    var col = document.createElement('div'); col.className = 'leaderboard-col';
-    var h = document.createElement('div'); h.className = 'leaderboard-col-title'; h.textContent = title;
-    col.appendChild(h);
-    if(!items.length){
-      var e = document.createElement('p'); e.style.cssText='font-size:12.5px;color:var(--text-muted);'; e.textContent = 'Not enough data yet.';
-      col.appendChild(e);
-    } else {
-      items.forEach(function(r,i){
-        var row = document.createElement('div'); row.className = 'leaderboard-row';
-        var name = document.createElement('span'); name.className = 'leaderboard-name'; name.textContent = (numbered?(i+1)+'. ':'') + r.name;
-        row.appendChild(name);
-        var val = document.createElement('span'); val.style.cssText = 'font-size:12.5px;font-weight:600;color:var(--text-secondary);'; val.textContent = pctOf(r) + '%';
-        row.appendChild(val);
-        col.appendChild(row);
-      });
-    }
-    return col;
-  }
-  cols.appendChild(buildCol('Top scores', top, true));
-  if(bottom.length) cols.appendChild(buildCol('Lowest scores', bottom, false));
-  wrap.appendChild(cols);
-  return wrap;
+  entries.sort(function(a,b){ return b.pct-a.pct; });
+  return buildRankingList(entries, function(it){ return it.name; });
 }
 function appendRankings(id, list){
   var el = document.getElementById(id); if(!el) return;
@@ -6806,7 +6797,9 @@ function appendRankings(id, list){
 }
 /* Whole-school ranking - each child's average score across every subject
    they've been assessed in (Blending Check included, attendance excluded
-   since it isn't a score), shown on the Analytics landing screen. */
+   since it isn't a score), shown on the Analytics landing screen. Every
+   child is listed (not just top/bottom), inside a collapsed dropdown so
+   scores aren't visible at a glance. */
 function renderOverallRankings(){
   var el = document.getElementById('an-overall-rankings'); if(!el) return;
   var SUBJECT_LISTS = [earlyYearsResults, results, blendingResults, timesTablesResults, handwritingResults, englishResults, mathsResults, topicResults, scienceResults, reResults, mflResults, musicResults, reasoningResults, computingResults];
@@ -6819,35 +6812,12 @@ function renderOverallRankings(){
       byName[k].count += 1;
     });
   });
-  var entries = Object.keys(byName).map(function(k){ var e=byName[k]; return {name:e.name, avg: Math.round(e.total/e.count), count:e.count}; });
+  var entries = Object.keys(byName).map(function(k){ var e=byName[k]; return {name:e.name, pct: Math.round(e.total/e.count), count:e.count}; });
   el.innerHTML = '';
   if(!entries.length){ el.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">No assessment data yet.</p>'; return; }
-  entries.sort(function(a,b){ return b.avg - a.avg; });
-  var top = entries.slice(0,10);
-  var bottom = entries.length>10 ? entries.slice(-5).reverse() : [];
-  var cols = document.createElement('div'); cols.className = 'leaderboard-cols';
-  function buildCol(title, items, numbered){
-    var col = document.createElement('div'); col.className = 'leaderboard-col';
-    var h = document.createElement('div'); h.className = 'leaderboard-col-title'; h.textContent = title;
-    col.appendChild(h);
-    if(!items.length){
-      var e = document.createElement('p'); e.style.cssText='font-size:12.5px;color:var(--text-muted);'; e.textContent = 'Not enough data yet.';
-      col.appendChild(e);
-    } else {
-      items.forEach(function(it,i){
-        var row = document.createElement('div'); row.className = 'leaderboard-row';
-        var name = document.createElement('span'); name.className = 'leaderboard-name'; name.textContent = (numbered?(i+1)+'. ':'') + it.name + ' (' + it.count + (it.count===1?' check':' checks') + ')';
-        row.appendChild(name);
-        var val = document.createElement('span'); val.style.cssText = 'font-size:12.5px;font-weight:600;color:var(--text-secondary);'; val.textContent = it.avg + '%';
-        row.appendChild(val);
-        col.appendChild(row);
-      });
-    }
-    return col;
-  }
-  cols.appendChild(buildCol('Top overall', top, true));
-  if(bottom.length) cols.appendChild(buildCol('Lowest overall', bottom, false));
-  el.appendChild(cols);
+  entries.sort(function(a,b){ return b.pct - a.pct; });
+  var board = buildRankingList(entries, function(it){ return it.name + ' (' + it.count + (it.count===1?' check':' checks') + ')'; });
+  if(board) el.appendChild(board);
 }
 /* Topic x tier heatmap for the subjects whose result records carry both a
    topic and a tier (Maths, English, Topics, Science, RE, Languages, Music,
