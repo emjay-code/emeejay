@@ -7236,6 +7236,57 @@ function renderResults(){
   renderGroups(el, list, keyFn, order, buildPupilCard, 'child', 'children', resultsGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
+/* Shared CSV helpers so every subject's export mirrors exactly what the
+   on-screen Analytics breakdowns show: gender, year group, additional
+   needs, FSM, vulnerable status, ethnicity, and attendance band - plus
+   the full child-by-child Rankings list. */
+function csvBreakdownRows(list){
+  var rows = [];
+  var blank = [''];
+  function section(title, groups, order){
+    var keys = order ? order.filter(function(k){return groups[k];}) : Object.keys(groups).sort();
+    if(!keys.length) return;
+    rows.push([title,'','']);
+    rows.push(['Group','Assessments','Average score']);
+    keys.forEach(function(k){
+      var g = groups[k];
+      var avg = Math.round(g.reduce(function(a,r){return a+pctOf(r);},0)/g.length);
+      rows.push([k, g.length, avg+'%']);
+    });
+    rows.push(blank);
+  }
+  var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';(genders[g]=genders[g]||[]).push(r);});
+  section('SCORE BY GENDER', genders);
+  var years={}; list.forEach(function(r){var y=r.year||'Not recorded';(years[y]=years[y]||[]).push(r);});
+  section('SCORE BY YEAR GROUP', years, ['Under 2s','2-3s','Nursery (3-4s)','Reception','Year 1','Year 2','Year 3','Year 4','Year 5','Year 6','Not recorded']);
+  var needsG={}; list.forEach(function(r){var n=r.needs||'None';(needsG[n]=needsG[n]||[]).push(r);});
+  section('SCORE BY ADDITIONAL NEEDS', needsG);
+  var fsmG={}; list.forEach(function(r){var fv=r.fsm?'FSM eligible':'Not FSM eligible';(fsmG[fv]=fsmG[fv]||[]).push(r);});
+  section('SCORE BY FREE SCHOOL MEALS', fsmG);
+  var vulnG={}; list.forEach(function(r){var vv=r.vulnerable?'Vulnerable':'Not flagged';(vulnG[vv]=vulnG[vv]||[]).push(r);});
+  section('SCORE BY VULNERABLE STATUS', vulnG);
+  var ethG={}; list.forEach(function(r){var ev=r.ethnicity||'Not recorded';(ethG[ev]=ethG[ev]||[]).push(r);});
+  section('SCORE BY ETHNICITY', ethG);
+  var attG={}; list.forEach(function(r){var ab=attendanceBandForResult(r); if(!ab) return; (attG[ab]=attG[ab]||[]).push(r);});
+  section('SCORE BY ATTENDANCE', attG, ATTENDANCE_BAND_ORDER);
+  return rows;
+}
+function csvRankingRows(list){
+  var rows = [];
+  var byName = {};
+  list.forEach(function(r){
+    var k=(r.name||'').trim().toLowerCase(); if(!k) return;
+    if(!byName[k] || (r.ts||0) > (byName[k].ts||0)) byName[k]=r;
+  });
+  var entries = Object.keys(byName).map(function(k){var r=byName[k]; return {name:r.name, pct:pctOf(r)};});
+  if(!entries.length) return rows;
+  entries.sort(function(a,b){return b.pct-a.pct;});
+  rows.push(['RANKINGS (all children, most recent check)','','']);
+  rows.push(['Rank','Name','Score']);
+  entries.forEach(function(it,i){ rows.push([i+1, it.name, it.pct+'%']); });
+  rows.push(['']);
+  return rows;
+}
 function csvEscape(v){var s=String(v===null||v===undefined?'':v);if(s.indexOf(',')>-1||s.indexOf('"')>-1||s.indexOf('\n')>-1)s='"'+s.replace(/"/g,'""')+'"';return s;}
 
 function downloadCSV(rows,filename){
@@ -7279,6 +7330,8 @@ function exportAnalyticsCSV(){
   rows.push(['Total assessments',scoped.length]);
   rows.push(['Overall average',avgPct(scoped)+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['MOST MISSED SOUNDS','']);
   rows.push(['Sound','Children missing it','% of assessments']);
@@ -7717,6 +7770,8 @@ function exportBlendingAnalyticsCSV(){
   rows.push(['Real words average',avgReal+'%']);
   rows.push(['Pseudo-words average',avgPseudo+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['MOST MISSED WORDS','','']);
   rows.push(['Word','Children missing it','% of checks']);
@@ -8076,6 +8131,8 @@ function exportTimesTablesAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalFacts? r.totalCorrect/r.totalFacts*100 : 0);},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['MOST MISSED FACTS','','']);
   rows.push(['Fact','Children missing it','% of checks']);
@@ -11007,6 +11064,8 @@ function exportMathsAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['BY TOPIC AND TIER','','']);
   rows.push(['Topic · Tier','Checks','Average score']);
@@ -13614,6 +13673,8 @@ function exportEnglishAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['BY TOPIC AND TIER','','']);
   rows.push(['Topic · Tier','Checks','Average score']);
@@ -14125,6 +14186,8 @@ function exportHandwritingAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+r.pct;},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['MOST DIFFICULT LETTERS/WORDS','','']);
   rows.push(['Item','Children needing more practice','% of checks']);
@@ -14474,6 +14537,8 @@ function exportEyAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+r.pct;},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['MOST-EMERGING SKILLS','','']);
   rows.push(['Skill','Children not yet showing this','% of checks']);
@@ -33169,6 +33234,8 @@ function exportTopicAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['BY TOPIC & TIER','','']);
   rows.push(['Topic check','Checks','Average score']);
@@ -33567,6 +33634,8 @@ function exportScienceAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['BY TOPIC & TIER','','']);
   rows.push(['Topic check','Checks','Average score']);
@@ -33965,6 +34034,8 @@ function exportReAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['BY TOPIC & TIER','','']);
   rows.push(['Topic check','Checks','Average score']);
@@ -34941,6 +35012,8 @@ function exportMflAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['BY TOPIC & TIER','','']);
   rows.push(['Topic check','Checks','Average score']);
@@ -35345,6 +35418,8 @@ function exportMusicAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['BY TOPIC & TIER','','']);
   rows.push(['Topic check','Checks','Average score']);
@@ -35749,6 +35824,8 @@ function exportComputingAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['BY TOPIC & TIER','','']);
   rows.push(['Topic check','Checks','Average score']);
@@ -36153,6 +36230,8 @@ function exportReasoningAnalyticsCSV(){
   var avgTotal = Math.round(scoped.reduce(function(a,r){return a+(r.totalQuestions? r.totalCorrect/r.totalQuestions*100 : 0);},0)/scoped.length);
   rows.push(['Overall average',avgTotal+'%']);
   rows.push(blank);
+  rows = rows.concat(csvBreakdownRows(scoped)).concat(csvRankingRows(scoped));
+
 
   rows.push(['BY TOPIC & TIER','','']);
   rows.push(['Topic check','Checks','Average score']);
