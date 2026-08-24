@@ -6783,7 +6783,7 @@ function buildRankings(list){
     if(!k) return;
     if(!byName[k] || (r.ts||0) > (byName[k].ts||0)) byName[k] = r;
   });
-  var entries = Object.keys(byName).map(function(k){ var r = byName[k]; return {name:r.name, pct:pctOf(r)}; });
+  var entries = Object.keys(byName).map(function(k){ var r = byName[k]; return {name:r.name, pct:Math.round(pctOf(r))}; });
   if(!entries.length) return null;
   entries.sort(function(a,b){ return b.pct-a.pct; });
   return buildRankingList(entries, function(it){ return it.name; });
