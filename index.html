@@ -692,7 +692,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
 
     <div class="landing-hero" style="padding:1.25rem 0 0.25rem;">
-      <div class="hero-title">Time back for teaching.</div>
+      <div class="hero-title">Time to teach.</div>
       <p class="hero-sub">Emeejay Assess takes you the whole way: quick, simple checks feed live results and analysis as they come in, gaps and most-missed questions are surfaced automatically, and from there you can set targets and generate parent-ready progress reports for a child, a class or the whole year &ndash; all in a click. It's light enough to fit around the school day, valuable enough to matter in pupil progress meetings, and thorough enough to show ISI and Ofsted real evidence of children's progress.</p>
 
       <div class="cta-row" style="max-width:340px;margin-left:auto;margin-right:auto;">
@@ -4212,7 +4212,7 @@ function goToChooser(){
    Anything a visitor adds during their session is wiped the next time anyone
    starts a fresh demo, so it never piles up on top of the original sample data
    (rows flagged is_seed=true in the database are always kept). */
-var DEMO_EMAIL = 'demo@emjayphonicstracker.com';
+var DEMO_EMAIL = 'demo@emeejay.com';
 var DEMO_PASSWORD = 'EmjayDemo2026!';
 var DEMO_ACCESS_CODE = 'DEMOLITION5678';
 var DEMO_SCHOOL_ID = '8f2b768c-8251-4351-9759-26b6271319ed';
@@ -7319,7 +7319,7 @@ function exportResultsCSV(){
     rows.push(row);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emjay-phonics-results'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-phonics-results'+suffix+'-'+dateStr()+'.csv');
 }
 
 function avgPct(arr){if(!arr.length)return 0;return Math.round(arr.reduce(function(a,r){return a+r.pct;},0)/arr.length);}
@@ -7381,7 +7381,7 @@ function exportAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emjay-phonics-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-analytics'+classSuffix()+'-'+dateStr()+'.csv');
 }
 
 function makeBar(label,pct,color){
@@ -7674,7 +7674,7 @@ function exportBlendingCSV(){
     rows.push([r.name,r.date,getTerm(r.date),r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalWords,r.realCorrect,r.realTotal,r.pseudoCorrect,r.pseudoTotal,formatTrendForCSV(computeTrendDiff(blendingResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emjay-blending-checks'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-blending-checks'+suffix+'-'+dateStr()+'.csv');
 }
 
 async function clearAllBlending(){
