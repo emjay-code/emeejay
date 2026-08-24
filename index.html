@@ -673,6 +673,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="cta-row" style="max-width:360px;margin:1.25rem auto 0;">
             <button class="btn btn-primary" onclick="chooseTeacherEntry()">I'm a teacher or school staff</button>
             <button class="btn btn-ghost" onclick="showPlayPortal()">I'm a student with a class code</button>
+            <button class="btn btn-ghost" onclick="chooseTrustEntry()">I'm a trust or MAT</button>
           </div>
         </div>
       </div>
@@ -795,6 +796,75 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <button class="btn btn-primary" id="su-submit" onclick="doSignUp()">Sign up</button>
       <div class="error-text" id="su-error" style="display:none;"></div>
       <div class="info-text" id="su-info" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<div id="trust-auth-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap chooser-decor">
+    <div class="chooser-decor-icons" data-decor-size="full"></div>
+    <div class="brand-lockup">
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">Trust &amp; MAT oversight</div>
+    </div>
+
+    <a href="javascript:void(0)" class="back-link" onclick="goToChooser()">&larr; Back to home</a>
+
+    <p style="font-size:13px;color:var(--text-secondary);text-align:center;max-width:340px;margin:0 auto 1rem;">See rolled-up, anonymised analytics across every school in your trust or MAT that chooses to link in &ndash; no individual pupil data, free add-on.</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-trust-signin-btn" onclick="setTrustAuthTab('signin')">Sign in</button>
+      <button class="auth-tab" id="tab-trust-signup-btn" onclick="setTrustAuthTab('signup')">Sign up</button>
+    </div>
+
+    <div class="card" id="trust-signin-card">
+      <div class="field"><label>Email</label><input type="email" id="tra-si-email" autocomplete="username"/></div>
+      <div class="field"><label>Password</label><input type="password" id="tra-si-password" autocomplete="current-password"/></div>
+      <button class="btn btn-primary" id="tra-si-submit" onclick="doTrustSignIn()">Sign in</button>
+      <div class="error-text" id="tra-si-error" style="display:none;"></div>
+    </div>
+
+    <div class="card" id="trust-signup-card" style="display:none;">
+      <div class="field"><label>Your name</label><input type="text" id="tra-su-name" maxlength="60"/></div>
+      <div class="field"><label>Trust / MAT name</label><input type="text" id="tra-su-trust-name" maxlength="80"/></div>
+      <div class="field"><label>Email</label><input type="email" id="tra-su-email" autocomplete="username"/></div>
+      <div class="field"><label>Password</label><input type="password" id="tra-su-password" autocomplete="new-password"/></div>
+      <button class="btn btn-primary" id="tra-su-submit" onclick="doTrustSignUp()">Sign up</button>
+      <div class="error-text" id="tra-su-error" style="display:none;"></div>
+      <div class="info-text" id="tra-su-info" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<div id="trust-dashboard-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap landing-wrap">
+    <div class="brand-lockup">
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <a href="javascript:void(0)" class="brand-lockup-corner" onclick="doSignOut()">Sign out</a>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <div class="section-title" id="td-trust-name">Trust dashboard</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin:0.5rem 0;">Give this code to schools so they can link their data in (Staff &rarr; Trust, on their end):</p>
+      <div style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;font-size:22px;letter-spacing:2px;color:var(--hp-purple);text-align:center;padding:0.5rem;background:var(--hp-purple-light);border-radius:var(--radius);" id="td-trust-code">------</div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <div class="section-title">Linked schools</div>
+      <div id="td-schools-list" style="margin-top:0.5rem;font-size:13px;color:var(--text-secondary);">Loading&hellip;</div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <div class="section-title">Analytics by subject</div>
+      <p style="font-size:12.5px;color:var(--text-muted);margin:0.35rem 0 0.75rem;">Anonymised and rolled up across all linked schools &ndash; no individual pupil names, exactly like each school's own analytics but combined.</p>
+      <div class="mode-row" style="flex-wrap:wrap;" id="td-subject-picker"></div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;display:none;" id="td-results-card">
+      <div class="section-title" id="td-results-title">Analytics</div>
+      <div id="td-results"></div>
     </div>
   </div>
 </div>
@@ -4060,6 +4130,16 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <div id="staff-billing-row" style="display:none;margin-top:0.6rem;">
       <button class="btn" style="width:100%;" onclick="startBillingPortal(this)">Manage subscription &amp; billing</button>
     </div>
+    <div id="staff-trust-row" style="display:none;margin-top:0.85rem;border-top:0.5px solid var(--border);padding-top:0.85rem;">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text-secondary);margin-bottom:0.4rem;">Trust / MAT (optional)</div>
+      <p style="font-size:11.5px;color:var(--text-muted);margin:0 0 0.5rem;">Link your school so your trust can see rolled-up, anonymised analytics &ndash; no individual pupil data is shared.</p>
+      <div id="staff-trust-list" style="font-size:13px;margin-bottom:0.5rem;"></div>
+      <div class="name-row" style="align-items:center;">
+        <input type="text" id="staff-trust-code-input" placeholder="Trust code" maxlength="8" style="text-transform:uppercase;flex:1;"/>
+        <button class="btn" style="width:auto;padding:0.55rem 0.9rem;" onclick="linkSchoolToTrust()">Link</button>
+      </div>
+      <div class="error-text" id="staff-trust-error" style="display:none;font-size:12px;margin-top:0.35rem;"></div>
+    </div>
     <div style="display:flex;gap:0.5rem;margin-top:0.85rem;">
       <button class="btn" style="flex:1;" onclick="closeStaffModal()">Close</button>
     </div>
@@ -4180,12 +4260,185 @@ function showResetPasswordView(){
 var currentUser = null;
 var currentProfile = null; // {school_id, display_name, is_owner, can_edit_delete, is_app_admin}
 var currentSchool = null;  // {id, name, join_code}
+var currentTrust = null;  // {trust_id, trust_name, trust_code}
 
 /* ---------- Entry chooser / landing / auth screen wiring ---------- */
 function chooseTeacherEntry(){
   document.getElementById('entry-chooser-view').style.display = 'none';
   document.getElementById('landing-view').style.display = 'block';
   window.scrollTo(0,0);
+}
+function chooseTrustEntry(){
+  document.getElementById('entry-chooser-view').style.display = 'none';
+  document.getElementById('trust-auth-view').style.display = 'block';
+  setTrustAuthTab('signin');
+  window.scrollTo(0,0);
+}
+function setTrustAuthTab(t){
+  document.getElementById('tab-trust-signin-btn').classList.toggle('active', t==='signin');
+  document.getElementById('tab-trust-signup-btn').classList.toggle('active', t==='signup');
+  document.getElementById('trust-signin-card').style.display = (t==='signin') ? 'block' : 'none';
+  document.getElementById('trust-signup-card').style.display = (t==='signup') ? 'block' : 'none';
+}
+function showAuthErrorEl(el, msg){
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+async function doTrustSignIn(){
+  var errEl = document.getElementById('tra-si-error');
+  errEl.style.display = 'none';
+  var email = document.getElementById('tra-si-email').value.trim();
+  var password = document.getElementById('tra-si-password').value;
+  if(!email || !password){ showAuthErrorEl(errEl, 'Please enter your email and password.'); return; }
+  var btn = document.getElementById('tra-si-submit');
+  btn.disabled = true;
+  var res = await sb.auth.signInWithPassword({ email: email, password: password });
+  btn.disabled = false;
+  if(res.error){ showAuthErrorEl(errEl, res.error.message || 'Could not sign in.'); return; }
+  await onSignedIn();
+}
+async function doTrustSignUp(){
+  var errEl = document.getElementById('tra-su-error');
+  var infoEl = document.getElementById('tra-su-info');
+  errEl.style.display = 'none'; infoEl.style.display = 'none';
+  var name = document.getElementById('tra-su-name').value.trim();
+  var trustName = document.getElementById('tra-su-trust-name').value.trim();
+  var email = document.getElementById('tra-su-email').value.trim();
+  var password = document.getElementById('tra-su-password').value;
+  if(!trustName){ showAuthErrorEl(errEl, 'Please enter your trust or MAT name.'); return; }
+  if(!email || !password){ showAuthErrorEl(errEl, 'Please enter an email and password.'); return; }
+  var btn = document.getElementById('tra-su-submit');
+  btn.disabled = true;
+  var res = await sb.auth.signUp({ email: email, password: password, options: { data: { display_name: name } } });
+  if(res.error){ btn.disabled = false; showAuthErrorEl(errEl, res.error.message || 'Could not sign up.'); return; }
+  if(!res.data.session){
+    btn.disabled = false;
+    infoEl.textContent = 'Check your email to confirm your account, then sign in.';
+    infoEl.style.display = 'block';
+    return;
+  }
+  var trustRes = await sb.rpc('create_trust', { p_name: trustName });
+  btn.disabled = false;
+  if(trustRes.error){ showAuthErrorEl(errEl, trustRes.error.message || 'Could not create your trust.'); return; }
+  await onSignedIn();
+}
+
+var TRUST_SUBJECTS = [
+  {table:'results', label:'Phonics'},
+  {table:'blending_results', label:'Blending Check'},
+  {table:'maths_topics_results', label:'Maths'},
+  {table:'maths_results', label:'Times Tables'},
+  {table:'english_results', label:'English'},
+  {table:'topic_results', label:'Topics'},
+  {table:'science_results', label:'Science'},
+  {table:'re_results', label:'RE'},
+  {table:'mfl_results', label:'Languages'},
+  {table:'music_results', label:'Music'},
+  {table:'reasoning_results', label:'Reasoning'},
+  {table:'computing_results', label:'Computing'},
+  {table:'handwriting_results', label:'Handwriting'},
+  {table:'early_years_results', label:'Early Years'}
+];
+
+async function initTrustDashboard(){
+  document.getElementById('td-trust-name').textContent = (currentTrust.trust_name || 'Trust') + ' dashboard';
+  document.getElementById('td-trust-code').textContent = currentTrust.trust_code || '------';
+  document.getElementById('td-results-card').style.display = 'none';
+
+  var picker = document.getElementById('td-subject-picker');
+  picker.innerHTML = '';
+  TRUST_SUBJECTS.forEach(function(s){
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'mode-btn';
+    btn.textContent = s.label;
+    btn.onclick = function(){ pickTrustSubject(s.table, s.label, btn); };
+    picker.appendChild(btn);
+  });
+
+  var listEl = document.getElementById('td-schools-list');
+  listEl.textContent = 'Loading…';
+  var res = await sb.rpc('get_trust_school_list', { p_trust_id: currentTrust.trust_id });
+  if(res.error){ listEl.textContent = 'Could not load schools.'; return; }
+  var schools = res.data || [];
+  if(!schools.length){
+    listEl.innerHTML = 'No schools linked yet. Share the code above with a school owner – they can link it from Staff &rarr; Trust in their account.';
+    return;
+  }
+  var tbl = document.createElement('table');
+  tbl.style.cssText = 'width:100%;border-collapse:collapse;font-size:13px;';
+  schools.forEach(function(s){
+    var row = document.createElement('tr');
+    row.innerHTML = '<td style="padding:6px 4px;border-bottom:0.5px solid var(--border);">'+escapeHtml(s.school_name)+'</td><td style="padding:6px 4px;border-bottom:0.5px solid var(--border);text-align:right;color:var(--text-muted);">'+s.pupil_count+' pupils</td>';
+    tbl.appendChild(row);
+  });
+  listEl.innerHTML = '';
+  listEl.appendChild(tbl);
+}
+
+function trustGroupBy(rows, keyFn){
+  var groups = {};
+  rows.forEach(function(r){
+    var k = keyFn(r) || 'Not recorded';
+    if(!groups[k]) groups[k] = [];
+    groups[k].push(r);
+  });
+  return Object.keys(groups).sort().map(function(k){
+    var arr = groups[k];
+    var avg = Math.round(arr.reduce(function(a,r){return a + (r.pct||0);},0) / arr.length);
+    return {key:k, count:arr.length, avg:avg};
+  });
+}
+function trustBreakdownTable(title, groups){
+  if(!groups.length) return '';
+  var html = '<div style="font-size:12.5px;font-weight:600;color:var(--text-secondary);margin:0.9rem 0 0.3rem;">'+escapeHtml(title)+'</div>';
+  html += '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
+  groups.forEach(function(g){
+    html += '<tr><td style="padding:4px;border-bottom:0.5px solid var(--border);">'+escapeHtml(g.key)+'</td><td style="padding:4px;border-bottom:0.5px solid var(--border);text-align:right;color:var(--text-muted);">'+g.count+'</td><td style="padding:4px;border-bottom:0.5px solid var(--border);text-align:right;font-weight:600;">'+g.avg+'%</td></tr>';
+  });
+  html += '</table>';
+  return html;
+}
+async function pickTrustSubject(table, label, btn){
+  Array.prototype.forEach.call(document.getElementById('td-subject-picker').children, function(b){ b.classList.remove('active'); });
+  if(btn) btn.classList.add('active');
+  var card = document.getElementById('td-results-card');
+  var out = document.getElementById('td-results');
+  card.style.display = 'block';
+  document.getElementById('td-results-title').textContent = label + ' analytics';
+  out.innerHTML = 'Loading…';
+
+  var res = await sb.rpc('get_trust_subject_analytics', { p_trust_id: currentTrust.trust_id, p_table: table });
+  if(res.error){ out.innerHTML = 'Could not load this data.'; return; }
+  var rows = (res.data || []).map(function(r){ return { school_name:r.school_name, year_group:r.year_group, gender:r.gender, additional_needs:r.additional_needs, fsm:r.fsm, vulnerable:r.vulnerable, ethnicity:r.ethnicity, pct: r.pct==null?null:Math.round(r.pct) }; }).filter(function(r){ return r.pct!=null; });
+
+  if(!rows.length){
+    out.innerHTML = 'No '+escapeHtml(label)+' assessments yet across your linked schools.';
+    return;
+  }
+
+  var overallAvg = Math.round(rows.reduce(function(a,r){return a+r.pct;},0) / rows.length);
+  var bands = {high:0, mid:0, low:0};
+  rows.forEach(function(r){ if(r.pct>=80) bands.high++; else if(r.pct>=50) bands.mid++; else bands.low++; });
+
+  var html = '';
+  html += '<div class="landing-stat-row" style="justify-content:flex-start;gap:2rem;margin-top:0;">';
+  html += '<div class="landing-stat"><div class="landing-stat-val">'+rows.length+'</div><div class="landing-stat-lbl">assessments</div></div>';
+  html += '<div class="landing-stat"><div class="landing-stat-val">'+overallAvg+'%</div><div class="landing-stat-lbl">overall average</div></div>';
+  html += '</div>';
+
+  html += '<div style="font-size:12.5px;font-weight:600;color:var(--text-secondary);margin:0.9rem 0 0.3rem;">Score bands</div>';
+  html += '<div style="font-size:13px;">80%+: <strong>'+bands.high+'</strong> &nbsp;&middot;&nbsp; 50–79%: <strong>'+bands.mid+'</strong> &nbsp;&middot;&nbsp; Under 50%: <strong>'+bands.low+'</strong></div>';
+
+  html += trustBreakdownTable('By school', trustGroupBy(rows, function(r){return r.school_name;}));
+  html += trustBreakdownTable('By year group', trustGroupBy(rows, function(r){return r.year_group;}));
+  html += trustBreakdownTable('By gender', trustGroupBy(rows, function(r){return r.gender;}));
+  html += trustBreakdownTable('By additional needs', trustGroupBy(rows, function(r){return r.additional_needs;}));
+  html += trustBreakdownTable('By Free School Meals', trustGroupBy(rows, function(r){return r.fsm===true?'Yes':r.fsm===false?'No':'Not specified';}));
+  html += trustBreakdownTable('By vulnerable status', trustGroupBy(rows, function(r){return r.vulnerable===true?'Yes':r.vulnerable===false?'No':'Not specified';}));
+  html += trustBreakdownTable('By ethnicity', trustGroupBy(rows, function(r){return r.ethnicity;}));
+
+  out.innerHTML = html;
 }
 function goToAuth(tab, mode){
   document.getElementById('entry-chooser-view').style.display = 'none';
@@ -4205,6 +4458,8 @@ function goToChooser(){
   document.getElementById('landing-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'none';
   document.getElementById('app-view').style.display = 'none';
+  document.getElementById('trust-auth-view').style.display = 'none';
+  document.getElementById('trust-dashboard-view').style.display = 'none';
   document.getElementById('entry-chooser-view').style.display = 'block';
   window.scrollTo(0,0);
 }
@@ -4374,11 +4629,12 @@ async function doSignUp(){
 }
 
 async function doSignOut(){
-  if(isDemoSchool()){ await resetDemoData(); }
+  var wasTrust = !!currentTrust;
+  if(!wasTrust && isDemoSchool()){ await resetDemoData(); }
   stopLivePolling();
   currentLiveSessionId = null; currentLiveSessionCode = null;
   await sb.auth.signOut();
-  currentUser = null; currentProfile = null; currentSchool = null;
+  currentUser = null; currentProfile = null; currentSchool = null; currentTrust = null;
   results = [];
   blendingResults = [];
   mathsResults = [];
@@ -4389,7 +4645,13 @@ async function doSignOut(){
   document.getElementById('trial-banner').style.display = 'none';
   document.getElementById('app-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'none';
-  document.getElementById('landing-view').style.display = 'block';
+  document.getElementById('trust-dashboard-view').style.display = 'none';
+  document.getElementById('trust-auth-view').style.display = 'none';
+  if(wasTrust){
+    document.getElementById('entry-chooser-view').style.display = 'block';
+  } else {
+    document.getElementById('landing-view').style.display = 'block';
+  }
 }
 
 function copyJoinCode(){
@@ -4560,6 +4822,19 @@ async function onSignedIn(){
   var sess = await sb.auth.getSession();
   currentUser = sess.data.session ? sess.data.session.user : null;
   if(!currentUser) return;
+
+  var trustCheck = await sb.rpc('get_my_trust');
+  if(!trustCheck.error && trustCheck.data && trustCheck.data.length){
+    currentTrust = trustCheck.data[0];
+    document.getElementById('entry-chooser-view').style.display = 'none';
+    document.getElementById('landing-view').style.display = 'none';
+    document.getElementById('auth-view').style.display = 'none';
+    document.getElementById('trust-auth-view').style.display = 'none';
+    document.getElementById('app-view').style.display = 'none';
+    document.getElementById('trust-dashboard-view').style.display = 'block';
+    await initTrustDashboard();
+    return;
+  }
 
   var profRes = await sb.from('profiles').select('school_id, display_name, is_owner, can_edit_delete, is_app_admin').eq('id', currentUser.id).single();
   if(profRes.error || !profRes.data){
@@ -37262,6 +37537,51 @@ async function openStaffModal(){
   }
   staffListCache = res.data || [];
   renderStaffList();
+  refreshStaffTrustSection();
+}
+async function refreshStaffTrustSection(){
+  var row = document.getElementById('staff-trust-row');
+  var iAmOwner = !!(currentProfile && currentProfile.is_owner);
+  row.style.display = iAmOwner ? 'block' : 'none';
+  if(!iAmOwner) return;
+  var listEl = document.getElementById('staff-trust-list');
+  listEl.textContent = 'Loading…';
+  var res = await sb.from('trust_schools').select('trust_id, trusts(name)').eq('school_id', currentProfile.school_id);
+  if(res.error || !res.data || !res.data.length){
+    listEl.innerHTML = '<span style="color:var(--text-muted);">Not linked to a trust yet.</span>';
+    return;
+  }
+  listEl.innerHTML = '';
+  res.data.forEach(function(link){
+    var trustName = link.trusts ? link.trusts.name : 'Trust';
+    var item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:0.3rem 0;';
+    var nameSpan = document.createElement('span');
+    nameSpan.textContent = trustName;
+    item.appendChild(nameSpan);
+    var unlinkBtn = document.createElement('a');
+    unlinkBtn.href = 'javascript:void(0)';
+    unlinkBtn.className = 'mini-link';
+    unlinkBtn.textContent = 'Unlink';
+    unlinkBtn.onclick = function(){ unlinkSchoolFromTrust(link.trust_id); };
+    item.appendChild(unlinkBtn);
+    listEl.appendChild(item);
+  });
+}
+async function linkSchoolToTrust(){
+  var input = document.getElementById('staff-trust-code-input');
+  var errEl = document.getElementById('staff-trust-error');
+  errEl.style.display = 'none';
+  var code = input.value.trim();
+  if(!code){ errEl.textContent = 'Enter a trust code first.'; errEl.style.display = 'block'; return; }
+  var res = await sb.rpc('join_trust', { p_trust_code: code });
+  if(res.error){ errEl.textContent = res.error.message || 'Could not link that trust.'; errEl.style.display = 'block'; return; }
+  input.value = '';
+  await refreshStaffTrustSection();
+}
+async function unlinkSchoolFromTrust(trustId){
+  await sb.from('trust_schools').delete().eq('trust_id', trustId).eq('school_id', currentProfile.school_id);
+  await refreshStaffTrustSection();
 }
 function closeStaffModal(){
   document.getElementById('staff-modal-overlay').classList.remove('active');
