@@ -5128,6 +5128,7 @@ function rowToResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -5286,6 +5287,7 @@ async function finishCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: entry.name,
+    pupil_id: assessmentPupilId(),
     year_group: entry.year || null,
     gender: entry.gender || null,
     dob: entry.dob || null,
@@ -5697,7 +5699,7 @@ async function submitSuggestedQuestion(){
 var pupilsRoster = [];
 function rowToPupil(row){
   return {
-    id: row.id, name: row.name, year: row.year_group || '', gender: row.gender || '', dob: row.dob || '', needs: row.additional_needs || '', fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
+    id: row.id, studentId: row.student_id || '', name: row.name, year: row.year_group || '', gender: row.gender || '', dob: row.dob || '', needs: row.additional_needs || '', fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
     status: row.status || 'active', leftDate: row.left_date || '', leftReason: row.left_reason || '', practiceToken: row.practice_token || '', parentToken: row.parent_token || ''
   };
 }
@@ -5993,6 +5995,21 @@ function applyNurseryAgeSubjectGrid(pupil){
   if(grid) grid.classList.toggle('nursery-age-restricted', restricted);
   if(note) note.style.display = restricted ? 'block' : 'none';
 }
+/* Which child on the register this assessment belongs to.
+   Results rows carry pupil_id so a child's history is keyed on their register
+   entry rather than on a typed-in name - two children sharing a name used to
+   share one history, and across schools that leaked data between them.
+   Returns null when the name was typed freehand instead of picked from the
+   register, or when a picked name was then edited by hand: better to leave it
+   unset than to attribute the check to the wrong child. A database trigger
+   (set_result_pupil_id) resolves those rows by name where it's unambiguous. */
+function assessmentPupilId(){
+  if(!selectedAssessmentPupil) return null;
+  var nameEl = document.getElementById('pupil-name');
+  var typed = ((nameEl && nameEl.value) || '').trim().toLowerCase();
+  if((selectedAssessmentPupil.name || '').trim().toLowerCase() !== typed) return null;
+  return selectedAssessmentPupil.id || null;
+}
 function selectAssessmentPupil(p){
   selectedAssessmentPupil = p;
   document.getElementById('pupil-name').value = p.name;
@@ -6004,7 +6021,7 @@ function selectAssessmentPupil(p){
   document.getElementById('pupil-vulnerable').value = p.vulnerable === true ? 'true' : (p.vulnerable === false ? 'false' : '');
   document.getElementById('pupil-ethnicity').value = p.ethnicity || '';
   document.getElementById('home-selected-name').textContent = p.name;
-  document.getElementById('home-selected-meta').textContent = [p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet';
+  document.getElementById('home-selected-meta').textContent = pupilIdPrefix(p) + ([p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet');
   document.getElementById('home-pupil-selected').style.display = 'block';
   document.getElementById('home-pupil-picker').style.display = 'none';
   applyNurseryAgeSubjectGrid(p);
@@ -6110,6 +6127,29 @@ function setChildrenViewMode(mode){
   document.getElementById('ch-view-leavers-btn').classList.toggle('active', mode==='leavers');
   renderChildrenList();
 }
+/* Each child gets a per-school student number (0001, 0002, ...), assigned by
+   the database when they're added. Schools can overwrite it with their own
+   MIS/admission number. Shown alongside the name so two children called the
+   same thing can be told apart at a glance. */
+function pupilIdPrefix(p){
+  return p && p.studentId ? 'ID ' + p.studentId + ' · ' : '';
+}
+/* Student number for a result row, for CSV exports. Prefers the stored
+   pupil_id; falls back to the name only when it matches exactly one child on
+   the register, so an ambiguous name exports blank rather than wrong. */
+function studentIdOf(r){
+  if(!r) return '';
+  var p = null;
+  if(r.pupilId){
+    p = pupilsRoster.find(function(x){ return x.id === r.pupilId; });
+  }
+  if(!p && r.name){
+    var n = String(r.name).trim().toLowerCase();
+    var hits = pupilsRoster.filter(function(x){ return (x.name || '').trim().toLowerCase() === n; });
+    if(hits.length === 1) p = hits[0];
+  }
+  return p && p.studentId ? p.studentId : '';
+}
 function activePupils(){ return pupilsRoster.filter(function(p){ return p.status !== 'left'; }); }
 function leaverPupils(){ return pupilsRoster.filter(function(p){ return p.status === 'left'; }); }
 function renderChildrenList(){
@@ -6121,7 +6161,11 @@ function renderChildrenList(){
   if(leaversCountEl) leaversCountEl.textContent = leaverPupils().length;
   var search = (document.getElementById('ch-search').value || '').trim().toLowerCase();
   var base = childrenViewMode === 'leavers' ? leaverPupils() : activePupils();
-  var list = base.filter(function(p){ return !search || p.name.toLowerCase().indexOf(search) > -1; });
+  var list = base.filter(function(p){
+    if(!search) return true;
+    return p.name.toLowerCase().indexOf(search) > -1
+        || (p.studentId || '').toLowerCase().indexOf(search) > -1;
+  });
   var emptyEl = document.getElementById('ch-empty');
   emptyEl.style.display = list.length ? 'none' : 'block';
   emptyEl.textContent = childrenViewMode === 'leavers' ? 'No leavers on file.' : 'No children added yet.';
@@ -6146,7 +6190,7 @@ function buildChildCard(p){
   nb.onclick = function(){ openChildProfile(p.id); };
   var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = p.name;
   var me = document.createElement('div'); me.className = 'pupil-meta';
-  me.textContent = [p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet';
+  me.textContent = pupilIdPrefix(p) + ([p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet');
   nb.appendChild(ne); nb.appendChild(me);
   if(p.status === 'left'){
     var lm = document.createElement('div'); lm.className = 'pupil-meta'; lm.style.color = 'var(--text-danger)';
@@ -6223,7 +6267,7 @@ async function openChildProfile(id, focusSubject, focusTopic){
   profileFocusTopic = focusTopic || '';
   showRvScreen('tab-children', 'ch-profile-screen');
   document.getElementById('ch-profile-name').textContent = p.name;
-  document.getElementById('ch-profile-meta').textContent = [p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet';
+  document.getElementById('ch-profile-meta').textContent = pupilIdPrefix(p) + ([p.year, p.gender, p.needs].filter(function(x){ return x; }).join(' / ') || 'No details yet');
   var leaverNoteEl = document.getElementById('ch-profile-leaver-note');
   var leaveBtn = document.getElementById('ch-profile-leave-btn');
   var reinstateBtn = document.getElementById('ch-profile-reinstate-btn');
@@ -6255,21 +6299,23 @@ async function openChildProfile(id, focusSubject, focusTopic){
     setParentLinkDisplay(p.parentToken);
   }
 
-  var nameFilter = p.name.trim();
-  var results_ = await sb.from('results').select('*').ilike('pupil_name', nameFilter);
-  var blending_ = await sb.from('blending_results').select('*').ilike('pupil_name', nameFilter);
-  var maths_ = await sb.from('maths_topics_results').select('*').ilike('pupil_name', nameFilter);
-  var timesTables_ = await sb.from('maths_results').select('*').ilike('pupil_name', nameFilter);
-  var english_ = await sb.from('english_results').select('*').ilike('pupil_name', nameFilter);
-  var handwriting_ = await sb.from('handwriting_results').select('*').ilike('pupil_name', nameFilter);
-  var topics_ = await sb.from('topic_results').select('*').ilike('pupil_name', nameFilter);
-  var science_ = await sb.from('science_results').select('*').ilike('pupil_name', nameFilter);
-  var re_ = await sb.from('re_results').select('*').ilike('pupil_name', nameFilter);
-  var mfl_ = await sb.from('mfl_results').select('*').ilike('pupil_name', nameFilter);
-  var music_ = await sb.from('music_results').select('*').ilike('pupil_name', nameFilter);
-  var earlyYears_ = await sb.from('early_years_results').select('*').ilike('pupil_name', nameFilter);
-  var reasoning_ = await sb.from('reasoning_results').select('*').ilike('pupil_name', nameFilter);
-  var computing_ = await sb.from('computing_results').select('*').ilike('pupil_name', nameFilter);
+  /* Keyed on pupil_id, not name: two children sharing a name used to share
+     one history here. Rows written before this change were backfilled, and
+     a trigger keeps pupil_id populated for anything written since. */
+  var results_ = await sb.from('results').select('*').eq('pupil_id', p.id);
+  var blending_ = await sb.from('blending_results').select('*').eq('pupil_id', p.id);
+  var maths_ = await sb.from('maths_topics_results').select('*').eq('pupil_id', p.id);
+  var timesTables_ = await sb.from('maths_results').select('*').eq('pupil_id', p.id);
+  var english_ = await sb.from('english_results').select('*').eq('pupil_id', p.id);
+  var handwriting_ = await sb.from('handwriting_results').select('*').eq('pupil_id', p.id);
+  var topics_ = await sb.from('topic_results').select('*').eq('pupil_id', p.id);
+  var science_ = await sb.from('science_results').select('*').eq('pupil_id', p.id);
+  var re_ = await sb.from('re_results').select('*').eq('pupil_id', p.id);
+  var mfl_ = await sb.from('mfl_results').select('*').eq('pupil_id', p.id);
+  var music_ = await sb.from('music_results').select('*').eq('pupil_id', p.id);
+  var earlyYears_ = await sb.from('early_years_results').select('*').eq('pupil_id', p.id);
+  var reasoning_ = await sb.from('reasoning_results').select('*').eq('pupil_id', p.id);
+  var computing_ = await sb.from('computing_results').select('*').eq('pupil_id', p.id);
 
   currentProfileData = {
     phonics: (results_.data||[]).map(rowToResult),
@@ -6539,7 +6585,7 @@ function exportChildProfileCSV(){
   if(!currentProfileData || !currentPupilId) return;
   var p = pupilsRoster.find(function(x){ return x.id === currentPupilId; });
   if(!p) return;
-  var header = ['Name','Year group','Subject','Date','Term','Check','Percentage','Trend vs previous check'];
+  var header = ['Name','Student ID','Year group','Subject','Date','Term','Check','Percentage','Trend vs previous check'];
   var rows = [header];
   var any = false;
   CHILD_PROFILE_SUBJECTS.forEach(function(s){
@@ -6547,7 +6593,7 @@ function exportChildProfileCSV(){
     list.forEach(function(r){
       any = true;
       rows.push([
-        p.name, p.year || '', s.label, r.date || '', getTerm(r.date), subjectCheckLabel(s.key, r),
+        p.name, p.studentId || '', p.year || '', s.label, r.date || '', getTerm(r.date), subjectCheckLabel(s.key, r),
         Math.round(pctOf(r)) + '%', formatTrendForCSV(computeTrendDiff(list, r))
       ]);
     });
@@ -7821,11 +7867,11 @@ function exportResultsCSV(){
   var base = filterByClass(results);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No results to export yet' : 'No '+termFilter+' term results to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Set','Year group','Gender','Date of birth','Additional needs','Score','Total','Percentage','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Set','Year group','Gender','Date of birth','Additional needs','Score','Total','Percentage','Trend vs previous check'];
   ALL_SOUNDS.forEach(function(s){header.push(s);});
   var rows=[header];
   list.forEach(function(r){
-    var row=[r.name,r.date,getTerm(r.date),r.set,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.ok.length,r.total,r.pct+'%',formatTrendForCSV(computeTrendDiff(results, r))];
+    var row=[r.name,studentIdOf(r),r.date,getTerm(r.date),r.set,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.ok.length,r.total,r.pct+'%',formatTrendForCSV(computeTrendDiff(results, r))];
     ALL_SOUNDS.forEach(function(s){row.push(r.ok.indexOf(s)>-1?'Yes':r.no.indexOf(s)>-1?'No':'');});
     rows.push(row);
   });
@@ -7987,6 +8033,7 @@ function rowToBlendingResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -8061,6 +8108,7 @@ async function finishBlendingCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -8179,10 +8227,10 @@ function exportBlendingCSV(){
   var base = filterByClass(blendingResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No blending checks to export yet' : 'No '+termFilter+' term blending checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Year group','Gender','Date of birth','Additional needs','Total correct','Total words','Real correct','Real total','Pseudo correct','Pseudo total','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Year group','Gender','Date of birth','Additional needs','Total correct','Total words','Real correct','Real total','Pseudo correct','Pseudo total','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalWords,r.realCorrect,r.realTotal,r.pseudoCorrect,r.pseudoTotal,formatTrendForCSV(computeTrendDiff(blendingResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalWords,r.realCorrect,r.realTotal,r.pseudoCorrect,r.pseudoTotal,formatTrendForCSV(computeTrendDiff(blendingResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-blending-checks'+suffix+'-'+dateStr()+'.csv');
@@ -8353,6 +8401,7 @@ function rowToTimesTablesResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -8433,6 +8482,7 @@ async function finishTimesTablesCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -8548,10 +8598,10 @@ function exportTimesTablesCSV(){
   var base = filterByClass(timesTablesResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No times tables checks to export yet' : 'No '+termFilter+' term times tables checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Check','Year group','Gender','Date of birth','Additional needs','Total correct','Total facts','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Check','Year group','Gender','Date of birth','Additional needs','Total correct','Total facts','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.checkLabel||'Mixed',r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalFacts,formatTrendForCSV(computeTrendDiff(timesTablesResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.checkLabel||'Mixed',r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalFacts,formatTrendForCSV(computeTrendDiff(timesTablesResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-times-tables'+suffix+'-'+dateStr()+'.csv');
@@ -11318,6 +11368,7 @@ async function finishMathsCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -11363,6 +11414,7 @@ function rowToMathsResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -11473,10 +11525,10 @@ function exportMathsCSV(){
   var base = filterByClass(mathsResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Maths checks to export yet' : 'No '+termFilter+' term Maths checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel,r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(mathsResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel,r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(mathsResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-maths'+suffix+'-'+dateStr()+'.csv');
@@ -13927,6 +13979,7 @@ async function finishEnglishCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -13972,6 +14025,7 @@ function rowToEnglishResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -14082,10 +14136,10 @@ function exportEnglishCSV(){
   var base = filterByClass(englishResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No English checks to export yet' : 'No '+termFilter+' term English checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel,r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(englishResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel,r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(englishResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-english'+suffix+'-'+dateStr()+'.csv');
@@ -14464,6 +14518,7 @@ async function finishHwCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -14512,6 +14567,7 @@ function rowToHandwritingResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -14609,10 +14665,10 @@ function exportHandwritingCSV(){
   var base = filterByClass(handwritingResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No handwriting checks to export yet' : 'No '+termFilter+' term handwriting checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Check','Year group','Gender','Date of birth','Additional needs','Formed correctly','Total items','Score','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Check','Year group','Gender','Date of birth','Additional needs','Formed correctly','Total items','Score','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%',formatTrendForCSV(computeTrendDiff(handwritingResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%',formatTrendForCSV(computeTrendDiff(handwritingResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-handwriting'+suffix+'-'+dateStr()+'.csv');
@@ -14815,6 +14871,7 @@ async function finishEyCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -14863,6 +14920,7 @@ function rowToEyResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -14960,10 +15018,10 @@ function exportEyCSV(){
   var base = filterByClass(earlyYearsResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Early Years checks to export yet' : 'No '+termFilter+' term Early Years checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Area of learning','Year group','Gender','Date of birth','Additional needs','Met','Total items','Score','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Area of learning','Year group','Gender','Date of birth','Additional needs','Met','Total items','Score','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%',formatTrendForCSV(computeTrendDiff(earlyYearsResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%',formatTrendForCSV(computeTrendDiff(earlyYearsResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-early-years'+suffix+'-'+dateStr()+'.csv');
@@ -33488,6 +33546,7 @@ async function finishTopicCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -33533,6 +33592,7 @@ function rowToTopicResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -33643,10 +33703,10 @@ function exportTopicCSV(){
   var base = filterByClass(topicResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No topic checks to export yet' : 'No '+termFilter+' term topic checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(topicResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(topicResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-topics'+suffix+'-'+dateStr()+'.csv');
@@ -33888,6 +33948,7 @@ async function finishScienceCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -33933,6 +33994,7 @@ function rowToScienceResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -34043,10 +34105,10 @@ function exportScienceCSV(){
   var base = filterByClass(scienceResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No science checks to export yet' : 'No '+termFilter+' term science checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(scienceResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(scienceResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-science'+suffix+'-'+dateStr()+'.csv');
@@ -34288,6 +34350,7 @@ async function finishReCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -34333,6 +34396,7 @@ function rowToReResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -34443,10 +34507,10 @@ function exportReCSV(){
   var base = filterByClass(reResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No RE checks to export yet' : 'No '+termFilter+' term RE checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(reResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(reResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-re'+suffix+'-'+dateStr()+'.csv');
@@ -35266,6 +35330,7 @@ async function finishMflCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -35311,6 +35376,7 @@ function rowToMflResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -35421,10 +35487,10 @@ function exportMflCSV(){
   var base = filterByClass(mflResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Languages checks to export yet' : 'No '+termFilter+' term Languages checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(mflResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(mflResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-mfl'+suffix+'-'+dateStr()+'.csv');
@@ -35672,6 +35738,7 @@ async function finishMusicCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -35717,6 +35784,7 @@ function rowToMusicResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -35827,10 +35895,10 @@ function exportMusicCSV(){
   var base = filterByClass(musicResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Music checks to export yet' : 'No '+termFilter+' term Music checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(musicResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(musicResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-music'+suffix+'-'+dateStr()+'.csv');
@@ -36078,6 +36146,7 @@ async function finishComputingCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -36123,6 +36192,7 @@ function rowToComputingResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -36233,10 +36303,10 @@ function exportComputingCSV(){
   var base = filterByClass(computingResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Computing checks to export yet' : 'No '+termFilter+' term Computing checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(computingResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(computingResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-computing'+suffix+'-'+dateStr()+'.csv');
@@ -36484,6 +36554,7 @@ async function finishReasoningCheck(){
     school_id: currentProfile.school_id,
     teacher_id: currentUser.id,
     pupil_name: name,
+    pupil_id: assessmentPupilId(),
     year_group: year || null,
     gender: gender || null,
     dob: dob || null,
@@ -36529,6 +36600,7 @@ function rowToReasoningResult(row){
   return {
     id: row.id,
     name: row.pupil_name,
+    pupilId: row.pupil_id,
     year: row.year_group || '',
     gender: row.gender || '',
     dob: row.dob || '',
@@ -36639,10 +36711,10 @@ function exportReasoningCSV(){
   var base = filterByClass(reasoningResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
   if(!list.length){alert((termFilter==='all' ? 'No Reasoning checks to export yet' : 'No '+termFilter+' term Reasoning checks to export yet')+classSuffixText()+'.');return;}
-  var header=['Name','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
+  var header=['Name','Student ID','Date','Term','Topic','Tier','Year group','Gender','Date of birth','Additional needs','Total correct','Total questions','Trend vs previous check'];
   var rows=[header];
   list.forEach(function(r){
-    rows.push([r.name,r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(reasoningResults, r))]);
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(reasoningResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
   downloadCSV(rows,'emeejay-reasoning'+suffix+'-'+dateStr()+'.csv');
@@ -38743,7 +38815,7 @@ async function generateTargetSuggestions(){
   var subj = CHILD_PROFILE_SUBJECTS.find(function(s){ return s.key === targetsSubjectKey; });
   var subjLabel = subj ? subj.label : targetsSubjectKey;
   if(!info){ emptyEl.textContent = 'Suggestions aren\'t available for this subject yet.'; return; }
-  var res = await sb.from(info.table).select('*').ilike('pupil_name', targetsPupil.name.trim());
+  var res = await sb.from(info.table).select('*').eq('pupil_id', targetsPupilId);
   if(res.error){ console.error(res.error); emptyEl.textContent = 'Could not load assessment history.'; return; }
   var history = res.data.map(info.rowFn);
   if(!history.length){ emptyEl.textContent = 'No ' + subjLabel + ' checks recorded for ' + targetsPupil.name + ' yet – complete an assessment first.'; return; }
@@ -38895,7 +38967,7 @@ async function generateProgressReport(){
   var subj = CHILD_PROFILE_SUBJECTS.find(function(s){ return s.key === targetsSubjectKey; });
   var subjLabel = subj ? subj.label : targetsSubjectKey;
   if(!info){ emptyEl.textContent = 'A progress report isn\'t available for this subject yet.'; return; }
-  var res = await sb.from(info.table).select('*').ilike('pupil_name', targetsPupil.name.trim());
+  var res = await sb.from(info.table).select('*').eq('pupil_id', targetsPupilId);
   if(res.error){ console.error(res.error); emptyEl.textContent = 'Could not load assessment history.'; return; }
   var history = res.data.map(info.rowFn);
   if(termScope !== 'all') history = history.filter(function(r){ return getTerm(r.date) === termScope; });
@@ -39000,7 +39072,7 @@ async function generateFullYearReport(){
   var fetches = CHILD_PROFILE_SUBJECTS.map(function(subj){
     var info = SUBJECT_TABLE_MAP[subj.key];
     if(!info) return Promise.resolve(null);
-    return sb.from(info.table).select('*').ilike('pupil_name', targetsPupil.name.trim()).then(function(res){
+    return sb.from(info.table).select('*').eq('pupil_id', targetsPupilId).then(function(res){
       return { subj: subj, info: info, res: res };
     });
   });
