@@ -90,6 +90,11 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 .play-screen.active{display:block;}
 .practice-screen{display:none;}
 .practice-screen.active{display:block;}
+.parent-screen{display:none;}
+.parent-screen.active{display:block;}
+.parent-pointer-row{display:flex;align-items:baseline;gap:8px;padding:0.35rem 0;font-size:14px;}
+.parent-pointer-row + .parent-pointer-row{border-top:0.5px solid var(--border-strong);}
+.parent-pointer-subject{font-weight:600;color:var(--hp-purple-dark);}
 .lr-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0.6rem 0.75rem;border:0.5px solid var(--border-strong);border-radius:var(--radius);background:var(--surface-2);margin-bottom:0.5rem;}
 .lr-row-text{font-size:13px;color:var(--text-primary);flex:1;}
 .lr-row.lr-swapped{border-color:var(--hp-purple);background:var(--surface-1);}
@@ -3425,6 +3430,20 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       </div>
     </div>
 
+    <div class="card" id="ch-profile-parent-card" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div>
+          <div class="section-hd" style="margin-bottom:2px;">Parent link</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">A light, friendly update for parents &ndash; no scores or raw results, just gentle pointers on what's going well and what could use a bit more support.</div>
+        </div>
+        <button class="all-btn" id="ch-profile-parent-btn" onclick="generateParentLink()">Get parent link</button>
+      </div>
+      <div id="ch-profile-parent-linkrow" style="display:none;margin-top:0.6rem;gap:6px;flex-wrap:wrap;align-items:center;">
+        <input type="text" id="ch-profile-parent-url" readonly style="flex:1;min-width:220px;font-size:12.5px;" onclick="this.select();"/>
+        <button class="all-btn" onclick="copyParentLink()">Copy link</button>
+      </div>
+    </div>
+
     <div class="card" id="ch-profile-attendance-card" style="margin-bottom:1rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
         <div class="section-hd" style="margin-bottom:0;">Attendance</div>
@@ -3910,6 +3929,60 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
         <button class="btn btn-primary" style="flex:1;" onclick="practiceAgainSameTopic()">Practise again</button>
         <button class="btn" style="flex:1;" onclick="practiceChooseAnother()">Choose another topic</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div id="parent-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap">
+    <div class="chooser-decor" style="padding:0.5rem 0 2.25rem;">
+    <div class="chooser-decor-icons" data-decor-size="header"></div>
+    <div class="brand-lockup">
+      <a href="javascript:void(0)" onclick="exitParentPortal()" class="brand-lockup-corner">Exit</a>
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">Family update</div>
+    </div>
+    </div>
+
+    <div class="parent-screen active" id="parent-loading">
+      <div class="card" style="text-align:center;padding:2rem 1rem;">Loading your update…</div>
+    </div>
+
+    <div class="parent-screen" id="parent-invalid">
+      <div class="card" style="text-align:center;padding:2rem 1rem;">
+        <div class="section-hd" style="margin-bottom:0.5rem;">Link not recognised</div>
+        <div style="font-size:13px;color:var(--text-muted);">This link isn't valid, or it's no longer active. Please ask your child's teacher for a new one.</div>
+      </div>
+    </div>
+
+    <div class="parent-screen" id="parent-home">
+      <div class="card" style="margin-bottom:0.75rem;">
+        <div style="font-size:13px;color:var(--text-muted);">Hi there</div>
+        <div style="font-size:19px;font-weight:600;color:var(--hp-purple-dark);">Here's how <span id="parent-welcome-name"></span> has been getting on</div>
+        <div style="font-size:12.5px;color:var(--text-muted);margin-top:4px;">Just a friendly overview &ndash; no scores or test results here, just a few gentle pointers.</div>
+      </div>
+
+      <div id="parent-empty-card" class="card" style="text-align:center;padding:1.5rem 1rem;display:none;">
+        <div style="font-size:13px;color:var(--text-muted);">Nothing to share yet &ndash; check back after a few more assessments.</div>
+      </div>
+
+      <div id="parent-great-card" class="card" style="margin-bottom:0.75rem;display:none;">
+        <div class="section-hd" style="margin-bottom:0.5rem;">🌟 Doing brilliantly</div>
+        <div id="parent-great-list"></div>
+      </div>
+
+      <div id="parent-building-card" class="card" style="margin-bottom:0.75rem;display:none;">
+        <div class="section-hd" style="margin-bottom:0.5rem;">🌱 Coming along nicely</div>
+        <div id="parent-building-list"></div>
+      </div>
+
+      <div id="parent-support-card" class="card" style="margin-bottom:0.75rem;display:none;">
+        <div class="section-hd" style="margin-bottom:0.5rem;">💛 Could use a little more support</div>
+        <div id="parent-support-list"></div>
+      </div>
+
+      <div class="card" style="text-align:center;font-size:12.5px;color:var(--text-muted);">Want to practise together at home? Ask your child's teacher for a practice code.</div>
     </div>
   </div>
 </div>
@@ -5556,7 +5629,7 @@ var pupilsRoster = [];
 function rowToPupil(row){
   return {
     id: row.id, name: row.name, year: row.year_group || '', gender: row.gender || '', dob: row.dob || '', needs: row.additional_needs || '', fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
-    status: row.status || 'active', leftDate: row.left_date || '', leftReason: row.left_reason || '', practiceToken: row.practice_token || ''
+    status: row.status || 'active', leftDate: row.left_date || '', leftReason: row.left_reason || '', practiceToken: row.practice_token || '', parentToken: row.parent_token || ''
   };
 }
 async function loadPupils(){
@@ -6105,6 +6178,13 @@ async function openChildProfile(id, focusSubject, focusTopic){
   if(p.practiceToken && !isNurseryAgePupil(p)){
     setPracticeLinkDisplay(p.practiceToken);
   }
+  var parentRow = document.getElementById('ch-profile-parent-linkrow');
+  var parentBtn = document.getElementById('ch-profile-parent-btn');
+  if(parentRow) parentRow.style.display = 'none';
+  if(parentBtn) parentBtn.textContent = 'Get parent link';
+  if(p.parentToken){
+    setParentLinkDisplay(p.parentToken);
+  }
 
   var nameFilter = p.name.trim();
   var results_ = await sb.from('results').select('*').ilike('pupil_name', nameFilter);
@@ -6188,6 +6268,51 @@ function copyPracticeLink(){
   var urlEl = document.getElementById('ch-profile-practice-url');
   if(!urlEl || !urlEl.value) return;
   var btnRow = document.getElementById('ch-profile-practice-linkrow');
+  var btnEl = btnRow ? btnRow.querySelector('.all-btn') : null;
+  navigator.clipboard.writeText(urlEl.value).then(function(){
+    if(btnEl){ var orig = btnEl.textContent; btnEl.textContent = 'Copied!'; setTimeout(function(){ btnEl.textContent = orig; }, 1500); }
+  }).catch(function(){
+    urlEl.select();
+    alert('Could not copy automatically – the link is selected, so you can copy it manually.');
+  });
+}
+/* Parent link: a standing per-child link (?parent=TOKEN), separate from the
+   home-practice link above. It's read-only and deliberately light-touch -
+   no scores, no raw results, just friendly "doing well" / "a bit more
+   support" pointers per subject, resolved anonymously via get_parent_summary. */
+function parentLinkUrl(token){
+  return location.origin + location.pathname + '?parent=' + encodeURIComponent(token);
+}
+function setParentLinkDisplay(token){
+  var row = document.getElementById('ch-profile-parent-linkrow');
+  var urlEl = document.getElementById('ch-profile-parent-url');
+  var btnEl = document.getElementById('ch-profile-parent-btn');
+  if(!row || !urlEl) return;
+  urlEl.value = parentLinkUrl(token);
+  row.style.display = 'flex';
+  if(btnEl) btnEl.textContent = 'Parent link ready';
+}
+async function generateParentLink(){
+  if(!currentPupilId) return;
+  var btnEl = document.getElementById('ch-profile-parent-btn');
+  var origText = btnEl ? btnEl.textContent : '';
+  if(btnEl){ btnEl.disabled = true; btnEl.textContent = 'Generating…'; }
+  var res = await sb.rpc('get_or_create_parent_token', { p_pupil_id: currentPupilId });
+  if(btnEl) btnEl.disabled = false;
+  if(res.error || !res.data){
+    if(btnEl) btnEl.textContent = origText || 'Get parent link';
+    alert('Could not generate a parent link: ' + (res.error ? res.error.message : 'unknown error'));
+    return;
+  }
+  var token = res.data;
+  var p = pupilsRoster.find(function(x){ return x.id === currentPupilId; });
+  if(p) p.parentToken = token;
+  setParentLinkDisplay(token);
+}
+function copyParentLink(){
+  var urlEl = document.getElementById('ch-profile-parent-url');
+  if(!urlEl || !urlEl.value) return;
+  var btnRow = document.getElementById('ch-profile-parent-linkrow');
   var btnEl = btnRow ? btnRow.querySelector('.all-btn') : null;
   navigator.clipboard.writeText(urlEl.value).then(function(){
     if(btnEl){ var orig = btnEl.textContent; btnEl.textContent = 'Copied!'; setTimeout(function(){ btnEl.textContent = orig; }, 1500); }
@@ -36951,6 +37076,81 @@ function exitPracticePortal(){
   document.getElementById('practice-view').style.display = 'none';
   goToChooser();
 }
+
+/* ---------- Parent portal (read-only, no login, light-touch) ----------
+   Reached via a standing per-child link (?parent=TOKEN), generated by a
+   teacher on the child's profile screen (get_or_create_parent_token) and
+   resolved here anonymously (get_parent_summary). Deliberately shows no
+   scores, percentages or raw results - just a friendly banded pointer per
+   subject ("doing brilliantly" / "coming along nicely" / "could use a
+   little more support"), computed server-side from the last few
+   assessments. It's separate from the home-practice link: parents don't
+   get a practice code from here, they have to ask the teacher for one. */
+function checkParentParam(){
+  var params = new URLSearchParams(window.location.search);
+  var token = params.get('parent');
+  if(token){ showParentPortal(token); return true; }
+  return false;
+}
+function showParentPortal(token){
+  document.getElementById('entry-chooser-view').style.display = 'none';
+  document.getElementById('landing-view').style.display = 'none';
+  document.getElementById('auth-view').style.display = 'none';
+  document.getElementById('app-view').style.display = 'none';
+  document.getElementById('parent-view').style.display = 'block';
+  loadParentSummary(token);
+}
+function exitParentPortal(){
+  document.getElementById('parent-view').style.display = 'none';
+  goToChooser();
+}
+function showParentScreen(id){
+  document.querySelectorAll('.parent-screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
+var PARENT_BAND_TEXT = {
+  doing_great: 'doing brilliantly!',
+  building: 'coming along nicely.',
+  needs_support: 'a little extra practice here would help.'
+};
+function parentPointerRow(subjectLabel, band){
+  var row = document.createElement('div');
+  row.className = 'parent-pointer-row';
+  var subj = document.createElement('span'); subj.className = 'parent-pointer-subject'; subj.textContent = subjectLabel + ':';
+  var txt = document.createElement('span'); txt.textContent = PARENT_BAND_TEXT[band] || '';
+  row.appendChild(subj); row.appendChild(txt);
+  return row;
+}
+async function loadParentSummary(token){
+  showParentScreen('parent-loading');
+  var res = await sb.rpc('get_parent_summary', { p_token: token });
+  var rows = res.data || [];
+  /* An invalid/unrecognised token resolves to zero rows. A valid token for a
+     child with no assessments yet still resolves to exactly one row, with
+     band:'no_data' - that's how we tell "wrong link" from "nothing yet". */
+  if(res.error || !rows.length){
+    showParentScreen('parent-invalid');
+    return;
+  }
+  showParentScreen('parent-home');
+  document.getElementById('parent-welcome-name').textContent = rows[0].pupil_name || '';
+  var greatList = document.getElementById('parent-great-list');
+  var buildingList = document.getElementById('parent-building-list');
+  var supportList = document.getElementById('parent-support-list');
+  greatList.innerHTML = ''; buildingList.innerHTML = ''; supportList.innerHTML = '';
+  var counts = { doing_great:0, building:0, needs_support:0 };
+  rows.forEach(function(r){
+    if(r.band === 'doing_great'){ greatList.appendChild(parentPointerRow(r.subject_label, r.band)); counts.doing_great++; }
+    else if(r.band === 'building'){ buildingList.appendChild(parentPointerRow(r.subject_label, r.band)); counts.building++; }
+    else if(r.band === 'needs_support'){ supportList.appendChild(parentPointerRow(r.subject_label, r.band)); counts.needs_support++; }
+  });
+  var hasAny = counts.doing_great || counts.building || counts.needs_support;
+  document.getElementById('parent-empty-card').style.display = hasAny ? 'none' : 'block';
+  document.getElementById('parent-great-card').style.display = counts.doing_great ? 'block' : 'none';
+  document.getElementById('parent-building-card').style.display = counts.building ? 'block' : 'none';
+  document.getElementById('parent-support-card').style.display = counts.needs_support ? 'block' : 'none';
+}
+
 function showPracticeScreen(id){
   document.querySelectorAll('.practice-screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
@@ -38933,7 +39133,8 @@ renderEnglishList();
 renderMathsList();
 var isPlayMode = checkPlayParam();
 var isPracticeMode = !isPlayMode && checkPracticeParam();
-if(!isPlayMode && !isPracticeMode){ initAuth(); }
+var isParentMode = !isPlayMode && !isPracticeMode && checkParentParam();
+if(!isPlayMode && !isPracticeMode && !isParentMode){ initAuth(); }
 checkCheckoutReturn();
 </script>
 </body>
