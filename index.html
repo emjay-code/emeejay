@@ -37201,6 +37201,20 @@ function parentPointerRow(subjectLabel, band, detail){
        Works for sounds, times-table facts, handwriting words/letters and
        topic names alike, since the detail is just a short comma list. */
     text = 'a little extra practice here would help, especially with: ' + detail + '.';
+  } else if(detail && band === 'building'){
+    text = 'coming along nicely, though a little extra practice with ' + detail + ' would help it click.';
+  } else if(detail && band === 'doing_great'){
+    /* For a strong subject, "detail" here is usually a challenge suggestion
+       (next tier/set/check up) computed server-side from what they've
+       already attempted. Early Years has no "next tier" to offer (it's one
+       flat stage), so its detail is instead a couple of checklist items
+       still marked Emerging - phrased as "keep trying with" rather than
+       "challenge them with". */
+    if(subjectLabel === 'Early Years'){
+      text = 'doing brilliantly! A couple of areas to keep trying with: ' + detail + '.';
+    } else {
+      text = 'doing brilliantly! Try challenging them with ' + detail + '.';
+    }
   }
   var txt = document.createElement('span'); txt.textContent = text;
   row.appendChild(subj); row.appendChild(txt);
