@@ -3992,17 +3992,17 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       </div>
 
       <div id="parent-great-card" class="card" style="margin-bottom:0.75rem;display:none;">
-        <div class="section-hd" style="margin-bottom:0.5rem;">🌟 Doing brilliantly</div>
+        <div class="section-hd" style="margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--fill-success);display:inline-block;flex-shrink:0;"></span>Doing brilliantly</div>
         <div id="parent-great-list"></div>
       </div>
 
       <div id="parent-building-card" class="card" style="margin-bottom:0.75rem;display:none;">
-        <div class="section-hd" style="margin-bottom:0.5rem;">🌱 Coming along nicely</div>
+        <div class="section-hd" style="margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--fill-warning);display:inline-block;flex-shrink:0;"></span>Coming along nicely</div>
         <div id="parent-building-list"></div>
       </div>
 
       <div id="parent-support-card" class="card" style="margin-bottom:0.75rem;display:none;">
-        <div class="section-hd" style="margin-bottom:0.5rem;">💛 Could use a little more support</div>
+        <div class="section-hd" style="margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--fill-danger);display:inline-block;flex-shrink:0;"></span>Could use a little more support</div>
         <div id="parent-support-list"></div>
       </div>
 
@@ -37190,11 +37190,19 @@ var PARENT_BAND_TEXT = {
   building: 'coming along nicely.',
   needs_support: 'a little extra practice here would help.'
 };
-function parentPointerRow(subjectLabel, band){
+function parentPointerRow(subjectLabel, band, detail){
   var row = document.createElement('div');
   row.className = 'parent-pointer-row';
   var subj = document.createElement('span'); subj.className = 'parent-pointer-subject'; subj.textContent = subjectLabel + ':';
-  var txt = document.createElement('span'); txt.textContent = PARENT_BAND_TEXT[band] || '';
+  var text = PARENT_BAND_TEXT[band] || '';
+  if(detail && band === 'needs_support'){
+    /* Swap the generic sentence for one naming the actual weak spot, e.g.
+       "a little extra practice here would help, especially with: ai, are, ear."
+       Works for sounds, times-table facts, handwriting words/letters and
+       topic names alike, since the detail is just a short comma list. */
+    text = 'a little extra practice here would help, especially with: ' + detail + '.';
+  }
+  var txt = document.createElement('span'); txt.textContent = text;
   row.appendChild(subj); row.appendChild(txt);
   return row;
 }
@@ -37217,9 +37225,9 @@ async function loadParentSummary(token){
   greatList.innerHTML = ''; buildingList.innerHTML = ''; supportList.innerHTML = '';
   var counts = { doing_great:0, building:0, needs_support:0 };
   rows.forEach(function(r){
-    if(r.band === 'doing_great'){ greatList.appendChild(parentPointerRow(r.subject_label, r.band)); counts.doing_great++; }
-    else if(r.band === 'building'){ buildingList.appendChild(parentPointerRow(r.subject_label, r.band)); counts.building++; }
-    else if(r.band === 'needs_support'){ supportList.appendChild(parentPointerRow(r.subject_label, r.band)); counts.needs_support++; }
+    if(r.band === 'doing_great'){ greatList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail)); counts.doing_great++; }
+    else if(r.band === 'building'){ buildingList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail)); counts.building++; }
+    else if(r.band === 'needs_support'){ supportList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail)); counts.needs_support++; }
   });
   var hasAny = counts.doing_great || counts.building || counts.needs_support;
   document.getElementById('parent-empty-card').style.display = hasAny ? 'none' : 'block';
