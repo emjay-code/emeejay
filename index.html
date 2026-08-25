@@ -863,7 +863,10 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
 
     <div class="card" style="margin-top:1rem;">
-      <div class="section-title">Linked schools</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div class="section-title" style="margin-bottom:0;">Linked schools</div>
+        <button class="icon-btn export-btn" id="td-schools-export-btn" style="display:none;" onclick="exportTrustSchoolsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      </div>
       <div id="td-schools-list" style="margin-top:0.5rem;font-size:13px;color:var(--text-secondary);">Loading&hellip;</div>
     </div>
 
@@ -874,7 +877,10 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
 
     <div class="card" style="margin-top:1rem;display:none;" id="td-results-card">
-      <div class="section-title" id="td-results-title">Analytics</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div class="section-title" id="td-results-title" style="margin-bottom:0;">Analytics</div>
+        <button class="icon-btn export-btn" id="td-results-export-btn" onclick="exportTrustSubjectCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      </div>
       <div id="td-results"></div>
     </div>
   </div>
@@ -4466,10 +4472,17 @@ var TRUST_SUBJECTS = [
   {table:'early_years_results', label:'Early Years'}
 ];
 
+var trustSchoolsExportData = [];
+var trustSubjectExportRows = [];
+var trustSubjectExportLabel = '';
 async function initTrustDashboard(){
   document.getElementById('td-trust-name').textContent = (currentTrust.trust_name || 'Trust') + ' dashboard';
   document.getElementById('td-trust-code').textContent = currentTrust.trust_code || '------';
   document.getElementById('td-results-card').style.display = 'none';
+  trustSchoolsExportData = [];
+  trustSubjectExportRows = [];
+  trustSubjectExportLabel = '';
+  document.getElementById('td-schools-export-btn').style.display = 'none';
 
   var picker = document.getElementById('td-subject-picker');
   picker.innerHTML = '';
@@ -4491,6 +4504,8 @@ async function initTrustDashboard(){
     listEl.innerHTML = 'No schools linked yet. Share the code above with a school owner – they can link it from Staff &rarr; Trust in their account.';
     return;
   }
+  trustSchoolsExportData = schools;
+  document.getElementById('td-schools-export-btn').style.display = '';
   var tbl = document.createElement('table');
   tbl.style.cssText = 'width:100%;border-collapse:collapse;font-size:13px;';
   schools.forEach(function(s){
@@ -4500,6 +4515,12 @@ async function initTrustDashboard(){
   });
   listEl.innerHTML = '';
   listEl.appendChild(tbl);
+}
+function exportTrustSchoolsCSV(){
+  if(!trustSchoolsExportData.length){ alert('No schools to export yet.'); return; }
+  var rows = [['School','Pupils']];
+  trustSchoolsExportData.forEach(function(s){ rows.push([s.school_name, s.pupil_count]); });
+  downloadCSV(rows, (currentTrust.trust_name || 'trust') + '-linked-schools-' + dateStr() + '.csv');
 }
 
 function trustGroupBy(rows, keyFn){
@@ -4536,7 +4557,10 @@ async function pickTrustSubject(table, label, btn){
 
   var res = await sb.rpc('get_trust_subject_analytics', { p_trust_id: currentTrust.trust_id, p_table: table });
   if(res.error){ out.innerHTML = 'Could not load this data.'; return; }
-  var rows = (res.data || []).map(function(r){ return { school_name:r.school_name, year_group:r.year_group, gender:r.gender, additional_needs:r.additional_needs, fsm:r.fsm, vulnerable:r.vulnerable, ethnicity:r.ethnicity, pct: r.pct==null?null:Math.round(r.pct) }; }).filter(function(r){ return r.pct!=null; });
+  var rows = (res.data || []).map(function(r){ return { school_name:r.school_name, year_group:r.year_group, gender:r.gender, additional_needs:r.additional_needs, fsm:r.fsm, vulnerable:r.vulnerable, ethnicity:r.ethnicity, assessed_date:r.assessed_date, pct: r.pct==null?null:Math.round(r.pct) }; }).filter(function(r){ return r.pct!=null; });
+
+  trustSubjectExportRows = rows;
+  trustSubjectExportLabel = label;
 
   if(!rows.length){
     out.innerHTML = 'No '+escapeHtml(label)+' assessments yet across your linked schools.';
@@ -4565,6 +4589,27 @@ async function pickTrustSubject(table, label, btn){
   html += trustBreakdownTable('By ethnicity', trustGroupBy(rows, function(r){return r.ethnicity;}));
 
   out.innerHTML = html;
+}
+function exportTrustSubjectCSV(){
+  if(!trustSubjectExportRows.length){ alert('No '+(trustSubjectExportLabel||'')+' assessments to export yet.'); return; }
+  /* Anonymised, rolled-up rows only - one row per assessment across every
+     linked school, no pupil names, matching what's shown on screen. */
+  var rows = [['School','Year group','Gender','Additional needs','Free School Meals','Vulnerable','Ethnicity','Date assessed','Score']];
+  trustSubjectExportRows.forEach(function(r){
+    rows.push([
+      r.school_name || '',
+      r.year_group || '',
+      r.gender || '',
+      r.additional_needs || '',
+      r.fsm===true?'Yes':r.fsm===false?'No':'',
+      r.vulnerable===true?'Yes':r.vulnerable===false?'No':'',
+      r.ethnicity || '',
+      r.assessed_date || '',
+      r.pct + '%'
+    ]);
+  });
+  var subjSuffix = (trustSubjectExportLabel||'analytics').toLowerCase().replace(/\s+/g,'-');
+  downloadCSV(rows, (currentTrust.trust_name || 'trust') + '-' + subjSuffix + '-' + dateStr() + '.csv');
 }
 function goToAuth(tab, mode){
   document.getElementById('entry-chooser-view').style.display = 'none';
