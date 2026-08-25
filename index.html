@@ -865,7 +865,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <div class="card" style="margin-top:1rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
         <div class="section-title" style="margin-bottom:0;">Linked schools</div>
-        <button class="icon-btn export-btn" id="td-schools-export-btn" style="display:none;" onclick="exportTrustSchoolsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" id="td-schools-export-btn" style="display:none;" onclick="exportTrustSchoolsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
       </div>
       <div id="td-schools-list" style="margin-top:0.5rem;font-size:13px;color:var(--text-secondary);">Loading&hellip;</div>
     </div>
@@ -879,7 +879,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <div class="card" style="margin-top:1rem;display:none;" id="td-results-card">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
         <div class="section-title" id="td-results-title" style="margin-bottom:0;">Analytics</div>
-        <button class="icon-btn export-btn" id="td-results-export-btn" onclick="exportTrustSubjectCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" id="td-results-export-btn" onclick="exportTrustSubjectCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
       </div>
       <div id="td-results"></div>
     </div>
@@ -2133,7 +2133,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Results</h2>
       <div class="tab-actions">
         <select id="rv-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportResultsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportResultsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-results-btn" onclick="clearAll()">Clear all</button>
       </div>
     </div>
@@ -2158,7 +2158,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Blending checks</h2>
       <div class="tab-actions">
         <select id="bc-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderBlendingResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportBlendingCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportBlendingCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-blending-btn" onclick="clearAllBlending()">Clear all</button>
       </div>
     </div>
@@ -2200,7 +2200,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Maths</h2>
       <div class="tab-actions">
         <select id="mt-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderMathsResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportMathsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportMathsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-maths-btn" onclick="clearAllMaths()">Clear all</button>
       </div>
     </div>
@@ -2237,7 +2237,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Times Tables</h2>
       <div class="tab-actions">
         <select id="tt-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderTimesTablesResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportTimesTablesCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportTimesTablesCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-times-tables-btn" onclick="clearAllTimesTables()">Clear all</button>
       </div>
     </div>
@@ -2279,7 +2279,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">English</h2>
       <div class="tab-actions">
         <select id="en-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderEnglishResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportEnglishCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportEnglishCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-english-btn" onclick="clearAllEnglish()">Clear all</button>
       </div>
     </div>
@@ -2316,7 +2316,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Handwriting</h2>
       <div class="tab-actions">
         <select id="hw-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderHandwritingResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportHandwritingCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportHandwritingCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-handwriting-btn" onclick="clearAllHandwriting()">Clear all</button>
       </div>
     </div>
@@ -2353,7 +2353,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Early Years</h2>
       <div class="tab-actions">
         <select id="ey-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderEyResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportEyCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportEyCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-early_years-btn" onclick="clearAllEy()">Clear all</button>
       </div>
     </div>
@@ -2395,7 +2395,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Topics</h2>
       <div class="tab-actions">
         <select id="tp-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderTopicResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportTopicCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportTopicCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-topics-btn" onclick="clearAllTopics()">Clear all</button>
       </div>
     </div>
@@ -2437,7 +2437,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Science</h2>
       <div class="tab-actions">
         <select id="sc-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderScienceResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportScienceCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportScienceCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-science-btn" onclick="clearAllScience()">Clear all</button>
       </div>
     </div>
@@ -2479,7 +2479,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">RE</h2>
       <div class="tab-actions">
         <select id="re-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderReResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportReCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportReCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-re-btn" onclick="clearAllRe()">Clear all</button>
       </div>
     </div>
@@ -2521,7 +2521,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Languages</h2>
       <div class="tab-actions">
         <select id="mfl-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderMflResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportMflCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportMflCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-mfl-btn" onclick="clearAllMfl()">Clear all</button>
       </div>
     </div>
@@ -2563,7 +2563,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Music</h2>
       <div class="tab-actions">
         <select id="music-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderMusicResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportMusicCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportMusicCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-music-btn" onclick="clearAllMusic()">Clear all</button>
       </div>
     </div>
@@ -2605,7 +2605,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Reasoning</h2>
       <div class="tab-actions">
         <select id="reasoning-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderReasoningResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportReasoningCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportReasoningCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-reasoning-btn" onclick="clearAllReasoning()">Clear all</button>
       </div>
     </div>
@@ -2647,7 +2647,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <h2 style="margin-bottom:0;">Computing</h2>
       <div class="tab-actions">
         <select id="computing-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderComputingResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
-        <button class="icon-btn export-btn" onclick="exportComputingCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn export-btn" onclick="exportComputingCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
         <button class="icon-btn danger-btn" id="clear-computing-btn" onclick="clearAllComputing()">Clear all</button>
       </div>
     </div>
@@ -2785,7 +2785,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="an-empty" class="empty-state" style="display:none;">No data yet. Complete some assessments first.</div>
     <div id="an-content" style="display:none;">
@@ -2811,7 +2811,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportBlendingAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportBlendingAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="bc-an-empty" class="empty-state" style="display:none;">No blending check data yet. Complete a blending check first.</div>
     <div id="bc-an-content" style="display:none;">
@@ -2852,7 +2852,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportMathsAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportMathsAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="mt-an-empty" class="empty-state" style="display:none;">No Maths check data yet. Complete a Maths check first.</div>
     <div id="mt-an-content" style="display:none;">
@@ -2894,7 +2894,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportTimesTablesAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportTimesTablesAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="tt-an-empty" class="empty-state" style="display:none;">No times tables data yet. Complete a Times Tables Check first.</div>
     <div id="tt-an-content" style="display:none;">
@@ -2935,7 +2935,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportEnglishAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportEnglishAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="en-an-empty" class="empty-state" style="display:none;">No English check data yet. Complete an English check first.</div>
     <div id="en-an-content" style="display:none;">
@@ -2977,7 +2977,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportHandwritingAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportHandwritingAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="hw-an-empty" class="empty-state" style="display:none;">No handwriting check data yet. Complete a handwriting check first.</div>
     <div id="hw-an-content" style="display:none;">
@@ -3017,7 +3017,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportEyAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportEyAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="ey-an-empty" class="empty-state" style="display:none;">No Early Years check data yet. Complete an Early Years check first.</div>
     <div id="ey-an-content" style="display:none;">
@@ -3057,7 +3057,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportTopicAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportTopicAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="tp-an-empty" class="empty-state" style="display:none;">No topic check data yet. Complete a topic check first.</div>
     <div id="tp-an-content" style="display:none;">
@@ -3099,7 +3099,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportScienceAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportScienceAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="sc-an-empty" class="empty-state" style="display:none;">No science check data yet. Complete a science check first.</div>
     <div id="sc-an-content" style="display:none;">
@@ -3141,7 +3141,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportReAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportReAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="re-an-empty" class="empty-state" style="display:none;">No RE check data yet. Complete a RE check first.</div>
     <div id="re-an-content" style="display:none;">
@@ -3183,7 +3183,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportMflAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportMflAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="mfl-an-empty" class="empty-state" style="display:none;">No Languages check data yet. Complete a Languages check first.</div>
     <div id="mfl-an-content" style="display:none;">
@@ -3225,7 +3225,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportMusicAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportMusicAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="music-an-empty" class="empty-state" style="display:none;">No Music check data yet. Complete a Music check first.</div>
     <div id="music-an-content" style="display:none;">
@@ -3267,7 +3267,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportReasoningAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportReasoningAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="reasoning-an-empty" class="empty-state" style="display:none;">No Reasoning check data yet. Complete a Reasoning check first.</div>
     <div id="reasoning-an-content" style="display:none;">
@@ -3309,7 +3309,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     <div class="tab-header">
       <h2 style="margin-bottom:0;">Analytics</h2>
-      <button class="icon-btn export-btn" onclick="exportComputingAnalyticsCSV()"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      <button class="icon-btn export-btn" onclick="exportComputingAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
     </div>
     <div id="computing-an-empty" class="empty-state" style="display:none;">No Computing check data yet. Complete a Computing check first.</div>
     <div id="computing-an-content" style="display:none;">
@@ -4516,11 +4516,11 @@ async function initTrustDashboard(){
   listEl.innerHTML = '';
   listEl.appendChild(tbl);
 }
-function exportTrustSchoolsCSV(){
+function exportTrustSchoolsCSV(btn){
   if(!trustSchoolsExportData.length){ alert('No schools to export yet.'); return; }
   var rows = [['School','Pupils']];
   trustSchoolsExportData.forEach(function(s){ rows.push([s.school_name, s.pupil_count]); });
-  downloadCSV(rows, (currentTrust.trust_name || 'trust') + '-linked-schools-' + dateStr() + '.csv');
+  downloadCSV(rows, (currentTrust.trust_name || 'trust') + '-linked-schools-' + dateStr() + '.csv', btn);
 }
 
 function trustGroupBy(rows, keyFn){
@@ -4590,7 +4590,7 @@ async function pickTrustSubject(table, label, btn){
 
   out.innerHTML = html;
 }
-function exportTrustSubjectCSV(){
+function exportTrustSubjectCSV(btn){
   if(!trustSubjectExportRows.length){ alert('No '+(trustSubjectExportLabel||'')+' assessments to export yet.'); return; }
   /* Anonymised, rolled-up rows only - one row per assessment across every
      linked school, no pupil names, matching what's shown on screen. */
@@ -4609,7 +4609,7 @@ function exportTrustSubjectCSV(){
     ]);
   });
   var subjSuffix = (trustSubjectExportLabel||'analytics').toLowerCase().replace(/\s+/g,'-');
-  downloadCSV(rows, (currentTrust.trust_name || 'trust') + '-' + subjSuffix + '-' + dateStr() + '.csv');
+  downloadCSV(rows, (currentTrust.trust_name || 'trust') + '-' + subjSuffix + '-' + dateStr() + '.csv', btn);
 }
 function goToAuth(tab, mode){
   document.getElementById('entry-chooser-view').style.display = 'none';
@@ -7851,18 +7851,30 @@ function csvRankingRows(list){
 }
 function csvEscape(v){var s=String(v===null||v===undefined?'':v);if(s.indexOf(',')>-1||s.indexOf('"')>-1||s.indexOf('\n')>-1)s='"'+s.replace(/"/g,'""')+'"';return s;}
 
-function downloadCSV(rows,filename){
+function downloadCSV(rows,filename,btn){
   var csv=rows.map(function(r){return r.map(csvEscape).join(',');}).join('\n');
   var blob=new Blob([csv],{type:'text/csv'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  /* The download itself is silent (no browser dialog), so without this the
+     button appears to do nothing and looks broken even though the file has
+     landed in Downloads. Flash a brief confirmation, same pattern as the
+     "Copied!" buttons elsewhere in the app. btn is passed explicitly by the
+     caller (via onclick="...(this)") rather than read from
+     document.activeElement, since Safari doesn't focus buttons on click. */
+  if(btn && btn.classList && btn.classList.contains('export-btn')){
+    var orig = btn.innerHTML;
+    btn.innerHTML = 'Downloaded ✓';
+    btn.disabled = true;
+    setTimeout(function(){ btn.innerHTML = orig; btn.disabled = false; }, 1600);
+  }
 }
 
 function dateStr(){return new Date().toISOString().slice(0,10);}
 function classSuffix(){ return classFilter ? ('-'+classFilter.toLowerCase().replace(/\s+/g,'-')) : ''; }
 function classSuffixText(){ return classFilter ? (' for '+classFilter) : ''; }
 
-function exportResultsCSV(){
+function exportResultsCSV(btn){
   var termFilter = document.getElementById('rv-export-term') ? document.getElementById('rv-export-term').value : 'all';
   var base = filterByClass(results);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -7876,13 +7888,13 @@ function exportResultsCSV(){
     rows.push(row);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-phonics-results'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-phonics-results'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 function avgPct(arr){if(!arr.length)return 0;return Math.round(arr.reduce(function(a,r){return a+r.pct;},0)/arr.length);}
 function barColor(pct){return pct>=80?'var(--fill-success)':pct>=50?'var(--fill-warning)':'var(--fill-danger)';}
 
-function exportAnalyticsCSV(){
+function exportAnalyticsCSV(btn){
   var scoped = filterByClass(results);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -7938,7 +7950,7 @@ function exportAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 function makeBar(label,pct,color){
@@ -8222,7 +8234,7 @@ async function clearAll(){
   renderAnalytics();
 }
 
-function exportBlendingCSV(){
+function exportBlendingCSV(btn){
   var termFilter = document.getElementById('bc-export-term') ? document.getElementById('bc-export-term').value : 'all';
   var base = filterByClass(blendingResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -8233,7 +8245,7 @@ function exportBlendingCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalWords,r.realCorrect,r.realTotal,r.pseudoCorrect,r.pseudoTotal,formatTrendForCSV(computeTrendDiff(blendingResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-blending-checks'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-blending-checks'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllBlending(){
@@ -8320,7 +8332,7 @@ function renderBlendingAnalytics(){
   }
 }
 
-function exportBlendingAnalyticsCSV(){
+function exportBlendingAnalyticsCSV(btn){
   var scoped = filterByClass(blendingResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -8363,7 +8375,7 @@ function exportBlendingAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-blending-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-blending-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 /* ---------- Subject selector (Phonics / Maths / future subjects) ----------
@@ -8593,7 +8605,7 @@ function renderTimesTablesResults(){
   renderGroups(el, list, keyFn, order, buildTimesTablesCard, 'child checked', 'children checked', timesTablesGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportTimesTablesCSV(){
+function exportTimesTablesCSV(btn){
   var termFilter = document.getElementById('tt-export-term') ? document.getElementById('tt-export-term').value : 'all';
   var base = filterByClass(timesTablesResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -8604,7 +8616,7 @@ function exportTimesTablesCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.checkLabel||'Mixed',r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalFacts,formatTrendForCSV(computeTrendDiff(timesTablesResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-times-tables'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-times-tables'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllTimesTables(){
@@ -8687,7 +8699,7 @@ function renderTimesTablesAnalytics(){
   }
 }
 
-function exportTimesTablesAnalyticsCSV(){
+function exportTimesTablesAnalyticsCSV(btn){
   var scoped = filterByClass(timesTablesResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -8726,7 +8738,7 @@ function exportTimesTablesAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-times-tables-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-times-tables-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 var MATHS_TOPICS = {
@@ -11520,7 +11532,7 @@ function renderMathsResults(){
   renderGroups(el, list, keyFn, order, buildMathsCard, 'child checked', 'children checked', mathsGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportMathsCSV(){
+function exportMathsCSV(btn){
   var termFilter = document.getElementById('mt-export-term') ? document.getElementById('mt-export-term').value : 'all';
   var base = filterByClass(mathsResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -11531,7 +11543,7 @@ function exportMathsCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel,r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(mathsResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-maths'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-maths'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllMaths(){
@@ -11622,7 +11634,7 @@ function renderMathsAnalytics(){
   }
 }
 
-function exportMathsAnalyticsCSV(){
+function exportMathsAnalyticsCSV(btn){
   var scoped = filterByClass(mathsResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -11672,7 +11684,7 @@ function exportMathsAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-maths-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-maths-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 function startLiveMathsTier(tier){
@@ -14131,7 +14143,7 @@ function renderEnglishResults(){
   renderGroups(el, list, keyFn, order, buildEnglishCard, 'child checked', 'children checked', englishGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportEnglishCSV(){
+function exportEnglishCSV(btn){
   var termFilter = document.getElementById('en-export-term') ? document.getElementById('en-export-term').value : 'all';
   var base = filterByClass(englishResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -14142,7 +14154,7 @@ function exportEnglishCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel,r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(englishResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-english'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-english'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllEnglish(){
@@ -14233,7 +14245,7 @@ function renderEnglishAnalytics(){
   }
 }
 
-function exportEnglishAnalyticsCSV(){
+function exportEnglishAnalyticsCSV(btn){
   var scoped = filterByClass(englishResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -14283,7 +14295,7 @@ function exportEnglishAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-english-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-english-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 function startLiveEnglishTier(tier){
@@ -14660,7 +14672,7 @@ function renderHandwritingResults(){
   renderGroups(el, list, keyFn, order, buildHandwritingCard, 'child checked', 'children checked', handwritingGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportHandwritingCSV(){
+function exportHandwritingCSV(btn){
   var termFilter = document.getElementById('hw-export-term') ? document.getElementById('hw-export-term').value : 'all';
   var base = filterByClass(handwritingResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -14671,7 +14683,7 @@ function exportHandwritingCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%',formatTrendForCSV(computeTrendDiff(handwritingResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-handwriting'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-handwriting'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllHandwriting(){
@@ -14748,7 +14760,7 @@ function renderHandwritingAnalytics(){
   }
 }
 
-function exportHandwritingAnalyticsCSV(){
+function exportHandwritingAnalyticsCSV(btn){
   var scoped = filterByClass(handwritingResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -14783,7 +14795,7 @@ function exportHandwritingAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-handwriting-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-handwriting-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 /* ---------- Early Years (teacher-marked checklist, mirrors Handwriting) ---------- */
@@ -15013,7 +15025,7 @@ function renderEyResults(){
   renderGroups(el, list, keyFn, order, buildEyCard, 'child checked', 'children checked', eyGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportEyCSV(){
+function exportEyCSV(btn){
   var termFilter = document.getElementById('ey-export-term') ? document.getElementById('ey-export-term').value : 'all';
   var base = filterByClass(earlyYearsResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -15024,7 +15036,7 @@ function exportEyCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.setLabel,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.itemsOk.length,r.total,r.pct+'%',formatTrendForCSV(computeTrendDiff(earlyYearsResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-early-years'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-early-years'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllEy(){
@@ -15101,7 +15113,7 @@ function renderEyAnalytics(){
   }
 }
 
-function exportEyAnalyticsCSV(){
+function exportEyAnalyticsCSV(btn){
   var scoped = filterByClass(earlyYearsResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -15136,7 +15148,7 @@ function exportEyAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-early-years-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-early-years-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 function startLiveEyArea(key){
@@ -33698,7 +33710,7 @@ function renderTopicResults(){
   renderGroups(el, list, keyFn, order, buildTopicCard, 'child checked', 'children checked', topicGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportTopicCSV(){
+function exportTopicCSV(btn){
   var termFilter = document.getElementById('tp-export-term') ? document.getElementById('tp-export-term').value : 'all';
   var base = filterByClass(topicResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -33709,7 +33721,7 @@ function exportTopicCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(topicResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-topics'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-topics'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllTopics(){
@@ -33800,7 +33812,7 @@ function renderTopicAnalytics(){
   }
 }
 
-function exportTopicAnalyticsCSV(){
+function exportTopicAnalyticsCSV(btn){
   var scoped = filterByClass(topicResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -33850,7 +33862,7 @@ function exportTopicAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-topics-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-topics-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 /* ---------- Science (topic-container subject, mirrors Topics) ---------- */
@@ -34100,7 +34112,7 @@ function renderScienceResults(){
   renderGroups(el, list, keyFn, order, buildScienceCard, 'child checked', 'children checked', scienceGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportScienceCSV(){
+function exportScienceCSV(btn){
   var termFilter = document.getElementById('sc-export-term') ? document.getElementById('sc-export-term').value : 'all';
   var base = filterByClass(scienceResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -34111,7 +34123,7 @@ function exportScienceCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(scienceResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-science'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-science'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllScience(){
@@ -34202,7 +34214,7 @@ function renderScienceAnalytics(){
   }
 }
 
-function exportScienceAnalyticsCSV(){
+function exportScienceAnalyticsCSV(btn){
   var scoped = filterByClass(scienceResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -34252,7 +34264,7 @@ function exportScienceAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-science-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-science-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 /* ---------- RE (topic-container subject, mirrors Science/Topics) ---------- */
@@ -34502,7 +34514,7 @@ function renderReResults(){
   renderGroups(el, list, keyFn, order, buildReCard, 'child checked', 'children checked', reGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportReCSV(){
+function exportReCSV(btn){
   var termFilter = document.getElementById('re-export-term') ? document.getElementById('re-export-term').value : 'all';
   var base = filterByClass(reResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -34513,7 +34525,7 @@ function exportReCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(reResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-re'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-re'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllRe(){
@@ -34604,7 +34616,7 @@ function renderReAnalytics(){
   }
 }
 
-function exportReAnalyticsCSV(){
+function exportReAnalyticsCSV(btn){
   var scoped = filterByClass(reResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -34654,7 +34666,7 @@ function exportReAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-re-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-re-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 /* ---------- Student portal (live sessions) ---------- */
@@ -35482,7 +35494,7 @@ function renderMflResults(){
   renderGroups(el, list, keyFn, order, buildMflCard, 'child checked', 'children checked', mflGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportMflCSV(){
+function exportMflCSV(btn){
   var termFilter = document.getElementById('mfl-export-term') ? document.getElementById('mfl-export-term').value : 'all';
   var base = filterByClass(mflResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -35493,7 +35505,7 @@ function exportMflCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(mflResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-mfl'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-mfl'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllMfl(){
@@ -35584,7 +35596,7 @@ function renderMflAnalytics(){
   }
 }
 
-function exportMflAnalyticsCSV(){
+function exportMflAnalyticsCSV(btn){
   var scoped = filterByClass(mflResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -35634,7 +35646,7 @@ function exportMflAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-mfl-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-mfl-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 function startLiveMflTier(tier){
@@ -35890,7 +35902,7 @@ function renderMusicResults(){
   renderGroups(el, list, keyFn, order, buildMusicCard, 'child checked', 'children checked', musicGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportMusicCSV(){
+function exportMusicCSV(btn){
   var termFilter = document.getElementById('music-export-term') ? document.getElementById('music-export-term').value : 'all';
   var base = filterByClass(musicResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -35901,7 +35913,7 @@ function exportMusicCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(musicResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-music'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-music'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllMusic(){
@@ -35992,7 +36004,7 @@ function renderMusicAnalytics(){
   }
 }
 
-function exportMusicAnalyticsCSV(){
+function exportMusicAnalyticsCSV(btn){
   var scoped = filterByClass(musicResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -36042,7 +36054,7 @@ function exportMusicAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-music-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-music-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 function startLiveMusicTier(tier){
@@ -36298,7 +36310,7 @@ function renderComputingResults(){
   renderGroups(el, list, keyFn, order, buildComputingCard, 'child checked', 'children checked', computingGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportComputingCSV(){
+function exportComputingCSV(btn){
   var termFilter = document.getElementById('computing-export-term') ? document.getElementById('computing-export-term').value : 'all';
   var base = filterByClass(computingResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -36309,7 +36321,7 @@ function exportComputingCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(computingResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-computing'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-computing'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllComputing(){
@@ -36400,7 +36412,7 @@ function renderComputingAnalytics(){
   }
 }
 
-function exportComputingAnalyticsCSV(){
+function exportComputingAnalyticsCSV(btn){
   var scoped = filterByClass(computingResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -36450,7 +36462,7 @@ function exportComputingAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-computing-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-computing-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 function startLiveComputingTier(tier){
@@ -36706,7 +36718,7 @@ function renderReasoningResults(){
   renderGroups(el, list, keyFn, order, buildReasoningCard, 'child checked', 'children checked', reasoningGroupMode==='year' && !classFilter ? setClassFilter : null);
 }
 
-function exportReasoningCSV(){
+function exportReasoningCSV(btn){
   var termFilter = document.getElementById('reasoning-export-term') ? document.getElementById('reasoning-export-term').value : 'all';
   var base = filterByClass(reasoningResults);
   var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
@@ -36717,7 +36729,7 @@ function exportReasoningCSV(){
     rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.topicLabel||r.topicKey,TOPIC_TIER_LABELS[r.tier]||r.tier,r.year||'',r.gender||'',r.dob||'',r.needs||'',r.totalCorrect,r.totalQuestions,formatTrendForCSV(computeTrendDiff(reasoningResults, r))]);
   });
   var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
-  downloadCSV(rows,'emeejay-reasoning'+suffix+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-reasoning'+suffix+'-'+dateStr()+'.csv', btn);
 }
 
 async function clearAllReasoning(){
@@ -36808,7 +36820,7 @@ function renderReasoningAnalytics(){
   }
 }
 
-function exportReasoningAnalyticsCSV(){
+function exportReasoningAnalyticsCSV(btn){
   var scoped = filterByClass(reasoningResults);
   if(!scoped.length){alert('No data to export yet'+classSuffixText()+'.');return;}
   var rows=[];
@@ -36858,7 +36870,7 @@ function exportReasoningAnalyticsCSV(){
     });
   });
 
-  downloadCSV(rows,'emeejay-reasoning-analytics'+classSuffix()+'-'+dateStr()+'.csv');
+  downloadCSV(rows,'emeejay-reasoning-analytics'+classSuffix()+'-'+dateStr()+'.csv', btn);
 }
 
 function startLiveReasoningTier(tier){
