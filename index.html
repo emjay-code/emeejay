@@ -37307,16 +37307,38 @@ var PARENT_BAND_TEXT = {
   building: 'coming along nicely.',
   needs_support: 'a little extra practice here would help.'
 };
-function parentPointerRow(subjectLabel, band, detail){
+/* "focus" is a pipe-separated list of the questions actually missed inside the
+   check the child sat. Naming a topic on its own ("Plants") isn't something a
+   parent can act on, and the class may have moved off it since - the questions
+   are concrete enough to sit down and go through together. */
+function parentFocusList(focus){
+  if(!focus) return '';
+  var items = String(focus).split('|').map(function(s){ return s.trim(); }).filter(function(s){ return s; });
+  if(!items.length) return '';
+  var quoted = items.map(function(s){ return '“' + s + '”'; });
+  if(quoted.length === 1) return quoted[0];
+  return quoted.slice(0, -1).join(', ') + ' and ' + quoted[quoted.length - 1];
+}
+function parentPointerRow(subjectLabel, band, detail, focus){
   var row = document.createElement('div');
   row.className = 'parent-pointer-row';
   var subj = document.createElement('span'); subj.className = 'parent-pointer-subject'; subj.textContent = subjectLabel + ':';
   var text = PARENT_BAND_TEXT[band] || '';
-  if(detail && band === 'needs_support'){
-    /* Swap the generic sentence for one naming the actual weak spot, e.g.
-       "a little extra practice here would help, especially with: ai, are, ear."
-       Works for sounds, times-table facts, handwriting words/letters and
-       topic names alike, since the detail is just a short comma list. */
+  var focusText = parentFocusList(focus);
+  if(focusText && detail && (band === 'needs_support' || band === 'building')){
+    /* Best case: we know both the check they sat and what they got wrong in
+       it, e.g. "From their Ancient Egyptians check, it may be worth revisiting
+       'Why was the River Nile so important to the Ancient Egyptians?'". */
+    var opener = band === 'needs_support'
+      ? 'a little extra practice here would help. '
+      : 'coming along nicely. ';
+    /* "check on X" rather than "X check" - topic labels that start with an
+       article ("The Great Fire of London") read badly the other way round. */
+    text = opener + 'From their check on ' + detail + ', it may be worth revisiting ' + focusText + '.';
+  } else if(detail && band === 'needs_support'){
+    /* No question-level detail available - for sounds, times-table facts and
+       handwriting letters the weak spots are already the specific items, so
+       the short comma list is actionable on its own. */
     text = 'a little extra practice here would help, especially with: ' + detail + '.';
   } else if(detail && band === 'building'){
     text = 'coming along nicely, though a little extra practice with ' + detail + ' would help it click.';
@@ -37356,9 +37378,9 @@ async function loadParentSummary(token){
   greatList.innerHTML = ''; buildingList.innerHTML = ''; supportList.innerHTML = '';
   var counts = { doing_great:0, building:0, needs_support:0 };
   rows.forEach(function(r){
-    if(r.band === 'doing_great'){ greatList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail)); counts.doing_great++; }
-    else if(r.band === 'building'){ buildingList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail)); counts.building++; }
-    else if(r.band === 'needs_support'){ supportList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail)); counts.needs_support++; }
+    if(r.band === 'doing_great'){ greatList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail, r.focus)); counts.doing_great++; }
+    else if(r.band === 'building'){ buildingList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail, r.focus)); counts.building++; }
+    else if(r.band === 'needs_support'){ supportList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail, r.focus)); counts.needs_support++; }
   });
   var hasAny = counts.doing_great || counts.building || counts.needs_support;
   document.getElementById('parent-empty-card').style.display = hasAny ? 'none' : 'block';
