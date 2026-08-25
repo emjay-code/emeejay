@@ -3434,14 +3434,22 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <div class="card" id="ch-profile-parent-card" style="margin-bottom:1rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
         <div>
-          <div class="section-hd" style="margin-bottom:2px;">Parent link</div>
-          <div style="font-size:12.5px;color:var(--text-muted);">A light, friendly update for parents &ndash; no scores or raw results, just gentle pointers on what's going well and what could use a bit more support.</div>
+          <div class="section-hd" style="margin-bottom:2px;">Parent link &amp; code</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">A light, friendly update for parents &ndash; no scores or raw results, just gentle pointers on what's going well and what could use a bit more support. Share the link, or give them the code to enter themselves at emeejay.com (choose "I'm a parent with a code").</div>
         </div>
         <button class="all-btn" id="ch-profile-parent-btn" onclick="generateParentLink()">Get parent link</button>
       </div>
-      <div id="ch-profile-parent-linkrow" style="display:none;margin-top:0.6rem;gap:6px;flex-wrap:wrap;align-items:center;">
-        <input type="text" id="ch-profile-parent-url" readonly style="flex:1;min-width:220px;font-size:12.5px;" onclick="this.select();"/>
-        <button class="all-btn" onclick="copyParentLink()">Copy link</button>
+      <div id="ch-profile-parent-linkrow" style="display:none;margin-top:0.6rem;">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Parent code</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:0.7rem;">
+          <div style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;font-size:16px;letter-spacing:1.5px;color:var(--hp-purple);padding:0.35rem 0.7rem;background:var(--hp-purple-light);border-radius:var(--radius);" id="ch-profile-parent-code">------</div>
+          <button class="all-btn" id="ch-profile-parent-copycode-btn" onclick="copyParentCode()">Copy code</button>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Or full link</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          <input type="text" id="ch-profile-parent-url" readonly style="flex:1;min-width:220px;font-size:12.5px;" onclick="this.select();"/>
+          <button class="all-btn" id="ch-profile-parent-copylink-btn" onclick="copyParentLink()">Copy link</button>
+        </div>
       </div>
     </div>
 
@@ -3953,6 +3961,10 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
         <div class="field"><label>Code</label><input type="text" id="parent-code-input" autocomplete="off" autocapitalize="off" spellcheck="false"/></div>
         <button class="btn btn-primary" id="parent-code-submit" onclick="submitParentCode()">View update</button>
         <div class="error-text" id="parent-code-error" style="display:none;"></div>
+      </div>
+      <div class="cta-row" style="max-width:340px;margin:0.75rem auto 0;">
+        <button class="btn btn-ghost" onclick="viewParentDemo(this)">Try a demo</button>
+        <div style="text-align:center;margin:0.4rem 0 0.1rem;font-size:13px;color:var(--text-muted);">Demo code: <span style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;letter-spacing:0.5px;color:#C8A6FF;">DEMOLITION5678</span></div>
       </div>
     </div>
 
@@ -6298,10 +6310,12 @@ function parentLinkUrl(token){
 function setParentLinkDisplay(token){
   var row = document.getElementById('ch-profile-parent-linkrow');
   var urlEl = document.getElementById('ch-profile-parent-url');
+  var codeEl = document.getElementById('ch-profile-parent-code');
   var btnEl = document.getElementById('ch-profile-parent-btn');
   if(!row || !urlEl) return;
   urlEl.value = parentLinkUrl(token);
-  row.style.display = 'flex';
+  if(codeEl) codeEl.textContent = token;
+  row.style.display = 'block';
   if(btnEl) btnEl.textContent = 'Parent link ready';
 }
 async function generateParentLink(){
@@ -6324,13 +6338,22 @@ async function generateParentLink(){
 function copyParentLink(){
   var urlEl = document.getElementById('ch-profile-parent-url');
   if(!urlEl || !urlEl.value) return;
-  var btnRow = document.getElementById('ch-profile-parent-linkrow');
-  var btnEl = btnRow ? btnRow.querySelector('.all-btn') : null;
+  var btnEl = document.getElementById('ch-profile-parent-copylink-btn');
   navigator.clipboard.writeText(urlEl.value).then(function(){
     if(btnEl){ var orig = btnEl.textContent; btnEl.textContent = 'Copied!'; setTimeout(function(){ btnEl.textContent = orig; }, 1500); }
   }).catch(function(){
     urlEl.select();
     alert('Could not copy automatically – the link is selected, so you can copy it manually.');
+  });
+}
+function copyParentCode(){
+  var codeEl = document.getElementById('ch-profile-parent-code');
+  if(!codeEl || !codeEl.textContent || codeEl.textContent === '------') return;
+  var btnEl = document.getElementById('ch-profile-parent-copycode-btn');
+  navigator.clipboard.writeText(codeEl.textContent).then(function(){
+    if(btnEl){ var orig = btnEl.textContent; btnEl.textContent = 'Copied!'; setTimeout(function(){ btnEl.textContent = orig; }, 1500); }
+  }).catch(function(){
+    alert('Could not copy automatically – the code is: ' + codeEl.textContent);
   });
 }
 /* Re-renders every subject's full-history section from the currently loaded
@@ -37137,6 +37160,22 @@ function submitParentCode(){
   }
   if(errEl) errEl.style.display = 'none';
   loadParentSummary(code);
+}
+/* Parent-side demo: a fixed, permanent parent_token on one of the demo
+   school's seeded pupils (Maya Singh - chosen for having a good mix of
+   "doing great" / "coming along" / "needs support" bands already), gated
+   behind the same public DEMOLITION5678 code used everywhere else. Being a
+   seeded row, reset_demo_data() never touches it, so the code stays valid
+   permanently. */
+var DEMO_PARENT_TOKEN = 'emeejayfamdemo';
+function viewParentDemo(btn){
+  var code = window.prompt('Enter your demo code to continue:');
+  if(code === null) return; // cancelled
+  if(code.trim().toUpperCase() !== DEMO_ACCESS_CODE){
+    alert('That demo code isn\'t right. Please check it and try again.');
+    return;
+  }
+  loadParentSummary(DEMO_PARENT_TOKEN);
 }
 function exitParentPortal(){
   document.getElementById('parent-view').style.display = 'none';
