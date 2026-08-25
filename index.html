@@ -679,6 +679,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
             <button class="btn btn-primary" onclick="chooseTeacherEntry()">I'm a teacher or school staff</button>
             <button class="btn btn-ghost" onclick="showPlayPortal()">I'm a student with a class code</button>
             <button class="btn btn-ghost" onclick="chooseTrustEntry()">I'm a trust, MAT or company</button>
+            <button class="btn btn-ghost" onclick="chooseParentEntry()">I'm a parent with a code</button>
           </div>
         </div>
       </div>
@@ -3945,14 +3946,25 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
     </div>
 
-    <div class="parent-screen active" id="parent-loading">
+    <div class="parent-screen active" id="parent-code-entry">
+      <div class="card">
+        <div class="section-hd" style="margin-bottom:0.25rem;">Enter your code</div>
+        <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:0.75rem;">Your child's teacher will have given you a code to see their update.</div>
+        <div class="field"><label>Code</label><input type="text" id="parent-code-input" autocomplete="off" autocapitalize="off" spellcheck="false"/></div>
+        <button class="btn btn-primary" id="parent-code-submit" onclick="submitParentCode()">View update</button>
+        <div class="error-text" id="parent-code-error" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="parent-screen" id="parent-loading">
       <div class="card" style="text-align:center;padding:2rem 1rem;">Loading your update…</div>
     </div>
 
     <div class="parent-screen" id="parent-invalid">
       <div class="card" style="text-align:center;padding:2rem 1rem;">
-        <div class="section-hd" style="margin-bottom:0.5rem;">Link not recognised</div>
-        <div style="font-size:13px;color:var(--text-muted);">This link isn't valid, or it's no longer active. Please ask your child's teacher for a new one.</div>
+        <div class="section-hd" style="margin-bottom:0.5rem;">Code not recognised</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;">That code isn't valid, or it's no longer active. Please check it and try again, or ask your child's teacher for a new one.</div>
+        <button class="btn" onclick="showParentScreen('parent-code-entry')">Try again</button>
       </div>
     </div>
 
@@ -37099,6 +37111,32 @@ function showParentPortal(token){
   document.getElementById('app-view').style.display = 'none';
   document.getElementById('parent-view').style.display = 'block';
   loadParentSummary(token);
+}
+/* Entry point from the "Who's this for?" chooser: shows the code-entry
+   screen rather than jumping straight to loading, since (unlike the
+   ?parent=TOKEN link) there's no token in the URL yet. */
+function chooseParentEntry(){
+  document.getElementById('entry-chooser-view').style.display = 'none';
+  document.getElementById('landing-view').style.display = 'none';
+  document.getElementById('auth-view').style.display = 'none';
+  document.getElementById('app-view').style.display = 'none';
+  document.getElementById('parent-view').style.display = 'block';
+  var errEl = document.getElementById('parent-code-error');
+  if(errEl) errEl.style.display = 'none';
+  var inputEl = document.getElementById('parent-code-input');
+  if(inputEl) inputEl.value = '';
+  showParentScreen('parent-code-entry');
+}
+function submitParentCode(){
+  var inputEl = document.getElementById('parent-code-input');
+  var errEl = document.getElementById('parent-code-error');
+  var code = inputEl ? inputEl.value.trim() : '';
+  if(!code){
+    if(errEl){ errEl.textContent = 'Please enter your code.'; errEl.style.display = 'block'; }
+    return;
+  }
+  if(errEl) errEl.style.display = 'none';
+  loadParentSummary(code);
 }
 function exitParentPortal(){
   document.getElementById('parent-view').style.display = 'none';
