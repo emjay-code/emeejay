@@ -673,7 +673,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="cta-row" style="max-width:360px;margin:1.25rem auto 0;">
             <button class="btn btn-primary" onclick="chooseTeacherEntry()">I'm a teacher or school staff</button>
             <button class="btn btn-ghost" onclick="showPlayPortal()">I'm a student with a class code</button>
-            <button class="btn btn-ghost" onclick="chooseTrustEntry()">I'm a trust or MAT</button>
+            <button class="btn btn-ghost" onclick="chooseTrustEntry()">I'm a trust, MAT or company</button>
           </div>
         </div>
       </div>
@@ -806,12 +806,17 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <div class="brand-lockup">
       <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
       <div class="brand-lockup-word">emeejay</div>
-      <div class="brand-lockup-sub">Trust &amp; MAT oversight</div>
+      <div class="brand-lockup-sub">Trust, MAT &amp; company oversight</div>
     </div>
 
     <a href="javascript:void(0)" class="back-link" onclick="goToChooser()">&larr; Back to home</a>
 
-    <p style="font-size:13px;color:var(--text-secondary);text-align:center;max-width:340px;margin:0 auto 1rem;">See rolled-up, anonymised analytics across every school in your trust or MAT that chooses to link in &ndash; no individual pupil data, free add-on.</p>
+    <p style="font-size:13px;color:var(--text-secondary);text-align:center;max-width:340px;margin:0 auto 1rem;">See rolled-up, anonymised analytics across every school in your trust, MAT or company that chooses to link in &ndash; no individual pupil data, free add-on.</p>
+
+    <div class="cta-row" style="max-width:340px;margin:0 auto 1rem;">
+      <button class="btn btn-ghost" onclick="viewTrustDemo(this)">Try a demo</button>
+      <div style="text-align:center;margin:0.4rem 0 0.1rem;font-size:13px;color:var(--text-muted);">Demo code: <span style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;letter-spacing:0.5px;color:#C8A6FF;">DEMOLITION5678</span></div>
+    </div>
 
     <div class="auth-tabs">
       <button class="auth-tab active" id="tab-trust-signin-btn" onclick="setTrustAuthTab('signin')">Sign in</button>
@@ -827,7 +832,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
     <div class="card" id="trust-signup-card" style="display:none;">
       <div class="field"><label>Your name</label><input type="text" id="tra-su-name" maxlength="60"/></div>
-      <div class="field"><label>Trust / MAT name</label><input type="text" id="tra-su-trust-name" maxlength="80"/></div>
+      <div class="field"><label>Trust / MAT / company name</label><input type="text" id="tra-su-trust-name" maxlength="80"/></div>
       <div class="field"><label>Email</label><input type="email" id="tra-su-email" autocomplete="username"/></div>
       <div class="field"><label>Password</label><input type="password" id="tra-su-password" autocomplete="new-password"/></div>
       <button class="btn btn-primary" id="tra-su-submit" onclick="doTrustSignUp()">Sign up</button>
@@ -4305,7 +4310,7 @@ async function doTrustSignUp(){
   var trustName = document.getElementById('tra-su-trust-name').value.trim();
   var email = document.getElementById('tra-su-email').value.trim();
   var password = document.getElementById('tra-su-password').value;
-  if(!trustName){ showAuthErrorEl(errEl, 'Please enter your trust or MAT name.'); return; }
+  if(!trustName){ showAuthErrorEl(errEl, 'Please enter your trust, MAT or company name.'); return; }
   if(!email || !password){ showAuthErrorEl(errEl, 'Please enter an email and password.'); return; }
   var btn = document.getElementById('tra-su-submit');
   btn.disabled = true;
@@ -4320,6 +4325,30 @@ async function doTrustSignUp(){
   var trustRes = await sb.rpc('create_trust', { p_name: trustName });
   btn.disabled = false;
   if(trustRes.error){ showAuthErrorEl(errEl, trustRes.error.message || 'Could not create your trust.'); return; }
+  await onSignedIn();
+}
+
+/* Trust-side demo: a fixed, permanent trust admin account (demo-trust@emeejay.com)
+   pre-linked to the same demo school used by the school-side demo, gated behind the
+   same public DEMOLITION5678 code. It's read-only (no reset needed) since it never
+   owns or edits any data - it only views the demo school's rolled-up analytics. */
+var DEMO_TRUST_EMAIL = 'demo-trust@emeejay.com';
+var DEMO_TRUST_PASSWORD = 'EmeejayTrustDemo2026!';
+async function viewTrustDemo(btn){
+  var code = window.prompt('Enter your demo code to continue:');
+  if(code === null) return; // cancelled
+  if(code.trim().toUpperCase() !== DEMO_ACCESS_CODE){
+    alert('That demo code isn\'t right. Please check it and try again.');
+    return;
+  }
+  var oldText = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'Loading demo...'; }
+  var res = await sb.auth.signInWithPassword({ email: DEMO_TRUST_EMAIL, password: DEMO_TRUST_PASSWORD });
+  if(res.error){
+    if(btn){ btn.disabled = false; btn.textContent = oldText; }
+    alert('Could not start the demo right now. Please try again shortly.');
+    return;
+  }
   await onSignedIn();
 }
 
