@@ -679,7 +679,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
             <button class="btn btn-primary" onclick="chooseTeacherEntry()">I'm a teacher or school staff</button>
             <button class="btn btn-ghost" onclick="showPlayPortal()">I'm a student with a class code</button>
             <button class="btn btn-ghost" onclick="chooseTrustEntry()">I'm a trust, MAT or company</button>
-            <button class="btn btn-ghost" onclick="chooseParentEntry()">I'm a parent with a code</button>
+            <button class="btn btn-ghost" onclick="chooseParentEntry()">I'm a parent/carer with a code</button>
           </div>
         </div>
       </div>
@@ -700,7 +700,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
     <div class="landing-hero" style="padding:1.25rem 0 0.25rem;">
       <div class="hero-title">Time to teach.</div>
-      <p class="hero-sub">Emeejay Assess takes you the whole way: quick, simple checks feed live results and analysis as they come in, gaps and most-missed questions are surfaced automatically, and from there you can set targets and generate parent-ready progress reports for a child, a class or the whole year &ndash; all in a click. It's light enough to fit around the school day, valuable enough to matter in pupil progress meetings, and thorough enough to show ISI and Ofsted real evidence of children's progress.</p>
+      <p class="hero-sub">Emeejay Assess takes you the whole way: quick, simple checks feed live results and analysis as they come in, gaps and most-missed questions are surfaced automatically, and from there you can set targets and generate parent/carer-ready progress reports for a child, a class or the whole year &ndash; all in a click. It's light enough to fit around the school day, valuable enough to matter in pupil progress meetings, and thorough enough to show ISI and Ofsted real evidence of children's progress.</p>
 
       <div class="cta-row" style="max-width:340px;margin-left:auto;margin-right:auto;">
         <button class="btn btn-primary" style="padding:1rem;font-size:18px;font-weight:700;" onclick="viewDemo(this)">Try Now</button>
@@ -736,7 +736,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
 
     <div class="landing-hero landing-narrow" style="margin-top:2rem;">
-      <p class="hero-sub">One flat fee covers every subject &ndash; phonics, maths, English, topics and more &ndash; with live sessions, instant results, gap analysis and parent-ready reports built in. Nothing to install, no per-pupil charges, and everything syncs across every device so tracking progress never gets in the way of teaching it.</p>
+      <p class="hero-sub">One flat fee covers every subject &ndash; phonics, maths, English, topics and more &ndash; with live sessions, instant results, gap analysis and parent/carer-ready reports built in. Nothing to install, no per-pupil charges, and everything syncs across every device so tracking progress never gets in the way of teaching it.</p>
     </div>
 
     <div class="card price-card landing-narrow" style="margin-top:1.75rem;">
@@ -3440,13 +3440,13 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <div class="card" id="ch-profile-parent-card" style="margin-bottom:1rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
         <div>
-          <div class="section-hd" style="margin-bottom:2px;">Parent link &amp; code</div>
-          <div style="font-size:12.5px;color:var(--text-muted);">A light, friendly update for parents &ndash; no scores or raw results, just gentle pointers on what's going well and what could use a bit more support. Share the link, or give them the code to enter themselves at emeejay.com (choose "I'm a parent with a code").</div>
+          <div class="section-hd" style="margin-bottom:2px;">Parent/carer link &amp; code</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">A light, friendly update for parents and carers &ndash; no scores or raw results, just gentle pointers on what's going well and what could use a bit more support. Share the link, or give them the code to enter themselves at emeejay.com (choose "I'm a parent/carer with a code").</div>
         </div>
-        <button class="all-btn" id="ch-profile-parent-btn" onclick="generateParentLink()">Get parent link</button>
+        <button class="all-btn" id="ch-profile-parent-btn" onclick="generateParentLink()">Get parent/carer link</button>
       </div>
       <div id="ch-profile-parent-linkrow" style="display:none;margin-top:0.6rem;">
-        <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Parent code</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Parent/carer code</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:0.7rem;">
           <div style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;font-size:16px;letter-spacing:1.5px;color:var(--hp-purple);padding:0.35rem 0.7rem;background:var(--hp-purple-light);border-radius:var(--radius);" id="ch-profile-parent-code">------</div>
           <button class="all-btn" id="ch-profile-parent-copycode-btn" onclick="copyParentCode()">Copy code</button>
@@ -3657,7 +3657,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <button class="all-btn" onclick="generateProgressReport()">Generate report</button>
         </div>
       </div>
-      <div id="tg-report-empty" style="font-size:13px;color:var(--text-muted);">Click &quot;Generate report&quot; for a short, parent-report-style paragraph summarising this child's progress in this subject, based on their assessment history. You can edit the wording before copying.</div>
+      <div id="tg-report-empty" style="font-size:13px;color:var(--text-muted);">Click &quot;Generate report&quot; for a short paragraph in the style of a parent/carer report summarising this child's progress in this subject, based on their assessment history. You can edit the wording before copying.</div>
       <textarea id="tg-report-text" class="report-textarea" style="display:none;min-height:110px;"></textarea>
       <div id="tg-report-actions" style="display:none;gap:8px;margin-top:0.5rem;flex-wrap:wrap;">
         <button class="all-btn" onclick="copyProgressReport(this)">Copy text</button>
@@ -6294,7 +6294,7 @@ async function openChildProfile(id, focusSubject, focusTopic){
   var parentRow = document.getElementById('ch-profile-parent-linkrow');
   var parentBtn = document.getElementById('ch-profile-parent-btn');
   if(parentRow) parentRow.style.display = 'none';
-  if(parentBtn) parentBtn.textContent = 'Get parent link';
+  if(parentBtn) parentBtn.textContent = 'Get parent/carer link';
   if(p.parentToken){
     setParentLinkDisplay(p.parentToken);
   }
@@ -6407,7 +6407,7 @@ function setParentLinkDisplay(token){
   urlEl.value = parentLinkUrl(token);
   if(codeEl) codeEl.textContent = token;
   row.style.display = 'block';
-  if(btnEl) btnEl.textContent = 'Parent link ready';
+  if(btnEl) btnEl.textContent = 'Parent/carer link ready';
 }
 async function generateParentLink(){
   if(!currentPupilId) return;
@@ -6417,8 +6417,8 @@ async function generateParentLink(){
   var res = await sb.rpc('get_or_create_parent_token', { p_pupil_id: currentPupilId });
   if(btnEl) btnEl.disabled = false;
   if(res.error || !res.data){
-    if(btnEl) btnEl.textContent = origText || 'Get parent link';
-    alert('Could not generate a parent link: ' + (res.error ? res.error.message : 'unknown error'));
+    if(btnEl) btnEl.textContent = origText || 'Get parent/carer link';
+    alert('Could not generate a parent/carer link: ' + (res.error ? res.error.message : 'unknown error'));
     return;
   }
   var token = res.data;
@@ -38328,7 +38328,7 @@ async function openTargetsDetail(p){
   if(reportText){ reportText.style.display = 'none'; reportText.value = ''; }
   if(reportActions) reportActions.style.display = 'none';
   if(reportTerm) reportTerm.value = 'all';
-  if(reportEmpty){ reportEmpty.style.display = 'block'; reportEmpty.textContent = 'Click "Generate report" for a short, parent-report-style paragraph summarising this child\'s progress in this subject, based on their assessment history. You can edit the wording before copying.'; }
+  if(reportEmpty){ reportEmpty.style.display = 'block'; reportEmpty.textContent = 'Click "Generate report" for a short paragraph in the style of a parent/carer report summarising this child\'s progress in this subject, based on their assessment history. You can edit the wording before copying.'; }
   var fyText = document.getElementById('tg-fullyear-text');
   var fyEmpty = document.getElementById('tg-fullyear-empty');
   var fyActions = document.getElementById('tg-fullyear-actions');
