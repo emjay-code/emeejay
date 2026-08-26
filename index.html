@@ -4538,8 +4538,12 @@ function trustGroupBy(rows, keyFn){
 }
 function trustBreakdownTable(title, groups){
   if(!groups.length) return '';
+  var colLabel = title.replace(/^By\s+/i, '');
+  colLabel = colLabel.charAt(0).toUpperCase() + colLabel.slice(1);
+  var thStyle = 'text-align:right;padding:4px;border-bottom:1px solid var(--border);font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.3px;';
   var html = '<div style="font-size:12.5px;font-weight:600;color:var(--text-secondary);margin:0.9rem 0 0.3rem;">'+escapeHtml(title)+'</div>';
   html += '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
+  html += '<tr><th style="'+thStyle+'text-align:left;">'+escapeHtml(colLabel)+'</th><th style="'+thStyle+'">No. of assessments</th><th style="'+thStyle+'">Avg. score</th></tr>';
   groups.forEach(function(g){
     html += '<tr><td style="padding:4px;border-bottom:0.5px solid var(--border);">'+escapeHtml(g.key)+'</td><td style="padding:4px;border-bottom:0.5px solid var(--border);text-align:right;color:var(--text-muted);">'+g.count+'</td><td style="padding:4px;border-bottom:0.5px solid var(--border);text-align:right;font-weight:600;">'+g.avg+'%</td></tr>';
   });
@@ -4577,8 +4581,9 @@ async function pickTrustSubject(table, label, btn){
   html += '<div class="landing-stat"><div class="landing-stat-val">'+overallAvg+'%</div><div class="landing-stat-lbl">overall average</div></div>';
   html += '</div>';
 
-  html += '<div style="font-size:12.5px;font-weight:600;color:var(--text-secondary);margin:0.9rem 0 0.3rem;">Score bands</div>';
-  html += '<div style="font-size:13px;">80%+: <strong>'+bands.high+'</strong> &nbsp;&middot;&nbsp; 50–79%: <strong>'+bands.mid+'</strong> &nbsp;&middot;&nbsp; Under 50%: <strong>'+bands.low+'</strong></div>';
+  var bandPct = function(n){ return Math.round((n/rows.length)*100); };
+  html += '<div style="font-size:12.5px;font-weight:600;color:var(--text-secondary);margin:0.9rem 0 0.3rem;">Score bands &ndash; number (and share) of assessments in each band</div>';
+  html += '<div style="font-size:13px;">80%+: <strong>'+bands.high+'</strong> assessments ('+bandPct(bands.high)+'%) &nbsp;&middot;&nbsp; 50&ndash;79%: <strong>'+bands.mid+'</strong> assessments ('+bandPct(bands.mid)+'%) &nbsp;&middot;&nbsp; Under 50%: <strong>'+bands.low+'</strong> assessments ('+bandPct(bands.low)+'%)</div>';
 
   html += trustBreakdownTable('By school', trustGroupBy(rows, function(r){return r.school_name;}));
   html += trustBreakdownTable('By year group', trustGroupBy(rows, function(r){return r.year_group;}));
