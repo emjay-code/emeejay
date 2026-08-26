@@ -1,0 +1,355 @@
+  </div>
+      <button class="phase-btn" onclick="startEyCheck(currentEyKey)"><div class="phase-badge"><i class="ti ti-clipboard-check" aria-hidden="true" style="font-size:16px;"></i></div><div><div class="phase-name" id="ey-area-check-name">Start Check</div><div class="phase-desc" id="ey-area-check-desc"></div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveEyArea(currentEyKey)">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-ey-check">
+    <div class="progress-bar"><div class="progress-fill" id="ey-prog"></div></div>
+    <div class="sound-counter" id="ey-counter">Item 1 of 16</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Does the child do this?</div>
+      <div class="sound-display" id="ey-item-display" style="font-size:17px;"></div>
+      <div class="yn-row">
+        <button class="yn-btn yn-yes" onclick="markEy(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Met</button>
+        <button class="yn-btn yn-no" onclick="markEy(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Emerging</button>
+      </div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportEyItem()"><i class="ti ti-flag" aria-hidden="true"></i> Report this item</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-ey-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Results for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:1rem;" id="ey-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="ey-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="ey-res-got"></div><div class="stat-lbl">Met</div></div>
+        <div class="stat-card"><div class="stat-val" id="ey-res-not"></div><div class="stat-lbl">Emerging</div></div>
+      </div>
+    </div>
+    <div class="card" id="ey-res-ok-wrap" style="display:none;"><div class="section-hd">Met</div><div id="ey-res-ok-chips" class="chips-row"></div></div>
+    <div class="card" id="ey-res-no-wrap" style="display:none;"><div class="section-hd">Emerging</div><div id="ey-res-no-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New Early Years check</button>
+  </div>
+
+  <div class="screen" id="screen-pe-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-pe">
+      <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">PE</div>
+    </div>
+    <div class="card" id="pe-strand-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a strand to assess</span>
+      </div>
+      <div id="pe-strand-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-pe-strand">
+    <a href="javascript:void(0)" class="back-link" onclick="backToPeHome()">&larr; Back to strands</a>
+    <div class="subject-banner subj-pe">
+      <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="pe-strand-banner-title">Strand</div>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <p style="font-size:12.5px;color:var(--text-secondary);" id="pe-strand-desc"></p>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a class to assess</span>
+      </div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Rate every child in the class against this strand's age-related expectation, in one pass.</p>
+      <div class="year-btn-grid" id="pe-year-grid" style="margin-bottom:0;"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-pe-pass">
+    <a href="javascript:void(0)" class="back-link" onclick="backToPeStrand()">&larr; Back to classes</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" id="pe-pass-title" style="margin-bottom:0.35rem;">Strand · Class</div>
+      <p style="font-size:12.5px;color:var(--text-secondary);" id="pe-pass-expectation"></p>
+    </div>
+    <div class="card" id="pe-pass-card" style="margin-bottom:0.75rem;">
+      <div id="pe-pass-empty" class="empty-state" style="display:none;">No children in this class yet.</div>
+      <div id="pe-pass-list"></div>
+    </div>
+    <button class="btn btn-primary" onclick="savePePass()">Save assessment</button>
+    <button class="btn btn-ghost" onclick="showScreen('screen-pe-strand')" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-pe-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">PE assessment saved for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:1rem;" id="pe-done-strand"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="pe-done-count"></div><div class="stat-lbl">Children rated</div></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="goHome()">New PE assessment</button>
+  </div>
+
+  <div class="screen" id="screen-topics-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-topics">
+      <div class="subject-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Topics</div>
+    </div>
+    <div class="card" id="topics-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a topic</span>
+      </div>
+      <div id="topics-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-topic-tiers">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTopics()">&larr; Back to topics</a>
+    <div class="subject-banner subj-topics">
+      <div class="subject-icon" id="topic-banner-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="topic-banner-title">Topic</div>
+    </div>
+    <div class="card" id="topic-tier-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" id="tp-tier-btn-KS1" onclick="startTopicCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
+      <button class="phase-btn" id="tp-tier-btn-LKS2" onclick="startTopicCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
+      <button class="phase-btn" id="tp-tier-btn-UKS2" onclick="startTopicCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" id="tp-tier-live-KS1" onclick="startLiveTopicTier('KS1')">KS1</button>
+        <button type="button" class="year-btn" id="tp-tier-live-LKS2" onclick="startLiveTopicTier('LKS2')">LKS2</button>
+        <button type="button" class="year-btn" id="tp-tier-live-UKS2" onclick="startLiveTopicTier('UKS2')">UKS2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-science-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-science">
+      <div class="subject-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Science</div>
+    </div>
+    <div class="card" id="science-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a topic</span>
+      </div>
+      <div id="science-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-science-tiers">
+    <a href="javascript:void(0)" class="back-link" onclick="backToScienceTopics()">&larr; Back to topics</a>
+    <div class="subject-banner subj-science">
+      <div class="subject-icon" id="science-banner-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="science-banner-title">Topic</div>
+    </div>
+    <div class="card" id="science-tier-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" onclick="startScienceCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startScienceCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
+      <button class="phase-btn" onclick="startScienceCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveScienceTier('KS1')">KS1</button>
+        <button type="button" class="year-btn" onclick="startLiveScienceTier('LKS2')">LKS2</button>
+        <button type="button" class="year-btn" onclick="startLiveScienceTier('UKS2')">UKS2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-re-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-re">
+      <div class="subject-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">RE</div>
+    </div>
+    <div class="card" id="re-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a topic</span>
+      </div>
+      <div id="re-topic-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-re-tiers">
+    <a href="javascript:void(0)" class="back-link" onclick="backToReTopics()">&larr; Back to topics</a>
+    <div class="subject-banner subj-re">
+      <div class="subject-icon" id="re-banner-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="re-banner-title">Topic</div>
+    </div>
+    <div class="card" id="re-tier-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" onclick="startReCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startReCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
+      <button class="phase-btn" onclick="startReCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveReTier('KS1')">KS1</button>
+        <button type="button" class="year-btn" onclick="startLiveReTier('LKS2')">LKS2</button>
+        <button type="button" class="year-btn" onclick="startLiveReTier('UKS2')">UKS2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-mfl-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-mfl">
+      <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Languages</div>
+    </div>
+    <div class="card" id="mfl-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a language</span>
+      </div>
+      <div id="mfl-topic-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-mfl-tiers">
+    <a href="javascript:void(0)" class="back-link" onclick="backToMflTopics()">&larr; Back to languages</a>
+    <div class="subject-banner subj-mfl">
+      <div class="subject-icon" id="mfl-banner-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="mfl-banner-title">Language</div>
+    </div>
+    <div class="card" id="mfl-tier-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" onclick="startMflCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startMflCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
+      <button class="phase-btn" onclick="startMflCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveMflTier('KS1')">KS1</button>
+        <button type="button" class="year-btn" onclick="startLiveMflTier('LKS2')">LKS2</button>
+        <button type="button" class="year-btn" onclick="startLiveMflTier('UKS2')">UKS2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-music-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-music">
+      <div class="subject-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Music</div>
+    </div>
+    <div class="card" id="music-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a module</span>
+      </div>
+      <div id="music-topic-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-music-tiers">
+    <a href="javascript:void(0)" class="back-link" onclick="backToMusicTopics()">&larr; Back to modules</a>
+    <div class="subject-banner subj-music">
+      <div class="subject-icon" id="music-banner-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="music-banner-title">Module</div>
+    </div>
+    <div class="card" id="music-tier-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" onclick="startMusicCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startMusicCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
+      <button class="phase-btn" onclick="startMusicCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveMusicTier('KS1')">KS1</button>
+        <button type="button" class="year-btn" onclick="startLiveMusicTier('LKS2')">LKS2</button>
+        <button type="button" class="year-btn" onclick="startLiveMusicTier('UKS2')">UKS2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-reasoning-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-reasoning">
+      <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Reasoning</div>
+    </div>
+    <div class="card" id="reasoning-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a topic</span>
+      </div>
+      <div id="reasoning-topic-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-reasoning-tiers">
+    <a href="javascript:void(0)" class="back-link" onclick="backToReasoningTopics()">&larr; Back to topics</a>
+    <div class="subject-banner subj-reasoning">
+      <div class="subject-icon" id="reasoning-banner-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="reasoning-banner-title">Topic</div>
+    </div>
+    <div class="card" id="reasoning-tier-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" onclick="startReasoningCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startReasoningCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
+      <button class="phase-btn" onclick="startReasoningCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveReasoningTier('KS1')">KS1</button>
+        <button type="button" class="year-btn" onclick="startLiveReasoningTier('LKS2')">LKS2</button>
+        <button type="button" class="year-btn" onclick="startLiveReasoningTier('UKS2')">UKS2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-reasoning-check">
+    <div class="progress-bar"><div class="progress-fill" id="reasoning-prog"></div></div>
+    <div class="sound-counter" id="reasoning-counter">Question 1 of 12</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child this question, then tap the answer they give</div>
+      <div class="gr-question-display" id="reasoning-question-display"></div>
+      <div class="mc-grid mc-grid-text" id="reasoning-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportReasoningQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-reasoning-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Reasoning check for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:0.25rem;" id="reasoning-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="reasoning-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="reasoning-res-total"></div><div class="stat-lbl" id="reasoning-res-total-lbl">Correct</div></div>
+      </div>
+    </div>
+    <div class="card" id="reasoning-res-missed-wrap" style="display:none;"><div class="section-hd">Questions to revisit</div><div id="reasoning-res-missed-c
