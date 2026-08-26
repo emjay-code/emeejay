@@ -1,0 +1,277 @@
+s="year-group-name">Phonics</span><span class="year-group-count" id="ch-profile-count-phonics"></span></summary><div class="year-group-body"><div id="ch-profile-phonics"></div><div id="ch-profile-phonics-empty" style="font-size:13px;color:var(--text-muted);">No phonics checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-blending"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Blending</span><span class="year-group-count" id="ch-profile-count-blending"></span></summary><div class="year-group-body"><div id="ch-profile-blending"></div><div id="ch-profile-blending-empty" style="font-size:13px;color:var(--text-muted);">No blending checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-times-tables"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Times Tables</span><span class="year-group-count" id="ch-profile-count-times-tables"></span></summary><div class="year-group-body"><div id="ch-profile-times-tables"></div><div id="ch-profile-times-tables-empty" style="font-size:13px;color:var(--text-muted);">No times tables checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-handwriting"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Handwriting</span><span class="year-group-count" id="ch-profile-count-handwriting"></span></summary><div class="year-group-body"><div id="ch-profile-handwriting"></div><div id="ch-profile-handwriting-empty" style="font-size:13px;color:var(--text-muted);">No handwriting checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-english"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">English</span><span class="year-group-count" id="ch-profile-count-english"></span></summary><div class="year-group-body"><div id="ch-profile-english"></div><div id="ch-profile-english-empty" style="font-size:13px;color:var(--text-muted);">No English checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-maths"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Maths</span><span class="year-group-count" id="ch-profile-count-maths"></span></summary><div class="year-group-body"><div id="ch-profile-maths"></div><div id="ch-profile-maths-empty" style="font-size:13px;color:var(--text-muted);">No maths checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-topics"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Topics</span><span class="year-group-count" id="ch-profile-count-topics"></span></summary><div class="year-group-body"><div id="ch-profile-topics"></div><div id="ch-profile-topics-empty" style="font-size:13px;color:var(--text-muted);">No topic checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-science"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Science</span><span class="year-group-count" id="ch-profile-count-science"></span></summary><div class="year-group-body"><div id="ch-profile-science"></div><div id="ch-profile-science-empty" style="font-size:13px;color:var(--text-muted);">No science checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-re"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">RE</span><span class="year-group-count" id="ch-profile-count-re"></span></summary><div class="year-group-body"><div id="ch-profile-re"></div><div id="ch-profile-re-empty" style="font-size:13px;color:var(--text-muted);">No RE checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-mfl"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Languages</span><span class="year-group-count" id="ch-profile-count-mfl"></span></summary><div class="year-group-body"><div id="ch-profile-mfl"></div><div id="ch-profile-mfl-empty" style="font-size:13px;color:var(--text-muted);">No Languages checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-music"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Music</span><span class="year-group-count" id="ch-profile-count-music"></span></summary><div class="year-group-body"><div id="ch-profile-music"></div><div id="ch-profile-music-empty" style="font-size:13px;color:var(--text-muted);">No Music checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-reasoning"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Reasoning</span><span class="year-group-count" id="ch-profile-count-reasoning"></span></summary><div class="year-group-body"><div id="ch-profile-reasoning"></div><div id="ch-profile-reasoning-empty" style="font-size:13px;color:var(--text-muted);">No Reasoning checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-computing"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Computing</span><span class="year-group-count" id="ch-profile-count-computing"></span></summary><div class="year-group-body"><div id="ch-profile-computing"></div><div id="ch-profile-computing-empty" style="font-size:13px;color:var(--text-muted);">No Computing checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-pe"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">PE</span><span class="year-group-count" id="ch-profile-count-pe"></span></summary><div class="year-group-body"><div id="ch-profile-pe"></div><div id="ch-profile-pe-empty" style="font-size:13px;color:var(--text-muted);">No PE assessments yet.</div></div></details>
+  </div>
+</div>
+
+<div id="tab-targets" style="display:none;">
+  <div class="rv-screen active" id="tg-subject-screen">
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Targets &amp; Reporting</div>
+      <p style="font-size:13px;">Choose a subject, then a child, to see suggested targets based on their assessment history.</p>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.75rem;">Choose a subject</div>
+      <div class="subject-grid" id="tg-subject-grid"></div>
+    </div>
+    <div class="card" id="tg-reported-card" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+      <div>
+        <div class="section-hd" style="margin-bottom:2px;">Reported questions</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Questions teachers have flagged as too hard, too easy, or not quite right. Only visible to you, the school owner.</div>
+      </div>
+      <button class="all-btn" onclick="openReportedQuestionsScreen()">Review <span id="tg-reported-open-count"></span></button>
+    </div>
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+      <div>
+        <div class="section-hd" style="margin-bottom:2px;">Suggested questions</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Question ideas teachers have submitted, waiting to be reviewed and added to the bank.</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="all-btn" onclick="openSuggestQuestionModal(null)">Suggest one</button>
+        <button class="all-btn" id="tg-suggested-review-btn" onclick="openSuggestedQuestionsScreen()">Review <span id="tg-suggested-open-count"></span></button>
+      </div>
+    </div>
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-top:0.75rem;">
+      <div>
+        <div class="section-hd" style="margin-bottom:2px;">Your custom assessments</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Assessments you've built yourself. Usable by your school straight away, and sent to us to consider for the permanent question bank.</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="all-btn" onclick="openCustomTopicBuilder()">Create one</button>
+        <button class="all-btn" onclick="openCustomTopicsScreen()">Manage <span id="tg-custom-topics-count"></span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="tg-custom-topics-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsSubjects()">&larr; Back to Targets &amp; Reporting</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div>
+          <div class="section-hd" style="margin-bottom:0.35rem;">Your custom assessments</div>
+          <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:0;">Built by teachers at your school. Each one is already usable in the relevant subject, and is also visible to us for review towards becoming a permanent topic.</p>
+        </div>
+        <button class="all-btn" style="flex-shrink:0;" onclick="openCustomTopicBuilder()">+ Create one</button>
+      </div>
+    </div>
+    <div id="tg-custom-topics-empty" class="empty-state" style="display:none;">No custom assessments yet.</div>
+    <div id="tg-custom-topics-list"></div>
+  </div>
+
+  <div class="rv-screen" id="tg-reported-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsSubjects()">&larr; Back to Targets &amp; Reporting</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Reported questions</div>
+      <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:0.6rem;">Flagged by teachers either while reviewing a Live Session before sending it, or via "Report this question" during a check.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <select id="tg-reported-status-filter" style="min-width:130px;" onchange="loadReportedQuestions()">
+          <option value="open">Open</option>
+          <option value="resolved">Resolved</option>
+          <option value="dismissed">Dismissed</option>
+          <option value="all">All</option>
+        </select>
+        <select id="tg-reported-subject-filter" style="min-width:150px;" onchange="loadReportedQuestions()">
+          <option value="">All subjects</option>
+        </select>
+        <button class="all-btn" onclick="exportReportedQuestionsCSV()">Export CSV</button>
+      </div>
+    </div>
+    <div id="tg-reported-empty" class="empty-state" style="display:none;">No reported questions here.</div>
+    <div id="tg-reported-list"></div>
+  </div>
+
+  <div class="rv-screen" id="tg-suggested-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsSubjects()">&larr; Back to Targets &amp; Reporting</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div>
+          <div class="section-hd" style="margin-bottom:0.35rem;">Suggested questions</div>
+          <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:0;">Question ideas teachers have submitted. Approving one here is a note-to-self that it's good to add to the shared question bank &ndash; it doesn't add it automatically.</p>
+        </div>
+        <button class="all-btn" style="flex-shrink:0;" onclick="openSuggestQuestionModal(null)">+ Suggest one</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:0.6rem;">
+        <select id="tg-suggested-status-filter" style="min-width:130px;" onchange="loadSuggestedQuestions()">
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+          <option value="all">All</option>
+        </select>
+        <select id="tg-suggested-subject-filter" style="min-width:150px;" onchange="loadSuggestedQuestions()">
+          <option value="">All subjects</option>
+        </select>
+        <button class="all-btn" onclick="exportSuggestedQuestionsCSV()">Export CSV</button>
+      </div>
+    </div>
+    <div id="tg-suggested-empty" class="empty-state" style="display:none;">No suggested questions here.</div>
+    <div id="tg-suggested-list"></div>
+  </div>
+
+  <div class="rv-screen" id="tg-pupil-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsSubjects()">&larr; Back to subjects</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.75rem;" id="tg-pupil-subject-title"></div>
+      <input type="text" id="tg-pupil-search" placeholder="Search by name" oninput="renderTargetsPupilPicker()" style="width:100%;"/>
+      <div style="margin-top:0.6rem;">
+        <a href="javascript:void(0)" onclick="openBatchReportScreen()" style="font-size:12.5px;">Generate progress reports for a whole class &rarr;</a>
+      </div>
+    </div>
+    <div id="tg-pupil-empty" class="empty-state" style="display:none;">No active children match.</div>
+    <div id="tg-pupil-list"></div>
+  </div>
+
+  <div class="rv-screen" id="tg-batch-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsPupils()">&larr; Back to children</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;" id="tg-batch-title">Generate reports for a class</div>
+      <p style="font-size:13px;margin-bottom:0.6rem;">Choose a class and term to generate an editable progress report for every active child in that year group.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <select id="tg-batch-year" style="flex:1;min-width:140px;"></select>
+        <select id="tg-batch-term" class="report-term-select">
+          <option value="all">All time</option>
+          <option value="Autumn">Autumn term</option>
+          <option value="Spring">Spring term</option>
+          <option value="Summer">Summer term</option>
+        </select>
+        <button class="btn btn-primary" style="width:auto;margin-top:0;white-space:nowrap;" onclick="generateBatchReports()">Generate</button>
+      </div>
+    </div>
+    <div id="tg-batch-loading" style="display:none;font-size:13px;color:var(--text-muted);margin-bottom:0.75rem;">Generating&hellip;</div>
+    <div id="tg-batch-empty" class="empty-state" style="display:none;"></div>
+    <div id="tg-batch-toolbar" style="display:none;margin-bottom:0.75rem;">
+      <button class="all-btn" onclick="copyAllBatchReports(this)">Copy all</button>
+    </div>
+    <div id="tg-batch-results"></div>
+  </div>
+
+  <div class="rv-screen" id="tg-detail-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToTargetsPupils()">&larr; Back to children</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="font-size:19px;font-weight:600;color:var(--hp-purple-dark);" id="tg-detail-name"></div>
+      <div class="pupil-meta" id="tg-detail-subject"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <div class="section-hd" style="margin-bottom:0;">Progress report</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <select id="tg-report-term" class="report-term-select">
+            <option value="all">All time</option>
+            <option value="Autumn">Autumn term</option>
+            <option value="Spring">Spring term</option>
+            <option value="Summer">Summer term</option>
+          </select>
+          <button class="all-btn" onclick="generateProgressReport()">Generate report</button>
+        </div>
+      </div>
+      <div id="tg-report-empty" style="font-size:13px;color:var(--text-muted);">Click &quot;Generate report&quot; for a short paragraph in the style of a parent/carer report summarising this child's progress in this subject, based on their assessment history. You can edit the wording before copying.</div>
+      <textarea id="tg-report-text" class="report-textarea" style="display:none;min-height:110px;"></textarea>
+      <div id="tg-report-actions" style="display:none;gap:8px;margin-top:0.5rem;flex-wrap:wrap;">
+        <button class="all-btn" onclick="copyProgressReport(this)">Copy text</button>
+        <button class="all-btn" onclick="saveProgressReport(this)">Save to history</button>
+      </div>
+      <div style="margin-top:0.85rem;padding-top:0.75rem;border-top:0.5px solid var(--border-strong);">
+        <div class="section-hd" style="margin-bottom:0.4rem;font-size:13px;">Past reports</div>
+        <div id="tg-report-history-empty" style="font-size:12.5px;color:var(--text-muted);">No reports saved yet for this subject.</div>
+        <div id="tg-report-history"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <div class="section-hd" style="margin-bottom:0;">Full year report (all subjects)</div>
+        <button class="all-btn" onclick="generateFullYearReport()">Generate full year report</button>
+      </div>
+      <div id="tg-fullyear-empty" style="font-size:13px;color:var(--text-muted);">Click &quot;Generate full year report&quot; for one combined report covering every subject this child has been assessed in this year, grouped by term (Autumn, Spring, Summer). You can edit the wording before copying.</div>
+      <textarea id="tg-fullyear-text" class="report-textarea" style="display:none;min-height:220px;"></textarea>
+      <div id="tg-fullyear-actions" style="display:none;gap:8px;margin-top:0.5rem;flex-wrap:wrap;">
+        <button class="all-btn" onclick="copyFullYearReport(this)">Copy text</button>
+        <button class="all-btn" onclick="saveFullYearReport(this)">Save to history</button>
+      </div>
+      <div style="margin-top:0.85rem;padding-top:0.75rem;border-top:0.5px solid var(--border-strong);">
+        <div class="section-hd" style="margin-bottom:0.4rem;font-size:13px;">Past full year reports</div>
+        <div id="tg-fullyear-history-empty" style="font-size:12.5px;color:var(--text-muted);">No full year reports saved yet.</div>
+        <div id="tg-fullyear-history"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <div class="section-hd" style="margin-bottom:0;">Suggested targets</div>
+        <button class="all-btn" onclick="generateTargetSuggestions()">Generate suggestions</button>
+      </div>
+      <div id="tg-suggestions-empty" style="font-size:13px;color:var(--text-muted);">Click &quot;Generate suggestions&quot; to see targets based on this child's assessment history in this subject.</div>
+      <div id="tg-suggestions"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Add a custom target</div>
+      <div class="name-row">
+        <input type="text" id="tg-custom-input" placeholder="e.g. Practise 2-digit subtraction with regrouping" maxlength="200" style="flex:1;"/>
+        <button class="btn btn-primary" style="width:auto;margin-top:0;white-space:nowrap;" onclick="addCustomTarget()">Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Saved targets</div>
+      <div id="tg-saved-empty" class="empty-state" style="display:none;">No targets saved yet for this subject.</div>
+      <div id="tg-saved-list"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<div class="site-footer" style="color:rgba(255,255,255,0.5);">&copy; 2026 Emeejay Assess &middot; data syncs securely to your school's account<br/><a href="mailto:marc@emeejay.com" style="color:#C8A6FF;">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:#C8A6FF;">Privacy Policy</a> &middot; <a href="/terms-of-service.html" style="color:#C8A6FF;">Terms of Service</a> &middot; <a href="/data-processing-agreement.html" style="color:#C8A6FF;">Data Processing Agreement</a> &middot; <a href="javascript:void(0)" onclick="openFeedbackModal()" style="color:#C8A6FF;">Send feedback</a></div>
+</div>
+
+<div id="play-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap">
+    <div class="chooser-decor" style="padding:0.5rem 0 2.25rem;">
+    <div class="chooser-decor-icons" data-decor-size="header"></div>
+    <div class="brand-lockup">
+      <a href="javascript:void(0)" onclick="exitPlayPortal()" class="brand-lockup-corner">Exit</a>
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">Student check-in</div>
+    </div>
+    </div>
+
+    <div class="play-screen active" id="play-join">
+      <div class="card" style="text-align:center;" id="play-join-step1">
+        <div class="section-hd" style="margin-bottom:0.75rem;">Enter your code</div>
+        <input type="text" id="play-code-input" maxlength="5" placeholder="ABCDE" style="text-align:center;font-size:28px;letter-spacing:6px;text-transform:uppercase;font-weight:700;width:100%;"/>
+        <div style="height:0.75rem;"></div>
+        <select id="play-year-input" style="display:none;"><option value="">Your year group</option><option>Under 2s</option><option>2-3s</option><option>Nursery (3-4s)</option><option>Reception</option><option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option><option>Year 5</option><option>Year 6</option></select>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.4rem;">Your year group</div>
+        <div class="year-btn-grid" id="play-year-input-btns">
+          <button type="button" class="year-btn" data-year="Under 2s" onclick="selectYearBtn('play-year-input',this)">Under 2s</button>
+          <button type="button" class="year-btn" data-year="2-3s" onclick="selectYearBtn('play-year-input',this)">2-3s</button>
+          <button type="button" class="year-btn" data-year="Nursery (3-4s)" onclick="selectYearBtn('play-year-input',this)">Nursery</button>
+          <button type="button" class="year-btn" data-year="Reception" onclick="selectYearBtn('play-year-input',this)">Reception</button>
+          <button type="button" class="year-btn" data-year="Year 1" onclick="selectYearBtn('play-year-input',this)">Year 1</button>
+          <button type="button" class="year-btn" data-year="Year 2" onclick="selectYearBtn('play-year-input',this)">Year 2</button>
+          <button type="button" class="year-btn" data-year="Year 3" onclick="selectYearBtn('play-year-input',this)">Year 3</button>
+          <button type="button" class="year-btn" data-year="Year 4" onclick="selectYearBtn('play-year-input',this)">Year 4</button>
+          <button type="button" class="year-btn" data-year="Year 5" onclick="selectYearBtn('play-year-input',this)">Year 5</button>
+          <button type="button" class="year-btn" data-year="Year 6" onclick="selectYearBtn('play-year-input',this)">Year 6</button>
+        </div>
+        <div id="play-join-error" style="color:var(--text-danger, #c0392b);font-size:13px;margin-top:0.5rem;display:none;"></div>
+        <button class="btn btn-primary" style="margin-top:1rem;" onclick="playFindRoster()">Continue</button>
+      </div>
+
+      <div class="card" id="play-join-step2" style="display:none;">
+        <a href="javascript:void(0)" onclick="playBackToStep1()" style="font-size:12.5px;color:var(--hp-purple);font-weight:500;">&larr; Wrong code or year group?</a>
+        <div class="section-hd" style="margin:0.6rem 0 0.5rem;text-align:center;">Which one are you?</div>
+        <input type="text" id="play-roster-search" placeholder="Search your name..." oninput="renderPlayRosterList()" style="width:100%;margin-bottom:0.5rem;"/>
