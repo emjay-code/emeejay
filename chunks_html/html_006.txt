@@ -1,0 +1,349 @@
+pan class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="ey-group-year-btn" onclick="setEyGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="ey-group-term-btn" onclick="setEyGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="ey-sort" class="sort-select" onchange="renderEyResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
+    </div>
+    <div id="ey-list-empty" class="empty-state" style="display:none;">No Early Years checks yet.</div>
+    <div id="ey-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="ey-count">0</div><div class="stat-lbl">Children checked</div></div>
+        <div class="stat-card"><div class="stat-val" id="ey-avg">0%</div><div class="stat-lbl">Average score</div></div>
+      </div>
+      <div id="ey-distribution"></div>
+    </div>
+    <div id="ey-list"></div>
+  </div>
+
+  <div class="rv-screen" id="rv-topics-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-topics">
+      <div class="subject-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Topics results</div>
+    </div>
+    <div class="class-filter-indicator topic-filter-indicator" data-subject="topics">
+      <i class="ti ti-world" aria-hidden="true"></i>
+      <span>Viewing <span class="topic-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setTopicFilter('topics','')">Show all topics</a>
+    </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Topics</h2>
+      <div class="tab-actions">
+        <select id="tp-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderTopicResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportTopicCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-topics-btn" onclick="clearAllTopics()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="tp-group-year-btn" onclick="setTopicGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="tp-group-term-btn" onclick="setTopicGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="tp-sort" class="sort-select" onchange="renderTopicResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
+    </div>
+    <div id="tp-list-empty" class="empty-state" style="display:none;">No topic checks yet.</div>
+    <div id="tp-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="tp-count">0</div><div class="stat-lbl">Children checked</div></div>
+        <div class="stat-card"><div class="stat-val" id="tp-avg">0%</div><div class="stat-lbl">Average score</div></div>
+      </div>
+      <div id="tp-distribution"></div>
+    </div>
+    <div id="tp-list"></div>
+  </div>
+
+  <div class="rv-screen" id="rv-science-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-science">
+      <div class="subject-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Science results</div>
+    </div>
+    <div class="class-filter-indicator topic-filter-indicator" data-subject="science">
+      <i class="ti ti-leaf" aria-hidden="true"></i>
+      <span>Viewing <span class="topic-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setTopicFilter('science','')">Show all topics</a>
+    </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Science</h2>
+      <div class="tab-actions">
+        <select id="sc-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderScienceResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportScienceCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-science-btn" onclick="clearAllScience()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="sc-group-year-btn" onclick="setScienceGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="sc-group-term-btn" onclick="setScienceGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="sc-sort" class="sort-select" onchange="renderScienceResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
+    </div>
+    <div id="sc-list-empty" class="empty-state" style="display:none;">No science checks yet.</div>
+    <div id="sc-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="sc-count">0</div><div class="stat-lbl">Children checked</div></div>
+        <div class="stat-card"><div class="stat-val" id="sc-avg">0%</div><div class="stat-lbl">Average score</div></div>
+      </div>
+      <div id="sc-distribution"></div>
+    </div>
+    <div id="sc-list"></div>
+  </div>
+
+  <div class="rv-screen" id="rv-re-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-re">
+      <div class="subject-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">RE results</div>
+    </div>
+    <div class="class-filter-indicator topic-filter-indicator" data-subject="re">
+      <i class="ti ti-star" aria-hidden="true"></i>
+      <span>Viewing <span class="topic-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setTopicFilter('re','')">Show all topics</a>
+    </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">RE</h2>
+      <div class="tab-actions">
+        <select id="re-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderReResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportReCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-re-btn" onclick="clearAllRe()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="re-group-year-btn" onclick="setReGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="re-group-term-btn" onclick="setReGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="re-sort" class="sort-select" onchange="renderReResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
+    </div>
+    <div id="re-list-empty" class="empty-state" style="display:none;">No RE checks yet.</div>
+    <div id="re-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="re-count">0</div><div class="stat-lbl">Children checked</div></div>
+        <div class="stat-card"><div class="stat-val" id="re-avg">0%</div><div class="stat-lbl">Average score</div></div>
+      </div>
+      <div id="re-distribution"></div>
+    </div>
+    <div id="re-list"></div>
+  </div>
+
+  <div class="rv-screen" id="rv-mfl-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-mfl">
+      <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Languages results</div>
+    </div>
+    <div class="class-filter-indicator topic-filter-indicator" data-subject="mfl">
+      <i class="ti ti-language" aria-hidden="true"></i>
+      <span>Viewing <span class="topic-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setTopicFilter('mfl','')">Show all topics</a>
+    </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Languages</h2>
+      <div class="tab-actions">
+        <select id="mfl-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderMflResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportMflCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-mfl-btn" onclick="clearAllMfl()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="mfl-group-year-btn" onclick="setMflGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="mfl-group-term-btn" onclick="setMflGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="mfl-sort" class="sort-select" onchange="renderMflResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
+    </div>
+    <div id="mfl-list-empty" class="empty-state" style="display:none;">No Languages checks yet.</div>
+    <div id="mfl-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="mfl-count">0</div><div class="stat-lbl">Children checked</div></div>
+        <div class="stat-card"><div class="stat-val" id="mfl-avg">0%</div><div class="stat-lbl">Average score</div></div>
+      </div>
+      <div id="mfl-distribution"></div>
+    </div>
+    <div id="mfl-list"></div>
+  </div>
+
+  <div class="rv-screen" id="rv-music-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-music">
+      <div class="subject-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Music results</div>
+    </div>
+    <div class="class-filter-indicator topic-filter-indicator" data-subject="music">
+      <i class="ti ti-music" aria-hidden="true"></i>
+      <span>Viewing <span class="topic-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setTopicFilter('music','')">Show all topics</a>
+    </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Music</h2>
+      <div class="tab-actions">
+        <select id="music-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderMusicResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportMusicCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-music-btn" onclick="clearAllMusic()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="music-group-year-btn" onclick="setMusicGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="music-group-term-btn" onclick="setMusicGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="music-sort" class="sort-select" onchange="renderMusicResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
+    </div>
+    <div id="music-list-empty" class="empty-state" style="display:none;">No Music checks yet.</div>
+    <div id="music-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="music-count">0</div><div class="stat-lbl">Children checked</div></div>
+        <div class="stat-card"><div class="stat-val" id="music-avg">0%</div><div class="stat-lbl">Average score</div></div>
+      </div>
+      <div id="music-distribution"></div>
+    </div>
+    <div id="music-list"></div>
+  </div>
+
+  <div class="rv-screen" id="rv-reasoning-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-reasoning">
+      <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Reasoning results</div>
+    </div>
+    <div class="class-filter-indicator topic-filter-indicator" data-subject="reasoning">
+      <i class="ti ti-brain" aria-hidden="true"></i>
+      <span>Viewing <span class="topic-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setTopicFilter('reasoning','')">Show all topics</a>
+    </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Reasoning</h2>
+      <div class="tab-actions">
+        <select id="reasoning-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderReasoningResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportReasoningCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-reasoning-btn" onclick="clearAllReasoning()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="reasoning-group-year-btn" onclick="setReasoningGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="reasoning-group-term-btn" onclick="setReasoningGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="reasoning-sort" class="sort-select" onchange="renderReasoningResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
+    </div>
+    <div id="reasoning-list-empty" class="empty-state" style="display:none;">No Reasoning checks yet.</div>
+    <div id="reasoning-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="reasoning-count">0</div><div class="stat-lbl">Children checked</div></div>
+        <div class="stat-card"><div class="stat-val" id="reasoning-avg">0%</div><div class="stat-lbl">Average score</div></div>
+      </div>
+      <div id="reasoning-distribution"></div>
+    </div>
+    <div id="reasoning-list"></div>
+  </div>
+
+  <div class="rv-screen" id="rv-pe-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-pe">
+      <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">PE results</div>
+    </div>
+    <div class="class-filter-indicator topic-filter-indicator" data-subject="pe">
+      <i class="ti ti-run" aria-hidden="true"></i>
+      <span>Viewing <span class="topic-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setTopicFilter('pe','')">Show all strands</a>
+    </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">PE</h2>
+      <div class="tab-actions">
+        <select id="pe-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderPeResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportPeCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-pe-btn" onclick="clearAllPe()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="pe-group-year-btn" onclick="setPeGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="pe-group-term-btn" onclick="setPeGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="pe-sort" class="sort-select" onchange="renderPeResults()"><option value="recent">Most recent</option><option value="score-desc">Highest rating</option><option value="score-asc">Lowest rating</option><option value="name">Name A-Z</option></select>
+    </div>
+    <div id="pe-list-empty" class="empty-state" style="display:none;">No PE assessments yet.</div>
+    <div id="pe-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="pe-count">0</div><div class="stat-lbl">Children assessed</div></div>
+        <div class="stat-card"><div class="stat-val" id="pe-avg">0%</div><div class="stat-lbl">Average rating</div></div>
+      </div>
+      <div id="pe-distribution"></div>
+    </div>
+    <div id="pe-list"></div>
+  </div>
+
+  <div class="rv-screen" id="rv-computing-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-computing">
+      <div class="subject-icon"><i class="ti ti-device-desktop" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Computing results</div>
+    </div>
+    <div class="class-filter-indicator topic-filter-indicator" data-subject="computing">
+      <i class="ti ti-device-desktop" aria-hidden="true"></i>
+      <span>Viewing <span class="topic-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setTopicFilter('computing','')">Show all topics</a>
+    </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Computing</h2>
+      <div class="tab-actions">
+        <select id="computing-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderComputingResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportComputingCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-computing-btn" onclick="clearAllComputing()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="computing-group-year-btn" onclick="setComputingGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="computing-group-term-btn" onclick="setComputingGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="computing-sort" class="sort-select" onchange="renderComputingResults()"><option value="recent">Most recent</option><option value="score-desc">Highest score</option><option value="score-asc">Lowest score</option><option value="name">Name A-Z</option></select>
+    </div>
+    <div id="computing-list-empty" class="empty-state" style="display:none;">No Computing checks yet.</div>
+    <div id="computing-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="computing-count">0</div><div class="stat-lbl">Children checked</div></div>
+        <div class="stat-card"><div class="stat-val" id="computing-avg">0%</div><div class="stat-lbl">Average score</div></div>
+      </div>
+      <div id="computing-distribution"></div>
