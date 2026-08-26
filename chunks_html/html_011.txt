@@ -1,0 +1,337 @@
+      <div id="play-roster-list" style="max-height:280px;overflow-y:auto;"></div>
+        <div id="play-roster-empty" style="display:none;font-size:13px;color:var(--text-muted);text-align:center;padding:0.75rem 0;">No one found. Try a different search, or ask your teacher.</div>
+        <div style="text-align:center;margin-top:0.6rem;">
+          <a href="javascript:void(0)" onclick="playToggleFallback()" id="play-fallback-link" style="font-size:12.5px;color:var(--text-muted);">Can't find your name?</a>
+        </div>
+        <div id="play-fallback-panel" style="display:none;margin-top:0.6rem;text-align:center;">
+          <input type="text" id="play-name-input" placeholder="Type your first name" maxlength="30" style="width:100%;"/>
+          <div style="height:0.6rem;"></div>
+          <button class="btn btn-primary" style="width:100%;" onclick="playJoin(null)">Start anyway</button>
+        </div>
+        <div id="play-join-error-2" style="color:var(--text-danger, #c0392b);font-size:13px;margin-top:0.5rem;display:none;text-align:center;"></div>
+      </div>
+    </div>
+
+    <div class="play-screen" id="play-check">
+      <div class="progress-bar"><div class="progress-fill" id="play-prog"></div></div>
+      <div class="sound-counter" id="play-counter">Item 1 of 12</div>
+      <div class="card" style="text-align:center;" id="play-item-card"></div>
+    </div>
+
+    <div class="play-screen" id="play-done">
+      <div class="card" style="text-align:center;padding:1.5rem;">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Well done</div>
+        <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:1rem;" id="play-done-name"></div>
+        <div class="stat-grid" style="margin-bottom:0;">
+          <div class="stat-card"><div class="stat-val" id="play-done-score"></div><div class="stat-lbl">Correct</div></div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="playReset()">Enter another code</button>
+    </div>
+  </div>
+</div>
+
+<div id="practice-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap">
+    <div class="chooser-decor" style="padding:0.5rem 0 2.25rem;">
+    <div class="chooser-decor-icons" data-decor-size="header"></div>
+    <div class="brand-lockup">
+      <a href="javascript:void(0)" onclick="exitPracticePortal()" class="brand-lockup-corner">Exit</a>
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">Home practice</div>
+    </div>
+    </div>
+
+    <div class="practice-screen active" id="practice-loading">
+      <div class="card" style="text-align:center;padding:2rem 1rem;">Loading your practice…</div>
+    </div>
+
+    <div class="practice-screen" id="practice-invalid">
+      <div class="card" style="text-align:center;padding:2rem 1rem;">
+        <div class="section-hd" style="margin-bottom:0.5rem;">Link not recognised</div>
+        <div style="font-size:13px;color:var(--text-muted);">This practice link isn't valid, or it's no longer active. Please ask your teacher for a new link.</div>
+      </div>
+    </div>
+
+    <div class="practice-screen" id="practice-nursery-age">
+      <div class="card" style="text-align:center;padding:2rem 1rem;">
+        <div class="section-hd" style="margin-bottom:0.5rem;">Not quite ready yet</div>
+        <div style="font-size:13px;color:var(--text-muted);">Home practice isn't available for this age group yet. Please ask your teacher.</div>
+      </div>
+    </div>
+
+    <div class="practice-screen" id="practice-home">
+      <div class="card" style="margin-bottom:0.75rem;">
+        <div style="font-size:13px;color:var(--text-muted);">Hi</div>
+        <div style="font-size:19px;font-weight:600;color:var(--hp-purple-dark);" id="practice-welcome-name"></div>
+        <div style="font-size:12.5px;color:var(--text-muted);margin-top:4px;">Pick something to practise. This is just for you – it doesn't get marked or sent to your teacher.</div>
+      </div>
+      <div class="subject-grid">
+        <button class="subject-card subj-english" onclick="openPracticeSubject('english')">
+          <div class="subject-icon"><i class="ti ti-book-2" aria-hidden="true"></i></div>
+          <div class="subject-name">English</div>
+          <div class="subject-desc">Grammar, Punctuation, Spelling, Vocabulary and Reading Comprehension</div>
+        </button>
+        <button class="subject-card subj-maths" onclick="openPracticeSubject('maths')">
+          <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
+          <div class="subject-name">Maths</div>
+          <div class="subject-desc">Shape, measure, the four operations, place value and statistics</div>
+        </button>
+        <button class="subject-card subj-topics" onclick="openPracticeSubject('topics')">
+          <div class="subject-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
+          <div class="subject-name">Topics</div>
+          <div class="subject-desc">Humanities topics</div>
+        </button>
+        <button class="subject-card subj-science" onclick="openPracticeSubject('science')">
+          <div class="subject-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+          <div class="subject-name">Science</div>
+          <div class="subject-desc">Science topics</div>
+        </button>
+        <button class="subject-card subj-re" onclick="openPracticeSubject('re')">
+          <div class="subject-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
+          <div class="subject-name">RE</div>
+          <div class="subject-desc">Religious Education topics</div>
+        </button>
+        <button class="subject-card subj-mfl" onclick="openPracticeSubject('mfl')">
+          <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+          <div class="subject-name">Languages</div>
+          <div class="subject-desc">French, Spanish, German and Latin</div>
+        </button>
+        <button class="subject-card subj-music" onclick="openPracticeSubject('music')">
+          <div class="subject-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
+          <div class="subject-name">Music</div>
+          <div class="subject-desc">Elements, instruments, notation, composers and more</div>
+        </button>
+        <button class="subject-card subj-reasoning" onclick="openPracticeSubject('reasoning')">
+          <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+          <div class="subject-name">Reasoning</div>
+          <div class="subject-desc">Verbal and Non-Verbal Reasoning</div>
+        </button>
+        <button class="subject-card subj-computing" onclick="openPracticeSubject('computing')">
+          <div class="subject-icon"><i class="ti ti-device-desktop" aria-hidden="true"></i></div>
+          <div class="subject-name">Computing</div>
+          <div class="subject-desc">Algorithms, online safety, hardware, data and more</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="practice-screen" id="practice-topic">
+      <a href="javascript:void(0)" class="back-link" onclick="showPracticeScreen('practice-home')">&larr; Back to subjects</a>
+      <div class="section-hd" style="margin:0.5rem 0 0.5rem;" id="practice-topic-subject-name"></div>
+      <div id="practice-topic-grid"></div>
+      <div id="practice-topic-empty" class="empty-state" style="display:none;">No practice topics are set up here yet.</div>
+    </div>
+
+    <div class="practice-screen" id="practice-learn">
+      <a href="javascript:void(0)" class="back-link" onclick="showPracticeScreen('practice-topic')">&larr; Back to topics</a>
+      <div class="section-hd" style="margin:0.5rem 0 0.5rem;" id="practice-learn-topic-name"></div>
+      <div class="card" style="text-align:center;padding:1.75rem 1.25rem;min-height:120px;display:flex;align-items:center;justify-content:center;">
+        <div style="font-size:16px;line-height:1.5;" id="practice-learn-fact"></div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:0.5rem;" id="practice-learn-counter"></div>
+      <div style="display:flex;gap:8px;margin-top:0.75rem;">
+        <button class="btn" id="practice-learn-prev" style="flex:1;" onclick="practiceLearnPrev()">Back</button>
+        <button class="btn btn-primary" id="practice-learn-next" style="flex:2;" onclick="practiceLearnNext()">Next fact</button>
+      </div>
+      <div style="text-align:center;margin-top:0.6rem;"><a href="javascript:void(0)" style="font-size:12.5px;color:var(--hp-purple);" onclick="startPracticeGame()">Skip ahead to the game</a></div>
+    </div>
+
+    <div class="practice-screen" id="practice-game">
+      <a href="javascript:void(0)" class="back-link" onclick="showPracticeScreen('practice-topic')">&larr; Back to topics</a>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;margin:0.5rem 0;flex-wrap:wrap;">
+        <div class="section-hd" style="margin-bottom:0;" id="practice-game-topic-name"></div>
+        <div style="font-size:12px;color:var(--text-muted);">Pairs: <span id="practice-game-pairs">0</span> · Moves: <span id="practice-game-moves">0</span></div>
+      </div>
+      <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:0.5rem;">Match each question card to its answer card.</div>
+      <div class="mm-grid" id="practice-game-grid"></div>
+      <div style="text-align:center;margin-top:0.75rem;"><a href="javascript:void(0)" style="font-size:12.5px;color:var(--hp-purple);" onclick="practiceGameQuickQuiz()">Skip to quick quiz instead</a></div>
+    </div>
+
+    <div class="practice-screen" id="practice-game-done">
+      <div class="card" style="text-align:center;padding:1.5rem;">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">All matched!</div>
+        <div class="stat-grid" style="margin-bottom:0;">
+          <div class="stat-card"><div class="stat-val" id="practice-game-done-moves"></div><div class="stat-lbl">Moves</div></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" style="flex:1;" onclick="practiceGamePlayAgain()">Play again</button>
+        <button class="btn" style="flex:1;" onclick="practiceGameQuickQuiz()">Quick quiz</button>
+      </div>
+      <div style="text-align:center;margin-top:0.5rem;"><a href="javascript:void(0)" style="font-size:12.5px;color:var(--hp-purple);" onclick="practiceChooseAnother()">Choose another topic</a></div>
+    </div>
+
+    <div class="practice-screen" id="practice-quiz">
+      <a href="javascript:void(0)" class="back-link" onclick="showPracticeScreen('practice-topic')">&larr; Back to topics</a>
+      <div class="progress-bar"><div class="progress-fill" id="practice-prog"></div></div>
+      <div class="sound-counter" id="practice-counter">Question 1 of 10</div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:0.4rem;" id="practice-quiz-topic-name"></div>
+        <div class="gr-question-display" id="practice-question-display"></div>
+        <div id="practice-pictogram-display"></div>
+        <div class="mc-grid mc-grid-text" id="practice-mc-options"></div>
+      </div>
+    </div>
+
+    <div class="practice-screen" id="practice-done">
+      <div class="card" style="text-align:center;padding:1.5rem;">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Nice work</div>
+        <div class="stat-grid" style="margin-bottom:0;">
+          <div class="stat-card"><div class="stat-val" id="practice-done-score"></div><div class="stat-lbl">Correct</div></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" style="flex:1;" onclick="practiceAgainSameTopic()">Practise again</button>
+        <button class="btn" style="flex:1;" onclick="practiceChooseAnother()">Choose another topic</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="parent-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap">
+    <div class="chooser-decor" style="padding:0.5rem 0 2.25rem;">
+    <div class="chooser-decor-icons" data-decor-size="header"></div>
+    <div class="brand-lockup">
+      <a href="javascript:void(0)" onclick="exitParentPortal()" class="brand-lockup-corner">Exit</a>
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">Family update</div>
+    </div>
+    </div>
+
+    <div class="parent-screen active" id="parent-code-entry">
+      <div class="card">
+        <div class="section-hd" style="margin-bottom:0.25rem;">Enter your code</div>
+        <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:0.75rem;">Your child's teacher will have given you a code to see their update.</div>
+        <div class="field"><label>Code</label><input type="text" id="parent-code-input" autocomplete="off" autocapitalize="off" spellcheck="false"/></div>
+        <button class="btn btn-primary" id="parent-code-submit" onclick="submitParentCode()">View update</button>
+        <div class="error-text" id="parent-code-error" style="display:none;"></div>
+      </div>
+      <div class="cta-row" style="max-width:340px;margin:0.75rem auto 0;">
+        <button class="btn btn-ghost" onclick="viewParentDemo(this)">Try a demo</button>
+        <div style="text-align:center;margin:0.4rem 0 0.1rem;font-size:13px;color:var(--text-muted);">Demo code: <span style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;letter-spacing:0.5px;color:#C8A6FF;">DEMOLITION5678</span></div>
+      </div>
+    </div>
+
+    <div class="parent-screen" id="parent-loading">
+      <div class="card" style="text-align:center;padding:2rem 1rem;">Loading your update…</div>
+    </div>
+
+    <div class="parent-screen" id="parent-invalid">
+      <div class="card" style="text-align:center;padding:2rem 1rem;">
+        <div class="section-hd" style="margin-bottom:0.5rem;">Code not recognised</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;">That code isn't valid, or it's no longer active. Please check it and try again, or ask your child's teacher for a new one.</div>
+        <button class="btn" onclick="showParentScreen('parent-code-entry')">Try again</button>
+      </div>
+    </div>
+
+    <div class="parent-screen" id="parent-home">
+      <div class="card" style="margin-bottom:0.75rem;">
+        <div style="font-size:13px;color:var(--text-muted);">Hi there</div>
+        <div style="font-size:19px;font-weight:600;color:var(--hp-purple-dark);">Here's how <span id="parent-welcome-name"></span> has been getting on</div>
+        <div style="font-size:12.5px;color:var(--text-muted);margin-top:4px;">Just a friendly overview &ndash; no scores or test results here, just a few gentle pointers.</div>
+      </div>
+
+      <div id="parent-empty-card" class="card" style="text-align:center;padding:1.5rem 1rem;display:none;">
+        <div style="font-size:13px;color:var(--text-muted);">Nothing to share yet &ndash; check back after a few more assessments.</div>
+      </div>
+
+      <div id="parent-great-card" class="card" style="margin-bottom:0.75rem;display:none;">
+        <div class="section-hd" style="margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--fill-success);display:inline-block;flex-shrink:0;"></span>Doing brilliantly</div>
+        <div id="parent-great-list"></div>
+      </div>
+
+      <div id="parent-building-card" class="card" style="margin-bottom:0.75rem;display:none;">
+        <div class="section-hd" style="margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--fill-warning);display:inline-block;flex-shrink:0;"></span>Coming along nicely</div>
+        <div id="parent-building-list"></div>
+      </div>
+
+      <div id="parent-support-card" class="card" style="margin-bottom:0.75rem;display:none;">
+        <div class="section-hd" style="margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--fill-danger);display:inline-block;flex-shrink:0;"></span>Could use a little more support</div>
+        <div id="parent-support-list"></div>
+      </div>
+
+      <div class="card" style="text-align:center;font-size:12.5px;color:var(--text-muted);">Want to practise together at home? Ask your child's teacher for a practice code.</div>
+    </div>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="pupil-modal-overlay">
+  <div class="edit-modal-card">
+    <div class="section-hd" style="margin-bottom:0.75rem;" id="pupil-modal-title">Add child</div>
+    <div class="name-row"><input type="text" id="pupil-modal-name" placeholder="Child's name" maxlength="40" style="width:100%;"/></div>
+    <label>Year group</label>
+    <select id="pupil-modal-year" style="display:none;"><option value="">Select</option><option>Under 2s</option><option>2-3s</option><option>Nursery (3-4s)</option><option>Reception</option><option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option><option>Year 5</option><option>Year 6</option></select>
+    <div class="year-btn-grid" id="pupil-modal-year-btns">
+      <button type="button" class="year-btn" data-year="Under 2s" onclick="selectYearBtn('pupil-modal-year',this)">Under 2s</button>
+      <button type="button" class="year-btn" data-year="2-3s" onclick="selectYearBtn('pupil-modal-year',this)">2-3s</button>
+      <button type="button" class="year-btn" data-year="Nursery (3-4s)" onclick="selectYearBtn('pupil-modal-year',this)">Nursery</button>
+      <button type="button" class="year-btn" data-year="Reception" onclick="selectYearBtn('pupil-modal-year',this)">Reception</button>
+      <button type="button" class="year-btn" data-year="Year 1" onclick="selectYearBtn('pupil-modal-year',this)">Year 1</button>
+      <button type="button" class="year-btn" data-year="Year 2" onclick="selectYearBtn('pupil-modal-year',this)">Year 2</button>
+      <button type="button" class="year-btn" data-year="Year 3" onclick="selectYearBtn('pupil-modal-year',this)">Year 3</button>
+      <button type="button" class="year-btn" data-year="Year 4" onclick="selectYearBtn('pupil-modal-year',this)">Year 4</button>
+      <button type="button" class="year-btn" data-year="Year 5" onclick="selectYearBtn('pupil-modal-year',this)">Year 5</button>
+      <button type="button" class="year-btn" data-year="Year 6" onclick="selectYearBtn('pupil-modal-year',this)">Year 6</button>
+    </div>
+    <div class="form-grid">
+      <div><label>Gender</label>
+        <select id="pupil-modal-gender"><option value="">Select</option><option>Boy</option><option>Girl</option><option>Other</option><option>Prefer not to say</option></select>
+      </div>
+      <div><label>Date of birth</label><input type="date" id="pupil-modal-dob"/></div>
+      <div><label>Additional needs</label>
+        <select id="pupil-modal-needs"><option value="">None</option><option>EAL</option><option>SEND</option><option>EAL and SEND</option></select>
+      </div>
+      <div><label>Free School Meals</label>
+        <select id="pupil-modal-fsm"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+      </div>
+      <div><label>Vulnerable</label>
+        <select id="pupil-modal-vulnerable"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+      </div>
+      <div><label>Ethnicity</label>
+        <select id="pupil-modal-ethnicity"><option value="">Not specified</option><option>White British</option><option>White Irish</option><option>Gypsy/Roma</option><option>Traveller of Irish Heritage</option><option>White - any other background</option><option>Mixed - White and Black Caribbean</option><option>Mixed - White and Black African</option><option>Mixed - White and Asian</option><option>Mixed - any other background</option><option>Asian or Asian British - Indian</option><option>Asian or Asian British - Pakistani</option><option>Asian or Asian British - Bangladeshi</option><option>Asian or Asian British - any other background</option><option>Black or Black British - Caribbean</option><option>Black or Black British - African</option><option>Black or Black British - any other background</option><option>Chinese</option><option>Any other ethnic group</option><option>Prefer not to say</option></select>
+      </div>
+    </div>
+    <div id="pupil-modal-error" style="color:var(--text-danger, #c0392b);font-size:13px;margin-top:0.25rem;display:none;"></div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+      <button class="btn" style="flex:1;" onclick="closePupilModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="savePupilModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="edit-modal-overlay">
+  <div class="edit-modal-card">
+    <div class="section-hd" style="margin-bottom:0.75rem;">Edit details for <span id="edit-modal-name"></span></div>
+    <label>Year group</label>
+    <select id="edit-modal-year" style="display:none;"><option value="">Select</option><option>Under 2s</option><option>2-3s</option><option>Nursery (3-4s)</option><option>Reception</option><option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option><option>Year 5</option><option>Year 6</option></select>
+    <div class="year-btn-grid" id="edit-modal-year-btns">
+      <button type="button" class="year-btn" data-year="Under 2s" onclick="selectYearBtn('edit-modal-year',this)">Under 2s</button>
+      <button type="button" class="year-btn" data-year="2-3s" onclick="selectYearBtn('edit-modal-year',this)">2-3s</button>
+      <button type="button" class="year-btn" data-year="Nursery (3-4s)" onclick="selectYearBtn('edit-modal-year',this)">Nursery</button>
+      <button type="button" class="year-btn" data-year="Reception" onclick="selectYearBtn('edit-modal-year',this)">Reception</button>
+      <button type="button" class="year-btn" data-year="Year 1" onclick="selectYearBtn('edit-modal-year',this)">Year 1</button>
+      <button type="button" class="year-btn" data-year="Year 2" onclick="selectYearBtn('edit-modal-year',this)">Year 2</button>
+      <button type="button" class="year-btn" data-year="Year 3" onclick="selectYearBtn('edit-modal-year',this)">Year 3</button>
+      <button type="button" class="year-btn" data-year="Year 4" onclick="selectYearBtn('edit-modal-year',this)">Year 4</button>
+      <button type="button" class="year-btn" data-year="Year 5" onclick="selectYearBtn('edit-modal-year',this)">Year 5</button>
+      <button type="button" class="year-btn" data-year="Year 6" onclick="selectYearBtn('edit-modal-year',this)">Year 6</button>
+    </div>
+    <div class="form-grid">
+      <div><label>Gender</label>
+        <select id="edit-modal-gender"><option value="">Select</option><option>Boy</option><option>Girl</option><option>Other</option><option>Prefer not to say</option></select>
+      </div>
+      <div><label>Date of birth</label><input type="date" id="edit-modal-dob"/></div>
+      <div><label>Additional needs</label>
+        <select id="edit-modal-needs"><option value="">None</option><option>EAL</option><option>SEND</option><option>EAL and SEND</option></select>
+      </div>
+      <div><label>Free School Meals</label>
+        <select id="edit-modal-fsm"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+      </div>
+      <div><label>Vulnerable</label>
+        <select id="edit-modal-vulnerable"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+      </div>
+      <div><label>Ethnicity</label>
+        <select id="edit-modal-ethnicity"><option value="">Not specified</option><option>White British</option><option>White Irish</option><option>Gypsy/Roma</option><option>
