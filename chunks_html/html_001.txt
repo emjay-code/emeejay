@@ -1,0 +1,303 @@
+lass="subject-chip" style="background:#6B3FA0;"><i class="ti ti-music ico-music" aria-hidden="true"></i>Music</span>
+        <span class="subject-chip" style="background:#2E5DA8;"><i class="ti ti-brain ico-reasoning" aria-hidden="true"></i>Reasoning</span>
+        <span class="subject-chip" style="background:#35495E;"><i class="ti ti-device-desktop ico-computing" aria-hidden="true"></i>Computing</span>
+        <span class="subject-chip" style="background:#47637A;"><i class="ti ti-pencil ico-handwriting" aria-hidden="true"></i>Handwriting</span>
+        <span class="subject-chip" style="background:#8B5CF6;"><i class="ti ti-building-carousel ico-early-years" aria-hidden="true"></i>Early Years</span>
+      </div>
+
+      <p style="text-align:center;font-size:13px;color:var(--text-muted);margin-top:1rem;">Can't see an assessment you need? <a href="mailto:marc@emeejay.com" style="color:#C8A6FF;">Let us know</a> &ndash; we'll set it up for you.</p>
+    </div>
+    </div>
+
+    <div class="landing-hero landing-narrow" style="margin-top:2rem;">
+      <p class="hero-sub">One flat fee covers every subject &ndash; phonics, maths, English, topics and more &ndash; with live sessions, instant results, gap analysis and parent/carer-ready reports built in. Nothing to install, no per-pupil charges, and everything syncs across every device so tracking progress never gets in the way of teaching it.</p>
+    </div>
+
+    <div class="card price-card landing-narrow" style="margin-top:1.75rem;">
+      <div class="section-title">Pricing</div>
+      <div class="price-amount">&pound;200<span class="price-period">/year, per school</span></div>
+      <p style="margin:0.75rem 0;">One flat fee for every subject. Unlimited staff logins, unlimited children, unlimited assessments.</p>
+      <button class="btn btn-primary" onclick="goToAuth('signup','create')">Start your free 14-day trial</button>
+    </div>
+
+    <div class="site-footer">&copy; 2026 Emeejay Assess &middot; <a href="mailto:marc@emeejay.com" style="color:#C8A6FF;">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:#C8A6FF;">Privacy Policy</a> &middot; <a href="/terms-of-service.html" style="color:#C8A6FF;">Terms of Service</a> &middot; <a href="/data-processing-agreement.html" style="color:#C8A6FF;">Data Processing Agreement</a></div>
+  </div>
+</div>
+
+<div id="auth-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap chooser-decor">
+    <div class="chooser-decor-icons" data-decor-size="full"></div>
+    <div class="brand-lockup">
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">All your assessments in one place</div>
+    </div>
+
+    <a href="javascript:void(0)" class="back-link" onclick="showLanding()">&larr; Back to home</a>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-signin-btn" onclick="setAuthTab('signin')">Sign in</button>
+      <button class="auth-tab" id="tab-signup-btn" onclick="setAuthTab('signup')">Sign up</button>
+    </div>
+
+    <div class="card" id="signin-card">
+      <div class="field"><label>Email</label><input type="email" id="si-email" autocomplete="username"/></div>
+      <div class="field"><label>Password</label><input type="password" id="si-password" autocomplete="current-password"/></div>
+      <button class="btn btn-primary" id="si-submit" onclick="doSignIn()">Sign in</button>
+      <div class="error-text" id="si-error" style="display:none;"></div>
+      <a href="javascript:void(0)" class="mini-link" onclick="goToForgotPassword()">Forgot your password?</a>
+    </div>
+
+    <div class="card" id="forgot-password-card" style="display:none;">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Reset your password</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Enter the email you sign in with and we'll send you a link to set a new password.</p>
+      <div class="field"><label>Email</label><input type="email" id="fp-email" autocomplete="username"/></div>
+      <button class="btn btn-primary" id="fp-submit" onclick="doRequestPasswordReset()">Send reset link</button>
+      <div class="error-text" id="fp-error" style="display:none;"></div>
+      <div class="info-text" id="fp-info" style="display:none;"></div>
+      <a href="javascript:void(0)" class="mini-link" onclick="backToSignInFromForgot()">&larr; Back to sign in</a>
+    </div>
+
+    <div class="card" id="signup-card" style="display:none;">
+      <div class="field"><label>Your name</label><input type="text" id="su-name" maxlength="60"/></div>
+      <div class="field"><label>Email</label><input type="email" id="su-email" autocomplete="username"/></div>
+      <div class="field"><label>Password</label><input type="password" id="su-password" autocomplete="new-password"/></div>
+      <div class="mode-row" style="flex-wrap:wrap;">
+        <button type="button" class="mode-btn active" id="mode-create-btn" onclick="setSchoolMode('create')">Create a new school</button>
+        <button type="button" class="mode-btn" id="mode-join-btn" onclick="setSchoolMode('join')">Join existing school</button>
+      </div>
+      <div class="field" id="school-name-field"><label>School name</label><input type="text" id="su-school-name" maxlength="80"/></div>
+      <div class="field" id="school-domain-field">
+        <label>School email domain</label>
+        <input type="text" id="su-school-domain" maxlength="100" placeholder="e.g. schoolname.co.uk"/>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Required. Must be your school's own domain, not a personal email provider (Gmail, Outlook, etc). Only staff with a @this-domain email can create or join this school, and each domain can only start one free trial.</div>
+      </div>
+      <div class="field" id="school-code-field" style="display:none;"><label>School code</label><input type="text" id="su-school-code" maxlength="8" style="text-transform:uppercase;" placeholder="e.g. AB12CD"/></div>
+      <button class="btn btn-primary" id="su-submit" onclick="doSignUp()">Sign up</button>
+      <div class="error-text" id="su-error" style="display:none;"></div>
+      <div class="info-text" id="su-info" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<div id="trust-auth-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap chooser-decor">
+    <div class="chooser-decor-icons" data-decor-size="full"></div>
+    <div class="brand-lockup">
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">Trust, MAT &amp; company oversight</div>
+    </div>
+
+    <a href="javascript:void(0)" class="back-link" onclick="goToChooser()">&larr; Back to home</a>
+
+    <p style="font-size:13px;color:var(--text-secondary);text-align:center;max-width:340px;margin:0 auto 1rem;">See rolled-up, anonymised analytics across every school in your trust, MAT or company that chooses to link in &ndash; no individual pupil data, free add-on.</p>
+
+    <div class="cta-row" style="max-width:340px;margin:0 auto 1rem;">
+      <button class="btn btn-ghost" onclick="viewTrustDemo(this)">Try a demo</button>
+      <div style="text-align:center;margin:0.4rem 0 0.1rem;font-size:13px;color:var(--text-muted);">Demo code: <span style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;letter-spacing:0.5px;color:#C8A6FF;">DEMOLITION5678</span></div>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-trust-signin-btn" onclick="setTrustAuthTab('signin')">Sign in</button>
+      <button class="auth-tab" id="tab-trust-signup-btn" onclick="setTrustAuthTab('signup')">Sign up</button>
+    </div>
+
+    <div class="card" id="trust-signin-card">
+      <div class="field"><label>Email</label><input type="email" id="tra-si-email" autocomplete="username"/></div>
+      <div class="field"><label>Password</label><input type="password" id="tra-si-password" autocomplete="current-password"/></div>
+      <button class="btn btn-primary" id="tra-si-submit" onclick="doTrustSignIn()">Sign in</button>
+      <div class="error-text" id="tra-si-error" style="display:none;"></div>
+    </div>
+
+    <div class="card" id="trust-signup-card" style="display:none;">
+      <div class="field"><label>Your name</label><input type="text" id="tra-su-name" maxlength="60"/></div>
+      <div class="field"><label>Trust / MAT / company name</label><input type="text" id="tra-su-trust-name" maxlength="80"/></div>
+      <div class="field"><label>Email</label><input type="email" id="tra-su-email" autocomplete="username"/></div>
+      <div class="field"><label>Password</label><input type="password" id="tra-su-password" autocomplete="new-password"/></div>
+      <button class="btn btn-primary" id="tra-su-submit" onclick="doTrustSignUp()">Sign up</button>
+      <div class="error-text" id="tra-su-error" style="display:none;"></div>
+      <div class="info-text" id="tra-su-info" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<div id="trust-dashboard-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap landing-wrap">
+    <div class="brand-lockup">
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <a href="javascript:void(0)" class="brand-lockup-corner" onclick="doSignOut()">Sign out</a>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <div class="section-title" id="td-trust-name">Trust dashboard</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin:0.5rem 0;">Give this code to schools so they can link their data in (Staff &rarr; Trust, on their end):</p>
+      <div style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;font-size:22px;letter-spacing:2px;color:var(--hp-purple);text-align:center;padding:0.5rem;background:var(--hp-purple-light);border-radius:var(--radius);" id="td-trust-code">------</div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div class="section-title" style="margin-bottom:0;">Linked schools</div>
+        <button class="icon-btn export-btn" id="td-schools-export-btn" style="display:none;" onclick="exportTrustSchoolsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      </div>
+      <div id="td-schools-list" style="margin-top:0.5rem;font-size:13px;color:var(--text-secondary);">Loading&hellip;</div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <div class="section-title">Analytics by subject</div>
+      <p style="font-size:12.5px;color:var(--text-muted);margin:0.35rem 0 0.75rem;">Anonymised and rolled up across all linked schools &ndash; no individual pupil names, exactly like each school's own analytics but combined.</p>
+      <div class="mode-row" style="flex-wrap:wrap;" id="td-subject-picker"></div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;display:none;" id="td-results-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div class="section-title" id="td-results-title" style="margin-bottom:0;">Analytics</div>
+        <button class="icon-btn export-btn" id="td-results-export-btn" onclick="exportTrustSubjectCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+      </div>
+      <div id="td-results"></div>
+    </div>
+  </div>
+</div>
+
+<div id="reset-password-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap chooser-decor">
+    <div class="chooser-decor-icons" data-decor-size="full"></div>
+    <div class="brand-lockup">
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">All your assessments in one place</div>
+    </div>
+    <div class="card" id="reset-password-card">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Set a new password</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Choose a new password for your account.</p>
+      <div class="field"><label>New password</label><input type="password" id="rp-password" autocomplete="new-password"/></div>
+      <div class="field"><label>Confirm new password</label><input type="password" id="rp-password-confirm" autocomplete="new-password"/></div>
+      <button class="btn btn-primary" id="rp-submit" onclick="doSetNewPassword()">Set new password</button>
+      <div class="error-text" id="rp-error" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<div id="payment-setup-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap chooser-decor">
+    <div class="chooser-decor-icons" data-decor-size="full"></div>
+    <div class="brand-lockup">
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">All your assessments in one place</div>
+    </div>
+    <div class="card" id="ps-owner-block">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Activate your school's free trial</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:0.9rem;">One last step: add a payment method to activate your 14-day free trial. You won't be charged today &mdash; your card is only charged automatically once the trial ends, unless you cancel first.</p>
+      <button class="btn btn-primary" id="ps-checkout-btn" onclick="startPaymentSetupCheckout(this)">Continue to secure checkout</button>
+      <div class="error-text" id="ps-error" style="display:none;"></div>
+      <a href="javascript:void(0)" class="mini-link" onclick="doSignOut()">Sign out</a>
+    </div>
+    <div class="card" id="ps-staff-block" style="display:none;">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Trial not yet activated</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:0.9rem;">Your school's account owner needs to add a payment method to activate the 14-day free trial before staff can start using Emeejay Assess. Ask them to sign in and complete this step.</p>
+      <a href="javascript:void(0)" class="mini-link" onclick="doSignOut()">Sign out</a>
+    </div>
+  </div>
+</div>
+
+<div id="app-view" style="display:none;">
+<div class="wrap">
+<h2 class="sr-only">Emeejay Assess</h2>
+
+<div class="chooser-decor" style="padding:0.5rem 0 2.25rem;">
+<div class="chooser-decor-icons" data-decor-size="header"></div>
+<a href="javascript:void(0)" onclick="switchTab('quiz'); showScreen('screen-home');" class="brand-lockup" style="cursor:pointer;text-decoration:none;" aria-label="Back to assessment start">
+  <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+  <div class="brand-lockup-word">emeejay</div>
+  <div class="brand-lockup-sub">All your assessments in one place</div>
+</a>
+</div>
+
+<div class="school-bar">
+  <div class="school-bar-left">
+    <b id="sb-school-name">-</b>
+    <span id="sb-teacher-name">-</span>
+  </div>
+  <div class="school-bar-actions">
+    <button class="icon-btn export-btn" id="sb-code-btn" onclick="copyJoinCode()">Code: ------</button>
+    <button class="icon-btn export-btn" onclick="openStaffModal()"><i class="ti ti-users" aria-hidden="true" style="font-size:14px;"></i> Staff</button>
+    <button class="icon-btn danger-btn" onclick="doSignOut()">Sign out</button>
+  </div>
+</div>
+
+<div id="trial-banner" style="display:none;"></div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="switchTab('quiz')"><i class="ti ti-school" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Assessment</button>
+  <button class="nav-tab" onclick="switchTab('results')"><i class="ti ti-list" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Results</button>
+  <button class="nav-tab" onclick="switchTab('analytics')"><i class="ti ti-chart-bar" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Analytics</button>
+  <button class="nav-tab" onclick="switchTab('children')"><i class="ti ti-users" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Children</button>
+  <button class="nav-tab" onclick="switchTab('targets')"><i class="ti ti-target-arrow" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Targets &amp; Reporting</button>
+</div>
+
+<div class="content-shell">
+<div id="tab-quiz">
+  <div class="screen active" id="screen-home">
+    <p style="margin-bottom:0.75rem;">Select a child from the register, then choose a subject to begin.</p>
+
+    <div class="card wip-banner" id="wip-banner" style="margin-bottom:0.75rem;">
+      <div style="display:flex;gap:0.6rem;align-items:flex-start;">
+        <i class="ti ti-tools" aria-hidden="true" style="font-size:18px;color:var(--hp-purple);flex-shrink:0;margin-top:1px;"></i>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px;">Our content library is continually expanding</div>
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.4;">Not every topic, tier or question will suit every child just yet. If something feels too difficult or isn't quite right, use the <i class="ti ti-flag" aria-hidden="true"></i> flag link during a check to let us know &ndash; content is reviewed and adjusted where appropriate.</div>
+        </div>
+        <a href="javascript:void(0)" onclick="document.getElementById('wip-banner').style.display='none';" style="color:var(--text-muted);font-size:16px;line-height:1;flex-shrink:0;" aria-label="Dismiss">&times;</a>
+      </div>
+    </div>
+
+    <!-- Hidden data-bus fields: populated from the roster selection below, read by every
+         finish*Check() function exactly as before. Not shown to the teacher any more. -->
+    <input type="hidden" id="pupil-name"/>
+    <select id="pupil-year" style="display:none;"><option value="">Select</option><option>Under 2s</option><option>2-3s</option><option>Nursery (3-4s)</option><option>Reception</option><option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option><option>Year 5</option><option>Year 6</option></select>
+    <select id="pupil-gender" style="display:none;"><option value="">Select</option><option>Boy</option><option>Girl</option><option>Other</option><option>Prefer not to say</option></select>
+    <input type="date" id="pupil-dob" style="display:none;"/>
+    <select id="pupil-needs" style="display:none;"><option value="">None</option><option>EAL</option><option>SEND</option><option>EAL and SEND</option></select>
+    <select id="pupil-fsm" style="display:none;"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+    <select id="pupil-vulnerable" style="display:none;"><option value="">Not specified</option><option value="true">Yes</option><option value="false">No</option></select>
+    <select id="pupil-ethnicity" style="display:none;"><option value="">Not specified</option><option>White British</option><option>White Irish</option><option>Gypsy/Roma</option><option>Traveller of Irish Heritage</option><option>White - any other background</option><option>Mixed - White and Black Caribbean</option><option>Mixed - White and Black African</option><option>Mixed - White and Asian</option><option>Mixed - any other background</option><option>Asian or Asian British - Indian</option><option>Asian or Asian British - Pakistani</option><option>Asian or Asian British - Bangladeshi</option><option>Asian or Asian British - any other background</option><option>Black or Black British - Caribbean</option><option>Black or Black British - African</option><option>Black or Black British - any other background</option><option>Chinese</option><option>Any other ethnic group</option><option>Prefer not to say</option></select>
+
+    <div class="card" id="home-pupil-selected" style="display:none;margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;">
+        <div>
+          <div class="pupil-name" id="home-selected-name"></div>
+          <div class="pupil-meta" id="home-selected-meta"></div>
+        </div>
+        <button type="button" class="edit-row-btn" onclick="clearAssessmentPupil()">Change child</button>
+      </div>
+    </div>
+
+    <div class="card" id="home-pupil-picker" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.75rem;">Select a child</div>
+      <div id="home-pupil-empty" style="display:none;color:var(--text-secondary);font-size:14px;padding:0.5rem 0;">No children added yet. <a href="javascript:void(0)" onclick="switchTab('children')">Add children to the register</a> to get started.</div>
+      <button type="button" class="btn btn-primary" id="home-pupil-search-btn" style="width:100%;display:none;" onclick="openHomePupilSearch()"><i class="ti ti-search" aria-hidden="true" style="margin-right:6px;"></i>Search for a child</button>
+      <div id="home-pupil-search-panel" style="display:none;">
+        <div class="name-row" style="display:flex;gap:0.5rem;align-items:center;">
+          <input type="text" id="home-pupil-search" placeholder="Search for a child..." oninput="renderHomePupilPicker()" style="flex:1;"/>
+          <a href="javascript:void(0)" onclick="closeHomePupilSearch()" style="color:var(--text-secondary);font-size:13px;white-space:nowrap;">Cancel</a>
+        </div>
+        <div id="home-pupil-list"></div>
+        <div id="home-pupil-hint" style="color:var(--text-secondary);font-size:13px;padding:0.5rem 0;">Start typing a name to search.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.75rem;">Choose a subject</div>
+      <div class="card" id="home-nursery-note" style="display:none;margin-bottom:0.75rem;">
+        <div style="display:flex;gap:0.6rem;align-items:flex-start;">
+          <i class="ti ti-info-circle" aria-hidden="true" style="font-size:18px;color:var(--hp-purple);flex-shrink:0;margin-top:1px;"></i>
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.4;">Under 2s, 2-3s and Nursery children are only assessed on Early Years and Phonics for now.</div>
+        </div>
+      </div>
+      <div class="subject-grid" id="home-subject-grid">
+        <button class="subject-card subj-early-years" onclick="goToSubject('early_years')">
+          <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
+          <div class="subject-name">Early Years</div>
+          <div class="subject-desc">
