@@ -1,0 +1,357 @@
+hips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New Reasoning check</button>
+  </div>
+
+  <div class="screen" id="screen-computing-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-computing">
+      <div class="subject-icon"><i class="ti ti-device-desktop" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Computing</div>
+    </div>
+    <div class="card" id="computing-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a module</span>
+      </div>
+      <div id="computing-topic-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-computing-tiers">
+    <a href="javascript:void(0)" class="back-link" onclick="backToComputingTopics()">&larr; Back to modules</a>
+    <div class="subject-banner subj-computing">
+      <div class="subject-icon" id="computing-banner-icon"><i class="ti ti-device-desktop" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="computing-banner-title">Topic</div>
+    </div>
+    <div class="card" id="computing-tier-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" onclick="startComputingCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
+      <button class="phase-btn" onclick="startComputingCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
+      <button class="phase-btn" onclick="startComputingCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveComputingTier('KS1')">KS1</button>
+        <button type="button" class="year-btn" onclick="startLiveComputingTier('LKS2')">LKS2</button>
+        <button type="button" class="year-btn" onclick="startLiveComputingTier('UKS2')">UKS2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-computing-check">
+    <div class="progress-bar"><div class="progress-fill" id="computing-prog"></div></div>
+    <div class="sound-counter" id="computing-counter">Question 1 of 12</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child this question, then tap the answer they give</div>
+      <div class="gr-question-display" id="computing-question-display"></div>
+      <div class="mc-grid mc-grid-text" id="computing-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportComputingQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-computing-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Computing check for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:0.25rem;" id="computing-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="computing-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="computing-res-total"></div><div class="stat-lbl" id="computing-res-total-lbl">Correct</div></div>
+      </div>
+    </div>
+    <div class="card" id="computing-res-missed-wrap" style="display:none;"><div class="section-hd">Questions to revisit</div><div id="computing-res-missed-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New Computing check</button>
+  </div>
+
+  <div class="screen" id="screen-live-review">
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.35rem;" id="live-review-label">Review before sending</div>
+      <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:0;">These are the <span id="live-review-count"></span> that will be sent to the class. Swap out anything that doesn't look right before you generate the code &ndash; you'll get the chance to say why, which helps us improve the question bank.</p>
+    </div>
+    <div id="live-review-list" style="margin-bottom:0.75rem;"></div>
+    <button class="all-btn" style="width:100%;margin-bottom:0.75rem;" onclick="openSuggestQuestionModal({subject:liveReviewState.subject, checkType:liveReviewState.checkType, tier:liveReviewState.tier, topicLabel:liveReviewState.topicLabel, fromLiveReview:true})" id="live-review-suggest-btn">+ Suggest a question of your own</button>
+    <div style="display:flex;gap:8px;">
+      <button class="btn" style="flex:1;" onclick="cancelLiveReview()">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;" onclick="confirmStartLiveSession()">Looks good, generate code</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-live-dashboard">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;" id="live-session-label">Live session</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.5rem;">Join code</div>
+      <div style="font-size:48px;font-weight:700;letter-spacing:8px;color:var(--hp-purple);" id="live-session-code">-----</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-top:0.5rem;">Children go to emeejay.com, tap &ldquo;I'm a student with a class code&rdquo;, then enter this code</div>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Live progress</h2>
+      <button class="icon-btn danger-btn" onclick="closeLiveSession()">Close session</button>
+    </div>
+    <div id="live-empty" class="empty-state" style="display:none;">Waiting for children to join&hellip;</div>
+    <div id="live-participants-list"></div>
+  </div>
+
+  <div class="screen" id="screen-check">
+    <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+    <div class="sound-counter" id="sound-counter">Sound 1 of 25</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Show the child this sound</div>
+      <div class="sound-display" id="sound-display">m</div>
+      <div class="keyword" id="keyword-display"></div>
+      <div class="yn-row">
+        <button class="yn-btn yn-yes" onclick="mark(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Can say it</button>
+        <button class="yn-btn yn-no" onclick="mark(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
+      </div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportPhonicsSound()"><i class="ti ti-flag" aria-hidden="true"></i> Report this sound</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Results for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:1rem;" id="res-name"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="res-got"></div><div class="stat-lbl">Can say</div></div>
+        <div class="stat-card"><div class="stat-val" id="res-not"></div><div class="stat-lbl">Not yet</div></div>
+      </div>
+    </div>
+    <div class="card" id="res-ok-wrap" style="display:none;"><div class="section-hd">Sounds known</div><div id="res-ok-chips" class="chips-row"></div></div>
+    <div class="card" id="res-no-wrap" style="display:none;"><div class="section-hd">Still learning</div><div id="res-no-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New assessment</button>
+    <button class="btn btn-ghost" onclick="switchTab('results')">View all results</button>
+  </div>
+
+  <div class="screen" id="screen-bc-check">
+    <div class="progress-bar"><div class="progress-fill" id="bc-prog"></div></div>
+    <div class="sound-counter" id="bc-counter">Word 1 of 40</div>
+    <div class="card" style="text-align:center;">
+      <div id="bc-pseudo-badge" class="pseudo-badge" style="display:none;"><i class="ti ti-puzzle" aria-hidden="true"></i> Pseudo-word (not a real word)</div>
+      <div class="check-label">Ask the child to blend and read this word</div>
+      <div class="sound-display" id="bc-word-display">dup</div>
+      <div class="yn-row">
+        <button class="yn-btn yn-yes" onclick="markBlendingWord(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Read correctly</button>
+        <button class="yn-btn yn-no" onclick="markBlendingWord(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
+      </div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportBlendingWord()"><i class="ti ti-flag" aria-hidden="true"></i> Report this word</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-bc-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Blending check for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:1rem;" id="bc-res-name"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="bc-res-total"></div><div class="stat-lbl">Total (out of 40)</div></div>
+        <div class="stat-card"><div class="stat-val" id="bc-res-real"></div><div class="stat-lbl">Real words (out of 20)</div></div>
+        <div class="stat-card"><div class="stat-val" id="bc-res-pseudo"></div><div class="stat-lbl">Pseudo-words (out of 20)</div></div>
+      </div>
+    </div>
+    <div class="card" id="bc-res-missed-wrap" style="display:none;"><div class="section-hd">Words to revisit</div><div id="bc-res-missed-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New blending check</button>
+  </div>
+
+  <div class="screen" id="screen-tt-check">
+    <div class="progress-bar"><div class="progress-fill" id="tt-prog"></div></div>
+    <div class="sound-counter" id="tt-counter">Fact 1 of 25</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child this times table fact</div>
+      <div class="sound-display" id="tt-fact-display">7 &times; 8</div>
+      <div class="yn-row">
+        <button class="yn-btn yn-yes" onclick="markTT(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Correct</button>
+        <button class="yn-btn yn-no" onclick="markTT(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
+      </div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportTTFact()"><i class="ti ti-flag" aria-hidden="true"></i> Report this fact</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-tt-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Times Tables Check for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:0.25rem;" id="tt-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="tt-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="tt-res-total"></div><div class="stat-lbl" id="tt-res-total-lbl">Correct</div></div>
+      </div>
+    </div>
+    <div class="card" id="tt-res-missed-wrap" style="display:none;"><div class="section-hd">Facts to revisit</div><div id="tt-res-missed-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New times tables check</button>
+  </div>
+
+  <div class="screen" id="screen-en-check">
+    <div class="progress-bar"><div class="progress-fill" id="en-prog"></div></div>
+    <div class="sound-counter" id="en-counter">Question 1 of 12</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child this question, then tap the answer they give</div>
+      <div class="gr-question-display" id="en-question-display"></div>
+      <div class="mc-grid mc-grid-text" id="en-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportEnglishQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-en-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">English check for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:0.25rem;" id="en-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="en-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="en-res-total"></div><div class="stat-lbl" id="en-res-total-lbl">Correct</div></div>
+      </div>
+    </div>
+    <div class="card" id="en-res-missed-wrap" style="display:none;"><div class="section-hd">Questions to revisit</div><div id="en-res-missed-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New English check</button>
+  </div>
+
+  <div class="screen" id="screen-mt-check">
+    <div class="progress-bar"><div class="progress-fill" id="mt-prog"></div></div>
+    <div class="sound-counter" id="mt-counter">Question 1 of 12</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child this question, then tap the answer they give</div>
+      <div class="gr-question-display" id="mt-question-display"></div>
+      <div id="mt-pictogram-display"></div>
+      <div class="mc-grid mc-grid-text" id="mt-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportMathsQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-mt-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Maths check for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:0.25rem;" id="mt-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="mt-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="mt-res-total"></div><div class="stat-lbl" id="mt-res-total-lbl">Correct</div></div>
+      </div>
+    </div>
+    <div class="card" id="mt-res-missed-wrap" style="display:none;"><div class="section-hd">Questions to revisit</div><div id="mt-res-missed-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New Maths check</button>
+  </div>
+
+  <div class="screen" id="screen-hw-check">
+    <div class="progress-bar"><div class="progress-fill" id="hw-prog"></div></div>
+    <div class="sound-counter" id="hw-counter">Item 1 of 12</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child to write this</div>
+      <div class="sound-display" id="hw-item-display">a</div>
+      <div class="yn-row">
+        <button class="yn-btn yn-yes" onclick="markHw(true)"><i class="ti ti-check" aria-hidden="true" style="font-size:20px;"></i> Formed correctly</button>
+        <button class="yn-btn yn-no" onclick="markHw(false)"><i class="ti ti-x" aria-hidden="true" style="font-size:20px;"></i> Not yet</button>
+      </div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportHwItem()"><i class="ti ti-flag" aria-hidden="true"></i> Report this item</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-hw-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Results for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:1rem;" id="hw-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="hw-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="hw-res-got"></div><div class="stat-lbl">Formed correctly</div></div>
+        <div class="stat-card"><div class="stat-val" id="hw-res-not"></div><div class="stat-lbl">Not yet</div></div>
+      </div>
+    </div>
+    <div class="card" id="hw-res-ok-wrap" style="display:none;"><div class="section-hd">Formed correctly</div><div id="hw-res-ok-chips" class="chips-row"></div></div>
+    <div class="card" id="hw-res-no-wrap" style="display:none;"><div class="section-hd">Still practising</div><div id="hw-res-no-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New handwriting check</button>
+  </div>
+
+  <div class="screen" id="screen-tp-check">
+    <div class="progress-bar"><div class="progress-fill" id="tp-prog"></div></div>
+    <div class="sound-counter" id="tp-counter">Question 1 of 12</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child this question, then tap the answer they give</div>
+      <div class="gr-question-display" id="tp-question-display"></div>
+      <div class="mc-grid mc-grid-text" id="tp-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportTopicQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-tp-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Topic check for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:0.25rem;" id="tp-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="tp-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="tp-res-total"></div><div class="stat-lbl" id="tp-res-total-lbl">Correct</div></div>
+      </div>
+    </div>
+    <div class="card" id="tp-res-missed-wrap" style="display:none;"><div class="section-hd">Questions to revisit</div><div id="tp-res-missed-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New topic check</button>
+  </div>
+
+  <div class="screen" id="screen-sc-check">
+    <div class="progress-bar"><div class="progress-fill" id="sc-prog"></div></div>
+    <div class="sound-counter" id="sc-counter">Question 1 of 12</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child this question, then tap the answer they give</div>
+      <div class="gr-question-display" id="sc-question-display"></div>
+      <div class="mc-grid mc-grid-text" id="sc-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportScienceQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-sc-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Science check for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:0.25rem;" id="sc-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="sc-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="sc-res-total"></div><div class="stat-lbl" id="sc-res-total-lbl">Correct</div></div>
+      </div>
+    </div>
+    <div class="card" id="sc-res-missed-wrap" style="display:none;"><div class="section-hd">Questions to revisit</div><div id="sc-res-missed-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New science check</button>
+  </div>
+
+  <div class="screen" id="screen-re-check">
+    <div class="progress-bar"><div class="progress-fill" id="re-prog"></div></div>
+    <div class="sound-counter" id="re-counter">Question 1 of 12</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child this question, then tap the answer they give</div>
+      <div class="gr-question-display" id="re-question-display"></div>
+      <div class="mc-grid mc-grid-text" id="re-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportReQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-re-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">RE check for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:0.25rem;" id="re-res-name"></div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;" id="re-res-label"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="re-res-total"></div><div class="stat-lbl" id="re-res-total-lbl">Correct</div></div>
+      </div>
+    </div>
+    <div class="card" id="re-res-missed-wrap" style="display:none;"><div class="section-hd">Questions to revisit</div><div id="re-res-missed-chips" class="chips-row"></div></div>
+    <button class="btn btn-primary" onclick="goHome()">New RE check</button>
+  </div>
+
+  <div class="screen" id="screen-mfl-check">
+    <div class="progress-bar"><div class="progress-fill" id="mfl-prog"></div></div>
+    <div class="sound-counter" id="mfl-counter">Question 1 of 12</div>
+    <div class="card" style="text-align:center;">
+      <div class="check-label">Ask the child this question, then tap the answer they give</div>
+      <div class="gr-question-display" id="mfl-question-display"></div>
+      <div class="mc-grid mc-grid-text" id="mfl-answer-display"></div>
+      <a href="javascript:void(0)" class="report-q-link" onclick="reportMflQuestion()"><i class="ti ti-flag" aria-hidden="true"></i> Report this question</a>
+    </div>
+    <button class="btn btn-ghost" onclick="goHome()" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-mfl-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Languages check for</div>
+      <div style="font-size:22px;f
