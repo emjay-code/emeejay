@@ -1,0 +1,289 @@
+rable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by ethnicity</h2><div id="music-an-ethnicity"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="music-an-attendance-band"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="music-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="music-an-leaderboard"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="music-an-rankings" style="margin-top:0.75rem;"></div></details></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="music-an-heatmap"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="music-an-coverage"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="music-an-missed"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">Music check trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children checked more than once, showing change over time.</p>
+        <div id="music-an-trends"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="an-reasoning-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-reasoning">
+      <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Reasoning analytics</div>
+    </div>
+    <div class="class-filter-indicator has-select active">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Filter by class:</span>
+      <select class="class-filter-select" onchange="setClassFilter(this.value)">
+        <option value="">All classes (whole school)</option>
+        <option value="Under 2s">Under 2s</option><option value="2-3s">2-3s</option><option value="Nursery (3-4s)">Nursery (3-4s)</option><option value="Reception">Reception</option><option value="Year 1">Year 1</option><option value="Year 2">Year 2</option><option value="Year 3">Year 3</option><option value="Year 4">Year 4</option><option value="Year 5">Year 5</option><option value="Year 6">Year 6</option><option value="Not recorded">Not recorded</option>
+      </select>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportReasoningAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="reasoning-an-empty" class="empty-state" style="display:none;">No Reasoning check data yet. Complete a Reasoning check first.</div>
+    <div id="reasoning-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Reasoning check overview</h2><div id="reasoning-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="reasoning-an-bands"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="reasoning-an-gender"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="reasoning-an-needs"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by Free School Meals</h2><div id="reasoning-an-fsm"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by vulnerable status</h2><div id="reasoning-an-vulnerable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by ethnicity</h2><div id="reasoning-an-ethnicity"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="reasoning-an-attendance-band"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="reasoning-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="reasoning-an-leaderboard"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="reasoning-an-rankings" style="margin-top:0.75rem;"></div></details></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="reasoning-an-heatmap"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="reasoning-an-coverage"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="reasoning-an-missed"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">Reasoning check trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children checked more than once, showing change over time.</p>
+        <div id="reasoning-an-trends"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="an-pe-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-pe">
+      <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">PE analytics</div>
+    </div>
+    <div class="class-filter-indicator has-select active">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Filter by class:</span>
+      <select class="class-filter-select" onchange="setClassFilter(this.value)">
+        <option value="">All classes (whole school)</option>
+        <option value="Under 2s">Under 2s</option><option value="2-3s">2-3s</option><option value="Nursery (3-4s)">Nursery (3-4s)</option><option value="Reception">Reception</option><option value="Year 1">Year 1</option><option value="Year 2">Year 2</option><option value="Year 3">Year 3</option><option value="Year 4">Year 4</option><option value="Year 5">Year 5</option><option value="Year 6">Year 6</option><option value="Not recorded">Not recorded</option>
+      </select>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportPeAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="pe-an-empty" class="empty-state" style="display:none;">No PE assessment data yet. Complete a whole-class PE pass first.</div>
+    <div id="pe-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">PE overview by strand</h2><div id="pe-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating bands</h2><div id="pe-an-bands"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by gender</h2><div id="pe-an-gender"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by additional needs</h2><div id="pe-an-needs"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by Free School Meals</h2><div id="pe-an-fsm"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by vulnerable status</h2><div id="pe-an-vulnerable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by ethnicity</h2><div id="pe-an-ethnicity"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by attendance</h2><div id="pe-an-attendance-band"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="pe-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="pe-an-leaderboard"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="pe-an-rankings" style="margin-top:0.75rem;"></div></details></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Strand by year group</h2><div id="pe-an-heatmap"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Assessed this term</h2><div id="pe-an-coverage"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">PE assessment trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children assessed more than once on the same strand, showing change over time.</p>
+        <div id="pe-an-trends"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="an-computing-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-computing">
+      <div class="subject-icon"><i class="ti ti-device-desktop" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Computing analytics</div>
+    </div>
+    <div class="class-filter-indicator has-select active">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Filter by class:</span>
+      <select class="class-filter-select" onchange="setClassFilter(this.value)">
+        <option value="">All classes (whole school)</option>
+        <option value="Under 2s">Under 2s</option><option value="2-3s">2-3s</option><option value="Nursery (3-4s)">Nursery (3-4s)</option><option value="Reception">Reception</option><option value="Year 1">Year 1</option><option value="Year 2">Year 2</option><option value="Year 3">Year 3</option><option value="Year 4">Year 4</option><option value="Year 5">Year 5</option><option value="Year 6">Year 6</option><option value="Not recorded">Not recorded</option>
+      </select>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportComputingAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="computing-an-empty" class="empty-state" style="display:none;">No Computing check data yet. Complete a Computing check first.</div>
+    <div id="computing-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Computing check overview</h2><div id="computing-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="computing-an-bands"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="computing-an-gender"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="computing-an-needs"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by Free School Meals</h2><div id="computing-an-fsm"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by vulnerable status</h2><div id="computing-an-vulnerable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by ethnicity</h2><div id="computing-an-ethnicity"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="computing-an-attendance-band"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="computing-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="computing-an-leaderboard"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="computing-an-rankings" style="margin-top:0.75rem;"></div></details></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="computing-an-heatmap"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="computing-an-coverage"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="computing-an-missed"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">Computing check trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children checked more than once, showing change over time.</p>
+        <div id="computing-an-trends"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="an-attendance-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-attendance">
+      <div class="subject-icon"><i class="ti ti-calendar-check" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Attendance analytics</div>
+    </div>
+    <div class="class-filter-indicator has-select active">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Filter by class:</span>
+      <select class="class-filter-select" onchange="setClassFilter(this.value)">
+        <option value="">All classes (whole school)</option>
+        <option value="Under 2s">Under 2s</option><option value="2-3s">2-3s</option><option value="Nursery (3-4s)">Nursery (3-4s)</option><option value="Reception">Reception</option><option value="Year 1">Year 1</option><option value="Year 2">Year 2</option><option value="Year 3">Year 3</option><option value="Year 4">Year 4</option><option value="Year 5">Year 5</option><option value="Year 6">Year 6</option><option value="Not recorded">Not recorded</option>
+      </select>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="all-btn" onclick="openAttendanceModal()">Record attendance</button>
+    </div>
+    <div id="an-attendance-empty" class="empty-state" style="display:none;">No attendance recorded yet. Use "Record attendance" above, or on the Children tab, to get started.</div>
+    <div id="an-attendance-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Average attendance by term</h2><div id="an-attendance-trend"></div></div>
+      <p style="font-size:12.5px;color:var(--text-muted);margin:-0.5rem 0 0.75rem;">The breakdowns below are for the most recent term with data: <strong id="an-attendance-recent-term-label"></strong>.</p>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Attendance by year group</h2><div id="an-attendance-year"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Attendance by gender</h2><div id="an-attendance-gender"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Attendance by Free School Meals</h2><div id="an-attendance-fsm"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Attendance by vulnerable status</h2><div id="an-attendance-vulnerable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Attendance by ethnicity</h2><div id="an-attendance-ethnicity"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">Children below 90% attendance</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">90% is the threshold the DfE uses to define "persistent absence" &ndash; a useful early-warning list, not a judgement.</p>
+        <div id="an-attendance-low"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-children" style="display:none;">
+  <div class="rv-screen active" id="ch-list-screen">
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.75rem;">Children</div>
+      <p style="font-size:13px;margin-bottom:0.75rem;">Add every child in the school here once, so their year group and details autofill whenever you start a check &ndash; and see each child's full history in one place.</p>
+      <div class="name-row">
+        <input type="text" id="ch-search" placeholder="Search by name" oninput="renderChildrenList()" style="flex:1;"/>
+        <button class="btn btn-primary" style="width:auto;margin-top:0;white-space:nowrap;" onclick="openAddPupil()">+ Add child</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div style="font-size:12px;color:var(--text-muted);" id="ch-rollover-status"></div>
+        <button class="all-btn" onclick="runYearRolloverManual()">Start new school year</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div>
+          <div class="section-hd" style="margin-bottom:2px;">Attendance</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">Record every child's attendance percentage for a term, all at once.</div>
+        </div>
+        <button class="all-btn" onclick="openAttendanceModal()">Record attendance</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:0.75rem;">
+      <button type="button" class="group-toggle-btn active" id="ch-view-active-btn" onclick="setChildrenViewMode('active')">Active (<span id="ch-active-count">0</span>)</button>
+      <button type="button" class="group-toggle-btn" id="ch-view-leavers-btn" onclick="setChildrenViewMode('leavers')">Leavers (<span id="ch-leavers-count">0</span>)</button>
+    </div>
+    <div id="ch-empty" class="empty-state" style="display:none;">No children added yet.</div>
+    <div id="ch-list"></div>
+  </div>
+
+  <div class="rv-screen" id="ch-profile-screen">
+    <a href="javascript:void(0)" class="back-link" onclick="backToChildrenList()">&larr; Back to children</a>
+    <div class="card" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
+        <div>
+          <div style="font-size:19px;font-weight:600;color:var(--hp-purple-dark);" id="ch-profile-name"></div>
+          <div class="pupil-meta" id="ch-profile-meta" style="margin-top:4px;"></div>
+          <div class="pupil-meta" id="ch-profile-leaver-note" style="display:none;margin-top:4px;color:var(--text-danger);"></div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;">
+          <button class="all-btn" onclick="exportChildProfileCSV()">Export CSV</button>
+          <button class="edit-row-btn" onclick="editCurrentPupil()">Edit details</button>
+          <button class="all-btn" id="ch-profile-leave-btn" onclick="openMarkAsLeftModal()">Mark as left</button>
+          <button class="all-btn" id="ch-profile-reinstate-btn" style="display:none;" onclick="reinstatePupil()">Reinstate</button>
+          <button class="delete-row-btn" onclick="deleteCurrentPupil()">Delete permanently</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="ch-profile-practice-card" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div>
+          <div class="section-hd" style="margin-bottom:2px;">Home practice link</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">A private link just for this child to practise at home or in class. Doesn't count as an official assessment.</div>
+        </div>
+        <button class="all-btn" id="ch-profile-practice-btn" onclick="generatePracticeLink()">Get practice link</button>
+      </div>
+      <div id="ch-profile-practice-linkrow" style="display:none;margin-top:0.6rem;gap:6px;flex-wrap:wrap;align-items:center;">
+        <input type="text" id="ch-profile-practice-url" readonly style="flex:1;min-width:220px;font-size:12.5px;" onclick="this.select();"/>
+        <button class="all-btn" onclick="copyPracticeLink()">Copy link</button>
+      </div>
+    </div>
+
+    <div class="card" id="ch-profile-parent-card" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+        <div>
+          <div class="section-hd" style="margin-bottom:2px;">Parent/carer link &amp; code</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">A light, friendly update for parents and carers &ndash; no scores or raw results, just gentle pointers on what's going well and what could use a bit more support. Share the link, or give them the code to enter themselves at emeejay.com (choose "I'm a parent/carer with a code").</div>
+        </div>
+        <button class="all-btn" id="ch-profile-parent-btn" onclick="generateParentLink()">Get parent/carer link</button>
+      </div>
+      <div id="ch-profile-parent-linkrow" style="display:none;margin-top:0.6rem;">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Parent/carer code</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:0.7rem;">
+          <div style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;font-size:16px;letter-spacing:1.5px;color:var(--hp-purple);padding:0.35rem 0.7rem;background:var(--hp-purple-light);border-radius:var(--radius);" id="ch-profile-parent-code">------</div>
+          <button class="all-btn" id="ch-profile-parent-copycode-btn" onclick="copyParentCode()">Copy code</button>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Or full link</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          <input type="text" id="ch-profile-parent-url" readonly style="flex:1;min-width:220px;font-size:12.5px;" onclick="this.select();"/>
+          <button class="all-btn" id="ch-profile-parent-copylink-btn" onclick="copyParentLink()">Copy link</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="ch-profile-attendance-card" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <div class="section-hd" style="margin-bottom:0;">Attendance</div>
+        <button class="all-btn" onclick="openAttendanceModal(currentPupilId)">Add / edit</button>
+      </div>
+      <div id="ch-profile-attendance-list"></div>
+      <div id="ch-profile-attendance-empty" style="font-size:13px;color:var(--text-muted);display:none;">No attendance recorded yet for this child.</div>
+    </div>
+
+    <div class="card" id="ch-profile-snapshot-card" style="margin-bottom:1rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Overview</div>
+      <div id="ch-profile-snapshot-grid"></div>
+      <div id="ch-profile-snapshot-empty" class="empty-state" style="display:none;padding:1.5rem 1rem;">No checks recorded for this child yet.</div>
+    </div>
+
+    <div class="class-filter-indicator" id="ch-profile-topic-focus-indicator">
+      <i class="ti ti-filter" aria-hidden="true"></i>
+      <span>Showing <span id="ch-profile-topic-focus-text"></span></span>
+      <a href="javascript:void(0)" onclick="clearProfileTopicFocus()">Show full history</a>
+    </div>
+    <div class="section-hd" id="ch-profile-history-hd" style="margin:1rem 0 0.5rem;display:none;">Full history by subject</div>
+    <details class="year-group" id="ch-profile-wrap-early_years"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Early Years</span><span class="year-group-count" id="ch-profile-count-early_years"></span></summary><div class="year-group-body"><div id="ch-profile-early_years"></div><div id="ch-profile-early_years-empty" style="font-size:13px;color:var(--text-muted);">No Early Years checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-phonics"><summary class="year-group-summary"><span class="chevron">▸</span><span clas
