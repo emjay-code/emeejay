@@ -199,6 +199,14 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .mc-btn:disabled{cursor:default;opacity:0.85;}
 .mc-btn.mc-correct{background:var(--bg-success);color:var(--text-success);border-color:var(--border-success);}
 .mc-btn.mc-wrong{background:var(--bg-danger);color:var(--text-danger);border-color:var(--border-danger);}
+.pe-pass-row{display:flex;align-items:center;justify-content:space-between;gap:0.75rem;padding:0.6rem 0;border-bottom:0.5px solid var(--border);flex-wrap:wrap;}
+.pe-pass-name{font-size:13.5px;color:var(--text-primary);flex:1;min-width:90px;}
+.pe-pass-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.pe-rate-btn{padding:0.4rem 0.7rem;border-radius:var(--radius);font-size:12.5px;font-weight:500;cursor:pointer;border:0.5px solid var(--border-strong);background:var(--surface-2);color:var(--text-secondary);transition:all 0.12s;}
+.pe-rate-btn:hover{border-color:var(--hp-purple-mid);}
+.pe-rate-btn.active.pe-rate-working_towards{background:var(--bg-danger);color:var(--text-danger);border-color:var(--border-danger);}
+.pe-rate-btn.active.pe-rate-meeting{background:var(--bg-warning);color:var(--text-warning);border-color:var(--border-warning);}
+.pe-rate-btn.active.pe-rate-exceeding{background:var(--bg-success);color:var(--text-success);border-color:var(--border-success);}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:0.5rem;margin-bottom:1rem;}
 .stat-card{background:var(--surface-3);border-radius:var(--radius);padding:0.75rem 1rem;text-align:center;}
 .stat-val{font-size:22px;font-weight:600;color:var(--text-primary);font-family:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
@@ -434,6 +442,9 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 .subj-attendance{background:#E5F5F1;border-color:#B9E0D6;}
 .subj-attendance .subject-icon{background:#1F7A6C;}
 .subj-attendance .subject-name{color:#155349;}
+.subj-pe{background:#FBEAE3;border-color:#F0C4B0;}
+.subj-pe .subject-icon{background:#C64522;}
+.subj-pe .subject-name{color:#8A2E14;}
 .subject-card.subj-phonics .subject-icon{background:none;color:var(--hp-purple-dark);}
 .subject-card.subj-maths .subject-icon{background:none;color:#0F6B4F;}
 .subject-card.subj-english .subject-icon{background:none;color:#26399E;}
@@ -448,6 +459,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 .subject-card.subj-reasoning .subject-icon{background:none;color:#1E3E73;}
 .subject-card.subj-computing .subject-icon{background:none;color:#22303F;}
 .subject-card.subj-attendance .subject-icon{background:none;color:#155349;}
+.subject-card.subj-pe .subject-icon{background:none;color:#8A2E14;}
 /* Custom mask-based subject icon shapes (exact design export, replaces all Tabler glyph approximations) */
 .subject-card.subj-phonics .subject-icon i,
 .subject-banner.subj-phonics .subject-icon i,
@@ -475,6 +487,8 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 .subject-banner.subj-reasoning .subject-icon i,
 .subject-card.subj-computing .subject-icon i,
 .subject-banner.subj-computing .subject-icon i,
+.subject-card.subj-pe .subject-icon i,
+.subject-banner.subj-pe .subject-icon i,
 .ey-area-comm_lang .phase-badge i,
 .ey-area-psed .phase-badge i,
 .ey-area-physical .phase-badge i,
@@ -508,6 +522,8 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 .subject-banner.subj-reasoning .subject-icon i{background-color:#fff;-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%226%22%20cy%3D%226%22%20r%3D%222.5%22%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%229%22%20r%3D%222.5%22%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%229%22%20cy%3D%2218%22%20r%3D%222.5%22%3E%3C%2Fcircle%3E%3Cpath%20d%3D%22M8.3%207.2%2015.7%208.5M7%208.4l1.4%207.2M11.3%2017l5.4-6%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%226%22%20cy%3D%226%22%20r%3D%222.5%22%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%229%22%20r%3D%222.5%22%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%229%22%20cy%3D%2218%22%20r%3D%222.5%22%3E%3C%2Fcircle%3E%3Cpath%20d%3D%22M8.3%207.2%2015.7%208.5M7%208.4l1.4%207.2M11.3%2017l5.4-6%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");}
 .subject-card.subj-computing .subject-icon i{background-color:#22303F;-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223%22%20y%3D%224.5%22%20width%3D%2218%22%20height%3D%2212%22%20rx%3D%222%22%3E%3C%2Frect%3E%3Cpath%20d%3D%22M9.5%2020.5h5M12%2016.5v4%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M7.5%2012l2-2.5-2-2.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12.5%2012.5h4%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223%22%20y%3D%224.5%22%20width%3D%2218%22%20height%3D%2212%22%20rx%3D%222%22%3E%3C%2Frect%3E%3Cpath%20d%3D%22M9.5%2020.5h5M12%2016.5v4%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M7.5%2012l2-2.5-2-2.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12.5%2012.5h4%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");}
 .subject-banner.subj-computing .subject-icon i{background-color:#fff;-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223%22%20y%3D%224.5%22%20width%3D%2218%22%20height%3D%2212%22%20rx%3D%222%22%3E%3C%2Frect%3E%3Cpath%20d%3D%22M9.5%2020.5h5M12%2016.5v4%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M7.5%2012l2-2.5-2-2.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12.5%2012.5h4%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223%22%20y%3D%224.5%22%20width%3D%2218%22%20height%3D%2212%22%20rx%3D%222%22%3E%3C%2Frect%3E%3Cpath%20d%3D%22M9.5%2020.5h5M12%2016.5v4%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M7.5%2012l2-2.5-2-2.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12.5%2012.5h4%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");}
+.subject-card.subj-pe .subject-icon i{background-color:#8A2E14;-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2215.5%22%20cy%3D%225%22%20r%3D%222%22%3E%3C%2Fcircle%3E%3Cpath%20d%3D%22M14%207.5%2010.5%2013%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.5%2013%206.5%2017.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M6.5%2017.5%204.5%2015.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.5%2013%2013.5%2019%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M13.5%2019%2017%2019%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12%209.5%2016.5%2011%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12%209.5%208%207.5%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2215.5%22%20cy%3D%225%22%20r%3D%222%22%3E%3C%2Fcircle%3E%3Cpath%20d%3D%22M14%207.5%2010.5%2013%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.5%2013%206.5%2017.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M6.5%2017.5%204.5%2015.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.5%2013%2013.5%2019%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M13.5%2019%2017%2019%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12%209.5%2016.5%2011%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12%209.5%208%207.5%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");}
+.subject-banner.subj-pe .subject-icon i{background-color:#fff;-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2215.5%22%20cy%3D%225%22%20r%3D%222%22%3E%3C%2Fcircle%3E%3Cpath%20d%3D%22M14%207.5%2010.5%2013%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.5%2013%206.5%2017.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M6.5%2017.5%204.5%2015.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.5%2013%2013.5%2019%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M13.5%2019%2017%2019%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12%209.5%2016.5%2011%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12%209.5%208%207.5%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2215.5%22%20cy%3D%225%22%20r%3D%222%22%3E%3C%2Fcircle%3E%3Cpath%20d%3D%22M14%207.5%2010.5%2013%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.5%2013%206.5%2017.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M6.5%2017.5%204.5%2015.5%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.5%2013%2013.5%2019%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M13.5%2019%2017%2019%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12%209.5%2016.5%2011%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12%209.5%208%207.5%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");}
 .ey-area-comm_lang .phase-badge i{background-color:var(--hp-purple);-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%206.5A2%202%200%200%201%205%204.5h8a2%202%200%200%201%202%202v4a2%202%200%200%201-2%202H8l-3.5%203v-3H5a2%202%200%200%201-2-2Z%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M17.5%209.5h1a2%202%200%200%201%202%202v4a2%202%200%200%201-2%202H18v3l-3.5-3h-2%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%206.5A2%202%200%200%201%205%204.5h8a2%202%200%200%201%202%202v4a2%202%200%200%201-2%202H8l-3.5%203v-3H5a2%202%200%200%201-2-2Z%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M17.5%209.5h1a2%202%200%200%201%202%202v4a2%202%200%200%201-2%202H18v3l-3.5-3h-2%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");}
 .ey-area-psed .phase-badge i{background-color:var(--hp-purple);-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%2020.5s-8.5-4.9-8.5-10.4A4.6%204.6%200%200%201%2012%207.4a4.6%204.6%200%200%201%208.5%202.7c0%205.5-8.5%2010.4-8.5%2010.4Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%2020.5s-8.5-4.9-8.5-10.4A4.6%204.6%200%200%201%2012%207.4a4.6%204.6%200%200%201%208.5%202.7c0%205.5-8.5%2010.4-8.5%2010.4Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");}
 .ey-area-physical .phase-badge i{background-color:var(--hp-purple);-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%224.8%22%20r%3D%222.3%22%3E%3C%2Fcircle%3E%3Cpath%20d%3D%22M12.6%209.2%208.5%2011l1.6%203.4-2.6%206%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.1%2014.4h4.3l1.6%206%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M14.4%2010.2l3.6%202.2h2.5%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%224.8%22%20r%3D%222.3%22%3E%3C%2Fcircle%3E%3Cpath%20d%3D%22M12.6%209.2%208.5%2011l1.6%203.4-2.6%206%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.1%2014.4h4.3l1.6%206%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M14.4%2010.2l3.6%202.2h2.5%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");}
@@ -1088,6 +1104,11 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-name">Computing</div>
           <div class="subject-desc">Algorithms, online safety, hardware, data and more</div>
         </button>
+        <button class="subject-card subj-pe" onclick="goToSubject('pe')">
+          <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+          <div class="subject-name">PE</div>
+          <div class="subject-desc">Teacher-observed assessment against National Curriculum strands</div>
+        </button>
         <button class="subject-card subj-custom" style="border-style:dashed;" onclick="openCustomTopicBuilder()">
           <div class="subject-icon"><i class="ti ti-plus" aria-hidden="true"></i></div>
           <div class="subject-name">Create your own</div>
@@ -1392,6 +1413,63 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <div class="card" id="ey-res-ok-wrap" style="display:none;"><div class="section-hd">Met</div><div id="ey-res-ok-chips" class="chips-row"></div></div>
     <div class="card" id="ey-res-no-wrap" style="display:none;"><div class="section-hd">Emerging</div><div id="ey-res-no-chips" class="chips-row"></div></div>
     <button class="btn btn-primary" onclick="goHome()">New Early Years check</button>
+  </div>
+
+  <div class="screen" id="screen-pe-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-pe">
+      <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">PE</div>
+    </div>
+    <div class="card" id="pe-strand-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a strand to assess</span>
+      </div>
+      <div id="pe-strand-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-pe-strand">
+    <a href="javascript:void(0)" class="back-link" onclick="backToPeHome()">&larr; Back to strands</a>
+    <div class="subject-banner subj-pe">
+      <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="pe-strand-banner-title">Strand</div>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <p style="font-size:12.5px;color:var(--text-secondary);" id="pe-strand-desc"></p>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a class to assess</span>
+      </div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Rate every child in the class against this strand's age-related expectation, in one pass.</p>
+      <div class="year-btn-grid" id="pe-year-grid" style="margin-bottom:0;"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-pe-pass">
+    <a href="javascript:void(0)" class="back-link" onclick="backToPeStrand()">&larr; Back to classes</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" id="pe-pass-title" style="margin-bottom:0.35rem;">Strand · Class</div>
+      <p style="font-size:12.5px;color:var(--text-secondary);" id="pe-pass-expectation"></p>
+    </div>
+    <div class="card" id="pe-pass-card" style="margin-bottom:0.75rem;">
+      <div id="pe-pass-empty" class="empty-state" style="display:none;">No children in this class yet.</div>
+      <div id="pe-pass-list"></div>
+    </div>
+    <button class="btn btn-primary" onclick="savePePass()">Save assessment</button>
+    <button class="btn btn-ghost" onclick="showScreen('screen-pe-strand')" style="margin-top:0;">Cancel</button>
+  </div>
+
+  <div class="screen" id="screen-pe-done">
+    <div class="card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">PE assessment saved for</div>
+      <div style="font-size:22px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:1rem;" id="pe-done-strand"></div>
+      <div class="stat-grid" style="margin-bottom:0;">
+        <div class="stat-card"><div class="stat-val" id="pe-done-count"></div><div class="stat-lbl">Children rated</div></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="goHome()">New PE assessment</button>
   </div>
 
   <div class="screen" id="screen-topics-home">
@@ -2114,6 +2192,11 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-name">Computing</div>
           <div class="subject-desc">Computing check results</div>
         </button>
+        <button class="subject-card subj-pe" onclick="goToResultsSubject('pe')">
+          <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+          <div class="subject-name">PE</div>
+          <div class="subject-desc">PE assessment results</div>
+        </button>
       </div>
     </div>
   </div>
@@ -2627,6 +2710,48 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <div id="reasoning-list"></div>
   </div>
 
+  <div class="rv-screen" id="rv-pe-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-pe">
+      <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">PE results</div>
+    </div>
+    <div class="class-filter-indicator topic-filter-indicator" data-subject="pe">
+      <i class="ti ti-run" aria-hidden="true"></i>
+      <span>Viewing <span class="topic-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setTopicFilter('pe','')">Show all strands</a>
+    </div>
+    <div class="class-filter-indicator">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Viewing <span class="class-filter-indicator-text"></span></span>
+      <a href="javascript:void(0)" onclick="setClassFilter('')">Show all classes</a>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">PE</h2>
+      <div class="tab-actions">
+        <select id="pe-export-term" class="term-export-select" title="Filter the view by term (also applies to CSV export)" onchange="renderPeResults()"><option value="all">All terms</option><option value="Autumn">Autumn only</option><option value="Spring">Spring only</option><option value="Summer">Summer only</option></select>
+        <button class="icon-btn export-btn" onclick="exportPeCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+        <button class="icon-btn danger-btn" id="clear-pe-btn" onclick="clearAllPe()">Clear all</button>
+      </div>
+    </div>
+    <div class="group-toggle-row">
+      <span class="group-toggle-label">Group by:</span>
+      <button type="button" class="group-toggle-btn active" id="pe-group-year-btn" onclick="setPeGroupMode('year')">Year group</button>
+      <button type="button" class="group-toggle-btn" id="pe-group-term-btn" onclick="setPeGroupMode('term')">Term</button>
+      <span class="group-toggle-label" style="margin-left:auto;">Sort by:</span>
+      <select id="pe-sort" class="sort-select" onchange="renderPeResults()"><option value="recent">Most recent</option><option value="score-desc">Highest rating</option><option value="score-asc">Lowest rating</option><option value="name">Name A-Z</option></select>
+    </div>
+    <div id="pe-list-empty" class="empty-state" style="display:none;">No PE assessments yet.</div>
+    <div id="pe-summary" style="display:none;margin-bottom:0.75rem;">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val" id="pe-count">0</div><div class="stat-lbl">Children assessed</div></div>
+        <div class="stat-card"><div class="stat-val" id="pe-avg">0%</div><div class="stat-lbl">Average rating</div></div>
+      </div>
+      <div id="pe-distribution"></div>
+    </div>
+    <div id="pe-list"></div>
+  </div>
+
   <div class="rv-screen" id="rv-computing-section">
     <a href="javascript:void(0)" class="back-link" onclick="backToResultsSubjects()">&larr; Back to subjects</a>
     <div class="subject-banner subj-computing">
@@ -2759,6 +2884,11 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="subject-icon"><i class="ti ti-device-desktop" aria-hidden="true"></i></div>
           <div class="subject-name">Computing</div>
           <div class="subject-desc">Computing check analytics</div>
+        </button>
+        <button class="subject-card subj-pe" onclick="goToAnalyticsSubject('pe')">
+          <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+          <div class="subject-name">PE</div>
+          <div class="subject-desc">PE assessment analytics</div>
         </button>
         <button class="subject-card subj-attendance" onclick="goToAnalyticsSubject('attendance')">
           <div class="subject-icon"><i class="ti ti-calendar-check" aria-hidden="true"></i></div>
@@ -3293,6 +3423,47 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     </div>
   </div>
 
+  <div class="rv-screen" id="an-pe-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-pe">
+      <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">PE analytics</div>
+    </div>
+    <div class="class-filter-indicator has-select active">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Filter by class:</span>
+      <select class="class-filter-select" onchange="setClassFilter(this.value)">
+        <option value="">All classes (whole school)</option>
+        <option value="Under 2s">Under 2s</option><option value="2-3s">2-3s</option><option value="Nursery (3-4s)">Nursery (3-4s)</option><option value="Reception">Reception</option><option value="Year 1">Year 1</option><option value="Year 2">Year 2</option><option value="Year 3">Year 3</option><option value="Year 4">Year 4</option><option value="Year 5">Year 5</option><option value="Year 6">Year 6</option><option value="Not recorded">Not recorded</option>
+      </select>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportPeAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="pe-an-empty" class="empty-state" style="display:none;">No PE assessment data yet. Complete a whole-class PE pass first.</div>
+    <div id="pe-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">PE overview by strand</h2><div id="pe-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating bands</h2><div id="pe-an-bands"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by gender</h2><div id="pe-an-gender"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by additional needs</h2><div id="pe-an-needs"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by Free School Meals</h2><div id="pe-an-fsm"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by vulnerable status</h2><div id="pe-an-vulnerable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by ethnicity</h2><div id="pe-an-ethnicity"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Rating by attendance</h2><div id="pe-an-attendance-band"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="pe-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="pe-an-leaderboard"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="pe-an-rankings" style="margin-top:0.75rem;"></div></details></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Strand by year group</h2><div id="pe-an-heatmap"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Assessed this term</h2><div id="pe-an-coverage"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">PE assessment trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children assessed more than once on the same strand, showing change over time.</p>
+        <div id="pe-an-trends"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="rv-screen" id="an-computing-section">
     <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
     <div class="subject-banner subj-computing">
@@ -3494,6 +3665,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <details class="year-group" id="ch-profile-wrap-music"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Music</span><span class="year-group-count" id="ch-profile-count-music"></span></summary><div class="year-group-body"><div id="ch-profile-music"></div><div id="ch-profile-music-empty" style="font-size:13px;color:var(--text-muted);">No Music checks yet.</div></div></details>
     <details class="year-group" id="ch-profile-wrap-reasoning"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Reasoning</span><span class="year-group-count" id="ch-profile-count-reasoning"></span></summary><div class="year-group-body"><div id="ch-profile-reasoning"></div><div id="ch-profile-reasoning-empty" style="font-size:13px;color:var(--text-muted);">No Reasoning checks yet.</div></div></details>
     <details class="year-group" id="ch-profile-wrap-computing"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">Computing</span><span class="year-group-count" id="ch-profile-count-computing"></span></summary><div class="year-group-body"><div id="ch-profile-computing"></div><div id="ch-profile-computing-empty" style="font-size:13px;color:var(--text-muted);">No Computing checks yet.</div></div></details>
+    <details class="year-group" id="ch-profile-wrap-pe"><summary class="year-group-summary"><span class="chevron">▸</span><span class="year-group-name">PE</span><span class="year-group-count" id="ch-profile-count-pe"></span></summary><div class="year-group-body"><div id="ch-profile-pe"></div><div id="ch-profile-pe-empty" style="font-size:13px;color:var(--text-muted);">No PE assessments yet.</div></div></details>
   </div>
 </div>
 
@@ -4469,7 +4641,8 @@ var TRUST_SUBJECTS = [
   {table:'reasoning_results', label:'Reasoning'},
   {table:'computing_results', label:'Computing'},
   {table:'handwriting_results', label:'Handwriting'},
-  {table:'early_years_results', label:'Early Years'}
+  {table:'early_years_results', label:'Early Years'},
+  {table:'pe_results', label:'PE'}
 ];
 
 var trustSchoolsExportData = [];
@@ -5167,7 +5340,7 @@ async function switchTab(t){
     /* Re-fetch from Supabase rather than rendering cached arrays - a live
        session writes results from the child's own browser, so this
        teacher's locally-loaded data can be stale until refreshed. */
-    await Promise.all([loadResults(), loadBlendingResults(), loadMathsResults(), loadTimesTablesResults(), loadEnglishResults(), loadHandwritingResults(), loadTopicResults(), loadScienceResults(), loadReResults(), loadMflResults(), loadMusicResults(), loadEyResults(), loadReasoningResults(), loadComputingResults(), loadAttendance()]);
+    await Promise.all([loadResults(), loadBlendingResults(), loadMathsResults(), loadTimesTablesResults(), loadEnglishResults(), loadHandwritingResults(), loadTopicResults(), loadScienceResults(), loadReResults(), loadMflResults(), loadMusicResults(), loadEyResults(), loadReasoningResults(), loadComputingResults(), loadPeResults(), loadAttendance()]);
     renderAnalytics(); renderBlendingAnalytics(); renderMathsAnalytics(); renderTimesTablesAnalytics(); renderEnglishAnalytics(); renderHandwritingAnalytics(); renderTopicAnalytics(); renderScienceAnalytics(); renderReAnalytics(); renderMflAnalytics(); renderMusicAnalytics(); renderEyAnalytics(); renderReasoningAnalytics(); renderComputingAnalytics(); renderWholeSchoolDashboard(); renderAttendanceAnalytics();
   }
   if(t==='children'){
@@ -5360,7 +5533,7 @@ function syncYearButtons(selectId){
 function buildMeta(r){var parts=[r.set,r.date];if(r.year)parts.push(r.year);if(r.gender)parts.push(r.gender);if(r.needs)parts.push(r.needs);return parts.join(' / ');}
 
 /* ---------- Edit extra pupil details (year/gender/dob/needs) on any result row ---------- */
-var EDIT_TABLE_BY_SUBJECT = { phonics:'results', blending:'blending_results', maths:'maths_topics_results', times_tables:'maths_results', english:'english_results', handwriting:'handwriting_results', topics:'topic_results', science:'science_results', re:'re_results', mfl:'mfl_results', music:'music_results', early_years:'early_years_results', reasoning:'reasoning_results', computing:'computing_results' };
+var EDIT_TABLE_BY_SUBJECT = { phonics:'results', blending:'blending_results', maths:'maths_topics_results', times_tables:'maths_results', english:'english_results', handwriting:'handwriting_results', topics:'topic_results', science:'science_results', re:'re_results', mfl:'mfl_results', music:'music_results', early_years:'early_years_results', reasoning:'reasoning_results', computing:'computing_results', pe:'pe_results' };
 var editModalState = null;
 function refreshAfterEdit(subject){
   if(subject === 'phonics') return loadResults();
@@ -5377,6 +5550,7 @@ function refreshAfterEdit(subject){
   if(subject === 'early_years') return loadEyResults().then(function(){ renderEyAnalytics(); });
   if(subject === 'reasoning') return loadReasoningResults().then(function(){ renderReasoningAnalytics(); });
   if(subject === 'computing') return loadComputingResults().then(function(){ renderComputingAnalytics(); });
+  if(subject === 'pe') return loadPeResults().then(function(){ renderPeAnalytics(); });
 }
 function openEditDetails(subject, r){
   if(isDemoSchool()){ alert('This is the shared demo account, so its details can\'t be edited.'); return; }
@@ -6262,7 +6436,7 @@ var PROFILE_BUILDERS = {
   phonics: buildPupilCard, blending: buildBlendingCard, maths: buildMathsCard,
   'times-tables': buildTimesTablesCard, english: buildEnglishCard, handwriting: buildHandwritingCard,
   topics: buildTopicCard, science: buildScienceCard, re: buildReCard, mfl: buildMflCard,
-  music: buildMusicCard, early_years: buildEyCard, reasoning: buildReasoningCard, computing: buildComputingCard
+  music: buildMusicCard, early_years: buildEyCard, reasoning: buildReasoningCard, computing: buildComputingCard, pe: buildPeCard
 };
 async function openChildProfile(id, focusSubject, focusTopic){
   var p = pupilsRoster.find(function(x){ return x.id === id; });
@@ -6321,6 +6495,7 @@ async function openChildProfile(id, focusSubject, focusTopic){
   var earlyYears_ = await sb.from('early_years_results').select('*').eq('pupil_id', p.id);
   var reasoning_ = await sb.from('reasoning_results').select('*').eq('pupil_id', p.id);
   var computing_ = await sb.from('computing_results').select('*').eq('pupil_id', p.id);
+  var pe_ = await sb.from('pe_results').select('*').eq('pupil_id', p.id);
 
   currentProfileData = {
     phonics: (results_.data||[]).map(rowToResult),
@@ -6336,7 +6511,8 @@ async function openChildProfile(id, focusSubject, focusTopic){
     music: (music_.data||[]).map(rowToMusicResult),
     early_years: (earlyYears_.data||[]).map(rowToEyResult),
     reasoning: (reasoning_.data||[]).map(rowToReasoningResult),
-    computing: (computing_.data||[]).map(rowToComputingResult)
+    computing: (computing_.data||[]).map(rowToComputingResult),
+    pe: (pe_.data||[]).map(rowToPeResult)
   };
   await loadAttendance();
   renderChildAttendance(p);
@@ -6504,7 +6680,8 @@ var CHILD_PROFILE_SUBJECTS = [
   {key:'mfl', label:'Languages', icon:'ti-language'},
   {key:'music', label:'Music', icon:'ti-music'},
   {key:'reasoning', label:'Reasoning', icon:'ti-brain'},
-  {key:'computing', label:'Computing', icon:'ti-device-desktop'}
+  {key:'computing', label:'Computing', icon:'ti-device-desktop'},
+  {key:'pe', label:'PE', icon:'ti-run'}
 ];
 function renderProfileSection(key, list, buildFn){
   var el = document.getElementById('ch-profile-' + key);
@@ -6581,6 +6758,7 @@ function subjectCheckLabel(key, r){
     case 'music': return musicCheckLabel(r);
     case 'reasoning': return reasoningCheckLabel(r);
     case 'computing': return computingCheckLabel(r);
+    case 'pe': return (r.strandLabel || r.strandKey || '') + (r.rating ? (' · ' + peRatingMeta(r.rating).label) : '');
   }
   return '';
 }
@@ -6919,7 +7097,7 @@ function filterByClass(list){
    the TOPICS-style objects for each subject aren't all defined yet at the
    point this script runs top-to-bottom - by the time this is actually
    called, they all exist as globals. */
-var topicFilters = {maths:'', english:'', topics:'', science:'', re:'', mfl:'', music:'', reasoning:'', computing:''};
+var topicFilters = {maths:'', english:'', topics:'', science:'', re:'', mfl:'', music:'', reasoning:'', computing:'', pe:''};
 function getTopicsObjForSubject(subjectKey){
   switch(subjectKey){
     case 'maths': return MATHS_TOPICS;
@@ -6931,6 +7109,7 @@ function getTopicsObjForSubject(subjectKey){
     case 'music': return MUSIC_TOPICS;
     case 'reasoning': return REASONING_TOPICS;
     case 'computing': return COMPUTING_TOPICS;
+    case 'pe': return PE_STRANDS;
   }
   return {};
 }
@@ -6952,7 +7131,7 @@ function setTopicFilter(subjectKey, val){
     var textEl = el.querySelector('.topic-filter-indicator-text');
     if(textEl) textEl.textContent = label;
   });
-  renderMathsResults(); renderEnglishResults(); renderTopicResults(); renderScienceResults(); renderReResults(); renderMflResults(); renderMusicResults(); renderReasoningResults(); renderComputingResults();
+  renderMathsResults(); renderEnglishResults(); renderTopicResults(); renderScienceResults(); renderReResults(); renderMflResults(); renderMusicResults(); renderReasoningResults(); renderComputingResults(); renderPeResults();
 }
 function renderTopicFilterPicker(container, list, subjectKey, defaultIcon){
   container.innerHTML = '';
@@ -7224,7 +7403,8 @@ function renderWholeSchoolDashboard(){
     {label:'Languages', list: mflResults},
     {label:'Music', list: musicResults},
     {label:'Reasoning', list: reasoningResults},
-    {label:'Computing', list: computingResults}
+    {label:'Computing', list: computingResults},
+    {label:'PE', list: peResults}
   ];
   var rows = SUBJECTS.map(function(s){
     var list = filterByClass(s.list);
@@ -7369,7 +7549,7 @@ function appendRankings(id, list){
    scores aren't visible at a glance. */
 function renderOverallRankings(){
   var el = document.getElementById('an-overall-rankings'); if(!el) return;
-  var SUBJECT_LISTS = [earlyYearsResults, results, blendingResults, timesTablesResults, handwritingResults, englishResults, mathsResults, topicResults, scienceResults, reResults, mflResults, musicResults, reasoningResults, computingResults];
+  var SUBJECT_LISTS = [earlyYearsResults, results, blendingResults, timesTablesResults, handwritingResults, englishResults, mathsResults, topicResults, scienceResults, reResults, mflResults, musicResults, reasoningResults, computingResults, peResults];
   var byName = {};
   SUBJECT_LISTS.forEach(function(subjList){
     filterByClass(subjList).forEach(function(r){
@@ -7680,8 +7860,8 @@ function showRvScreen(containerId, id){
   container.querySelectorAll('.rv-screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
 }
-var SUBJECT_RESULTS_SCREENS = {phonics:'rv-phonics-section', maths:'rv-maths-section', times_tables:'rv-times-tables-section', english:'rv-english-section', handwriting:'rv-handwriting-section', topics:'rv-topics-section', science:'rv-science-section', re:'rv-re-section', mfl:'rv-mfl-section', music:'rv-music-section', early_years:'rv-early_years-section', reasoning:'rv-reasoning-section', computing:'rv-computing-section'};
-var SUBJECT_ANALYTICS_SCREENS = {phonics:'an-phonics-section', maths:'an-maths-section', times_tables:'an-times-tables-section', english:'an-english-section', handwriting:'an-handwriting-section', topics:'an-topics-section', science:'an-science-section', re:'an-re-section', mfl:'an-mfl-section', music:'an-music-section', early_years:'an-early_years-section', reasoning:'an-reasoning-section', computing:'an-computing-section', attendance:'an-attendance-section'};
+var SUBJECT_RESULTS_SCREENS = {phonics:'rv-phonics-section', maths:'rv-maths-section', times_tables:'rv-times-tables-section', english:'rv-english-section', handwriting:'rv-handwriting-section', topics:'rv-topics-section', science:'rv-science-section', re:'rv-re-section', mfl:'rv-mfl-section', music:'rv-music-section', early_years:'rv-early_years-section', reasoning:'rv-reasoning-section', computing:'rv-computing-section', pe:'rv-pe-section'};
+var SUBJECT_ANALYTICS_SCREENS = {phonics:'an-phonics-section', maths:'an-maths-section', times_tables:'an-times-tables-section', english:'an-english-section', handwriting:'an-handwriting-section', topics:'an-topics-section', science:'an-science-section', re:'an-re-section', mfl:'an-mfl-section', music:'an-music-section', early_years:'an-early_years-section', reasoning:'an-reasoning-section', computing:'an-computing-section', attendance:'an-attendance-section', pe:'an-pe-section'};
 function goToResultsSubject(subj){
   showRvScreen('tab-results', SUBJECT_RESULTS_SCREENS[subj] || 'rv-phonics-section');
 }
@@ -36957,6 +37137,476 @@ function checkPlayParam(){
    back to Supabase. It only reuses the existing topic-based question banks
    (the 9 subjects with self-markable multiple-choice questions) and the
    shared renderMcOptions/pickQuestions helpers, entirely client-side. */
+/* ---------- Physical Education: whole-class, teacher-observed assessment ----------
+   Unlike every other subject, PE is not a child-answered quiz - a PE teacher
+   watches the class and rates each child against an age-related expectation
+   for one National Curriculum strand at a time. To reuse all of the existing
+   generic analytics (pctOf, trends, sparklines, leaderboards, coverage) with
+   zero changes, each 3-point rating is stored as total_correct/total_questions
+   (1/3, 2/3 or 3/3) exactly like every question-based subject's score. */
+var PE_YEAR_GROUPS = ['Reception','Year 1','Year 2','Year 3','Year 4','Year 5','Year 6'];
+
+var PE_RATINGS = [
+  {key:'working_towards', label:'Working towards', short:'Towards', score:1},
+  {key:'meeting', label:'Meeting', short:'Meeting', score:2},
+  {key:'exceeding', label:'Exceeding', short:'Exceeding', score:3}
+];
+function peRatingMeta(key){
+  var m = PE_RATINGS.filter(function(r){ return r.key === key; })[0];
+  return m || PE_RATINGS[1];
+}
+
+var PE_STRANDS = {
+  fms: {
+    key:'fms', label:'Fundamental Movement Skills',
+    desc:'Running, jumping, hopping, balance and coordination',
+    expectations: {
+      'Reception':'Moves confidently in different ways - running, jumping, hopping, skipping - and can stop, start and change direction with control.',
+      'Year 1':'Performs basic movements including running, jumping, throwing and catching, developing balance, agility and coordination.',
+      'Year 2':'Applies basic movement skills with growing control and confidence, linking two or three actions together.',
+      'Year 3':'Combines running, jumping, throwing and catching with more consistent technique in isolation and simple combinations.',
+      'Year 4':'Shows increasing control, coordination and consistency when combining movement skills under light pressure.',
+      'Year 5':'Applies a broad range of movement skills fluently and consistently, adapting them to different activities.',
+      'Year 6':'Combines and performs movement skills with precision, control and consistency across a range of increasingly demanding situations.'
+    }
+  },
+  games: {
+    key:'games', label:'Games',
+    desc:'Invasion, net and striking/fielding games, attacking and defending',
+    expectations: {
+      'Reception':'Joins in simple chasing and target games, taking turns and following simple rules with adult support.',
+      'Year 1':'Plays simple games applying basic skills for attacking and defending, understanding the idea of taking turns and following rules.',
+      'Year 2':'Plays simple net, striking/fielding and invasion-style games, using skills such as throwing, catching, hitting and dribbling with some control.',
+      'Year 3':'Uses running, jumping, throwing and catching in isolation and in combination within simple competitive team games.',
+      'Year 4':'Plays competitive games, applying basic principles for attacking and defending with growing tactical awareness.',
+      'Year 5':'Applies a broad range of skills consistently in competitive team games, showing understanding of tactics and fair play.',
+      'Year 6':'Selects and applies the right skills and tactics to outwit opponents in competitive team games, playing with confidence and control.'
+    }
+  },
+  gymnastics: {
+    key:'gymnastics', label:'Gymnastics',
+    desc:'Travelling, balancing, rolling and sequence work',
+    expectations: {
+      'Reception':'Moves and balances on apparatus and the floor with growing confidence, copying and repeating simple actions.',
+      'Year 1':'Performs basic gymnastic actions such as travelling, balancing, rolling and jumping with control.',
+      'Year 2':'Links two or more gymnastic actions together to make a simple sequence, showing control and clarity of shape.',
+      'Year 3':'Plans and performs a sequence of movements, choosing and linking actions with control and coordination.',
+      'Year 4':'Develops flexibility, strength, technique and control when performing a sequence of movements, adjusting as needed.',
+      'Year 5':'Performs and refines sequences that show clarity, fluency, accuracy and consistency of technique.',
+      'Year 6':'Creates and performs complex sequences, combining flexibility, strength, technique, control and balance with precision.'
+    }
+  },
+  dance: {
+    key:'dance', label:'Dance',
+    desc:'Expressive movement, choreography and performance',
+    expectations: {
+      'Reception':'Moves to music, exploring different ways of travelling and expressing simple ideas and feelings through movement.',
+      'Year 1':'Performs simple dance movements, showing an awareness of space, and copies basic patterns.',
+      'Year 2':'Creates and performs short dance phrases that communicate a mood or idea, showing some control and coordination.',
+      'Year 3':'Improvises and creates simple dance phrases individually and with a partner, showing an awareness of space and dynamics.',
+      'Year 4':'Creates and links dance phrases with clear changes in speed, level and direction, working well with others.',
+      'Year 5':'Choreographs dances that communicate a clear idea, adapting movement, dynamics and formation for effect.',
+      'Year 6':'Creates, performs and evaluates dance compositions that show precision, fluency, expression and imagination.'
+    }
+  },
+  athletics: {
+    key:'athletics', label:'Athletics',
+    desc:'Running, jumping and throwing for distance, height and accuracy',
+    expectations: {
+      'Reception':'Runs, jumps and throws in a range of simple ways, showing growing coordination and control.',
+      'Year 1':'Runs at different speeds, jumps from a standing position and throws underarm with some control.',
+      'Year 2':'Runs, jumps and throws with increasing control and consistency, and can compare and try to improve a simple performance.',
+      'Year 3':'Uses different running, jumping and throwing techniques and can measure and record simple results.',
+      'Year 4':'Applies running, jumping and throwing techniques for distance and accuracy, showing improved technique under some pressure.',
+      'Year 5':'Demonstrates good technique across a range of running, jumping and throwing events, and can compare own and others’ performance.',
+      'Year 6':'Performs a range of athletic events with well-developed technique, and sets targets to improve personal performance.'
+    }
+  },
+  swimming: {
+    key:'swimming', label:'Swimming & Water Safety',
+    desc:'Water confidence, strokes, distance and safe self-rescue',
+    expectations: {
+      'Reception':'Shows growing confidence in water, exploring simple movements and floating with support.',
+      'Year 1':'Enters and moves through water with growing confidence, attempting simple floats and basic strokes with support.',
+      'Year 2':'Moves in water using simple strokes with some confidence and independence, and can float unaided for a short time.',
+      'Year 3':'Swims short distances using at least one recognised stroke with reasonable technique.',
+      'Year 4':'Swims competently and confidently over a short distance using more than one stroke.',
+      'Year 5':'Swims competently, confidently and proficiently over at least 25 metres using a range of strokes effectively.',
+      'Year 6':'Swims competently over at least 25 metres, uses a range of strokes effectively, and can perform safe self-rescue in different water-based situations.'
+    }
+  },
+  health_fitness: {
+    key:'health_fitness', label:'Health & Fitness',
+    desc:'Understanding of exercise, fitness and healthy, active lifestyles',
+    expectations: {
+      'Reception':'Shows growing awareness of how to be active and healthy, and enjoys being physically active.',
+      'Year 1':'Understands that exercise and being active is good for health, and can describe how their body feels during activity.',
+      'Year 2':'Talks about the changes to their body during exercise and understands why physical activity is good for health.',
+      'Year 3':'Understands the basic components of fitness and can describe why regular physical activity is important.',
+      'Year 4':'Recognises the effect that exercise has on the body and can describe simple ways to stay fit and healthy.',
+      'Year 5':'Understands how to plan and follow a simple, safe exercise routine to develop stamina, strength or flexibility.',
+      'Year 6':'Understands the long-term benefits of physical activity and can describe how to lead a healthy, active lifestyle.'
+    }
+  }
+};
+var PE_STRAND_ORDER = ['fms','games','gymnastics','dance','athletics','swimming','health_fitness'];
+
+/* ---------- PE: data layer ---------- */
+var peResults = [];
+function rowToPeResult(row){
+  return {
+    id: row.id,
+    name: row.pupil_name,
+    pupilId: row.pupil_id,
+    year: row.year_group || '',
+    gender: row.gender || '',
+    dob: row.dob || '',
+    needs: row.additional_needs || '',
+    fsm: row.fsm === true, vulnerable: row.vulnerable === true, ethnicity: row.ethnicity || '',
+    strandKey: row.strand_key,
+    strandLabel: row.strand_label,
+    topicKey: row.strand_key,
+    topicLabel: row.strand_label,
+    rating: row.rating,
+    totalCorrect: row.total_correct,
+    totalQuestions: row.total_questions,
+    date: row.assessed_date,
+    ts: row.ts
+  };
+}
+async function loadPeResults(){
+  var res = await sb.from('pe_results').select('*').order('created_at', { ascending:false });
+  if(res.error){ console.error(res.error); peResults = []; }
+  else { peResults = res.data.map(rowToPeResult); }
+  renderPeResults();
+}
+async function deletePeResult(id){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its data can\'t be changed.'); return; }
+  var res = await sb.from('pe_results').delete().eq('id', id);
+  if(res.error){ alert('Could not delete this PE assessment: ' + res.error.message); return; }
+  peResults = peResults.filter(function(r){return r.id!==id;});
+  renderPeResults();
+  renderPeAnalytics();
+}
+
+/* ---------- PE: whole-class pass workflow ----------
+   A PE teacher picks one National Curriculum strand, then one year group,
+   then rates every child in that year group against the strand's
+   age-related expectation in a single pass - closer to how PE is actually
+   taught (by class, one focus at a time) than a per-child quiz. */
+var currentPeStrandKey = null;
+var currentPeYearGroup = null;
+var pePassRatings = {};
+
+function renderPeStrandList(){
+  var el = document.getElementById('pe-strand-list');
+  if(!el) return;
+  el.innerHTML = '';
+  PE_STRAND_ORDER.forEach(function(key){
+    var s = PE_STRANDS[key];
+    if(!s) return;
+    var btn = document.createElement('button');
+    btn.className = 'phase-btn pe-strand-' + key;
+    btn.onclick = function(){ goToPeStrand(key); };
+    var badge = document.createElement('div'); badge.className = 'phase-badge';
+    var icon = document.createElement('i'); icon.className = 'ti ti-run'; icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
+    badge.appendChild(icon);
+    var textWrap = document.createElement('div');
+    var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = s.label;
+    var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = s.desc || '';
+    textWrap.appendChild(name); textWrap.appendChild(desc);
+    btn.appendChild(badge); btn.appendChild(textWrap);
+    el.appendChild(btn);
+  });
+}
+
+function goToPeStrand(key){
+  currentPeStrandKey = key;
+  currentPeYearGroup = null;
+  var s = PE_STRANDS[key];
+  if(!s) return;
+  document.getElementById('pe-strand-banner-title').textContent = s.label;
+  document.getElementById('pe-strand-desc').textContent = s.desc;
+  var grid = document.getElementById('pe-year-grid');
+  grid.innerHTML = '';
+  PE_YEAR_GROUPS.forEach(function(yg){
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'year-btn';
+    btn.textContent = yg;
+    btn.onclick = function(){ startPeClassPass(key, yg); };
+    grid.appendChild(btn);
+  });
+  showScreen('screen-pe-strand');
+}
+function backToPeHome(){ showScreen('screen-pe-home'); }
+function backToPeStrand(){ showScreen('screen-pe-strand'); }
+
+function pePassPupils(){
+  return activePupils().filter(function(p){ return (p.year || '') === currentPeYearGroup; });
+}
+
+function startPeClassPass(strandKey, yearGroup){
+  if(!requireActiveSchool()) return;
+  currentPeStrandKey = strandKey;
+  currentPeYearGroup = yearGroup;
+  pePassRatings = {};
+  var s = PE_STRANDS[strandKey];
+  document.getElementById('pe-pass-title').textContent = s.label + ' · ' + yearGroup;
+  document.getElementById('pe-pass-expectation').textContent = (s.expectations[yearGroup] || '');
+  renderPePassList();
+  showScreen('screen-pe-pass');
+}
+
+function renderPePassList(){
+  var listEl = document.getElementById('pe-pass-list');
+  var emptyEl = document.getElementById('pe-pass-empty');
+  if(!listEl) return;
+  listEl.innerHTML = '';
+  var pupils = pePassPupils();
+  if(!pupils.length){ emptyEl.style.display = 'block'; return; }
+  emptyEl.style.display = 'none';
+  pupils.forEach(function(p){
+    var existing = peResults.find(function(r){
+      return r.pupilId === p.id && r.strandKey === currentPeStrandKey && r.year === currentPeYearGroup;
+    });
+    if(existing && !pePassRatings[p.id]) pePassRatings[p.id] = existing.rating;
+    var row = document.createElement('div');
+    row.className = 'pe-pass-row';
+    var nameEl = document.createElement('div');
+    nameEl.className = 'pe-pass-name';
+    nameEl.textContent = p.name;
+    var btnsWrap = document.createElement('div');
+    btnsWrap.className = 'pe-pass-btns';
+    PE_RATINGS.forEach(function(rt){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pe-rate-btn pe-rate-' + rt.key;
+      b.textContent = rt.short;
+      if(pePassRatings[p.id] === rt.key) b.classList.add('active');
+      b.onclick = function(){
+        pePassRatings[p.id] = rt.key;
+        var siblings = btnsWrap.querySelectorAll('.pe-rate-btn');
+        siblings.forEach(function(sib){ sib.classList.remove('active'); });
+        b.classList.add('active');
+      };
+      btnsWrap.appendChild(b);
+    });
+    row.appendChild(nameEl);
+    row.appendChild(btnsWrap);
+    listEl.appendChild(row);
+  });
+}
+
+async function savePePass(){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its data can\'t be changed.'); return; }
+  var pupils = pePassPupils();
+  var s = PE_STRANDS[currentPeStrandKey];
+  if(!s) return;
+  var rows = [];
+  pupils.forEach(function(p){
+    var rating = pePassRatings[p.id];
+    if(!rating) return;
+    var meta = peRatingMeta(rating);
+    rows.push({
+      school_id: currentSchool.id,
+      teacher_id: currentUser.id,
+      pupil_name: p.name,
+      pupil_id: p.id,
+      year_group: p.year || currentPeYearGroup,
+      gender: p.gender || null,
+      dob: p.dob || null,
+      additional_needs: p.needs || null,
+      fsm: p.fsm === true, vulnerable: p.vulnerable === true, ethnicity: p.ethnicity || null,
+      strand_key: currentPeStrandKey,
+      strand_label: s.label,
+      rating: rating,
+      total_correct: meta.score,
+      total_questions: 3,
+      assessed_date: new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+      ts: Date.now()
+    });
+  });
+  if(!rows.length){ alert('Rate at least one child before saving.'); return; }
+  var ins = await sb.from('pe_results').insert(rows).select();
+  if(ins.error){
+    if(ins.error.code === '42501' || /row-level security/i.test(ins.error.message)){
+      alert('Your school\'s free trial or subscription isn\'t active, so this PE assessment couldn\'t be saved. Please upgrade to continue.');
+    } else {
+      alert('Could not save this PE assessment: ' + ins.error.message);
+    }
+    return;
+  }
+  var entries = ins.data.map(rowToPeResult);
+  entries.forEach(function(e){ peResults.unshift(e); });
+  document.getElementById('pe-done-count').textContent = entries.length;
+  document.getElementById('pe-done-strand').textContent = s.label + ' · ' + currentPeYearGroup;
+  showScreen('screen-pe-done');
+  renderPeResults();
+  renderPeAnalytics();
+}
+
+/* ---------- PE: results list ---------- */
+function ratingPillClass(rating){
+  if(rating === 'exceeding') return 'band-green';
+  if(rating === 'working_towards') return 'band-red';
+  return 'band-amber';
+}
+function buildPeCard(r){
+  var card = document.createElement('div'); card.className = 'pupil-card';
+  var header = document.createElement('div'); header.className = 'pupil-header';
+  var nb = document.createElement('div'); nb.style.flex = '1'; nb.style.cursor = 'pointer'; nb.onclick = function(){ goToChildProfileFromResult(r); };
+  var ne = document.createElement('div'); ne.className = 'pupil-name'; ne.textContent = r.name;
+  var me = document.createElement('div'); me.className = 'pupil-meta';
+  me.textContent = [r.strandLabel, r.date, r.year].filter(function(x){return x;}).join(' / ');
+  nb.appendChild(ne); nb.appendChild(me);
+  var right = document.createElement('div'); right.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;';
+  var pe = document.createElement('div'); pe.className = 'pct-pill';
+  var meta = peRatingMeta(r.rating);
+  pe.textContent = meta.label;
+  pe.classList.add(ratingPillClass(r.rating));
+  right.appendChild(pe);
+  var trendPe = buildTrendBadge(computeTrendDiff(peResults, r)); if(trendPe) right.appendChild(trendPe);
+  var sparkPe = buildSparkline(pupilScoreHistory(peResults, r)); if(sparkPe){ sparkPe.onclick=function(){ goToChildProfileForSubject(r,'pe'); }; right.appendChild(sparkPe); }
+  if(!isDemoSchool()){
+    var editBtn = document.createElement('button'); editBtn.className = 'edit-row-btn'; editBtn.textContent = 'Edit details';
+    (function(rr){ editBtn.onclick = function(){ openEditDetails('pe', rr); }; })(r);
+    right.appendChild(editBtn);
+    var delBtn = document.createElement('button'); delBtn.className = 'delete-row-btn'; delBtn.textContent = 'Delete';
+    (function(id){ delBtn.onclick = function(){ deletePeResult(id); }; })(r.id);
+    right.appendChild(delBtn);
+  }
+  header.appendChild(nb); header.appendChild(right);
+  card.appendChild(header);
+  return card;
+}
+
+var peGroupMode = 'year';
+function setPeGroupMode(mode){
+  peGroupMode = mode;
+  document.getElementById('pe-group-year-btn').classList.toggle('active', mode==='year');
+  document.getElementById('pe-group-term-btn').classList.toggle('active', mode==='term');
+  renderPeResults();
+}
+
+function renderPeResults(){
+  var el = document.getElementById('pe-list');
+  if(!el) return;
+  el.innerHTML = '';
+  var emptyEl = document.getElementById('pe-list-empty');
+  var summaryEl = document.getElementById('pe-summary');
+  var base = filterByTermSelect(filterByClass(peResults), 'pe-export-term');
+  if(!topicFilters.pe){
+    renderTopicFilterPicker(el, base, 'pe', 'ti-run');
+    if(emptyEl) emptyEl.style.display = 'none';
+    if(summaryEl) summaryEl.style.display = 'none';
+    return;
+  }
+  var list = sortResultList(filterByTopicFilter(base, 'pe'), sortSelectValue('pe-sort'));
+  if(!list.length){
+    if(emptyEl){ emptyEl.style.display = 'block'; emptyEl.textContent = classFilter ? ('No PE assessments yet for '+classFilter+'.') : 'No PE assessments yet.'; }
+    if(summaryEl) summaryEl.style.display = 'none';
+    return;
+  }
+  if(emptyEl) emptyEl.style.display = 'none';
+  if(summaryEl) summaryEl.style.display = 'block';
+  document.getElementById('pe-count').textContent = list.length;
+  var avgPe = Math.round(list.reduce(function(a,r){return a+pctOf(r);},0)/list.length);
+  document.getElementById('pe-avg').textContent = avgPe + '%';
+  var distEl=document.getElementById('pe-distribution'); if(distEl){ distEl.innerHTML=''; var dist=buildScoreDistribution(list); if(dist) distEl.appendChild(dist); }
+  if(classFilter){ renderPupilLinksForTopic(el, list, 'pe'); return; }
+  var keyFn = peGroupMode==='term' ? function(r){return getTerm(r.date);} : function(r){return r.year || 'Not recorded';};
+  var order = peGroupMode==='term' ? TERM_ORDER : YEAR_GROUP_ORDER;
+  renderGroups(el, list, keyFn, order, buildPeCard, 'child assessed', 'children assessed', peGroupMode==='year' && !classFilter ? setClassFilter : null);
+}
+
+function exportPeCSV(btn){
+  var termFilter = document.getElementById('pe-export-term') ? document.getElementById('pe-export-term').value : 'all';
+  var base = filterByClass(peResults);
+  var list = termFilter==='all' ? base : base.filter(function(r){return getTerm(r.date)===termFilter;});
+  if(!list.length){alert((termFilter==='all' ? 'No PE assessments to export yet' : 'No '+termFilter+' term PE assessments to export yet')+classSuffixText()+'.');return;}
+  var header=['Name','Student ID','Date','Term','Strand','Year group','Gender','Date of birth','Additional needs','Rating','Trend vs previous check'];
+  var rows=[header];
+  list.forEach(function(r){
+    rows.push([r.name,studentIdOf(r),r.date,getTerm(r.date),r.strandLabel||r.strandKey,r.year||'',r.gender||'',r.dob||'',r.needs||'',peRatingMeta(r.rating).label,formatTrendForCSV(computeTrendDiff(peResults, r))]);
+  });
+  var suffix = (termFilter==='all' ? '' : ('-'+termFilter.toLowerCase())) + classSuffix();
+  downloadCSV(rows,'emeejay-pe'+suffix+'-'+dateStr()+'.csv', btn);
+}
+
+async function clearAllPe(){
+  if(isDemoSchool()){ alert('This is the shared demo account, so its sample data can\'t be cleared.'); return; }
+  if(!confirm('Clear all PE assessments for your school? This cannot be undone.'))return;
+  var del = await sb.from('pe_results').delete().not('id','is',null);
+  if(del.error){ alert('Could not clear PE assessments: ' + del.error.message); return; }
+  peResults=[];
+  renderPeResults();
+  renderPeAnalytics();
+}
+
+/* ---------- PE: analytics ---------- */
+function renderPeAnalytics(){
+  var emptyEl = document.getElementById('pe-an-empty');
+  var contentEl = document.getElementById('pe-an-content');
+  if(!emptyEl || !contentEl) return;
+  var list = filterByClass(peResults);
+  if(!list.length){ emptyEl.style.display='block'; emptyEl.textContent = classFilter ? ('No PE assessment data yet for '+classFilter+'.') : 'No PE assessment data yet. Complete a whole-class PE pass first.'; contentEl.style.display='none'; return; }
+  emptyEl.style.display='none'; contentEl.style.display='block';
+
+  var overviewEl = document.getElementById('pe-an-overview'); overviewEl.innerHTML = '';
+  var avgTotal = Math.round(list.reduce(function(a,r){return a+pctOf(r);},0)/list.length);
+  overviewEl.appendChild(makeBar('Overall',avgTotal,barColor(avgTotal)));
+  var byStrand = {};
+  list.forEach(function(r){ var lbl = r.strandLabel || r.strandKey; if(!byStrand[lbl])byStrand[lbl]=[]; byStrand[lbl].push(r); });
+  Object.keys(byStrand).sort().forEach(function(lbl){
+    var subList = byStrand[lbl];
+    var subAvg = Math.round(subList.reduce(function(a,r){return a+pctOf(r);},0)/subList.length);
+    overviewEl.appendChild(makeBar(lbl, subAvg, barColor(subAvg)));
+  });
+
+  var bandsEl = document.getElementById('pe-an-bands'); if(bandsEl){ bandsEl.innerHTML=''; var pie=buildScoreBandPie(list); if(pie){ bandsEl.appendChild(pie); } else { bandsEl.innerHTML='<p class="donut-empty">No rating data yet.</p>'; } }
+  var genderEl = document.getElementById('pe-an-gender'); if(genderEl){ genderEl.innerHTML=''; var genders={}; list.forEach(function(r){var g=r.gender||'Not recorded';if(!genders[g])genders[g]=[];genders[g].push(r);}); var gk=Object.keys(genders); if(!gk.length){ genderEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } gk.sort().forEach(function(g){var avg=Math.round(genders[g].reduce(function(a,r){return a+pctOf(r);},0)/genders[g].length);genderEl.appendChild(makeBar(g+' ('+genders[g].length+')',avg,barColor(avg)));}); }
+  var needsEl = document.getElementById('pe-an-needs'); if(needsEl){ needsEl.innerHTML=''; var needsG={}; list.forEach(function(r){var n=r.needs||'None';if(!needsG[n])needsG[n]=[];needsG[n].push(r);}); var nk=Object.keys(needsG); if(!nk.length){ needsEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } nk.sort().forEach(function(n){var avg=Math.round(needsG[n].reduce(function(a,r){return a+pctOf(r);},0)/needsG[n].length);needsEl.appendChild(makeBar(n+' ('+needsG[n].length+')',avg,barColor(avg)));}); }
+  var fsmEl = document.getElementById('pe-an-fsm'); if(fsmEl){ fsmEl.innerHTML=''; var fsmG={}; list.forEach(function(r){var fv=r.fsm?'FSM eligible':'Not FSM eligible';if(!fsmG[fv])fsmG[fv]=[];fsmG[fv].push(r);}); var fk=Object.keys(fsmG); if(!fk.length){ fsmEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } fk.sort().forEach(function(fv){var avg=Math.round(fsmG[fv].reduce(function(a,r){return a+pctOf(r);},0)/fsmG[fv].length);fsmEl.appendChild(makeBar(fv+' ('+fsmG[fv].length+')',avg,barColor(avg)));}); }
+  var vulnEl = document.getElementById('pe-an-vulnerable'); if(vulnEl){ vulnEl.innerHTML=''; var vulnG={}; list.forEach(function(r){var vv=r.vulnerable?'Vulnerable':'Not flagged';if(!vulnG[vv])vulnG[vv]=[];vulnG[vv].push(r);}); var vk=Object.keys(vulnG); if(!vk.length){ vulnEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } vk.sort().forEach(function(vv){var avg=Math.round(vulnG[vv].reduce(function(a,r){return a+pctOf(r);},0)/vulnG[vv].length);vulnEl.appendChild(makeBar(vv+' ('+vulnG[vv].length+')',avg,barColor(avg)));}); }
+  var ethEl = document.getElementById('pe-an-ethnicity'); if(ethEl){ ethEl.innerHTML=''; var ethG={}; list.forEach(function(r){var ev=r.ethnicity||'Not recorded';if(!ethG[ev])ethG[ev]=[];ethG[ev].push(r);}); var ek=Object.keys(ethG); if(!ek.length){ ethEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No data yet.</p>'; } ek.sort().forEach(function(ev){var avg=Math.round(ethG[ev].reduce(function(a,r){return a+pctOf(r);},0)/ethG[ev].length);ethEl.appendChild(makeBar(ev+' ('+ethG[ev].length+')',avg,barColor(avg)));}); }
+  var attBandEl = document.getElementById('pe-an-attendance-band'); if(attBandEl){ attBandEl.innerHTML=''; var attBandG={}; list.forEach(function(r){var ab=attendanceBandForResult(r);if(!ab)return;if(!attBandG[ab])attBandG[ab]=[];attBandG[ab].push(r);}); var hasAttBand=ATTENDANCE_BAND_ORDER.some(function(k){return attBandG[k];}); if(!hasAttBand){ attBandEl.innerHTML='<p style="font-size:13px;color:var(--text-muted);">No attendance data recorded for these children yet.</p>'; } ATTENDANCE_BAND_ORDER.filter(function(k){return attBandG[k];}).forEach(function(ab){var avg=Math.round(attBandG[ab].reduce(function(a,r){return a+pctOf(r);},0)/attBandG[ab].length);attBandEl.appendChild(makeBar(ab+' ('+attBandG[ab].length+')',avg,barColor(avg)));}); }
+  appendTermChart('pe-an-terms', list);
+  appendLeaderboard('pe-an-leaderboard', list, peResults);
+  appendRankings('pe-an-rankings', list);
+  appendTopicHeatmap('pe-an-heatmap', list, function(r){return r.strandLabel||r.strandKey;}, function(r){return r.year||'Not recorded';});
+  appendCoverage('pe-an-coverage', peResults);
+
+  var trendEl = document.getElementById('pe-an-trends'); if(trendEl){ trendEl.innerHTML = '';
+  var byName = {};
+  list.forEach(function(r){ var k=r.name.toLowerCase().trim(); if(!byName[k])byName[k]=[]; byName[k].push(r); });
+  var multi = Object.keys(byName).filter(function(k){return byName[k].length>1;});
+  if(!multi.length){ var tmsg=document.createElement('p'); tmsg.style.cssText='font-size:13px;color:var(--text-muted);'; tmsg.textContent='Trends appear here once a child has been assessed on the same strand more than once.'; trendEl.appendChild(tmsg); }
+  else{
+    multi.forEach(function(k){
+      var entries=byName[k].slice().sort(function(a,b){return a.ts-b.ts;});
+      var nameHd=document.createElement('div');nameHd.style.cssText='font-size:14px;font-weight:500;color:var(--hp-purple-dark);margin-bottom:8px;margin-top:12px;';nameHd.textContent=entries[0].name;trendEl.appendChild(nameHd);
+      entries.forEach(function(r,i){
+        var row=document.createElement('div');row.className='trend-row';
+        var dateEl=document.createElement('div');dateEl.className='trend-date';dateEl.textContent=r.date;
+        var setEl=document.createElement('div');setEl.className='trend-set';setEl.textContent=r.strandLabel||r.strandKey;
+        var scoreEl=document.createElement('div');scoreEl.className='trend-score';scoreEl.textContent=peRatingMeta(r.rating).label;
+        var arrowEl=document.createElement('div');arrowEl.className='trend-arrow';
+        if(i>0){
+          var diff=r.totalCorrect-entries[i-1].totalCorrect;
+          if(diff>0){arrowEl.textContent='improved';arrowEl.style.color='var(--text-success)';}
+          else if(diff<0){arrowEl.textContent='declined';arrowEl.style.color='var(--text-danger)';}
+          else{arrowEl.textContent='no change';arrowEl.style.color='var(--text-muted)';}
+        }
+        row.appendChild(dateEl);row.appendChild(setEl);row.appendChild(scoreEl);row.appendChild(arrowEl);
+        trendEl.appendChild(row);
+      });
+    });
+  }
+  }
+}
+function exportPeAnalyticsCSV(btn){ exportPeCSV(btn); }
+
+
 var PRACTICE_SUBJECTS = [
   {key:'english', label:'English', topics:function(){ return ENGLISH_TOPICS; }},
   {key:'maths', label:'Maths', topics:function(){ return MATHS_TOPICS; }},
@@ -37724,7 +38374,7 @@ var SUBJECT_TABLE_MAP = {
 var SUBJ_CARD_CLASS_MAP = {
   phonics:'subj-phonics', blending:'subj-phonics', maths:'subj-maths', 'times-tables':'subj-times-tables',
   english:'subj-english', handwriting:'subj-handwriting', topics:'subj-topics', science:'subj-science',
-  re:'subj-re', mfl:'subj-mfl', music:'subj-music', early_years:'subj-early-years', reasoning:'subj-reasoning', computing:'subj-computing'
+  re:'subj-re', mfl:'subj-mfl', music:'subj-music', early_years:'subj-early-years', reasoning:'subj-reasoning', computing:'subj-computing', pe:'subj-pe'
 };
 var targetsSubjectKey = '';
 var targetsPupil = null;
@@ -39382,6 +40032,7 @@ renderReList();
 renderMflList();
 renderMusicList();
 renderEyList();
+renderPeStrandList();
 renderReasoningList();
 renderComputingList();
 renderEnglishList();
