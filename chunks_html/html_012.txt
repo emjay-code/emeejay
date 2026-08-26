@@ -1,0 +1,208 @@
+Traveller of Irish Heritage</option><option>White - any other background</option><option>Mixed - White and Black Caribbean</option><option>Mixed - White and Black African</option><option>Mixed - White and Asian</option><option>Mixed - any other background</option><option>Asian or Asian British - Indian</option><option>Asian or Asian British - Pakistani</option><option>Asian or Asian British - Bangladeshi</option><option>Asian or Asian British - any other background</option><option>Black or Black British - Caribbean</option><option>Black or Black British - African</option><option>Black or Black British - any other background</option><option>Chinese</option><option>Any other ethnic group</option><option>Prefer not to say</option></select>
+      </div>
+    </div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+      <button class="btn" style="flex:1;" onclick="closeEditDetails()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="saveEditDetails()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="mark-left-modal-overlay">
+  <div class="edit-modal-card">
+    <div class="section-hd" style="margin-bottom:0.35rem;">Mark <span id="mark-left-modal-name"></span> as left</div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Their full history stays on file and can still be exported, but they'll be moved out of the active roster and Results pickers.</p>
+    <div class="field">
+      <label>Date left</label>
+      <input type="date" id="mark-left-date"/>
+    </div>
+    <div class="field">
+      <label>Reason (optional)</label>
+      <input type="text" id="mark-left-reason" maxlength="200" placeholder="e.g. Moved to another school, Left after Year 6"/>
+    </div>
+    <div class="error-text" id="mark-left-error" style="display:none;"></div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+      <button class="btn" style="flex:1;" onclick="closeMarkAsLeftModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="confirmMarkAsLeft()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="feedback-modal-overlay">
+  <div class="edit-modal-card" id="feedback-modal-card">
+    <div class="section-hd" style="margin-bottom:0.35rem;">Send feedback</div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.85rem;">Spotted a bug, want a new topic or check added, or have another suggestion? This goes straight to the developer.</p>
+    <div class="field">
+      <label>What's this about?</label>
+      <select id="feedback-type">
+        <option value="Issue / bug">Something's not working</option>
+        <option value="Topic or check request">Request a new topic or check</option>
+        <option value="Other">Other feedback</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Your message</label>
+      <textarea id="feedback-message" maxlength="2000" placeholder="Tell us what's happening, or what you'd like to see..."></textarea>
+    </div>
+    <div class="error-text" id="feedback-error" style="display:none;"></div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+      <button class="btn" style="flex:1;" onclick="closeFeedbackModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" id="feedback-submit-btn" onclick="submitFeedback()">Send</button>
+    </div>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="report-modal-overlay">
+  <div class="edit-modal-card" id="report-modal-card">
+    <div class="section-hd" style="margin-bottom:0.35rem;">Report this question</div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Our content library is continually expanding, so not every question will suit every child yet. Let us know if something's wrong, too difficult, or not suitable &ndash; this goes straight to the developer and content is reviewed and adjusted where appropriate.</p>
+    <div class="field">
+      <label>Question / item</label>
+      <div id="report-modal-item" style="font-size:13px;color:var(--text-primary);background:var(--surface-1);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.5rem 0.65rem;"></div>
+    </div>
+    <div class="field">
+      <label>What's the issue?</label>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;" id="report-reason-btns">
+        <button type="button" class="group-toggle-btn" data-reason="Too hard" onclick="selectReportReason('Too hard')">Too hard</button>
+        <button type="button" class="group-toggle-btn" data-reason="Too easy" onclick="selectReportReason('Too easy')">Too easy</button>
+        <button type="button" class="group-toggle-btn" data-reason="Doesn't make sense" onclick="selectReportReason('Doesn\'t make sense')">Doesn&rsquo;t make sense</button>
+        <button type="button" class="group-toggle-btn" data-reason="Incorrect" onclick="selectReportReason('Incorrect')">Incorrect</button>
+        <button type="button" class="group-toggle-btn" data-reason="Not relevant" onclick="selectReportReason('Not relevant')">Not relevant</button>
+        <button type="button" class="group-toggle-btn" data-reason="Other" onclick="selectReportReason('Other')">Other</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Additional notes (optional)</label>
+      <textarea id="report-notes" maxlength="1000" placeholder="Tell us more, if useful..."></textarea>
+    </div>
+    <div class="error-text" id="report-error" style="display:none;"></div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+      <button class="btn" style="flex:1;" onclick="closeReportModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" id="report-submit-btn" onclick="submitQuestionReport()">Send</button>
+    </div>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="suggest-modal-overlay">
+  <div class="edit-modal-card" id="suggest-modal-card">
+    <div class="section-hd" style="margin-bottom:0.35rem;">Suggest a question</div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Got a question idea of your own? Add it here. If you're reviewing a Live Session, it'll be added to this test as well as sent for review.</p>
+    <div id="suggest-context-picker">
+      <div class="field">
+        <label>Subject</label>
+        <select id="suggest-subject-select" onchange="onSuggestSubjectChange()"></select>
+      </div>
+      <div class="field">
+        <label>Topic</label>
+        <select id="suggest-topic-select" onchange="onSuggestTopicChange()"></select>
+      </div>
+      <div class="field">
+        <label>Tier</label>
+        <select id="suggest-tier-select">
+          <option value="KS1">KS1 (Reception&ndash;Year 2)</option>
+          <option value="LKS2">LKS2 (Year 3&ndash;4)</option>
+          <option value="UKS2">UKS2 (Year 5&ndash;6)</option>
+        </select>
+      </div>
+    </div>
+    <div id="suggest-context-locked" style="display:none;font-size:13px;color:var(--text-primary);background:var(--surface-1);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.5rem 0.65rem;margin-bottom:0.85rem;"></div>
+    <div class="field">
+      <label>Question</label>
+      <textarea id="suggest-question-text" maxlength="500" placeholder="e.g. What is 12 × 4?"></textarea>
+    </div>
+    <div class="field">
+      <label>Correct answer</label>
+      <input type="text" id="suggest-correct-answer" maxlength="200" placeholder="e.g. 48"/>
+    </div>
+    <div class="field">
+      <label>Wrong answer options (optional &ndash; leave blank for a teacher-marked question with no choices)</label>
+      <input type="text" id="suggest-wrong-1" maxlength="200" placeholder="Wrong answer 1" style="margin-bottom:0.4rem;"/>
+      <input type="text" id="suggest-wrong-2" maxlength="200" placeholder="Wrong answer 2" style="margin-bottom:0.4rem;"/>
+      <input type="text" id="suggest-wrong-3" maxlength="200" placeholder="Wrong answer 3"/>
+    </div>
+    <div class="field">
+      <label>Notes for the reviewer (optional)</label>
+      <textarea id="suggest-notes" maxlength="500" placeholder="Anything that helps us understand the question..."></textarea>
+    </div>
+    <div class="error-text" id="suggest-error" style="display:none;"></div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+      <button class="btn" style="flex:1;" onclick="closeSuggestModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" id="suggest-submit-btn" onclick="submitSuggestedQuestion()">Send</button>
+    </div>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="staff-modal-overlay">
+  <div class="edit-modal-card" style="max-width:420px;">
+    <div class="section-hd" style="margin-bottom:0.35rem;">School staff</div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Everyone signed in at your school. Owners can manage this list and toggle access for others. Only staff with "Edit &amp; delete" on can change or remove existing data.</p>
+    <div id="staff-list"></div>
+    <div id="staff-owner-gone-note" style="display:none;font-size:12.5px;color:var(--text-secondary);background:var(--surface-1);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0.6rem 0.75rem;margin-top:0.6rem;">
+      Not an owner, and no owner is around to grant you access? <a href="javascript:void(0)" onclick="requestOwnershipHelp()" style="color:var(--hp-purple);">Contact us</a> and we'll help sort it out.
+    </div>
+    <div id="staff-billing-row" style="display:none;margin-top:0.6rem;">
+      <button class="btn" style="width:100%;" onclick="startBillingPortal(this)">Manage subscription &amp; billing</button>
+    </div>
+    <div id="staff-trust-row" style="display:none;margin-top:0.85rem;border-top:0.5px solid var(--border);padding-top:0.85rem;">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text-secondary);margin-bottom:0.4rem;">Trust / MAT (optional)</div>
+      <p style="font-size:11.5px;color:var(--text-muted);margin:0 0 0.5rem;">Link your school so your trust can see rolled-up, anonymised analytics &ndash; no individual pupil data is shared.</p>
+      <div id="staff-trust-list" style="font-size:13px;margin-bottom:0.5rem;"></div>
+      <div class="name-row" style="align-items:center;">
+        <input type="text" id="staff-trust-code-input" placeholder="Trust code" maxlength="8" style="text-transform:uppercase;flex:1;"/>
+        <button class="btn" style="width:auto;padding:0.55rem 0.9rem;" onclick="linkSchoolToTrust()">Link</button>
+      </div>
+      <div class="error-text" id="staff-trust-error" style="display:none;font-size:12px;margin-top:0.35rem;"></div>
+    </div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.85rem;">
+      <button class="btn" style="flex:1;" onclick="closeStaffModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="select-child-modal-overlay">
+  <div class="edit-modal-card">
+    <div class="section-hd" style="margin-bottom:0.75rem;">Select a child</div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Choose who this check is for before continuing.</p>
+    <div class="name-row" style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.5rem;">
+      <input type="text" id="select-child-search" placeholder="Search for a child..." oninput="renderSelectChildModalList()" style="flex:1;"/>
+    </div>
+    <div id="select-child-modal-list" style="max-height:320px;overflow-y:auto;"></div>
+    <div id="select-child-modal-empty" style="display:none;color:var(--text-secondary);font-size:14px;padding:0.5rem 0;">No children added yet. <a href="javascript:void(0)" onclick="closeSelectChildModal();switchTab('children');">Add children to the register</a> to get started.</div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+      <button class="btn" style="flex:1;" onclick="closeSelectChildModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="attendance-modal-overlay">
+  <div class="edit-modal-card" style="max-width:480px;">
+    <div class="section-hd" style="margin-bottom:0.75rem;">Record attendance</div>
+    <div class="name-row" style="align-items:center;">
+      <label style="font-size:13px;color:var(--text-secondary);white-space:nowrap;">Term:</label>
+      <select id="attendance-modal-term" onchange="renderAttendanceModalList()" style="flex:1;"></select>
+    </div>
+    <div id="attendance-modal-list" style="max-height:360px;overflow-y:auto;margin:0.5rem 0;"></div>
+    <div id="attendance-modal-empty" style="display:none;color:var(--text-secondary);font-size:14px;padding:0.5rem 0;">No active children in the register yet.</div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+      <button class="btn" style="flex:1;" onclick="closeAttendanceModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="saveAttendanceModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="tier-warning-modal-overlay">
+  <div class="edit-modal-card">
+    <div class="section-hd" style="margin-bottom:0.75rem;">Wrong level for this child?</div>
+    <p id="tier-warning-message" style="font-size:13px;color:var(--text-secondary);margin-bottom:0.75rem;"></p>
+    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+      <button class="btn" style="flex:1;" onclick="closeTierWarningModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="confirmTierOverride()">Start anyway</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
