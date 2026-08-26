@@ -1,0 +1,304 @@
+    </div>
+    <div id="computing-list"></div>
+  </div>
+</div>
+
+<div id="tab-analytics" style="display:none;">
+  <div class="trial-banner warn" style="margin-bottom:0.75rem;">
+    <span><i class="ti ti-alert-triangle" aria-hidden="true" style="margin-right:6px;"></i>We strongly recommend regularly exporting your data (CSV) and saving a copy somewhere safe, like your school's Teams, SharePoint or OneDrive &mdash; just in case data is ever lost or accidentally deleted.</span>
+  </div>
+  <div class="rv-screen active" id="an-subject-picker">
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="section-hd" style="margin-bottom:0;">Whole-school overview</div>
+        <select class="class-filter-select" style="margin-left:0;" onchange="setClassFilter(this.value)">
+          <option value="">All classes (whole school)</option>
+          <option value="Under 2s">Under 2s</option><option value="2-3s">2-3s</option><option value="Nursery (3-4s)">Nursery (3-4s)</option><option value="Reception">Reception</option><option value="Year 1">Year 1</option><option value="Year 2">Year 2</option><option value="Year 3">Year 3</option><option value="Year 4">Year 4</option><option value="Year 5">Year 5</option><option value="Year 6">Year 6</option><option value="Not recorded">Not recorded</option>
+        </select>
+      </div>
+      <div id="an-dashboard-empty" class="empty-state" style="display:none;">No assessment data yet across any subject.</div>
+      <div id="an-dashboard"></div>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <details class="rankings-toggle">
+        <summary class="section-hd" style="cursor:pointer;margin-bottom:0;display:inline-block;">Whole-school rankings (click to view all children)</summary>
+        <div id="an-overall-rankings" style="margin-top:0.75rem;"></div>
+      </details>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.75rem;">Choose a subject</div>
+      <div class="subject-grid">
+        <button class="subject-card subj-early-years" onclick="goToAnalyticsSubject('early_years')">
+          <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
+          <div class="subject-name">Early Years</div>
+          <div class="subject-desc">Early Years check analytics</div>
+        </button>
+        <button class="subject-card subj-phonics" onclick="goToAnalyticsSubject('phonics')">
+          <div class="subject-icon"><i class="ti ti-abc" aria-hidden="true"></i></div>
+          <div class="subject-name">Phonics</div>
+          <div class="subject-desc">Sound check and Blending Check analytics</div>
+        </button>
+        <button class="subject-card subj-times-tables" onclick="goToAnalyticsSubject('times_tables')">
+          <div class="subject-icon"><i class="ti ti-table" aria-hidden="true"></i></div>
+          <div class="subject-name">Times Tables</div>
+          <div class="subject-desc">Times Tables Check analytics</div>
+        </button>
+        <button class="subject-card subj-handwriting" onclick="goToAnalyticsSubject('handwriting')">
+          <div class="subject-icon"><i class="ti ti-pencil" aria-hidden="true"></i></div>
+          <div class="subject-name">Handwriting</div>
+          <div class="subject-desc">Handwriting check analytics</div>
+        </button>
+        <button class="subject-card subj-english" onclick="goToAnalyticsSubject('english')">
+          <div class="subject-icon"><i class="ti ti-book-2" aria-hidden="true"></i></div>
+          <div class="subject-name">English</div>
+          <div class="subject-desc">English check analytics</div>
+        </button>
+        <button class="subject-card subj-maths" onclick="goToAnalyticsSubject('maths')">
+          <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
+          <div class="subject-name">Maths</div>
+          <div class="subject-desc">Maths check analytics</div>
+        </button>
+        <button class="subject-card subj-topics" onclick="goToAnalyticsSubject('topics')">
+          <div class="subject-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
+          <div class="subject-name">Topics</div>
+          <div class="subject-desc">Topic check analytics</div>
+        </button>
+        <button class="subject-card subj-science" onclick="goToAnalyticsSubject('science')">
+          <div class="subject-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+          <div class="subject-name">Science</div>
+          <div class="subject-desc">Science check analytics</div>
+        </button>
+        <button class="subject-card subj-re" onclick="goToAnalyticsSubject('re')">
+          <div class="subject-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
+          <div class="subject-name">RE</div>
+          <div class="subject-desc">RE check analytics</div>
+        </button>
+        <button class="subject-card subj-mfl" onclick="goToAnalyticsSubject('mfl')">
+          <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+          <div class="subject-name">Languages</div>
+          <div class="subject-desc">Languages check analytics</div>
+        </button>
+        <button class="subject-card subj-music" onclick="goToAnalyticsSubject('music')">
+          <div class="subject-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
+          <div class="subject-name">Music</div>
+          <div class="subject-desc">Music check analytics</div>
+        </button>
+        <button class="subject-card subj-reasoning" onclick="goToAnalyticsSubject('reasoning')">
+          <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+          <div class="subject-name">Reasoning</div>
+          <div class="subject-desc">Reasoning check analytics</div>
+        </button>
+        <button class="subject-card subj-computing" onclick="goToAnalyticsSubject('computing')">
+          <div class="subject-icon"><i class="ti ti-device-desktop" aria-hidden="true"></i></div>
+          <div class="subject-name">Computing</div>
+          <div class="subject-desc">Computing check analytics</div>
+        </button>
+        <button class="subject-card subj-pe" onclick="goToAnalyticsSubject('pe')">
+          <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+          <div class="subject-name">PE</div>
+          <div class="subject-desc">PE assessment analytics</div>
+        </button>
+        <button class="subject-card subj-attendance" onclick="goToAnalyticsSubject('attendance')">
+          <div class="subject-icon"><i class="ti ti-calendar-check" aria-hidden="true"></i></div>
+          <div class="subject-name">Attendance</div>
+          <div class="subject-desc">Attendance analytics</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="an-phonics-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-phonics">
+      <div class="subject-icon"><i class="ti ti-abc" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Phonics analytics</div>
+    </div>
+    <div class="class-filter-indicator has-select active">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Filter by class:</span>
+      <select class="class-filter-select" onchange="setClassFilter(this.value)">
+        <option value="">All classes (whole school)</option>
+        <option value="Under 2s">Under 2s</option><option value="2-3s">2-3s</option><option value="Nursery (3-4s)">Nursery (3-4s)</option><option value="Reception">Reception</option><option value="Year 1">Year 1</option><option value="Year 2">Year 2</option><option value="Year 3">Year 3</option><option value="Year 4">Year 4</option><option value="Year 5">Year 5</option><option value="Year 6">Year 6</option><option value="Not recorded">Not recorded</option>
+      </select>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="an-empty" class="empty-state" style="display:none;">No data yet. Complete some assessments first.</div>
+    <div id="an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="an-bands"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed sounds</h2><div id="an-missed"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="an-gender"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by year group</h2><div id="an-year"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="an-needs"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by Free School Meals</h2><div id="an-fsm"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by vulnerable status</h2><div id="an-vulnerable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by ethnicity</h2><div id="an-ethnicity"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="an-attendance-band"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="an-leaderboard"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="an-rankings" style="margin-top:0.75rem;"></div></details></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="an-coverage"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">Score trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children assessed more than once, showing change over time.</p>
+        <div id="an-trends"></div>
+      </div>
+    </div>
+
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportBlendingAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="bc-an-empty" class="empty-state" style="display:none;">No blending check data yet. Complete a blending check first.</div>
+    <div id="bc-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Blending check overview</h2><div id="bc-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="bc-an-bands"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="bc-an-gender"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="bc-an-needs"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by Free School Meals</h2><div id="bc-an-fsm"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by vulnerable status</h2><div id="bc-an-vulnerable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by ethnicity</h2><div id="bc-an-ethnicity"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="bc-an-attendance-band"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="bc-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="bc-an-leaderboard"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="bc-an-rankings" style="margin-top:0.75rem;"></div></details></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="bc-an-coverage"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed blending words</h2><div id="bc-an-missed"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">Blending check trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children checked more than once, showing change over time.</p>
+        <div id="bc-an-trends"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="an-maths-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-maths">
+      <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Maths analytics</div>
+    </div>
+    <div class="class-filter-indicator has-select active">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Filter by class:</span>
+      <select class="class-filter-select" onchange="setClassFilter(this.value)">
+        <option value="">All classes (whole school)</option>
+        <option value="Under 2s">Under 2s</option><option value="2-3s">2-3s</option><option value="Nursery (3-4s)">Nursery (3-4s)</option><option value="Reception">Reception</option><option value="Year 1">Year 1</option><option value="Year 2">Year 2</option><option value="Year 3">Year 3</option><option value="Year 4">Year 4</option><option value="Year 5">Year 5</option><option value="Year 6">Year 6</option><option value="Not recorded">Not recorded</option>
+      </select>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportMathsAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="mt-an-empty" class="empty-state" style="display:none;">No Maths check data yet. Complete a Maths check first.</div>
+    <div id="mt-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Maths check overview</h2><div id="mt-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="mt-an-bands"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="mt-an-gender"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="mt-an-needs"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by Free School Meals</h2><div id="mt-an-fsm"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by vulnerable status</h2><div id="mt-an-vulnerable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by ethnicity</h2><div id="mt-an-ethnicity"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="mt-an-attendance-band"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="mt-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="mt-an-leaderboard"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="mt-an-rankings" style="margin-top:0.75rem;"></div></details></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="mt-an-heatmap"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="mt-an-coverage"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="mt-an-missed"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">Maths check trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children checked more than once, showing change over time.</p>
+        <div id="mt-an-trends"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="an-times-tables-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-times-tables">
+      <div class="subject-icon"><i class="ti ti-table" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Times Tables analytics</div>
+    </div>
+    <div class="class-filter-indicator has-select active">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Filter by class:</span>
+      <select class="class-filter-select" onchange="setClassFilter(this.value)">
+        <option value="">All classes (whole school)</option>
+        <option value="Under 2s">Under 2s</option><option value="2-3s">2-3s</option><option value="Nursery (3-4s)">Nursery (3-4s)</option><option value="Reception">Reception</option><option value="Year 1">Year 1</option><option value="Year 2">Year 2</option><option value="Year 3">Year 3</option><option value="Year 4">Year 4</option><option value="Year 5">Year 5</option><option value="Year 6">Year 6</option><option value="Not recorded">Not recorded</option>
+      </select>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportTimesTablesAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="tt-an-empty" class="empty-state" style="display:none;">No times tables data yet. Complete a Times Tables Check first.</div>
+    <div id="tt-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Times tables overview</h2><div id="tt-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="tt-an-bands"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="tt-an-gender"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="tt-an-needs"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by Free School Meals</h2><div id="tt-an-fsm"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by vulnerable status</h2><div id="tt-an-vulnerable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by ethnicity</h2><div id="tt-an-ethnicity"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="tt-an-attendance-band"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="tt-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="tt-an-leaderboard"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="tt-an-rankings" style="margin-top:0.75rem;"></div></details></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="tt-an-coverage"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed facts</h2><div id="tt-an-missed"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">Times tables trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children checked more than once, showing change over time.</p>
+        <div id="tt-an-trends"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="an-english-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-english">
+      <div class="subject-icon"><i class="ti ti-book-2" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">English analytics</div>
+    </div>
+    <div class="class-filter-indicator has-select active">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <span>Filter by class:</span>
+      <select class="class-filter-select" onchange="setClassFilter(this.value)">
+        <option value="">All classes (whole school)</option>
+        <option value="Under 2s">Under 2s</option><option value="2-3s">2-3s</option><option value="Nursery (3-4s)">Nursery (3-4s)</option><option value="Reception">Reception</option><option value="Year 1">Year 1</option><option value="Year 2">Year 2</option><option value="Year 3">Year 3</option><option value="Year 4">Year 4</option><option value="Year 5">Year 5</option><option value="Year 6">Year 6</option><option value="Not recorded">Not recorded</option>
+      </select>
+    </div>
+    <div class="tab-header">
+      <h2 style="margin-bottom:0;">Analytics</h2>
+      <button class="icon-btn export-btn" onclick="exportEnglishAnalyticsCSV(this)"><i class="ti ti-download" aria-hidden="true" style="font-size:14px;"></i> Export CSV</button>
+    </div>
+    <div id="en-an-empty" class="empty-state" style="display:none;">No English check data yet. Complete an English check first.</div>
+    <div id="en-an-content" style="display:none;">
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">English check overview</h2><div id="en-an-overview"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score bands</h2><div id="en-an-bands"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by gender</h2><div id="en-an-gender"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by additional needs</h2><div id="en-an-needs"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by Free School Meals</h2><div id="en-an-fsm"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by vulnerable status</h2><div id="en-an-vulnerable"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by ethnicity</h2><div id="en-an-ethnicity"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Score by attendance</h2><div id="en-an-attendance-band"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Term-by-term average</h2><div id="en-an-terms"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most improved / most declined</h2><div id="en-an-leaderboard"></div></div>
+      <div class="card"><details class="rankings-toggle"><summary style="cursor:pointer;font-size:16px;font-weight:600;">Rankings (click to view all children)</summary><div id="en-an-rankings" style="margin-top:0.75rem;"></div></details></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Topic breakdown</h2><div id="en-an-heatmap"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Checked this term</h2><div id="en-an-coverage"></div></div>
+      <div class="card"><h2 style="font-size:16px;margin-bottom:1rem;">Most missed questions</h2><div id="en-an-missed"></div></div>
+      <div class="card">
+        <h2 style="font-size:16px;margin-bottom:0.5rem;">English check trends</h2>
+        <p style="font-size:13px;margin-bottom:1rem;">Children checked more than once, showing change over time.</p>
+        <div id="en-an-trends"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-screen" id="an-handwriting-section">
+    <a href="javascript:void(0)" class="back-link" onclick="backToAnalyticsSubjects()">&larr; Back to subjects</a>
+    <div class
