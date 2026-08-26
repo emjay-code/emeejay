@@ -1,0 +1,332 @@
+Teacher-observed checklist across the 7 EYFS Areas of Learning</div>
+        </button>
+        <button class="subject-card subj-phonics" onclick="goToSubject('phonics')">
+          <div class="subject-icon"><i class="ti ti-abc" aria-hidden="true"></i></div>
+          <div class="subject-name">Phonics</div>
+          <div class="subject-desc">Letters and Sounds Sets 1&ndash;3, plus the Blending Check</div>
+        </button>
+        <button class="subject-card subj-times-tables" onclick="goToSubject('times_tables')">
+          <div class="subject-icon"><i class="ti ti-table" aria-hidden="true"></i></div>
+          <div class="subject-name">Times Tables</div>
+          <div class="subject-desc">Mixed or single times table checks</div>
+        </button>
+        <button class="subject-card subj-handwriting" onclick="goToSubject('handwriting')">
+          <div class="subject-icon"><i class="ti ti-pencil" aria-hidden="true"></i></div>
+          <div class="subject-name">Handwriting</div>
+          <div class="subject-desc">Teacher-marked letter and word formation checks</div>
+        </button>
+        <button class="subject-card subj-english" onclick="goToSubject('english')">
+          <div class="subject-icon"><i class="ti ti-book-2" aria-hidden="true"></i></div>
+          <div class="subject-name">English</div>
+          <div class="subject-desc">Grammar, Punctuation, Spelling, Vocabulary and Reading Comprehension checks</div>
+        </button>
+        <button class="subject-card subj-maths" onclick="goToSubject('maths')">
+          <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
+          <div class="subject-name">Maths</div>
+          <div class="subject-desc">Shape, measure, the four operations, place value and statistics checks</div>
+        </button>
+        <button class="subject-card subj-topics" onclick="goToSubject('topics')">
+          <div class="subject-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
+          <div class="subject-name">Topics</div>
+          <div class="subject-desc">Humanities topic checks</div>
+        </button>
+        <button class="subject-card subj-science" onclick="goToSubject('science')">
+          <div class="subject-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+          <div class="subject-name">Science</div>
+          <div class="subject-desc">Science topic checks</div>
+        </button>
+        <button class="subject-card subj-re" onclick="goToSubject('re')">
+          <div class="subject-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
+          <div class="subject-name">RE</div>
+          <div class="subject-desc">Religious Education topic checks</div>
+        </button>
+        <button class="subject-card subj-mfl" onclick="goToSubject('mfl')">
+          <div class="subject-icon"><i class="ti ti-language" aria-hidden="true"></i></div>
+          <div class="subject-name">Languages</div>
+          <div class="subject-desc">French, Spanish, German and Latin checks</div>
+        </button>
+        <button class="subject-card subj-music" onclick="goToSubject('music')">
+          <div class="subject-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
+          <div class="subject-name">Music</div>
+          <div class="subject-desc">Elements, instruments, notation, composers and more</div>
+        </button>
+        <button class="subject-card subj-reasoning" onclick="goToSubject('reasoning')">
+          <div class="subject-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+          <div class="subject-name">Reasoning</div>
+          <div class="subject-desc">Verbal and Non-Verbal Reasoning checks</div>
+        </button>
+        <button class="subject-card subj-computing" onclick="goToSubject('computing')">
+          <div class="subject-icon"><i class="ti ti-device-desktop" aria-hidden="true"></i></div>
+          <div class="subject-name">Computing</div>
+          <div class="subject-desc">Algorithms, online safety, hardware, data and more</div>
+        </button>
+        <button class="subject-card subj-pe" onclick="goToSubject('pe')">
+          <div class="subject-icon"><i class="ti ti-run" aria-hidden="true"></i></div>
+          <div class="subject-name">PE</div>
+          <div class="subject-desc">Teacher-observed assessment against National Curriculum strands</div>
+        </button>
+        <button class="subject-card subj-custom" style="border-style:dashed;" onclick="openCustomTopicBuilder()">
+          <div class="subject-icon"><i class="ti ti-plus" aria-hidden="true"></i></div>
+          <div class="subject-name">Create your own</div>
+          <div class="subject-desc">Build your own assessment for Maths, English or another subject</div>
+        </button>
+      </div>
+      <div style="text-align:center;font-size:13px;color:var(--text-secondary);margin-top:0.85rem;">Can't find what you need? <a href="javascript:void(0)" onclick="openFeedbackModal('Topic or check request')" style="color:var(--hp-purple);font-weight:500;">Request a new topic or check</a></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-custom-topic-builder">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Create your own assessment</div>
+      <p style="font-size:12.5px;color:var(--text-secondary);">Build a small assessment of your own. It's usable by your school straight away, and it'll also be sent to us to consider adding permanently.</p>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="field">
+        <label>Subject</label>
+        <select id="ct-subject-select"></select>
+      </div>
+      <div class="field">
+        <label>Year group / tier</label>
+        <select id="ct-tier-select">
+          <option value="KS1">KS1 (Reception&ndash;Year 2)</option>
+          <option value="LKS2">LKS2 (Year 3&ndash;4)</option>
+          <option value="UKS2">UKS2 (Year 5&ndash;6)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Title</label>
+        <input type="text" id="ct-title" maxlength="80" placeholder="e.g. Our Local Area"/>
+      </div>
+      <div class="field">
+        <label>Description (optional)</label>
+        <textarea id="ct-desc" maxlength="300" placeholder="What does this assessment cover?"></textarea>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Questions</div>
+      <div id="ct-question-list" style="margin-bottom:0.6rem;"></div>
+      <div id="ct-question-empty" style="font-size:12.5px;color:var(--text-secondary);margin-bottom:0.6rem;">No questions added yet.</div>
+      <div class="field">
+        <label>Question</label>
+        <textarea id="ct-q-text" maxlength="500" placeholder="e.g. What river runs through our town?"></textarea>
+      </div>
+      <div class="field">
+        <label>Correct answer</label>
+        <input type="text" id="ct-q-answer" maxlength="200" placeholder="e.g. The Thames"/>
+      </div>
+      <div class="field">
+        <label>Wrong answer options (optional &ndash; leave blank for a teacher-marked question with no choices)</label>
+        <input type="text" id="ct-q-wrong-1" maxlength="200" placeholder="Wrong answer 1" style="margin-bottom:0.4rem;"/>
+        <input type="text" id="ct-q-wrong-2" maxlength="200" placeholder="Wrong answer 2" style="margin-bottom:0.4rem;"/>
+        <input type="text" id="ct-q-wrong-3" maxlength="200" placeholder="Wrong answer 3"/>
+      </div>
+      <div class="error-text" id="ct-q-error" style="display:none;"></div>
+      <button class="btn" style="width:100%;" onclick="addCustomTopicQuestion()">+ Add question</button>
+    </div>
+    <div class="error-text" id="ct-save-error" style="display:none;margin-bottom:0.5rem;"></div>
+    <button class="btn btn-primary" id="ct-save-btn" style="width:100%;" onclick="saveCustomTopic()">Save assessment</button>
+  </div>
+
+  <div class="screen" id="screen-phonics-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-phonics">
+      <div class="subject-icon"><i class="ti ti-abc" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Phonics</div>
+    </div>
+    <div class="card" id="phonics-set-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a set</span>
+        <button class="all-btn" onclick="startAll()">All sets</button>
+      </div>
+      <button class="phase-btn" onclick="startPhase('set1')"><div class="phase-badge">1</div><div><div class="phase-name">Set 1</div><div class="phase-desc">m, a, s, d, t, i, n, p, g, o, c, k, u, b, f, e, l, h, r, j, v, y, w, z, x</div></div></button>
+      <button class="phase-btn" onclick="startPhase('set2')"><div class="phase-badge">2</div><div><div class="phase-name">Set 2</div><div class="phase-desc">ay, ee, igh, ow, oo, ar, or, air, ir, ou, oy</div></div></button>
+      <button class="phase-btn" onclick="startPhase('set3')"><div class="phase-badge">3</div><div><div class="phase-name">Set 3</div><div class="phase-desc">ea, oi, a-e, i-e, o-e, u-e, aw, are, ur, er, ow, ai, oa, ew, ire, ear, ure</div></div></button>
+      <button class="phase-btn" onclick="startBlendingCheck()"><div class="phase-badge"><i class="ti ti-puzzle" aria-hidden="true" style="font-size:16px;"></i></div><div><div class="phase-name">Blending Check</div><div class="phase-desc">Official Year 1 phonics screening check format &ndash; 40 words, half real and half pseudo-words</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveSession('phonics','set1',null,null,'Set 1')">Set 1</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('phonics','set2',null,null,'Set 2')">Set 2</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('phonics','set3',null,null,'Set 3')">Set 3</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('phonics','all',null,null,'All sets')">All sets</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('blending',null,null,null,'Blending Check')">Blending Check</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-maths-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-maths">
+      <div class="subject-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Maths</div>
+    </div>
+    <div class="card" id="maths-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a topic</span>
+      </div>
+      <div id="maths-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-maths-tiers">
+    <a href="javascript:void(0)" class="back-link" onclick="backToMathsTopics()">&larr; Back to topics</a>
+    <div class="subject-banner subj-maths">
+      <div class="subject-icon" id="maths-banner-icon"><i class="ti ti-math-symbols" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="maths-banner-title">Topic</div>
+    </div>
+    <div class="card" id="maths-tier-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" id="mt-tier-btn-KS1" onclick="startMathsCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
+      <button class="phase-btn" id="mt-tier-btn-LKS2" onclick="startMathsCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
+      <button class="phase-btn" id="mt-tier-btn-UKS2" onclick="startMathsCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" id="mt-tier-live-KS1" onclick="startLiveMathsTier('KS1')">KS1</button>
+        <button type="button" class="year-btn" id="mt-tier-live-LKS2" onclick="startLiveMathsTier('LKS2')">LKS2</button>
+        <button type="button" class="year-btn" id="mt-tier-live-UKS2" onclick="startLiveMathsTier('UKS2')">UKS2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-times_tables-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-times-tables">
+      <div class="subject-icon"><i class="ti ti-table" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Times Tables</div>
+    </div>
+    <div class="card" id="tt-set-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" onclick="startTimesTablesCheck('mixed')"><div class="phase-badge"><i class="ti ti-calculator" aria-hidden="true" style="font-size:16px;"></i></div><div><div class="phase-name">Mixed check</div><div class="phase-desc">25 quickfire multiplication facts, covering the 2 to 12 times tables</div></div></button>
+      <div class="section-hd" style="margin-top:1rem;">Or practise a single times table</div>
+      <div class="tt-table-grid">
+        <button class="tt-table-btn" onclick="startTimesTablesCheck(2)">2&times;</button>
+        <button class="tt-table-btn" onclick="startTimesTablesCheck(3)">3&times;</button>
+        <button class="tt-table-btn" onclick="startTimesTablesCheck(4)">4&times;</button>
+        <button class="tt-table-btn" onclick="startTimesTablesCheck(5)">5&times;</button>
+        <button class="tt-table-btn" onclick="startTimesTablesCheck(6)">6&times;</button>
+        <button class="tt-table-btn" onclick="startTimesTablesCheck(7)">7&times;</button>
+        <button class="tt-table-btn" onclick="startTimesTablesCheck(8)">8&times;</button>
+        <button class="tt-table-btn" onclick="startTimesTablesCheck(9)">9&times;</button>
+        <button class="tt-table-btn" onclick="startTimesTablesCheck(10)">10&times;</button>
+        <button class="tt-table-btn" onclick="startTimesTablesCheck(11)">11&times;</button>
+        <button class="tt-table-btn" onclick="startTimesTablesCheck(12)">12&times;</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','mixed',null,null,'Mixed check')">Mixed check</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','2',null,null,'2× table')">2&times;</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','3',null,null,'3× table')">3&times;</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','4',null,null,'4× table')">4&times;</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','5',null,null,'5× table')">5&times;</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','6',null,null,'6× table')">6&times;</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','7',null,null,'7× table')">7&times;</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','8',null,null,'8× table')">8&times;</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','9',null,null,'9× table')">9&times;</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','10',null,null,'10× table')">10&times;</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','11',null,null,'11× table')">11&times;</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('times_tables','12',null,null,'12× table')">12&times;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-english-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-english">
+      <div class="subject-icon"><i class="ti ti-book-2" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">English</div>
+    </div>
+    <div class="card" id="english-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a topic</span>
+      </div>
+      <div id="english-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-english-tiers">
+    <a href="javascript:void(0)" class="back-link" onclick="backToEnglishTopics()">&larr; Back to topics</a>
+    <div class="subject-banner subj-english">
+      <div class="subject-icon" id="english-banner-icon"><i class="ti ti-book-2" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="english-banner-title">Topic</div>
+    </div>
+    <div class="card" id="english-tier-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" id="en-tier-btn-KS1" onclick="startEnglishCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Check</div><div class="phase-desc">Year 1&ndash;2 level questions</div></div></button>
+      <button class="phase-btn" id="en-tier-btn-LKS2" onclick="startEnglishCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Check</div><div class="phase-desc">Years 3&ndash;4 level questions</div></div></button>
+      <button class="phase-btn" id="en-tier-btn-UKS2" onclick="startEnglishCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Check</div><div class="phase-desc">Years 5&ndash;6 level questions</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" id="en-tier-live-KS1" onclick="startLiveEnglishTier('KS1')">KS1</button>
+        <button type="button" class="year-btn" id="en-tier-live-LKS2" onclick="startLiveEnglishTier('LKS2')">LKS2</button>
+        <button type="button" class="year-btn" id="en-tier-live-UKS2" onclick="startLiveEnglishTier('UKS2')">UKS2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-handwriting-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-handwriting">
+      <div class="subject-icon"><i class="ti ti-pencil" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Handwriting</div>
+    </div>
+    <div class="card" id="handwriting-set-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+      </div>
+      <button class="phase-btn" onclick="startHandwritingCheck('KS1')"><div class="phase-badge">1</div><div><div class="phase-name">KS1 Handwriting Check</div><div class="phase-desc">Year 1&ndash;2: forming individual letters correctly</div></div></button>
+      <button class="phase-btn" onclick="startHandwritingCheck('LKS2')"><div class="phase-badge">2</div><div><div class="phase-name">LKS2 Handwriting Check</div><div class="phase-desc">Years 3&ndash;4: joined handwriting for common letter strings and words</div></div></button>
+      <button class="phase-btn" onclick="startHandwritingCheck('UKS2')"><div class="phase-badge">3</div><div><div class="phase-name">UKS2 Handwriting Check</div><div class="phase-desc">Years 5&ndash;6: fluent, legible joined handwriting for words and short sentences</div></div></button>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <div class="year-btn-grid" style="margin-bottom:0;">
+        <button type="button" class="year-btn" onclick="startLiveSession('handwriting','KS1','KS1',null,HANDWRITING_LABELS.KS1)">KS1</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('handwriting','LKS2','LKS2',null,HANDWRITING_LABELS.LKS2)">LKS2</button>
+        <button type="button" class="year-btn" onclick="startLiveSession('handwriting','UKS2','UKS2',null,HANDWRITING_LABELS.UKS2)">UKS2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-early_years-home">
+    <a href="javascript:void(0)" class="back-link" onclick="backToSubjects()">&larr; Back to subjects</a>
+    <div class="subject-banner subj-early-years">
+      <div class="subject-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
+      <div class="subject-banner-title">Early Years</div>
+    </div>
+    <div class="card" id="ey-list-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose an area of learning</span>
+      </div>
+      <div id="ey-area-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-ey-area">
+    <a href="javascript:void(0)" class="back-link" onclick="backToEyAreas()">&larr; Back to areas</a>
+    <div class="subject-banner subj-early-years">
+      <div class="subject-icon" id="ey-banner-icon"><i class="ti ti-building-carousel" aria-hidden="true"></i></div>
+      <div class="subject-banner-title" id="ey-banner-title">Area</div>
+    </div>
+    <div class="card" id="ey-area-card" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a check</span>
+    
