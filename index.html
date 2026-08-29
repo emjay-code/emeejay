@@ -38019,6 +38019,15 @@ function parentPointerRow(subjectLabel, band, detail, focus){
        "challenge them with". */
     if(subjectLabel === 'Early Years'){
       text = 'doing brilliantly! A couple of areas to keep trying with: ' + detail + '.';
+    } else if(detail === 'the Years 3-4 level check' || detail === 'the Years 5-6 level check'){
+      /* This "next tier" suggestion is the same generic phrase for every
+         subject that uses it (Maths, English, Handwriting, Topics, Science,
+         RE, Languages, Music, Reasoning, Computing) - naming it made the
+         portal read like a templated test result. A warm, non-specific nudge
+         instead; the genuinely subject-specific ones below (Phonics' next
+         sound set, Times Tables' Mixed check, Early Years' checklist items)
+         are left as they are since those actually differ per child. */
+      text = 'doing brilliantly! Worth giving them a bit more of a challenge in this area.';
     } else {
       text = 'doing brilliantly! Try challenging them with ' + detail + '.';
     }
