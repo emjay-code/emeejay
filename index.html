@@ -92,9 +92,11 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 .practice-screen.active{display:block;}
 .parent-screen{display:none;}
 .parent-screen.active{display:block;}
-.parent-pointer-row{display:flex;align-items:baseline;gap:8px;padding:0.35rem 0;font-size:14px;}
-.parent-pointer-row + .parent-pointer-row{border-top:0.5px solid var(--border-strong);}
-.parent-pointer-subject{font-weight:600;color:var(--hp-purple-dark);}
+.parent-subject-row{display:flex;align-items:flex-start;gap:12px;padding:0.65rem 0;}
+.parent-subject-row + .parent-subject-row{border-top:0.5px solid var(--border-strong);}
+.parent-subject-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+.parent-subject-name{font-weight:700;color:var(--text-primary);font-size:14.5px;}
+.parent-subject-text{font-size:13px;color:var(--text-secondary);margin-top:2px;line-height:1.4;}
 .lr-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0.6rem 0.75rem;border:0.5px solid var(--border-strong);border-radius:var(--radius);background:var(--surface-2);margin-bottom:0.5rem;}
 .lr-row-text{font-size:13px;color:var(--text-primary);flex:1;}
 .lr-row.lr-swapped{border-color:var(--hp-purple);background:var(--surface-1);}
@@ -4163,26 +4165,18 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
         <div style="font-size:13px;color:var(--text-muted);">Hi there</div>
         <div style="font-size:19px;font-weight:600;color:var(--hp-purple-dark);" id="parent-welcome-headline">How <span id="parent-welcome-name"></span> is getting on</div>
         <div style="font-size:13px;color:var(--text-secondary);margin-top:3px;" id="parent-welcome-participation"></div>
-        <div style="font-size:12.5px;color:var(--text-muted);margin-top:6px;">A quick overview below, with a few gentle pointers &ndash; no scores or test results here.</div>
       </div>
 
       <div id="parent-empty-card" class="card" style="text-align:center;padding:1.5rem 1rem;display:none;">
         <div style="font-size:13px;color:var(--text-muted);">Nothing to share yet &ndash; check back after a few more assessments.</div>
       </div>
 
-      <div id="parent-great-card" class="card" style="margin-bottom:0.75rem;display:none;">
-        <div class="section-hd" style="margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--fill-success);display:inline-block;flex-shrink:0;"></span>Doing brilliantly</div>
-        <div id="parent-great-list"></div>
-      </div>
-
-      <div id="parent-building-card" class="card" style="margin-bottom:0.75rem;display:none;">
-        <div class="section-hd" style="margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--fill-warning);display:inline-block;flex-shrink:0;"></span>Coming along nicely</div>
-        <div id="parent-building-list"></div>
-      </div>
-
-      <div id="parent-support-card" class="card" style="margin-bottom:0.75rem;display:none;">
-        <div class="section-hd" style="margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--fill-danger);display:inline-block;flex-shrink:0;"></span>Could use a little more support</div>
-        <div id="parent-support-list"></div>
+      <div id="parent-report-card" class="card" style="display:none;">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:0.85rem;">
+          <div style="font-size:16px;font-weight:700;color:var(--hp-purple-dark);">Progress report</div>
+          <div style="font-size:11.5px;color:var(--text-muted);">No scores &ndash; just gentle pointers</div>
+        </div>
+        <div id="parent-subject-list"></div>
       </div>
 
       <div class="card" style="text-align:center;font-size:12.5px;color:var(--text-muted);">Want to practise together at home? Ask your child's teacher for a practice code.</div>
@@ -37987,10 +37981,13 @@ function parentFocusList(focus){
   if(quoted.length === 1) return quoted[0];
   return quoted.slice(0, -1).join(', ') + ' and ' + quoted[quoted.length - 1];
 }
-function parentPointerRow(subjectLabel, band, detail, focus){
+function parentSubjectRow(subjectLabel, band, detail, focus){
   var row = document.createElement('div');
-  row.className = 'parent-pointer-row';
-  var subj = document.createElement('span'); subj.className = 'parent-pointer-subject'; subj.textContent = subjectLabel + ':';
+  row.className = 'parent-subject-row';
+  var dot = document.createElement('span'); dot.className = 'parent-subject-dot';
+  dot.style.background = band === 'doing_great' ? 'var(--fill-success)' : band === 'building' ? 'var(--fill-warning)' : band === 'needs_support' ? 'var(--fill-danger)' : 'var(--border-strong)';
+  var body = document.createElement('div');
+  var name = document.createElement('div'); name.className = 'parent-subject-name'; name.textContent = subjectLabel;
   var text = PARENT_BAND_TEXT[band] || '';
   var focusText = parentFocusList(focus);
   if(focusText && detail && (band === 'needs_support' || band === 'building')){
@@ -38032,8 +38029,9 @@ function parentPointerRow(subjectLabel, band, detail, focus){
       text = 'doing brilliantly! Try challenging them with ' + detail + '.';
     }
   }
-  var txt = document.createElement('span'); txt.textContent = text;
-  row.appendChild(subj); row.appendChild(txt);
+  var txt = document.createElement('div'); txt.className = 'parent-subject-text'; txt.textContent = text;
+  body.appendChild(name); body.appendChild(txt);
+  row.appendChild(dot); row.appendChild(body);
   return row;
 }
 async function loadParentSummary(token){
@@ -38063,21 +38061,16 @@ async function loadParentSummary(token){
   } else {
     participationEl.textContent = '';
   }
-  var greatList = document.getElementById('parent-great-list');
-  var buildingList = document.getElementById('parent-building-list');
-  var supportList = document.getElementById('parent-support-list');
-  greatList.innerHTML = ''; buildingList.innerHTML = ''; supportList.innerHTML = '';
-  var counts = { doing_great:0, building:0, needs_support:0 };
+  var list = document.getElementById('parent-subject-list');
+  list.innerHTML = '';
+  var hasAny = 0;
   rows.forEach(function(r){
-    if(r.band === 'doing_great'){ greatList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail, r.focus)); counts.doing_great++; }
-    else if(r.band === 'building'){ buildingList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail, r.focus)); counts.building++; }
-    else if(r.band === 'needs_support'){ supportList.appendChild(parentPointerRow(r.subject_label, r.band, r.detail, r.focus)); counts.needs_support++; }
+    if(r.band === 'no_data') return;
+    list.appendChild(parentSubjectRow(r.subject_label, r.band, r.detail, r.focus));
+    hasAny++;
   });
-  var hasAny = counts.doing_great || counts.building || counts.needs_support;
   document.getElementById('parent-empty-card').style.display = hasAny ? 'none' : 'block';
-  document.getElementById('parent-great-card').style.display = counts.doing_great ? 'block' : 'none';
-  document.getElementById('parent-building-card').style.display = counts.building ? 'block' : 'none';
-  document.getElementById('parent-support-card').style.display = counts.needs_support ? 'block' : 'none';
+  document.getElementById('parent-report-card').style.display = hasAny ? 'block' : 'none';
 }
 
 function showPracticeScreen(id){
