@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en" style="overflow:hidden; margin:0">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@hyperframes/core/dist/hyperframe.runtime.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@hyperframes/shader-transitions/dist/index.global.js"></script>
+<style>
+@font-face {
+  font-family: "Caveat";
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+  src: url(https://cdn.jsdelivr.net/npm/@fontsource/caveat@5.3.0/files/caveat-latin-700-normal.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Nunito";
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+  src: url(https://cdn.jsdelivr.net/npm/@fontsource/nunito@5.3.0/files/nunito-latin-400-normal.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Nunito";
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+  src: url(https://cdn.jsdelivr.net/npm/@fontsource/nunito@5.3.0/files/nunito-latin-700-normal.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Nunito";
+  font-weight: 800;
+  font-style: normal;
+  font-display: block;
+  src: url(https://cdn.jsdelivr.net/npm/@fontsource/nunito@5.3.0/files/nunito-latin-800-normal.woff2) format("woff2");
+}
+
+:root {
+  --bg-dark: #3A2352;
+  --bg-light: #F6F5FB;
+  --accent: #C8A6FF;
+  --violet: #8B5CF6;
+  --indigo: #5A50E6;
+  --ink: #221C4A;
+  --ink2: #5A5675;
+  --font-word: "Caveat", cursive;
+  --font-body: "Nunito", sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg-dark); color: #fff; font-family: var(--font-body); }
+
+.scene { position: absolute; top: 0; left: 0; width: 1080px; height: 1920px; overflow: hidden; }
+.scene-content { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; position: relative; z-index: 1; padding: 80px; }
+
+.wordmark { font-family: var(--font-word); font-weight: 700; color: #fff; }
+.headline { font-family: var(--font-body); font-weight: 800; line-height: 1.15; text-align: center; color: #fff; }
+.caption { font-family: var(--font-body); font-weight: 700; font-size: 44px; text-align: center; color: #fff; }
+.sub { font-family: var(--font-body); font-weight: 400; color: rgba(255,255,255,0.62); }
+
+.card { background: var(--bg-light); border-radius: 32px; padding: 48px; width: 820px; box-shadow: 0 30px 60px rgba(0,0,0,0.25); }
+.pill { display: inline-block; border-radius: 999px; padding: 14px 32px; font-family: var(--font-body); font-weight: 700; font-size: 30px; }
+
+.icon-chip { width: 90px; height: 90px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+</style>
+</head>
+<body>
+<div id="main" data-composition-id="main" data-width="1080" data-height="1920" data-start="0" data-duration="15">
+
+<!-- SCENE 1 (0-1.8s) Hook -->
+<div class="scene clip" id="s1" data-start="0" data-duration="1.8" data-track-index="0">
+  <div class="scene-content" style="background:var(--bg-dark);">
+    <svg width="90" height="90" viewBox="0 0 120 120" fill="none" style="margin-bottom:10px;">
+      <g transform="translate(0 11.5)" stroke="var(--accent)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"></path>
+        <path d="M92.4 44.4 L106 38 L104.8 53"></path>
+      </g>
+    </svg>
+    <h1 id="s1-head" class="headline" style="font-size:76px;">Marking eating your evenings?</h1>
+  </div>
+</div>
+
+<!-- SCENE 2 (1.8-2.6s) Logo sting -->
+<div class="scene clip" id="s2" data-start="1.8" data-duration="0.8" data-track-index="0" style="visibility:hidden;">
+  <div class="scene-content" style="background:var(--bg-dark); gap:8px;">
+    <svg id="s2-icon" width="130" height="130" viewBox="0 0 120 120" fill="none">
+      <g transform="translate(0 11.5)" stroke="var(--accent)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+        <path id="s2-path1" d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38" stroke-dasharray="300" stroke-dashoffset="300"></path>
+        <path id="s2-path2" d="M92.4 44.4 L106 38 L104.8 53" stroke-dasharray="40" stroke-dashoffset="40"></path>
+      </g>
+    </svg>
+    <div id="s2-word" class="wordmark" style="font-size:110px;">emeejay</div>
+    <div id="s2-sub" class="sub" style="font-size:30px;">All your assessments in one place</div>
+  </div>
+</div>
+
+<!-- SCENE 3 (2.6-5.4s) Assessments -->
+<div class="scene clip" id="s3" data-start="2.6" data-duration="2.8" data-track-index="0" style="visibility:hidden;">
+  <div class="scene-content" style="background:var(--bg-dark);">
+    <div id="s3-card" class="card" style="color:var(--ink);">
+      <div style="display:flex; gap:16px; margin-bottom:28px; flex-wrap:wrap;">
+        <div class="icon-chip" style="background:#EEEDFE; color:var(--indigo);">&#43;</div>
+        <div class="icon-chip" style="background:#E1F5EE; color:#0F6E56;">Abc</div>
+        <div class="icon-chip" style="background:#FAECE7; color:#993C1D;">&#9729;</div>
+        <div class="icon-chip" style="background:#FBEAF0; color:#993556;">&#9834;</div>
+      </div>
+      <div style="font-weight:800; font-size:38px; margin-bottom:20px;">Which number is bigger: 47 or 52?</div>
+      <div style="display:flex; gap:20px;">
+        <div class="pill" style="background:#EEEDFE; color:var(--indigo);">47</div>
+        <div class="pill" id="s3-answer" style="background:var(--indigo); color:#fff;">52</div>
+      </div>
+    </div>
+    <div id="s3-cap" class="caption">Start with a quick, simple check.</div>
+  </div>
+</div>
+
+<!-- SCENE 4 (5.4-8.0s) Live data -->
+<div class="scene clip" id="s4" data-start="5.4" data-duration="2.6" data-track-index="0" style="visibility:hidden;">
+  <div class="scene-content" style="background:var(--bg-dark);">
+    <div class="card" style="color:var(--ink); display:flex; flex-direction:column; gap:18px;">
+      <div style="display:flex; align-items:center; gap:16px;">
+        <div style="width:56px; height:56px; border-radius:50%; background:var(--indigo); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800;">RB</div>
+        <div style="flex:1; height:22px; border-radius:11px; background:#ECEAF6; overflow:hidden;"><div id="s4-bar1" style="height:100%; width:0%; background:var(--violet); border-radius:11px;"></div></div>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <div style="width:56px; height:56px; border-radius:50%; background:var(--violet); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800;">PJ</div>
+        <div style="flex:1; height:22px; border-radius:11px; background:#ECEAF6; overflow:hidden;"><div id="s4-bar2" style="height:100%; width:0%; background:var(--indigo); border-radius:11px;"></div></div>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <div style="width:56px; height:56px; border-radius:50%; background:#C4B5FD; color:var(--ink); display:flex; align-items:center; justify-content:center; font-weight:800;">OW</div>
+        <div style="flex:1; height:22px; border-radius:11px; background:#ECEAF6; overflow:hidden;"><div id="s4-bar3" style="height:100%; width:0%; background:var(--accent); border-radius:11px;"></div></div>
+      </div>
+    </div>
+    <div id="s4-cap" class="caption">Results come in live, as you go.</div>
+  </div>
+</div>
+
+<!-- SCENE 5 (8.0-10.8s) Analytics -->
+<div class="scene clip" id="s5" data-start="8.0" data-duration="2.8" data-track-index="0" style="visibility:hidden;">
+  <div class="scene-content" style="background:var(--bg-dark);">
+    <div class="card" style="color:var(--ink);">
+      <div style="display:flex; align-items:flex-end; gap:20px; height:180px; margin-bottom:24px;">
+        <div id="s5-b1" style="width:60px; height:0%; background:var(--indigo); border-radius:8px 8px 3px 3px;"></div>
+        <div id="s5-b2" style="width:60px; height:0%; background:var(--violet); border-radius:8px 8px 3px 3px;"></div>
+        <div id="s5-b3" style="width:60px; height:0%; background:var(--indigo); border-radius:8px 8px 3px 3px;"></div>
+        <div id="s5-b4" style="width:60px; height:0%; background:var(--violet); border-radius:8px 8px 3px 3px;"></div>
+        <div id="s5-b5" style="width:60px; height:0%; background:var(--accent); border-radius:8px 8px 3px 3px;"></div>
+      </div>
+      <div style="font-weight:700; font-size:30px; color:var(--ink2);">Most-missed: fractions, place value</div>
+    </div>
+    <div id="s5-cap" class="caption">Gaps and trends, surfaced automatically.</div>
+  </div>
+</div>
+
+<!-- SCENE 6 (10.8-13.2s) Reports -->
+<div class="scene clip" id="s6" data-start="10.8" data-duration="2.4" data-track-index="0" style="visibility:hidden;">
+  <div class="scene-content" style="background:var(--bg-dark);">
+    <div class="card" style="color:var(--ink); display:flex; flex-direction:column; gap:18px;">
+      <div id="s6-l1" style="height:22px; border-radius:6px; background:#CECBF6; width:0%;"></div>
+      <div id="s6-l2" style="height:22px; border-radius:6px; background:#CECBF6; width:0%;"></div>
+      <div id="s6-l3" style="height:22px; border-radius:6px; background:#CECBF6; width:0%;"></div>
+      <div id="s6-l4" style="height:22px; border-radius:6px; background:var(--indigo); width:0%;"></div>
+    </div>
+    <div id="s6-cap" class="caption">Reports, ready in one click.</div>
+  </div>
+</div>
+
+<!-- SCENE 7 (13.2-15.0s) End card -->
+<div class="scene clip" id="s7" data-start="13.2" data-duration="1.8" data-track-index="0" style="visibility:hidden;">
+  <div class="scene-content" style="background:var(--bg-dark); gap:8px;">
+    <svg width="110" height="110" viewBox="0 0 120 120" fill="none">
+      <g transform="translate(0 11.5)" stroke="var(--accent)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"></path>
+        <path d="M92.4 44.4 L106 38 L104.8 53"></path>
+      </g>
+    </svg>
+    <div id="s7-word" class="wordmark" style="font-size:100px;">emeejay</div>
+    <div id="s7-tag" class="sub" style="font-size:34px; text-align:center;">All your assessments. One place.</div>
+    <div id="s7-price" class="pill" style="background:var(--accent); color:var(--ink); margin-top:20px; font-size:32px;">&pound;200/year, per school</div>
+    <div id="s7-cta" class="sub" style="font-size:30px; margin-top:10px;">Link in bio</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+var tl = gsap.timeline({ paused: true });
+
+tl.set("#s1", { autoAlpha: 0 }, 1.8);
+tl.set("#s2", { autoAlpha: 1 }, 1.8); tl.set("#s2", { autoAlpha: 0 }, 2.6);
+tl.set("#s3", { autoAlpha: 1 }, 2.6); tl.set("#s3", { autoAlpha: 0 }, 5.4);
+tl.set("#s4", { autoAlpha: 1 }, 5.4); tl.set("#s4", { autoAlpha: 0 }, 8.0);
+tl.set("#s5", { autoAlpha: 1 }, 8.0); tl.set("#s5", { autoAlpha: 0 }, 10.8);
+tl.set("#s6", { autoAlpha: 1 }, 10.8); tl.set("#s6", { autoAlpha: 0 }, 13.2);
+tl.set("#s7", { autoAlpha: 1 }, 13.2);
+
+tl.from("#s1-head", { yPercent: 40, autoAlpha: 0, duration: 0.6, ease: "power3.out" }, 0.15);
+tl.to("#s1-head", { y: -6, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0.9);
+
+tl.to("#s2-path1", { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" }, 1.85);
+tl.to("#s2-path2", { strokeDashoffset: 0, duration: 0.2, ease: "power2.out" }, 2.25);
+tl.from("#s2-word", { autoAlpha: 0, scale: 0.8, duration: 0.35, ease: "back.out(1.6)" }, 2.0);
+tl.from("#s2-sub", { autoAlpha: 0, y: 10, duration: 0.3, ease: "power2.out" }, 2.3);
+
+tl.from("#s3-card", { yPercent: 15, autoAlpha: 0, duration: 0.5, ease: "power3.out" }, 2.7);
+tl.from("#s3-answer", { scale: 0.7, autoAlpha: 0, duration: 0.4, ease: "back.out(2)" }, 3.3);
+tl.to("#s3-answer", { scale: 1.05, duration: 0.4, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.9);
+tl.from("#s3-cap", { autoAlpha: 0, y: 20, duration: 0.4, ease: "power2.out" }, 4.7);
+
+tl.from("#s4 .card", { yPercent: 15, autoAlpha: 0, duration: 0.5, ease: "power3.out" }, 5.5);
+tl.to("#s4-bar1", { width: "82%", duration: 0.7, ease: "expo.out" }, 6.0);
+tl.to("#s4-bar2", { width: "64%", duration: 0.7, ease: "expo.out" }, 6.15);
+tl.to("#s4-bar3", { width: "91%", duration: 0.7, ease: "expo.out" }, 6.3);
+tl.from("#s4-cap", { autoAlpha: 0, y: 20, duration: 0.4, ease: "power2.out" }, 7.4);
+
+tl.from("#s5 .card", { yPercent: 15, autoAlpha: 0, duration: 0.5, ease: "power3.out" }, 8.1);
+["#s5-b1","#s5-b2","#s5-b3","#s5-b4","#s5-b5"].forEach(function(sel, i) {
+  var h = [70, 100, 55, 85, 40][i];
+  tl.to(sel, { height: h + "%", duration: 0.5, ease: "expo.out" }, 8.5 + i * 0.1);
+});
+tl.from("#s5-cap", { autoAlpha: 0, y: 20, duration: 0.4, ease: "power2.out" }, 10.2);
+
+tl.from("#s6 .card", { yPercent: 15, autoAlpha: 0, duration: 0.5, ease: "power3.out" }, 10.9);
+tl.to("#s6-l1", { width: "100%", duration: 0.3, ease: "power2.out" }, 11.4);
+tl.to("#s6-l2", { width: "88%", duration: 0.3, ease: "power2.out" }, 11.65);
+tl.to("#s6-l3", { width: "95%", duration: 0.3, ease: "power2.out" }, 11.9);
+tl.to("#s6-l4", { width: "60%", duration: 0.3, ease: "power2.out" }, 12.15);
+tl.from("#s6-cap", { autoAlpha: 0, y: 20, duration: 0.4, ease: "power2.out" }, 12.6);
+
+tl.from("#s7-word", { autoAlpha: 0, scale: 0.85, duration: 0.4, ease: "back.out(1.6)" }, 13.3);
+tl.from("#s7-tag", { autoAlpha: 0, y: 15, duration: 0.35, ease: "power2.out" }, 13.6);
+tl.from("#s7-price", { autoAlpha: 0, scale: 0.9, duration: 0.35, ease: "back.out(1.8)" }, 13.9);
+tl.from("#s7-cta", { autoAlpha: 0, duration: 0.3, ease: "power2.out" }, 14.2);
+
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>
