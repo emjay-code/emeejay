@@ -92,6 +92,10 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 .practice-screen.active{display:block;}
 .parent-screen{display:none;}
 .parent-screen.active{display:block;}
+.eh-screen{display:none;}
+.eh-screen.active{display:block;}
+.eh-teacher-screen{display:none;}
+.eh-teacher-screen.active{display:block;}
 .parent-subject-row{display:flex;align-items:flex-start;gap:12px;padding:0.65rem 0;}
 .parent-subject-row + .parent-subject-row{border-top:0.5px solid var(--border-strong);}
 .parent-subject-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:6px;}
@@ -698,6 +702,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
             <button class="btn btn-primary" onclick="showPlayPortal()">I'm a student with a class code</button>
             <button class="btn btn-primary" onclick="chooseTrustEntry()">I'm a trust, MAT or company</button>
             <button class="btn btn-primary" onclick="chooseParentEntry()">I'm a parent/carer with a code</button>
+            <button class="btn btn-primary" onclick="showHomePortal()">This is not homework &ndash; emeejay home</button>
           </div>
         </div>
       </div>
@@ -975,6 +980,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
 <div class="nav-tabs">
   <button class="nav-tab active" onclick="switchTab('quiz')"><i class="ti ti-school" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Assessment</button>
+  <button class="nav-tab" onclick="switchTab('eh')"><i class="ti ti-home" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>emeejay home</button>
   <button class="nav-tab" onclick="switchTab('results')"><i class="ti ti-list" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Results</button>
   <button class="nav-tab" onclick="switchTab('analytics')"><i class="ti ti-chart-bar" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Analytics</button>
   <button class="nav-tab" onclick="switchTab('children')"><i class="ti ti-users" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Children</button>
@@ -3671,6 +3677,61 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   </div>
 </div>
 
+<div id="tab-eh" style="display:none;">
+  <div class="card" style="margin-bottom:0.75rem;">
+    <div style="font-size:13px;color:var(--text-secondary);">Not homework &ndash; nothing assigned, nothing tracked for skipping. Seed a small pool of quests from something you've already taught; children let themselves in with the code below and choose if, and how far, they go.</div>
+  </div>
+  <div class="nav-tabs" style="margin-bottom:0.75rem;">
+    <button class="nav-tab eh-subnav-btn active" id="eh-subnav-setup" onclick="ehShowScreen('eh-teacher-setup')">This week</button>
+    <button class="nav-tab eh-subnav-btn" id="eh-subnav-insights" onclick="ehShowScreen('eh-teacher-insights')">Next morning</button>
+  </div>
+
+  <div class="eh-teacher-screen active" id="eh-teacher-setup">
+    <div class="card" style="margin-bottom:0.75rem;text-align:center;">
+      <div class="section-hd" style="margin-bottom:0.35rem;">Your emeejay home code</div>
+      <div style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;font-size:22px;letter-spacing:2px;color:var(--hp-purple);" id="eh-code-display">------</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Share this with your class &ndash; it stays the same all year.</div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;">What have you been teaching?</div>
+      <input type="text" id="eh-topics-search" placeholder="Search topics..." oninput="ehRenderTopicsList()" style="width:100%;margin-bottom:0.5rem;"/>
+      <div id="eh-topics-list" style="max-height:260px;overflow-y:auto;"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Which tier suits your class?</div>
+      <div class="year-btn-grid">
+        <button type="button" class="year-btn eh-tier-btn" data-tier="KS1" onclick="ehSelectTier('KS1',this)">KS1</button>
+        <button type="button" class="year-btn eh-tier-btn active" data-tier="LKS2" onclick="ehSelectTier('LKS2',this)">LKS2</button>
+        <button type="button" class="year-btn eh-tier-btn" data-tier="UKS2" onclick="ehSelectTier('UKS2',this)">UKS2</button>
+      </div>
+      <button class="btn btn-primary" id="eh-publish-btn" style="width:100%;margin-top:0.75rem;" onclick="ehPublish()" disabled>Publish this week's quests</button>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Publishing replaces last week's quests for this topic &ndash; nothing is deleted from a child's history.</div>
+    </div>
+
+    <div class="card">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Currently available</div>
+      <div id="eh-active-list"></div>
+    </div>
+  </div>
+
+  <div class="eh-teacher-screen" id="eh-teacher-insights">
+    <div class="stat-grid" id="eh-stats-row" style="margin-bottom:0.75rem;"></div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Who explored what</div>
+      <table style="width:100%;font-size:13px;">
+        <thead><tr><th style="text-align:left;">Child</th><th style="text-align:left;">Quest</th><th style="text-align:left;">Progress</th></tr></thead>
+        <tbody id="eh-roster-body"></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="section-hd" style="margin-bottom:0.5rem;">Notes from home</div>
+      <div id="eh-notes-list"></div>
+    </div>
+  </div>
+</div>
+
 <div id="tab-targets" style="display:none;">
   <div class="rv-screen active" id="tg-subject-screen">
     <div class="card" style="margin-bottom:0.75rem;">
@@ -3964,6 +4025,75 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   </div>
 </div>
 
+<div id="eh-view" class="page-dark full-bleed" style="display:none;">
+  <div class="auth-wrap">
+    <div class="chooser-decor" style="padding:0.5rem 0 2.25rem;">
+    <div class="chooser-decor-icons" data-decor-size="header"></div>
+    <div class="brand-lockup">
+      <a href="javascript:void(0)" onclick="exitHomePortal()" class="brand-lockup-corner">Exit</a>
+      <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+      <div class="brand-lockup-word">emeejay</div>
+      <div class="brand-lockup-sub">Not homework &ndash; pick it up if you're curious</div>
+    </div>
+    </div>
+
+    <div class="eh-screen active" id="eh-join">
+      <div class="card" style="text-align:center;">
+        <div class="section-hd" style="margin-bottom:0.75rem;">Enter your code</div>
+        <input type="text" id="eh-code-input" maxlength="5" placeholder="ABCDE" style="text-align:center;font-size:28px;letter-spacing:6px;text-transform:uppercase;font-weight:700;width:100%;"/>
+        <div style="height:0.75rem;"></div>
+        <select id="eh-year-input" style="display:none;"><option value="">Your year group</option><option>Under 2s</option><option>2-3s</option><option>Nursery (3-4s)</option><option>Reception</option><option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option><option>Year 5</option><option>Year 6</option></select>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.4rem;">Your year group</div>
+        <div class="year-btn-grid" id="eh-year-input-btns">
+          <button type="button" class="year-btn" data-year="Reception" onclick="selectYearBtn('eh-year-input',this)">Reception</button>
+          <button type="button" class="year-btn" data-year="Year 1" onclick="selectYearBtn('eh-year-input',this)">Year 1</button>
+          <button type="button" class="year-btn" data-year="Year 2" onclick="selectYearBtn('eh-year-input',this)">Year 2</button>
+          <button type="button" class="year-btn" data-year="Year 3" onclick="selectYearBtn('eh-year-input',this)">Year 3</button>
+          <button type="button" class="year-btn" data-year="Year 4" onclick="selectYearBtn('eh-year-input',this)">Year 4</button>
+          <button type="button" class="year-btn" data-year="Year 5" onclick="selectYearBtn('eh-year-input',this)">Year 5</button>
+          <button type="button" class="year-btn" data-year="Year 6" onclick="selectYearBtn('eh-year-input',this)">Year 6</button>
+        </div>
+        <div id="eh-join-error" style="color:var(--text-danger, #c0392b);font-size:13px;margin-top:0.5rem;display:none;"></div>
+        <button class="btn btn-primary" style="margin-top:1rem;" onclick="ehFindRoster()">Continue</button>
+      </div>
+    </div>
+
+    <div class="eh-screen" id="eh-roster">
+      <div class="card">
+        <a href="javascript:void(0)" onclick="ehBackToJoin()" style="font-size:12.5px;color:var(--hp-purple);font-weight:500;">&larr; Wrong code or year group?</a>
+        <div class="section-hd" style="margin:0.6rem 0 0.5rem;text-align:center;">Which one are you?</div>
+        <input type="text" id="eh-roster-search" placeholder="Search your name..." oninput="ehRenderRosterList()" style="width:100%;margin-bottom:0.5rem;"/>
+        <div id="eh-roster-list" style="max-height:280px;overflow-y:auto;"></div>
+      </div>
+    </div>
+
+    <div class="eh-screen" id="eh-questmap">
+      <div class="card" style="margin-bottom:0.75rem;">
+        <div class="section-hd" style="margin-bottom:0.25rem;">Hi <span id="eh-questmap-name"></span></div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Not a worksheet &ndash; a path. Finish one to open the next, or stop whenever you like.</div>
+      </div>
+      <div id="eh-quest-list"></div>
+    </div>
+
+    <div class="eh-screen" id="eh-play">
+      <div class="progress-bar"><div class="progress-fill" id="eh-play-prog"></div></div>
+      <div class="sound-counter" id="eh-play-counter">Item 1 of 12</div>
+      <div class="card" style="text-align:center;" id="eh-play-card"></div>
+    </div>
+
+    <div class="eh-screen" id="eh-done">
+      <div class="card" style="text-align:center;padding:1.5rem;">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Nice one</div>
+        <div class="stat-grid" style="margin-bottom:0;">
+          <div class="stat-card"><div class="stat-val" id="eh-done-score"></div><div class="stat-lbl">Correct</div></div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="ehBackToQuestMap()">Back to your quest map</button>
+      <button class="btn" onclick="ehReset()">Enter a different code</button>
+    </div>
+  </div>
+</div>
+
 <div id="practice-view" class="page-dark full-bleed" style="display:none;">
   <div class="auth-wrap">
     <div class="chooser-decor" style="padding:0.5rem 0 2.25rem;">
@@ -4177,6 +4307,14 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div style="font-size:11.5px;color:var(--text-muted);">No scores &ndash; just gentle pointers</div>
         </div>
         <div id="parent-subject-list"></div>
+      </div>
+
+      <div id="eh-parent-card" class="card" style="display:none;">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:0.5rem;">
+          <div style="font-size:16px;font-weight:700;color:var(--hp-purple-dark);">This week at emeejay home</div>
+          <div style="font-size:11.5px;color:var(--text-muted);">Not homework</div>
+        </div>
+        <div id="eh-parent-list"></div>
       </div>
 
       <div class="card" style="text-align:center;font-size:12.5px;color:var(--text-muted);">Want to practise together at home? Ask your child's teacher for a practice code.</div>
@@ -5328,9 +5466,12 @@ async function loadResults(){
 
 /* ---------- Tabs / screens ---------- */
 async function switchTab(t){
-  ['quiz','results','analytics','children','targets'].forEach(function(id){document.getElementById('tab-'+id).style.display=t===id?'block':'none';});
+  ['quiz','eh','results','analytics','children','targets'].forEach(function(id){document.getElementById('tab-'+id).style.display=t===id?'block':'none';});
   document.querySelectorAll('.nav-tab').forEach(function(n){n.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(n){if(n.getAttribute('onclick').indexOf("'"+t+"'")>-1)n.classList.add('active');});
+  if(t==='eh'){
+    ehLoadTab();
+  }
   if(t==='results' || t==='analytics'){
     /* Re-fetch from Supabase rather than rendering cached arrays - a live
        session writes results from the child's own browser, so this
@@ -34981,6 +35122,377 @@ async function playJoin(pupilId, pupilName){
   renderPlayItem();
 }
 
+/* ==========================================================================
+   emeejay home - opt-in independent study, deliberately not homework.
+   Nothing is assigned and nothing is tracked for skipping. A teacher seeds a
+   small pool of quests from a topic they've already taught; children let
+   themselves in with the school's persistent home code (separate from the
+   staff join_code) and pick themselves from the roster, same principle as
+   Live Session. Reuses buildItemsForCheck() for content and the existing
+   pupils table for identity - no separate accounts, no new roster.
+   ========================================================================== */
+
+/* --- Teacher side (tab-eh) --- */
+var ehTopicKey = null;
+var ehTier = 'LKS2';
+
+function ehLoadTab(){
+  ehShowScreen('eh-teacher-setup');
+  ehLoadCode();
+  ehRenderTopicsList();
+  ehLoadActiveQuests();
+}
+
+async function ehLoadCode(){
+  var el = document.getElementById('eh-code-display');
+  if(!el) return;
+  el.textContent = '------';
+  var res = await sb.rpc('get_or_create_home_code');
+  if(!res.error && res.data) el.textContent = res.data;
+}
+
+function ehShowScreen(id){
+  document.querySelectorAll('.eh-teacher-screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.eh-subnav-btn').forEach(function(b){ b.classList.remove('active'); });
+  var btn = document.getElementById(id === 'eh-teacher-setup' ? 'eh-subnav-setup' : 'eh-subnav-insights');
+  if(btn) btn.classList.add('active');
+  if(id === 'eh-teacher-insights') ehLoadInsights();
+}
+
+function ehBuildTopicBtn(key, t){
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'phase-btn' + (key === ehTopicKey ? ' active' : '');
+  btn.onclick = function(){ ehTopicKey = key; ehRenderTopicsList(); };
+  var badge = document.createElement('div'); badge.className = 'phase-badge';
+  var icon = document.createElement('i'); icon.className = 'ti ' + (t.icon || 'ti-world'); icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
+  badge.appendChild(icon);
+  var textWrap = document.createElement('div');
+  var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = t.label;
+  var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = t.desc || '';
+  textWrap.appendChild(name); textWrap.appendChild(desc);
+  btn.appendChild(badge); btn.appendChild(textWrap);
+  return btn;
+}
+
+function ehRenderTopicsList(){
+  var el = document.getElementById('eh-topics-list');
+  if(!el) return;
+  var searchEl = document.getElementById('eh-topics-search');
+  var search = searchEl ? (searchEl.value || '').trim().toLowerCase() : '';
+  el.innerHTML = '';
+  Object.keys(TOPICS).filter(function(key){
+    return !search || TOPICS[key].label.toLowerCase().indexOf(search) > -1;
+  }).forEach(function(key){ el.appendChild(ehBuildTopicBtn(key, TOPICS[key])); });
+  var publishBtn = document.getElementById('eh-publish-btn');
+  if(publishBtn) publishBtn.disabled = !ehTopicKey;
+}
+
+function ehSelectTier(tier, btnEl){
+  ehTier = tier;
+  document.querySelectorAll('.eh-tier-btn').forEach(function(b){ b.classList.remove('active'); });
+  btnEl.classList.add('active');
+}
+
+/* Splits one topic/tier's question pool into three quest cards rather than
+   inventing a second difficulty axis - warm-up/standard/boss is about how
+   far into the topic a child goes, not a harder syllabus underneath. */
+function ehSplitIntoQuests(pool){
+  var third = Math.max(1, Math.ceil(pool.length / 3));
+  return {
+    warmup: pool.slice(0, third),
+    standard: pool.slice(third, third * 2),
+    boss: pool.slice(third * 2)
+  };
+}
+
+async function ehPublish(){
+  if(!requireActiveSchool()) return;
+  if(!ehTopicKey){ alert('Please choose a topic first.'); return; }
+  var t = TOPICS[ehTopicKey];
+  var built = buildItemsForCheck('topics', ehTopicKey, ehTier);
+  var pool = built.pool && built.pool.length ? built.pool : built.items;
+  if(!pool || !pool.length){ alert('This topic has no questions set up for that tier yet.'); return; }
+  var split = ehSplitIntoQuests(pool);
+  var quests = [];
+  if(split.warmup.length) quests.push({ tier:'warmup', title: t.label + ' - warm-up', description: 'A gentle way in.', items: split.warmup });
+  if(split.standard.length) quests.push({ tier:'standard', title: t.label, description: 'The main quest.', items: split.standard });
+  if(split.boss.length) quests.push({ tier:'boss', title: t.label + ' - boss level', description: 'A proper stretch, once the others are done.', items: split.boss });
+  var res = await sb.rpc('publish_home_quests', { p_subject: 'topics', p_topic_label: t.label, p_year_group: null, p_quests: quests });
+  if(res.error){ alert('Could not publish: ' + res.error.message); return; }
+  alert('Published ' + quests.length + ' quest' + (quests.length === 1 ? '' : 's') + ' for ' + t.label + '.');
+  ehLoadActiveQuests();
+}
+
+async function ehLoadActiveQuests(){
+  var el = document.getElementById('eh-active-list');
+  if(!el) return;
+  el.innerHTML = '<div style="font-size:13px;color:var(--text-muted);">Loading…</div>';
+  var res = await sb.from('home_quests').select('id,title,tier,topic_label,status,created_at').eq('status','active').order('created_at',{ ascending:false });
+  var rows = res.data || [];
+  if(!rows.length){ el.innerHTML = '<div style="font-size:13px;color:var(--text-muted);">Nothing published yet.</div>'; return; }
+  el.innerHTML = '';
+  rows.forEach(function(r){
+    var row = document.createElement('div');
+    row.className = 'card';
+    row.style.cssText = 'margin-bottom:0.5rem;display:flex;justify-content:space-between;align-items:center;';
+    row.innerHTML = '<div><div style="font-weight:600;font-size:14px;">' + escapeHtml(r.title) + '</div><div style="font-size:12px;color:var(--text-muted);text-transform:capitalize;">' + escapeHtml(r.tier) + '</div></div>';
+    el.appendChild(row);
+  });
+}
+
+async function ehLoadInsights(){
+  var statsEl = document.getElementById('eh-stats-row');
+  var rosterEl = document.getElementById('eh-roster-body');
+  if(!statsEl || !rosterEl) return;
+  statsEl.innerHTML = '';
+  rosterEl.innerHTML = '<tr><td colspan="3" style="font-size:13px;color:var(--text-muted);">Loading…</td></tr>';
+
+  var questsRes = await sb.from('home_quests').select('id,title,tier').eq('status','active');
+  var quests = questsRes.data || [];
+  var questIds = quests.map(function(q){ return q.id; });
+  var attemptsRes = questIds.length
+    ? await sb.from('home_attempts').select('pupil_id,quest_id,status,total_correct,total_items,pupils(name)').in('quest_id', questIds)
+    : { data: [] };
+  var attempts = attemptsRes.data || [];
+
+  var explored = {}; var bossReached = 0;
+  attempts.forEach(function(a){
+    explored[a.pupil_id] = true;
+    var q = quests.find(function(x){ return x.id === a.quest_id; });
+    if(q && q.tier === 'boss' && a.status === 'done') bossReached++;
+  });
+  var notesRes = await sb.from('home_parent_notes').select('id,type,note,pupil_id,pupils(name)').order('created_at',{ ascending:false }).limit(10);
+  var notes = notesRes.data || [];
+
+  function ehStat(num, label){
+    var d = document.createElement('div'); d.className = 'stat-card';
+    d.innerHTML = '<div class="stat-val">' + num + '</div><div class="stat-lbl">' + escapeHtml(label) + '</div>';
+    return d;
+  }
+  statsEl.appendChild(ehStat(Object.keys(explored).length, 'explored a quest'));
+  statsEl.appendChild(ehStat(bossReached, 'reached the boss level'));
+  statsEl.appendChild(ehStat(notes.length, 'notes from home'));
+
+  rosterEl.innerHTML = '';
+  if(!attempts.length){
+    rosterEl.innerHTML = '<tr><td colspan="3" style="font-size:13px;color:var(--text-muted);">No one has opened a quest yet.</td></tr>';
+  } else {
+    attempts.forEach(function(a){
+      var q = quests.find(function(x){ return x.id === a.quest_id; });
+      var tr = document.createElement('tr');
+      var name = a.pupils ? a.pupils.name : 'Unknown';
+      var progress = a.status === 'done' ? (a.total_correct + '/' + a.total_items + ' correct') : 'In progress';
+      tr.innerHTML = '<td>' + escapeHtml(name) + '</td><td>' + escapeHtml(q ? q.title : '') + '</td><td>' + escapeHtml(progress) + '</td>';
+      rosterEl.appendChild(tr);
+    });
+  }
+  var notesEl = document.getElementById('eh-notes-list');
+  if(notesEl){
+    notesEl.innerHTML = notes.length ? '' : '<div style="font-size:13px;color:var(--text-muted);">No notes from home yet.</div>';
+    notes.forEach(function(n){
+      var name = n.pupils ? n.pupils.name : 'A parent';
+      var div = document.createElement('div');
+      div.className = 'card';
+      div.style.cssText = 'margin-bottom:0.5rem;';
+      div.innerHTML = '<div style="font-size:13px;"><strong>' + escapeHtml(name) + '</strong> &ndash; ' + (n.type === 'cheer' ? 'a cheer' : 'noticed a struggle') + (n.note ? ': "' + escapeHtml(n.note) + '"' : '') + '</div>';
+      notesEl.appendChild(div);
+    });
+  }
+}
+
+/* --- Child side (eh-view): code -> pick yourself from the roster -> quest map -> play -- */
+var ehCode = '', ehYear = '', ehRosterCache = [];
+var ehPupilId = null, ehPupilName = '';
+var ehQuests = [];
+var ehAttemptId = null, ehItems = [], ehIdx = 0, ehCorrect = 0;
+
+function showHomePortal(){
+  document.getElementById('entry-chooser-view').style.display = 'none';
+  document.getElementById('landing-view').style.display = 'none';
+  document.getElementById('auth-view').style.display = 'none';
+  document.getElementById('app-view').style.display = 'none';
+  document.getElementById('eh-view').style.display = 'block';
+  ehReset();
+}
+function exitHomePortal(){
+  document.getElementById('eh-view').style.display = 'none';
+  goToChooser();
+}
+function ehShowChildScreen(id){
+  document.querySelectorAll('.eh-screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
+function ehReset(){
+  ehCode = ''; ehYear = ''; ehRosterCache = []; ehPupilId = null; ehPupilName = ''; ehQuests = [];
+  ehAttemptId = null; ehItems = []; ehIdx = 0; ehCorrect = 0;
+  var codeEl = document.getElementById('eh-code-input'); if(codeEl) codeEl.value = '';
+  var yearEl = document.getElementById('eh-year-input'); if(yearEl) yearEl.value = '';
+  syncYearButtons('eh-year-input');
+  var errEl = document.getElementById('eh-join-error'); if(errEl) errEl.style.display = 'none';
+  ehShowChildScreen('eh-join');
+}
+async function ehFindRoster(){
+  var code = document.getElementById('eh-code-input').value.trim();
+  var year = document.getElementById('eh-year-input').value || '';
+  var errEl = document.getElementById('eh-join-error');
+  errEl.style.display = 'none';
+  if(!code){ errEl.textContent = 'Please enter your code.'; errEl.style.display = 'block'; return; }
+  if(!year){ errEl.textContent = 'Please choose your year group.'; errEl.style.display = 'block'; return; }
+  var res = await sb.rpc('get_home_roster', { p_code: code, p_year_group: year });
+  if(res.error){ errEl.textContent = res.error.message || 'That code is not recognised.'; errEl.style.display = 'block'; return; }
+  ehCode = code; ehYear = year; ehRosterCache = res.data || [];
+  var searchEl = document.getElementById('eh-roster-search'); if(searchEl) searchEl.value = '';
+  ehRenderRosterList();
+  ehShowChildScreen('eh-roster');
+}
+function ehRenderRosterList(){
+  var listEl = document.getElementById('eh-roster-list');
+  if(!listEl) return;
+  var searchEl = document.getElementById('eh-roster-search');
+  var search = searchEl ? (searchEl.value || '').trim().toLowerCase() : '';
+  listEl.innerHTML = '';
+  var list = ehRosterCache.filter(function(p){ return !search || p.name.toLowerCase().indexOf(search) > -1; });
+  list.forEach(function(p){
+    var row = document.createElement('button');
+    row.type = 'button'; row.className = 'phase-btn';
+    row.onclick = function(){ ehChoosePupil(p.id, p.name); };
+    var badge = buildAvatarBadge(p.name);
+    var nameEl = document.createElement('div');
+    nameEl.style.cssText = 'font-size:15px;font-weight:500;color:var(--text-primary);';
+    nameEl.textContent = p.name;
+    row.appendChild(badge); row.appendChild(nameEl);
+    listEl.appendChild(row);
+  });
+}
+function ehBackToJoin(){ ehShowChildScreen('eh-join'); }
+
+async function ehChoosePupil(id, name){
+  ehPupilId = id; ehPupilName = name;
+  await ehLoadQuestMap();
+}
+
+async function ehLoadQuestMap(){
+  ehShowChildScreen('eh-questmap');
+  document.getElementById('eh-questmap-name').textContent = ehPupilName;
+  var el = document.getElementById('eh-quest-list');
+  el.innerHTML = '<div style="font-size:13px;color:var(--text-muted);">Loading…</div>';
+  var res = await sb.rpc('get_home_quests', { p_code: ehCode, p_pupil_id: ehPupilId });
+  if(res.error){ el.innerHTML = '<div style="font-size:13px;color:var(--text-danger,#c0392b);">' + escapeHtml(res.error.message) + '</div>'; return; }
+  ehQuests = res.data || [];
+  el.innerHTML = '';
+  if(!ehQuests.length){
+    el.innerHTML = '<div class="card" style="text-align:center;font-size:13px;color:var(--text-muted);">Nothing here yet - check back once your teacher has set something up.</div>';
+    return;
+  }
+  var order = { warmup:0, standard:1, boss:2 };
+  var sorted = ehQuests.slice().sort(function(a,b){ return (order[a.tier] || 9) - (order[b.tier] || 9); });
+  var prevDone = true;
+  sorted.forEach(function(q){
+    var locked = !prevDone;
+    var done = q.attempt_status === 'done';
+    var card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'phase-btn';
+    card.disabled = locked;
+    card.style.opacity = locked ? '0.55' : '1';
+    if(!locked) card.onclick = function(){ ehStartQuest(q.quest_id); };
+    var badge = document.createElement('div'); badge.className = 'phase-badge';
+    var icon = document.createElement('i');
+    icon.className = 'ti ' + (done ? 'ti-check' : locked ? 'ti-lock' : 'ti-flag');
+    icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
+    badge.appendChild(icon);
+    var textWrap = document.createElement('div');
+    var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = q.title;
+    var desc = document.createElement('div'); desc.className = 'phase-desc';
+    desc.textContent = done ? ('Done - ' + q.total_correct + '/' + q.total_items + ' correct') : locked ? 'Opens once the one before it is done' : (q.description || 'Ready to play');
+    textWrap.appendChild(name); textWrap.appendChild(desc);
+    card.appendChild(badge); card.appendChild(textWrap);
+    el.appendChild(card);
+    prevDone = done;
+  });
+}
+
+async function ehStartQuest(questId){
+  var res = await sb.rpc('start_home_attempt', { p_code: ehCode, p_pupil_id: ehPupilId, p_quest_id: questId });
+  if(res.error){ alert('Could not open that quest: ' + res.error.message); return; }
+  var row = res.data && res.data[0];
+  if(!row || !row.items || !row.items.length){ alert('This quest has no questions yet.'); return; }
+  ehAttemptId = row.attempt_id; ehItems = row.items; ehIdx = 0; ehCorrect = 0;
+  ehShowChildScreen('eh-play');
+  ehRenderItem();
+}
+
+function ehRenderItem(){
+  var total = ehItems.length;
+  document.getElementById('eh-play-prog').style.width = Math.round((ehIdx / total) * 100) + '%';
+  document.getElementById('eh-play-counter').textContent = 'Item ' + (ehIdx + 1) + ' of ' + total;
+  var item = ehItems[ehIdx];
+  var card = document.getElementById('eh-play-card');
+  card.innerHTML =
+    '<div class="check-label">Choose the right answer</div>' +
+    '<div class="gr-question-display">' + escapeHtml(item.display) + '</div>' +
+    (item.pictogram ? pictogramHtml(item.pictogram) : '') +
+    '<div class="mc-grid mc-grid-text">' +
+      item.options.map(function(opt){ return '<button class="mc-btn" onclick="ehChoose(this,\'' + escapeHtml(opt).replace(/'/g,"\\'") + '\')">' + escapeHtml(opt) + '</button>'; }).join('') +
+    '</div>';
+}
+function ehChoose(btnEl, chosen){
+  var item = ehItems[ehIdx];
+  var correct = chosen === item.answer;
+  var allBtns = btnEl.parentElement.querySelectorAll('.mc-btn');
+  allBtns.forEach(function(b){ b.disabled = true; if(b.textContent === item.answer) b.classList.add('mc-correct'); else if(b === btnEl) b.classList.add('mc-wrong'); });
+  if(correct) ehCorrect++;
+  sb.rpc('update_home_attempt', { p_attempt_id: ehAttemptId, p_current_index: ehIdx + 1, p_total_correct: ehCorrect }).catch(function(){});
+  setTimeout(function(){
+    ehIdx++;
+    if(ehIdx >= ehItems.length){ ehFinishQuest(); return; }
+    ehRenderItem();
+  }, correct ? 400 : 900);
+}
+async function ehFinishQuest(){
+  await sb.rpc('complete_home_attempt', { p_attempt_id: ehAttemptId, p_total_correct: ehCorrect, p_total_items: ehItems.length });
+  document.getElementById('eh-done-score').textContent = ehCorrect + '/' + ehItems.length;
+  ehShowChildScreen('eh-done');
+}
+function ehBackToQuestMap(){ ehLoadQuestMap(); }
+
+/* --- Parent-side addition: this week's emeejay home activity, reusing the existing parent_token --- */
+var ehParentToken = null;
+async function ehLoadParentHome(token){
+  ehParentToken = token;
+  var card = document.getElementById('eh-parent-card');
+  var list = document.getElementById('eh-parent-list');
+  if(!card || !list) return;
+  var res = await sb.rpc('get_parent_home_summary', { p_token: token });
+  var rows = res.data || [];
+  if(res.error || !rows.length){ card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  list.innerHTML = '';
+  rows.forEach(function(r){
+    var row = document.createElement('div');
+    row.className = 'eh-parent-row';
+    row.style.cssText = 'padding:0.6rem 0;border-top:1px solid var(--border-strong);';
+    var status = r.attempt_status === 'done' ? (r.total_correct + '/' + r.total_items + ' correct') : 'Still going';
+    row.innerHTML = '<div style="font-size:13.5px;font-weight:600;">' + escapeHtml(r.quest_title) + '</div>' +
+      '<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">' + escapeHtml(status) + '</div>' +
+      '<div style="display:flex;gap:8px;">' +
+        '<button class="btn" style="flex:1;font-size:12.5px;padding:8px;" onclick="ehSendParentNote(this,\'cheer\')">Cheer them on</button>' +
+        '<button class="btn" style="flex:1;font-size:12.5px;padding:8px;" onclick="ehSendParentNote(this,\'concern\')">Noticed a struggle</button>' +
+      '</div>';
+    list.appendChild(row);
+  });
+}
+function ehSendParentNote(btnEl, type){
+  var row = btnEl.closest('.eh-parent-row');
+  var note = type === 'concern' ? window.prompt('Anything you want the teacher to know? (optional)') : null;
+  sb.rpc('add_home_parent_note', { p_token: ehParentToken, p_quest_id: null, p_type: type, p_note: note || null }).then(function(res){
+    if(res.error){ alert('Could not send that: ' + res.error.message); return; }
+    if(row) row.innerHTML = '<div style="font-size:13px;color:var(--text-success);padding:0.4rem 0;">Thanks &ndash; sent to the teacher.</div>';
+  });
+}
+
 function shuffleArray(arr){
   var a = arr.slice();
   for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
@@ -38046,6 +38558,7 @@ async function loadParentSummary(token){
     return;
   }
   showParentScreen('parent-home');
+  ehLoadParentHome(token);
   var childName = rows[0].pupil_name || 'Your child';
   document.getElementById('parent-welcome-name').textContent = childName;
   /* Warm, non-analytical opener above the subject breakdown. total_checks
