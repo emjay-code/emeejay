@@ -96,6 +96,14 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 .eh-screen.active{display:block;}
 .eh-teacher-screen{display:none;}
 .eh-teacher-screen.active{display:block;}
+.entry-step{display:none;}
+.entry-step.active{display:block;}
+.strand-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:420px;margin:1.5rem auto 0;}
+.strand-tile{background:#fff;border-radius:20px;padding:1.75rem 1rem;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;border:none;text-align:center;transition:transform 0.12s;}
+.strand-tile:hover{transform:translateY(-2px);}
+.strand-tile-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;flex-shrink:0;}
+.strand-tile-name{font-size:16px;font-weight:700;font-family:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--hp-purple-text);}
+.strand-tile-desc{font-size:11.5px;color:var(--text-secondary);line-height:1.35;}
 .parent-subject-row{display:flex;align-items:flex-start;gap:12px;padding:0.65rem 0;}
 .parent-subject-row + .parent-subject-row{border-top:0.5px solid var(--border-strong);}
 .parent-subject-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:6px;}
@@ -691,18 +699,52 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
         <div class="brand-lockup">
           <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
           <div class="brand-lockup-word">emeejay</div>
-          <div class="brand-lockup-sub">All your assessments in one place</div>
+          <div class="brand-lockup-sub">Assess in school, or the not-homework strand at home</div>
         </div>
 
-        <div class="landing-hero" style="padding:1.5rem 0 0.5rem;text-align:center;">
-          <div class="hero-title" style="font-size:21px;">Who's this for?</div>
-          <p class="hero-sub" style="max-width:380px;margin-left:auto;margin-right:auto;">Choose an option to continue.</p>
-          <div class="cta-row" style="max-width:360px;margin:1.25rem auto 0;">
-            <button class="btn btn-primary" onclick="chooseTeacherEntry()">I'm a teacher or school staff</button>
-            <button class="btn btn-primary" onclick="showPlayPortal()">I'm a student with a class code</button>
-            <button class="btn btn-primary" onclick="chooseTrustEntry()">I'm a trust, MAT or company</button>
-            <button class="btn btn-primary" onclick="chooseParentEntry()">I'm a parent/carer with a code</button>
-            <button class="btn btn-primary" onclick="showHomePortal()">This is not homework &ndash; emeejay home</button>
+        <div class="entry-step active" id="entry-step-main">
+          <div class="landing-hero" style="padding:1.5rem 0 0.5rem;text-align:center;">
+            <div class="hero-title" style="font-size:21px;">Which part of emeejay?</div>
+            <p class="hero-sub" style="max-width:380px;margin-left:auto;margin-right:auto;">Two separate strands on the same site &ndash; pick one to continue.</p>
+            <div class="strand-grid">
+              <button type="button" class="strand-tile" onclick="ehShowEntryStep('entry-step-assess')">
+                <div class="strand-tile-icon" style="background:var(--hp-purple);"><i class="ti ti-school" aria-hidden="true"></i></div>
+                <div class="strand-tile-name">emeejay assess</div>
+                <div class="strand-tile-desc">Assessments, checks and reporting for school</div>
+              </button>
+              <button type="button" class="strand-tile" onclick="ehShowEntryStep('entry-step-home')">
+                <div class="strand-tile-icon" style="background:#8B5CF6;"><i class="ti ti-home" aria-hidden="true"></i></div>
+                <div class="strand-tile-name">emeejay home</div>
+                <div class="strand-tile-desc">Not homework &ndash; opt-in independent study</div>
+              </button>
+            </div>
+            <div style="margin-top:1.25rem;">
+              <a href="javascript:void(0)" onclick="chooseTrustEntry()" style="font-size:12.5px;color:var(--text-muted);">I'm a trust, MAT or company</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry-step" id="entry-step-assess">
+          <div class="landing-hero" style="padding:1.5rem 0 0.5rem;text-align:center;">
+            <a href="javascript:void(0)" onclick="ehShowEntryStep('entry-step-main')" style="font-size:12.5px;color:var(--hp-purple);font-weight:500;">&larr; Back</a>
+            <div class="hero-title" style="font-size:21px;margin-top:0.5rem;">emeejay assess &ndash; who's this for?</div>
+            <div class="cta-row" style="max-width:360px;margin:1.25rem auto 0;">
+              <button class="btn btn-primary" onclick="chooseTeacherEntry()">I'm a teacher or school staff</button>
+              <button class="btn btn-primary" onclick="showPlayPortal()">I'm a student with a class code</button>
+              <button class="btn btn-primary" onclick="chooseParentEntry()">I'm a parent/carer with a code</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry-step" id="entry-step-home">
+          <div class="landing-hero" style="padding:1.5rem 0 0.5rem;text-align:center;">
+            <a href="javascript:void(0)" onclick="ehShowEntryStep('entry-step-main')" style="font-size:12.5px;color:var(--hp-purple);font-weight:500;">&larr; Back</a>
+            <div class="hero-title" style="font-size:21px;margin-top:0.5rem;">emeejay home &ndash; who's this for?</div>
+            <p class="hero-sub" style="max-width:340px;margin:0.35rem auto 0;">Not homework &ndash; nothing to enforce, nothing tracked for skipping.</p>
+            <div class="cta-row" style="max-width:360px;margin:1.25rem auto 0;">
+              <button class="btn btn-primary" onclick="chooseHomeTeacherEntry()">I'm a teacher</button>
+              <button class="btn btn-primary" onclick="showHomePortal()">I'm a child with the home code</button>
+            </div>
           </div>
         </div>
       </div>
@@ -970,6 +1012,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <span id="sb-teacher-name">-</span>
   </div>
   <div class="school-bar-actions">
+    <button class="icon-btn export-btn" onclick="switchStrand('home')"><i class="ti ti-home" aria-hidden="true" style="font-size:14px;"></i> emeejay home</button>
     <button class="icon-btn export-btn" id="sb-code-btn" onclick="copyJoinCode()">Code: ------</button>
     <button class="icon-btn export-btn" onclick="openStaffModal()"><i class="ti ti-users" aria-hidden="true" style="font-size:14px;"></i> Staff</button>
     <button class="icon-btn danger-btn" onclick="doSignOut()">Sign out</button>
@@ -980,7 +1023,6 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
 <div class="nav-tabs">
   <button class="nav-tab active" onclick="switchTab('quiz')"><i class="ti ti-school" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Assessment</button>
-  <button class="nav-tab" onclick="switchTab('eh')"><i class="ti ti-home" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>emeejay home</button>
   <button class="nav-tab" onclick="switchTab('results')"><i class="ti ti-list" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Results</button>
   <button class="nav-tab" onclick="switchTab('analytics')"><i class="ti ti-chart-bar" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Analytics</button>
   <button class="nav-tab" onclick="switchTab('children')"><i class="ti ti-users" aria-hidden="true" style="font-size:14px;margin-right:3px;"></i>Children</button>
@@ -3677,59 +3719,88 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   </div>
 </div>
 
-<div id="tab-eh" style="display:none;">
+<div id="eh-teacher-view" style="display:none;">
+<div class="wrap">
+<h2 class="sr-only">emeejay home</h2>
+
+<div class="chooser-decor" style="padding:0.5rem 0 2.25rem;">
+<div class="chooser-decor-icons" data-decor-size="header"></div>
+<div class="brand-lockup">
+  <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+  <div style="display:flex;align-items:baseline;gap:8px;justify-content:center;">
+    <div class="brand-lockup-word">emeejay</div>
+    <div style="font-size:12.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#221C4A;background:#C8A6FF;padding:3px 11px;border-radius:999px;">home</div>
+  </div>
+  <div class="brand-lockup-sub">Not homework &ndash; opt-in independent study</div>
+</div>
+</div>
+
+<div class="school-bar">
+  <div class="school-bar-left">
+    <b id="eh-school-name">-</b>
+    <span id="eh-teacher-name">-</span>
+  </div>
+  <div class="school-bar-actions">
+    <button class="icon-btn export-btn" onclick="switchStrand('assess')"><i class="ti ti-school" aria-hidden="true" style="font-size:14px;"></i> emeejay assess</button>
+    <button class="icon-btn danger-btn" onclick="doSignOut()">Sign out</button>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:0.75rem;">
+  <div style="font-size:13px;color:var(--text-secondary);">Not homework &ndash; nothing assigned, nothing tracked for skipping. Seed a small pool of quests from something you've already taught; children let themselves in with the code below and choose if, and how far, they go.</div>
+</div>
+<div class="nav-tabs" style="margin-bottom:0.75rem;">
+  <button class="nav-tab eh-subnav-btn active" id="eh-subnav-setup" onclick="ehShowScreen('eh-teacher-setup')">This week</button>
+  <button class="nav-tab eh-subnav-btn" id="eh-subnav-insights" onclick="ehShowScreen('eh-teacher-insights')">Next morning</button>
+</div>
+
+<div class="content-shell">
+<div class="eh-teacher-screen active" id="eh-teacher-setup">
+  <div class="card" style="margin-bottom:0.75rem;text-align:center;">
+    <div class="section-hd" style="margin-bottom:0.35rem;">Your emeejay home code</div>
+    <div style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;font-size:22px;letter-spacing:2px;color:var(--hp-purple);" id="eh-code-display">------</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Share this with your class &ndash; it stays the same all year.</div>
+  </div>
+
   <div class="card" style="margin-bottom:0.75rem;">
-    <div style="font-size:13px;color:var(--text-secondary);">Not homework &ndash; nothing assigned, nothing tracked for skipping. Seed a small pool of quests from something you've already taught; children let themselves in with the code below and choose if, and how far, they go.</div>
-  </div>
-  <div class="nav-tabs" style="margin-bottom:0.75rem;">
-    <button class="nav-tab eh-subnav-btn active" id="eh-subnav-setup" onclick="ehShowScreen('eh-teacher-setup')">This week</button>
-    <button class="nav-tab eh-subnav-btn" id="eh-subnav-insights" onclick="ehShowScreen('eh-teacher-insights')">Next morning</button>
+    <div class="section-hd" style="margin-bottom:0.5rem;">What have you been teaching?</div>
+    <input type="text" id="eh-topics-search" placeholder="Search topics..." oninput="ehRenderTopicsList()" style="width:100%;margin-bottom:0.5rem;"/>
+    <div id="eh-topics-list" style="max-height:260px;overflow-y:auto;"></div>
   </div>
 
-  <div class="eh-teacher-screen active" id="eh-teacher-setup">
-    <div class="card" style="margin-bottom:0.75rem;text-align:center;">
-      <div class="section-hd" style="margin-bottom:0.35rem;">Your emeejay home code</div>
-      <div style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;font-size:22px;letter-spacing:2px;color:var(--hp-purple);" id="eh-code-display">------</div>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Share this with your class &ndash; it stays the same all year.</div>
+  <div class="card" style="margin-bottom:0.75rem;">
+    <div class="section-hd" style="margin-bottom:0.5rem;">Which tier suits your class?</div>
+    <div class="year-btn-grid">
+      <button type="button" class="year-btn eh-tier-btn" data-tier="KS1" onclick="ehSelectTier('KS1',this)">KS1</button>
+      <button type="button" class="year-btn eh-tier-btn active" data-tier="LKS2" onclick="ehSelectTier('LKS2',this)">LKS2</button>
+      <button type="button" class="year-btn eh-tier-btn" data-tier="UKS2" onclick="ehSelectTier('UKS2',this)">UKS2</button>
     </div>
-
-    <div class="card" style="margin-bottom:0.75rem;">
-      <div class="section-hd" style="margin-bottom:0.5rem;">What have you been teaching?</div>
-      <input type="text" id="eh-topics-search" placeholder="Search topics..." oninput="ehRenderTopicsList()" style="width:100%;margin-bottom:0.5rem;"/>
-      <div id="eh-topics-list" style="max-height:260px;overflow-y:auto;"></div>
-    </div>
-
-    <div class="card" style="margin-bottom:0.75rem;">
-      <div class="section-hd" style="margin-bottom:0.5rem;">Which tier suits your class?</div>
-      <div class="year-btn-grid">
-        <button type="button" class="year-btn eh-tier-btn" data-tier="KS1" onclick="ehSelectTier('KS1',this)">KS1</button>
-        <button type="button" class="year-btn eh-tier-btn active" data-tier="LKS2" onclick="ehSelectTier('LKS2',this)">LKS2</button>
-        <button type="button" class="year-btn eh-tier-btn" data-tier="UKS2" onclick="ehSelectTier('UKS2',this)">UKS2</button>
-      </div>
-      <button class="btn btn-primary" id="eh-publish-btn" style="width:100%;margin-top:0.75rem;" onclick="ehPublish()" disabled>Publish this week's quests</button>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Publishing replaces last week's quests for this topic &ndash; nothing is deleted from a child's history.</div>
-    </div>
-
-    <div class="card">
-      <div class="section-hd" style="margin-bottom:0.5rem;">Currently available</div>
-      <div id="eh-active-list"></div>
-    </div>
+    <button class="btn btn-primary" id="eh-publish-btn" style="width:100%;margin-top:0.75rem;" onclick="ehPublish()" disabled>Publish this week's quests</button>
+    <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Publishing replaces last week's quests for this topic &ndash; nothing is deleted from a child's history.</div>
   </div>
 
-  <div class="eh-teacher-screen" id="eh-teacher-insights">
-    <div class="stat-grid" id="eh-stats-row" style="margin-bottom:0.75rem;"></div>
-    <div class="card" style="margin-bottom:0.75rem;">
-      <div class="section-hd" style="margin-bottom:0.5rem;">Who explored what</div>
-      <table style="width:100%;font-size:13px;">
-        <thead><tr><th style="text-align:left;">Child</th><th style="text-align:left;">Quest</th><th style="text-align:left;">Progress</th></tr></thead>
-        <tbody id="eh-roster-body"></tbody>
-      </table>
-    </div>
-    <div class="card">
-      <div class="section-hd" style="margin-bottom:0.5rem;">Notes from home</div>
-      <div id="eh-notes-list"></div>
-    </div>
+  <div class="card">
+    <div class="section-hd" style="margin-bottom:0.5rem;">Currently available</div>
+    <div id="eh-active-list"></div>
   </div>
+</div>
+
+<div class="eh-teacher-screen" id="eh-teacher-insights">
+  <div class="stat-grid" id="eh-stats-row" style="margin-bottom:0.75rem;"></div>
+  <div class="card" style="margin-bottom:0.75rem;">
+    <div class="section-hd" style="margin-bottom:0.5rem;">Who explored what</div>
+    <table style="width:100%;font-size:13px;">
+      <thead><tr><th style="text-align:left;">Child</th><th style="text-align:left;">Quest</th><th style="text-align:left;">Progress</th></tr></thead>
+      <tbody id="eh-roster-body"></tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="section-hd" style="margin-bottom:0.5rem;">Notes from home</div>
+    <div id="eh-notes-list"></div>
+  </div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="tab-targets" style="display:none;">
@@ -4676,10 +4747,44 @@ var currentSchool = null;  // {id, name, join_code}
 var currentTrust = null;  // {trust_id, trust_name, trust_code}
 
 /* ---------- Entry chooser / landing / auth screen wiring ---------- */
+/* Which strand a signed-in teacher is heading to - checked by onSignedIn()
+   to decide whether to land in app-view (assess) or eh-teacher-view (home).
+   Two separate product surfaces sharing one login, not one app with a
+   buried extra tab. */
+var pendingStrand = 'assess';
+
+function ehShowEntryStep(id){
+  document.querySelectorAll('.entry-step').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
+
 function chooseTeacherEntry(){
+  pendingStrand = 'assess';
   document.getElementById('entry-chooser-view').style.display = 'none';
   document.getElementById('landing-view').style.display = 'block';
   window.scrollTo(0,0);
+}
+/* emeejay home has no separate marketing page yet, so its teacher entry
+   skips straight to sign in rather than through the assess landing page. */
+function chooseHomeTeacherEntry(){
+  pendingStrand = 'home';
+  goToAuth('signin');
+}
+/* Lets a signed-in teacher move between the two strands without signing out
+   again - both read from the same account and school. */
+function switchStrand(strand){
+  pendingStrand = strand;
+  if(strand === 'home'){
+    document.getElementById('app-view').style.display = 'none';
+    document.getElementById('eh-teacher-view').style.display = 'block';
+    document.getElementById('eh-school-name').textContent = currentSchool ? currentSchool.name : 'Your school';
+    document.getElementById('eh-teacher-name').textContent = currentProfile ? (currentProfile.display_name || currentUser.email) : '-';
+    ehLoadTab();
+  } else {
+    document.getElementById('eh-teacher-view').style.display = 'none';
+    document.getElementById('app-view').style.display = 'block';
+    switchTab('quiz');
+  }
 }
 function chooseTrustEntry(){
   document.getElementById('entry-chooser-view').style.display = 'none';
@@ -4940,9 +5045,11 @@ function goToChooser(){
   document.getElementById('landing-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'none';
   document.getElementById('app-view').style.display = 'none';
+  var ehView = document.getElementById('eh-teacher-view'); if(ehView) ehView.style.display = 'none';
   document.getElementById('trust-auth-view').style.display = 'none';
   document.getElementById('trust-dashboard-view').style.display = 'none';
   document.getElementById('entry-chooser-view').style.display = 'block';
+  ehShowEntryStep('entry-step-main');
   window.scrollTo(0,0);
 }
 
@@ -5126,6 +5233,8 @@ async function doSignOut(){
   demoAccessToken = null;
   document.getElementById('trial-banner').style.display = 'none';
   document.getElementById('app-view').style.display = 'none';
+  var ehViewOnSignOut = document.getElementById('eh-teacher-view'); if(ehViewOnSignOut) ehViewOnSignOut.style.display = 'none';
+  pendingStrand = 'assess';
   document.getElementById('auth-view').style.display = 'none';
   document.getElementById('trust-dashboard-view').style.display = 'none';
   document.getElementById('trust-auth-view').style.display = 'none';
@@ -5335,6 +5444,21 @@ async function onSignedIn(){
     return;
   }
 
+  /* emeejay home is a separate strand, not a tab inside assess - a teacher
+     who arrived via "I'm a teacher" under emeejay home lands in its own
+     view instead of the assessment app, skipping all the assess-only data
+     loading below entirely. */
+  if(pendingStrand === 'home'){
+    document.getElementById('entry-chooser-view').style.display = 'none';
+    document.getElementById('landing-view').style.display = 'none';
+    document.getElementById('auth-view').style.display = 'none';
+    document.getElementById('eh-teacher-view').style.display = 'block';
+    document.getElementById('eh-school-name').textContent = currentSchool ? currentSchool.name : 'Your school';
+    document.getElementById('eh-teacher-name').textContent = currentProfile.display_name || currentUser.email;
+    ehLoadTab();
+    return;
+  }
+
   document.getElementById('sb-school-name').textContent = currentSchool ? currentSchool.name : 'Your school';
   document.getElementById('sb-teacher-name').textContent = currentProfile.display_name || currentUser.email;
   document.getElementById('sb-code-btn').textContent = 'Code: ' + (currentSchool ? currentSchool.join_code : '------');
@@ -5466,12 +5590,9 @@ async function loadResults(){
 
 /* ---------- Tabs / screens ---------- */
 async function switchTab(t){
-  ['quiz','eh','results','analytics','children','targets'].forEach(function(id){document.getElementById('tab-'+id).style.display=t===id?'block':'none';});
+  ['quiz','results','analytics','children','targets'].forEach(function(id){document.getElementById('tab-'+id).style.display=t===id?'block':'none';});
   document.querySelectorAll('.nav-tab').forEach(function(n){n.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(n){if(n.getAttribute('onclick').indexOf("'"+t+"'")>-1)n.classList.add('active');});
-  if(t==='eh'){
-    ehLoadTab();
-  }
   if(t==='results' || t==='analytics'){
     /* Re-fetch from Supabase rather than rendering cached arrays - a live
        session writes results from the child's own browser, so this
