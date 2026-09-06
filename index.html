@@ -244,6 +244,8 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .chip{font-family:var(--phonics-font);display:inline-block;padding:4px 10px;border-radius:6px;font-size:13px;font-weight:600;margin:3px;}
 .chip-ok{background:var(--bg-success);color:var(--text-success);}
 .chip-no{background:var(--bg-danger);color:var(--text-danger);}
+.eh-preset-chip{display:block;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:13px;font-family:inherit;color:#221C4A;cursor:pointer;transition:background 0.12s,border-color 0.12s;}
+.eh-preset-chip:hover{background:var(--hp-purple-light);border-color:var(--hp-purple-mid);}
 .section-hd{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;}
 .empty-state{text-align:center;padding:2.5rem 1rem;color:var(--text-muted);font-size:14px;}
 .name-row{display:flex;gap:0.5rem;margin-bottom:0.75rem;}
@@ -4034,7 +4036,9 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <button type="button" class="year-btn eh-activity-type-btn" data-type="photo" onclick="ehSelectActivityType('photo',this)">Photo of your work</button>
     </div>
     <div id="eh-activity-prompt-wrap" style="display:none;margin-top:0.6rem;">
-      <textarea id="eh-activity-prompt-input" placeholder="e.g. Pretend you are Florence Nightingale and write a diary entry set during the Crimean War." style="width:100%;min-height:64px;font-size:13px;padding:8px;border-radius:8px;border:1px solid var(--border-strong);font-family:inherit;"></textarea>
+      <div id="eh-activity-presets"></div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Or write your own:</div>
+      <textarea id="eh-activity-prompt-input" placeholder="Type your own activity..." style="width:100%;min-height:64px;font-size:13px;padding:8px;border-radius:8px;border:1px solid var(--border-strong);font-family:inherit;"></textarea>
     </div>
   </div>
 
@@ -35377,7 +35381,7 @@ function ehBuildTopicBtn(key, t){
   var btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'phase-btn' + (key === ehTopicKey ? ' active' : '');
-  btn.onclick = function(){ ehTopicKey = key; ehRenderTopicsList(); };
+  btn.onclick = function(){ ehTopicKey = key; ehRenderTopicsList(); ehRenderActivityPresets(); };
   var badge = document.createElement('div'); badge.className = 'phase-badge';
   var icon = document.createElement('i'); icon.className = 'ti ' + (t.icon || 'ti-world'); icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
   badge.appendChild(icon);
@@ -35409,10 +35413,51 @@ function ehSelectTier(tier, btnEl){
 }
 
 var EH_ACTIVITY_PLACEHOLDERS = {
-  writing: 'e.g. Pretend you are Florence Nightingale and write a diary entry set during the Crimean War.',
-  drawing: 'e.g. Draw what you think the hospital looked like, and label three things in it.',
-  photo: 'e.g. Take a photo of something you made, wrote or drew for this topic.'
+  writing: 'Type your own creative writing activity...',
+  drawing: 'Type your own drawing activity...',
+  photo: 'Type your own photo activity...'
 };
+var EH_ACTIVITY_PRESETS = {
+  writing: [
+    'Write a diary entry as if you were someone experiencing {topic} first-hand.',
+    'Write a short newspaper report about {topic}.',
+    'Write a letter explaining {topic} to a friend who has never heard of it.',
+    'Write down three amazing facts you learned about {topic}, in your own words.'
+  ],
+  drawing: [
+    'Draw a picture showing what you have learned about {topic}, and label three things.',
+    'Draw a comic strip (3-4 boxes) telling the story of {topic}.',
+    'Design a poster that would teach someone else about {topic}.'
+  ],
+  photo: [
+    'Take a photo of something you made, wrote or drew about {topic}.',
+    'Take a photo of a page from your book showing your work on {topic}.',
+    'Take a photo of a model, poster or object you created about {topic}.'
+  ]
+};
+function ehCurrentTopicLabel(){
+  return (ehTopicKey && TOPICS[ehTopicKey] && TOPICS[ehTopicKey].label) ? TOPICS[ehTopicKey].label : 'this topic';
+}
+function ehRenderActivityPresets(){
+  var el = document.getElementById('eh-activity-presets');
+  if(!el) return;
+  el.innerHTML = '';
+  if(!ehActivityType || !EH_ACTIVITY_PRESETS[ehActivityType]) return;
+  var topicLabel = ehCurrentTopicLabel();
+  var label = document.createElement('div');
+  label.style.cssText = 'font-size:12px;color:var(--text-muted);margin-bottom:4px;';
+  label.textContent = 'Choose one:';
+  el.appendChild(label);
+  EH_ACTIVITY_PRESETS[ehActivityType].forEach(function(tpl){
+    var text = tpl.replace(/\{topic\}/g, topicLabel);
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'eh-preset-chip';
+    btn.textContent = text;
+    btn.onclick = function(){ document.getElementById('eh-activity-prompt-input').value = text; };
+    el.appendChild(btn);
+  });
+}
 function ehSelectActivityType(type, btnEl){
   ehActivityType = type;
   document.querySelectorAll('.eh-activity-type-btn').forEach(function(b){ b.classList.remove('active'); });
@@ -35421,7 +35466,9 @@ function ehSelectActivityType(type, btnEl){
   var input = document.getElementById('eh-activity-prompt-input');
   if(type){
     wrap.style.display = 'block';
-    input.placeholder = EH_ACTIVITY_PLACEHOLDERS[type] || '';
+    input.value = '';
+    input.placeholder = EH_ACTIVITY_PLACEHOLDERS[type] || 'Type your own activity...';
+    ehRenderActivityPresets();
   } else {
     wrap.style.display = 'none';
     input.value = '';
@@ -35449,7 +35496,13 @@ async function ehPublish(){
   if(!pool || !pool.length){ alert('This topic has no questions set up for that tier yet.'); return; }
   var split = ehSplitIntoQuests(pool);
   var activityPromptInput = document.getElementById('eh-activity-prompt-input');
-  var activityPrompt = ehActivityType ? (activityPromptInput.value.trim() || EH_ACTIVITY_PLACEHOLDERS[ehActivityType]) : '';
+  var activityPrompt = '';
+  if(ehActivityType){
+    activityPrompt = activityPromptInput.value.trim();
+    if(!activityPrompt && EH_ACTIVITY_PRESETS[ehActivityType] && EH_ACTIVITY_PRESETS[ehActivityType].length){
+      activityPrompt = EH_ACTIVITY_PRESETS[ehActivityType][0].replace(/\{topic\}/g, t.label);
+    }
+  }
   var quests = [];
   if(split.warmup.length) quests.push({ tier:'warmup', title: t.label + ' - warm-up', description: 'A gentle way in.', items: split.warmup, activity_type: ehActivityType, activity_prompt: activityPrompt });
   if(split.standard.length) quests.push({ tier:'standard', title: t.label, description: 'The main quest.', items: split.standard, activity_type: ehActivityType, activity_prompt: activityPrompt });
