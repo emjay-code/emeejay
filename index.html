@@ -114,6 +114,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 @media (max-width:480px){
   .strand-grid{grid-template-columns:1fr;max-width:280px;}
 }
+.eh-fact-icon{width:64px;height:64px;border-radius:50%;margin:0 auto 0.75rem;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;background:linear-gradient(135deg,var(--hp-purple),var(--hp-violet));box-shadow:0 6px 16px -4px var(--hp-purple);}
+.eh-fact-dots{display:flex;justify-content:center;gap:6px;margin-top:0.85rem;}
+.eh-fact-dots .eh-dot{width:7px;height:7px;border-radius:50%;background:var(--hp-purple-border);transition:background 0.15s,transform 0.15s;}
+.eh-fact-dots .eh-dot.active{background:var(--hp-purple);transform:scale(1.3);}
+.eh-reward-icon{width:56px;height:56px;border-radius:50%;margin:0 auto 0.6rem;display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;background:linear-gradient(135deg,#F5A623,#E9A23B);box-shadow:0 6px 16px -4px #E9A23B;animation:eh-pop 0.4s ease;}
+@keyframes eh-pop{0%{transform:scale(0.4);opacity:0;}70%{transform:scale(1.15);opacity:1;}100%{transform:scale(1);}}
 .parent-subject-row{display:flex;align-items:flex-start;gap:12px;padding:0.65rem 0;}
 .parent-subject-row + .parent-subject-row{border-top:0.5px solid var(--border-strong);}
 .parent-subject-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:6px;}
@@ -4168,11 +4174,32 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card" style="margin-bottom:0.75rem;">
         <a href="javascript:void(0)" onclick="ehLoadQuestMap()" style="font-size:12.5px;color:var(--hp-purple);font-weight:500;">&larr; Back to your quest map</a>
         <div class="section-hd" style="margin:0.6rem 0 0.35rem;" id="eh-findout-title">Find out</div>
-        <div style="font-size:12.5px;color:var(--text-muted);">A few things to know before you play.</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Tap through a few things to know, then play.</div>
       </div>
-      <div class="card" id="eh-findout-facts" style="margin-bottom:0.75rem;"></div>
+      <div class="card" id="eh-findout-facts" style="text-align:center;margin-bottom:0.5rem;display:none;">
+        <div class="eh-fact-icon" id="eh-findout-icon"><i class="ti" id="eh-findout-icon-i" aria-hidden="true"></i></div>
+        <div style="font-size:14.5px;line-height:1.5;color:var(--text-primary);min-height:64px;display:flex;align-items:center;justify-content:center;" id="eh-findout-text"></div>
+        <div class="eh-fact-dots" id="eh-findout-dots"></div>
+        <div style="display:flex;gap:8px;margin-top:0.75rem;">
+          <button class="btn" id="eh-findout-prev" style="flex:1;" onclick="ehFindOutPrev()">Back</button>
+          <button class="btn btn-primary" id="eh-findout-next" style="flex:2;" onclick="ehFindOutNext()">Next fact</button>
+        </div>
+      </div>
       <div id="eh-findout-links" style="margin-bottom:0.75rem;"></div>
-      <button class="btn btn-primary" onclick="ehStartQuest(ehFindOutQuestId)">Start the quiz</button>
+      <button class="btn btn-primary" id="eh-findout-cta" onclick="ehStartQuest(ehFindOutQuestId)">Start the quiz</button>
+    </div>
+
+    <div class="eh-screen" id="eh-match">
+      <div class="card" style="margin-bottom:0.75rem;">
+        <a href="javascript:void(0)" onclick="ehShowChildScreen('eh-findout')" style="font-size:12.5px;color:var(--hp-purple);font-weight:500;">&larr; Back</a>
+        <div class="section-hd" style="margin:0.6rem 0 0.25rem;">Match them up!</div>
+        <div style="font-size:12px;color:var(--text-muted);">Pairs: <span id="eh-match-pairs">0</span> &middot; Moves: <span id="eh-match-moves">0</span></div>
+      </div>
+      <div class="mm-grid" id="eh-match-grid"></div>
+      <div id="eh-match-continue" style="display:none;margin-top:0.75rem;text-align:center;">
+        <div style="font-size:13.5px;color:var(--text-secondary);margin-bottom:0.6rem;">Nicely matched! Ready for the quiz?</div>
+        <button class="btn btn-primary" onclick="ehStartQuest(ehFindOutQuestId)">Start the quiz</button>
+      </div>
     </div>
 
     <div class="eh-screen" id="eh-play">
@@ -4183,7 +4210,8 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
     <div class="eh-screen" id="eh-done">
       <div class="card" style="text-align:center;padding:1.5rem;">
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;">Nice one</div>
+        <div class="eh-reward-icon" id="eh-done-reward" style="display:none;"><i class="ti" id="eh-done-reward-i" aria-hidden="true"></i></div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:0.25rem;" id="eh-done-caption">Nice one</div>
         <div class="stat-grid" style="margin-bottom:0;">
           <div class="stat-card"><div class="stat-val" id="eh-done-score"></div><div class="stat-lbl">Correct</div></div>
         </div>
@@ -35603,6 +35631,7 @@ async function ehLoadQuestMap(){
 /* A quest with facts and/or links opens the "find out" screen first (read
    and/or watch, then quiz); a plain quiz-only quest (or one already read)
    skips straight to the quiz, same as before. */
+var ehFindOutFacts = [], ehFindOutIdx = 0, ehFindOutMatchPairs = [];
 function ehOpenQuest(q){
   ehCurrentActivityPrompt = q.activity_prompt || null;
   var hasFacts = q.facts && q.facts.length;
@@ -35615,16 +35644,16 @@ function ehOpenQuest(q){
 }
 function ehRenderFindOut(q){
   ehFindOutQuestId = q.quest_id;
+  ehFindOutFacts = q.facts || [];
+  ehFindOutIdx = 0;
+  ehFindOutMatchPairs = q.match_pairs || [];
   document.getElementById('eh-findout-title').textContent = q.title;
   var factsEl = document.getElementById('eh-findout-facts');
-  if(q.facts && q.facts.length){
-    factsEl.innerHTML = '<div class="section-hd" style="font-size:14px;margin-bottom:0.5rem;">Find out</div>' +
-      '<ul style="margin:0;padding-left:1.1rem;font-size:13.5px;line-height:1.6;color:var(--text-primary);">' +
-      q.facts.map(function(f){ return '<li>' + escapeHtml(f) + '</li>'; }).join('') +
-      '</ul>';
+  if(ehFindOutFacts.length){
     factsEl.style.display = 'block';
+    ehRenderFindOutFact();
   } else {
-    factsEl.innerHTML = ''; factsEl.style.display = 'none';
+    factsEl.style.display = 'none';
   }
   var linksEl = document.getElementById('eh-findout-links');
   linksEl.innerHTML = '';
@@ -35636,7 +35665,119 @@ function ehRenderFindOut(q){
     a.textContent = l.label || 'Take a look';
     linksEl.appendChild(a);
   });
+  var ctaBtn = document.getElementById('eh-findout-cta');
+  if(ehFindOutMatchPairs.length >= 3){
+    ctaBtn.textContent = 'Play a matching game';
+    ctaBtn.onclick = function(){ ehStartMatch(); };
+  } else {
+    ctaBtn.textContent = 'Start the quiz';
+    ctaBtn.onclick = function(){ ehStartQuest(ehFindOutQuestId); };
+  }
   ehShowChildScreen('eh-findout');
+}
+function ehRenderFindOutFact(){
+  var fact = ehFindOutFacts[ehFindOutIdx];
+  if(!fact) return;
+  var isObj = typeof fact === 'object';
+  var text = isObj ? fact.text : fact;
+  var icon = isObj && fact.icon ? fact.icon : 'ti-bulb';
+  document.getElementById('eh-findout-icon-i').className = 'ti ' + icon;
+  document.getElementById('eh-findout-text').textContent = text;
+  var dotsEl = document.getElementById('eh-findout-dots');
+  dotsEl.innerHTML = '';
+  ehFindOutFacts.forEach(function(f, i){
+    var d = document.createElement('span');
+    d.className = 'eh-dot' + (i === ehFindOutIdx ? ' active' : '');
+    dotsEl.appendChild(d);
+  });
+  document.getElementById('eh-findout-prev').disabled = ehFindOutIdx === 0;
+  var nextBtn = document.getElementById('eh-findout-next');
+  nextBtn.textContent = (ehFindOutIdx === ehFindOutFacts.length - 1) ? 'Done' : 'Next fact';
+}
+function ehFindOutPrev(){
+  if(ehFindOutIdx > 0){ ehFindOutIdx--; ehRenderFindOutFact(); }
+}
+function ehFindOutNext(){
+  if(ehFindOutIdx < ehFindOutFacts.length - 1){ ehFindOutIdx++; ehRenderFindOutFact(); }
+}
+
+/* --- Matching game: a lightweight, self-contained pairs game reusing the
+   existing mm-grid/mm-card visuals from the practice portal's memory game,
+   so the child sees the same polished card-flip look without us having to
+   rework the generic practice-game engine (which is wired to the practice
+   subject/topic pickers, not to emeejay home quests). --- */
+var ehMatchCards = [], ehMatchFlipped = [], ehMatchMoves = 0, ehMatchMatchedCount = 0, ehMatchLock = false, ehMatchTotalPairs = 0;
+function ehStartMatch(){
+  var pairs = ehFindOutMatchPairs;
+  if(!pairs || pairs.length < 3){ ehStartQuest(ehFindOutQuestId); return; }
+  var cards = [];
+  pairs.forEach(function(p, i){
+    cards.push({ pairId:i, text:p.term, matched:false });
+    cards.push({ pairId:i, text:p.clue, matched:false });
+  });
+  ehMatchCards = shuffleArray(cards);
+  ehMatchFlipped = []; ehMatchMoves = 0; ehMatchMatchedCount = 0; ehMatchLock = false;
+  ehMatchTotalPairs = pairs.length;
+  document.getElementById('eh-match-continue').style.display = 'none';
+  document.getElementById('eh-match-grid').style.display = 'grid';
+  ehRenderMatch();
+  ehShowChildScreen('eh-match');
+}
+function ehRenderMatch(){
+  var el = document.getElementById('eh-match-grid');
+  el.innerHTML = '';
+  document.getElementById('eh-match-moves').textContent = ehMatchMoves;
+  document.getElementById('eh-match-pairs').textContent = ehMatchMatchedCount + ' of ' + ehMatchTotalPairs;
+  ehMatchCards.forEach(function(card, idx){
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    var isFlipped = ehMatchFlipped.indexOf(idx) > -1;
+    if(card.matched){
+      btn.className = 'mm-card mm-matched';
+      btn.textContent = card.text;
+      btn.disabled = true;
+    } else if(isFlipped){
+      btn.className = 'mm-card mm-revealed';
+      btn.textContent = card.text;
+      btn.onclick = function(){ ehMatchFlip(idx); };
+    } else {
+      btn.className = 'mm-card mm-hidden';
+      btn.textContent = '?';
+      btn.onclick = function(){ ehMatchFlip(idx); };
+    }
+    el.appendChild(btn);
+  });
+}
+function ehMatchFlip(idx){
+  if(ehMatchLock) return;
+  if(ehMatchFlipped.indexOf(idx) > -1) return;
+  if(ehMatchCards[idx].matched) return;
+  ehMatchFlipped.push(idx);
+  ehRenderMatch();
+  if(ehMatchFlipped.length === 2){
+    ehMatchMoves++;
+    var a = ehMatchCards[ehMatchFlipped[0]];
+    var b = ehMatchCards[ehMatchFlipped[1]];
+    if(a.pairId === b.pairId){
+      a.matched = true; b.matched = true;
+      ehMatchMatchedCount++;
+      ehMatchFlipped = [];
+      ehRenderMatch();
+      if(ehMatchMatchedCount === ehMatchTotalPairs){
+        setTimeout(function(){
+          document.getElementById('eh-match-grid').style.display = 'none';
+          document.getElementById('eh-match-continue').style.display = 'block';
+        }, 400);
+      }
+    } else {
+      ehMatchLock = true;
+      setTimeout(function(){
+        ehMatchFlipped = [];
+        ehMatchLock = false;
+        ehRenderMatch();
+      }, 900);
+    }
+  }
 }
 async function ehStartQuest(questId){
   var res = await sb.rpc('start_home_attempt', { p_code: ehCode, p_pupil_id: ehPupilId, p_quest_id: questId });
@@ -35678,6 +35819,17 @@ function ehChoose(btnEl, chosen){
 async function ehFinishQuest(){
   await sb.rpc('complete_home_attempt', { p_attempt_id: ehAttemptId, p_total_correct: ehCorrect, p_total_items: ehItems.length });
   document.getElementById('eh-done-score').textContent = ehCorrect + '/' + ehItems.length;
+  var ratio = ehItems.length ? (ehCorrect / ehItems.length) : 0;
+  var rewardEl = document.getElementById('eh-done-reward');
+  var rewardIcon = document.getElementById('eh-done-reward-i');
+  var captionEl = document.getElementById('eh-done-caption');
+  if(ratio === 1){
+    rewardIcon.className = 'ti ti-trophy'; rewardEl.style.display = 'flex'; captionEl.textContent = 'Perfect score!';
+  } else if(ratio >= 0.7){
+    rewardIcon.className = 'ti ti-star'; rewardEl.style.display = 'flex'; captionEl.textContent = 'Great job';
+  } else {
+    rewardEl.style.display = 'none'; captionEl.textContent = 'Nice one';
+  }
   var activityEl = document.getElementById('eh-done-activity');
   if(ehCurrentActivityPrompt){
     activityEl.innerHTML = '<div class="section-hd" style="font-size:13px;margin-bottom:0.35rem;">One more thing to try</div>' +
