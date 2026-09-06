@@ -115,6 +115,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
   .strand-grid{grid-template-columns:1fr;max-width:280px;}
 }
 .eh-fact-icon{width:64px;height:64px;border-radius:50%;margin:0 auto 0.75rem;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;background:linear-gradient(135deg,var(--hp-purple),var(--hp-violet));box-shadow:0 6px 16px -4px var(--hp-purple);}
+.eh-fact-img{width:100%;max-height:160px;object-fit:cover;border-radius:var(--radius);margin-bottom:0.75rem;box-shadow:0 6px 16px -4px rgba(90,80,230,0.35);}
 .eh-fact-dots{display:flex;justify-content:center;gap:6px;margin-top:0.85rem;}
 .eh-fact-dots .eh-dot{width:7px;height:7px;border-radius:50%;background:var(--hp-purple-border);transition:background 0.15s,transform 0.15s;}
 .eh-fact-dots .eh-dot.active{background:var(--hp-purple);transform:scale(1.3);}
@@ -4208,6 +4209,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
         <div style="font-size:12.5px;color:var(--text-muted);" id="eh-findout-sub">Tap through a few things to know, then play.</div>
       </div>
       <div class="card" id="eh-findout-facts" style="text-align:center;margin-bottom:0.5rem;display:none;">
+        <img class="eh-fact-img" id="eh-findout-img" style="display:none;" alt=""/>
         <div class="eh-fact-icon" id="eh-findout-icon"><i class="ti" id="eh-findout-icon-i" aria-hidden="true"></i></div>
         <div style="font-size:14.5px;line-height:1.5;color:var(--text-primary);min-height:64px;display:flex;align-items:center;justify-content:center;" id="eh-findout-text"></div>
         <div class="eh-fact-dots" id="eh-findout-dots"></div>
@@ -22605,14 +22607,29 @@ var TOPICS = {
     }
   }
 };
+/* One real, relevant photo/portrait per topic (Wikimedia Commons, public
+   domain or Creative Commons licensed) shown on every fact card for that
+   topic, replacing the plain icon glyph. */
+var EH_TOPIC_IMG = {
+  vikings: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Viking_longship.png/330px-Viking_longship.png',
+  romans: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/330px-Colosseo_2020.jpg',
+  great_fire_of_london: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Great_Fire_London.jpg/330px-Great_Fire_London.jpg',
+  ancient_egyptians: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Great_Pyramid_of_Giza_-_Pyramid_of_Khufu.jpg/330px-Great_Pyramid_of_Giza_-_Pyramid_of_Khufu.jpg',
+  world_war_2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Spitfire_-_Season_Premiere_Airshow_2018_%28cropped%29.jpg/330px-Spitfire_-_Season_Premiere_Airshow_2018_%28cropped%29.jpg',
+  rainforests: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Chiapas_Rainforest_crop.jpg/330px-Chiapas_Rainforest_crop.jpg',
+  rivers_coasts: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/White_Cliffs_of_Dover_02.JPG/330px-White_Cliffs_of_Dover_02.JPG',
+  mountains_volcanoes: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Augustine_volcano_Jan_24_2006_-_Cyrus_Read.jpg/330px-Augustine_volcano_Jan_24_2006_-_Cyrus_Read.jpg',
+  tudors: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/After_Hans_Holbein_the_Younger_-_Portrait_of_Henry_VIII_-_Google_Art_Project.jpg/330px-After_Hans_Holbein_the_Younger_-_Portrait_of_Henry_VIII_-_Google_Art_Project.jpg',
+  ancient_greece: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Parthenon_%2830276156187%29.jpg/330px-Parthenon_%2830276156187%29.jpg'
+};
 var TOPIC_JOURNEYS = {
   vikings: {
     facts: [
-      {icon:'ti-anchor', text:'The Vikings came from Scandinavia - the countries we now call Norway, Sweden and Denmark - and sailed to Britain in fast wooden longships.'},
-      {icon:'ti-sword', text:'The Viking Age lasted from about AD700 to 1100. At first Vikings came to raid, attacking monasteries like Lindisfarne for treasure.'},
-      {icon:'ti-map-2', text:'Later, many Vikings settled and farmed the land instead of raiding. The area they ruled in England was called the Danelaw.'},
-      {icon:'ti-building-community', text:'The Viking city of Jorvik (modern-day York) had over 10,000 people living in it and was an important trading centre.'},
-      {icon:'ti-book', text:'We know about the Vikings from archaeology - like ships, coins and jewellery - as well as writings such as the Anglo-Saxon Chronicle.'}
+      {icon:'ti-anchor', img:EH_TOPIC_IMG.vikings, text:'The Vikings came from Scandinavia - the countries we now call Norway, Sweden and Denmark - and sailed to Britain in fast wooden longships.'},
+      {icon:'ti-sword', img:EH_TOPIC_IMG.vikings, text:'The Viking Age lasted from about AD700 to 1100. At first Vikings came to raid, attacking monasteries like Lindisfarne for treasure.'},
+      {icon:'ti-map-2', img:EH_TOPIC_IMG.vikings, text:'Later, many Vikings settled and farmed the land instead of raiding. The area they ruled in England was called the Danelaw.'},
+      {icon:'ti-building-community', img:EH_TOPIC_IMG.vikings, text:'The Viking city of Jorvik (modern-day York) had over 10,000 people living in it and was an important trading centre.'},
+      {icon:'ti-book', img:EH_TOPIC_IMG.vikings, text:'We know about the Vikings from archaeology - like ships, coins and jewellery - as well as writings such as the Anglo-Saxon Chronicle.'}
     ],
     links: [
       {url:'https://www.youtube.com/watch?v=X0QnGvl3rJo', kind:'video', label:'Watch: Life in the Time of the Vikings (BBC Teach)'}
@@ -22628,11 +22645,11 @@ var TOPIC_JOURNEYS = {
   },
   romans: {
     facts: [
-      {icon:'ti-column', text:'The Romans invaded Britain in AD43, led by Emperor Claudius, and ruled for almost 400 years.'},
-      {icon:'ti-map-2', text:'Romans built a network of straight, well-made roads across Britain to move soldiers and goods quickly.'},
-      {icon:'ti-shield', text:"Hadrian's Wall was built to defend the northern edge of Roman Britain against tribes from what is now Scotland."},
-      {icon:'ti-flame', text:'Roman towns often had public bathhouses, heated by underfloor systems called hypocausts, where people relaxed and socialised.'},
-      {icon:'ti-book', text:'The Romans left Britain in AD410 when their soldiers were needed to defend Rome itself, ending Roman rule.'}
+      {icon:'ti-column', img:EH_TOPIC_IMG.romans, text:'The Romans invaded Britain in AD43, led by Emperor Claudius, and ruled for almost 400 years.'},
+      {icon:'ti-map-2', img:EH_TOPIC_IMG.romans, text:'Romans built a network of straight, well-made roads across Britain to move soldiers and goods quickly.'},
+      {icon:'ti-shield', img:EH_TOPIC_IMG.romans, text:"Hadrian's Wall was built to defend the northern edge of Roman Britain against tribes from what is now Scotland."},
+      {icon:'ti-flame', img:EH_TOPIC_IMG.romans, text:'Roman towns often had public bathhouses, heated by underfloor systems called hypocausts, where people relaxed and socialised.'},
+      {icon:'ti-book', img:EH_TOPIC_IMG.romans, text:'The Romans left Britain in AD410 when their soldiers were needed to defend Rome itself, ending Roman rule.'}
     ],
     links: [
       {url:'https://www.youtube.com/watch?v=nN_x9o8MV1o', kind:'video', label:'Watch: Life in Roman Britain (BBC Teach)'}
@@ -22648,11 +22665,11 @@ var TOPIC_JOURNEYS = {
   },
   great_fire_of_london: {
     facts: [
-      {icon:'ti-flame', text:'The Great Fire of London started in the early hours of 2 September 1666 in a bakery on Pudding Lane.'},
-      {icon:'ti-home', text:'It spread so quickly because most houses were made of wood and built close together, with strong winds fanning the flames.'},
-      {icon:'ti-building-monument', text:'The fire burned for four days and destroyed most of the City of London, including old St Paul’s Cathedral.'},
-      {icon:'ti-book', text:'We know a lot about the fire from Samuel Pepys, who wrote a detailed diary describing what he saw.'},
-      {icon:'ti-shield', text:'Remarkably few people died, but afterwards London was rebuilt with brick and stone instead of wood, to prevent fires spreading again.'}
+      {icon:'ti-flame', img:EH_TOPIC_IMG.great_fire_of_london, text:'The Great Fire of London started in the early hours of 2 September 1666 in a bakery on Pudding Lane.'},
+      {icon:'ti-home', img:EH_TOPIC_IMG.great_fire_of_london, text:'It spread so quickly because most houses were made of wood and built close together, with strong winds fanning the flames.'},
+      {icon:'ti-building-monument', img:EH_TOPIC_IMG.great_fire_of_london, text:'The fire burned for four days and destroyed most of the City of London, including old St Paul’s Cathedral.'},
+      {icon:'ti-book', img:EH_TOPIC_IMG.great_fire_of_london, text:'We know a lot about the fire from Samuel Pepys, who wrote a detailed diary describing what he saw.'},
+      {icon:'ti-shield', img:EH_TOPIC_IMG.great_fire_of_london, text:'Remarkably few people died, but afterwards London was rebuilt with brick and stone instead of wood, to prevent fires spreading again.'}
     ],
     links: [
       {url:'https://www.youtube.com/watch?v=DSH81jl-uAk', kind:'video', label:'Watch: The Great Fire of London, Episode 1 (BBC Teach)'}
@@ -22668,11 +22685,11 @@ var TOPIC_JOURNEYS = {
   },
   ancient_egyptians: {
     facts: [
-      {icon:'ti-pyramid', text:'The Ancient Egyptians built huge pyramids as tombs for their pharaohs, filled with treasure for the afterlife.'},
-      {icon:'ti-crown', text:'Pharaohs were believed to be god-like rulers of Egypt, and the most famous is the boy king Tutankhamun.'},
-      {icon:'ti-wave', text:'The River Nile flooded every year, leaving fertile soil that let Egyptian farmers grow crops in the desert.'},
-      {icon:'ti-book', text:'Egyptians wrote using picture symbols called hieroglyphics, carved and painted onto walls and papyrus.'},
-      {icon:'ti-flask', text:'Egyptians believed in life after death, so they preserved bodies through a process called mummification.'}
+      {icon:'ti-pyramid', img:EH_TOPIC_IMG.ancient_egyptians, text:'The Ancient Egyptians built huge pyramids as tombs for their pharaohs, filled with treasure for the afterlife.'},
+      {icon:'ti-crown', img:EH_TOPIC_IMG.ancient_egyptians, text:'Pharaohs were believed to be god-like rulers of Egypt, and the most famous is the boy king Tutankhamun.'},
+      {icon:'ti-wave', img:EH_TOPIC_IMG.ancient_egyptians, text:'The River Nile flooded every year, leaving fertile soil that let Egyptian farmers grow crops in the desert.'},
+      {icon:'ti-book', img:EH_TOPIC_IMG.ancient_egyptians, text:'Egyptians wrote using picture symbols called hieroglyphics, carved and painted onto walls and papyrus.'},
+      {icon:'ti-flask', img:EH_TOPIC_IMG.ancient_egyptians, text:'Egyptians believed in life after death, so they preserved bodies through a process called mummification.'}
     ],
     links: [
       {url:'https://www.youtube.com/watch?v=DklFWjDJMzA', kind:'video', label:'Watch: Ancient Egypt - Pyramids (BBC Teach)'}
@@ -22688,11 +22705,11 @@ var TOPIC_JOURNEYS = {
   },
   world_war_2: {
     facts: [
-      {icon:'ti-plane', text:'World War 2 lasted from 1939 to 1945, and Britain fought against Germany and other countries known as the Axis powers.'},
-      {icon:'ti-home', text:'Many children were evacuated from cities to the countryside to keep them safe from bombing raids.'},
-      {icon:'ti-alert-triangle', text:'The Blitz was a period of heavy bombing of British cities, including London, by the German air force.'},
-      {icon:'ti-flag', text:'Food, clothes and fuel were rationed, meaning everyone was only allowed a limited amount to make supplies last.'},
-      {icon:'ti-shield', text:'People sheltered from air raids in Anderson shelters in their gardens or in underground stations.'}
+      {icon:'ti-plane', img:EH_TOPIC_IMG.world_war_2, text:'World War 2 lasted from 1939 to 1945, and Britain fought against Germany and other countries known as the Axis powers.'},
+      {icon:'ti-home', img:EH_TOPIC_IMG.world_war_2, text:'Many children were evacuated from cities to the countryside to keep them safe from bombing raids.'},
+      {icon:'ti-alert-triangle', img:EH_TOPIC_IMG.world_war_2, text:'The Blitz was a period of heavy bombing of British cities, including London, by the German air force.'},
+      {icon:'ti-flag', img:EH_TOPIC_IMG.world_war_2, text:'Food, clothes and fuel were rationed, meaning everyone was only allowed a limited amount to make supplies last.'},
+      {icon:'ti-shield', img:EH_TOPIC_IMG.world_war_2, text:'People sheltered from air raids in Anderson shelters in their gardens or in underground stations.'}
     ],
     links: [
       {url:'https://www.youtube.com/watch?v=Wvgojxu2hp4', kind:'video', label:'Watch: The Lives of WW2 Evacuees (BBC Teach)'}
@@ -22708,11 +22725,11 @@ var TOPIC_JOURNEYS = {
   },
   rainforests: {
     facts: [
-      {icon:'ti-tree', text:'Rainforests are hot, wet forests found mostly near the Equator, like the Amazon in South America.'},
-      {icon:'ti-cloud', text:'A rainforest has four layers: the emergent layer, canopy, understory and forest floor, each with different plants and animals.'},
-      {icon:'ti-paw', text:"More than half of the world's animal and plant species live in rainforests, even though they cover a small part of the Earth."},
-      {icon:'ti-leaf', text:'Rainforests help the whole planet by producing oxygen and absorbing carbon dioxide from the air.'},
-      {icon:'ti-alert-triangle', text:'Large areas of rainforest are being cut down, known as deforestation, which threatens the animals and plants that live there.'}
+      {icon:'ti-tree', img:EH_TOPIC_IMG.rainforests, text:'Rainforests are hot, wet forests found mostly near the Equator, like the Amazon in South America.'},
+      {icon:'ti-cloud', img:EH_TOPIC_IMG.rainforests, text:'A rainforest has four layers: the emergent layer, canopy, understory and forest floor, each with different plants and animals.'},
+      {icon:'ti-paw', img:EH_TOPIC_IMG.rainforests, text:"More than half of the world's animal and plant species live in rainforests, even though they cover a small part of the Earth."},
+      {icon:'ti-leaf', img:EH_TOPIC_IMG.rainforests, text:'Rainforests help the whole planet by producing oxygen and absorbing carbon dioxide from the air.'},
+      {icon:'ti-alert-triangle', img:EH_TOPIC_IMG.rainforests, text:'Large areas of rainforest are being cut down, known as deforestation, which threatens the animals and plants that live there.'}
     ],
     links: [
       {url:'https://www.natgeokids.com/uk/primary-resource/rainforests-life-geography-resource/', kind:'article', label:'Read: Rainforests of Life (National Geographic Kids)'}
@@ -22728,11 +22745,11 @@ var TOPIC_JOURNEYS = {
   },
   rivers_coasts: {
     facts: [
-      {icon:'ti-mountain', text:'A river begins at its source, often high up in hills or mountains, and flows downhill towards the sea.'},
-      {icon:'ti-wave', text:'Where a river meets the sea is called its mouth, and this is often a wide area called an estuary.'},
-      {icon:'ti-map-2', text:'As rivers flow across flat land they often bend into loops called meanders.'},
-      {icon:'ti-flag-2', text:'Coastlines are shaped by waves, which wear away rock through erosion and build up beaches by depositing sand.'},
-      {icon:'ti-shield', text:'People build sea walls and other defences to protect coastal towns from erosion and flooding.'}
+      {icon:'ti-mountain', img:EH_TOPIC_IMG.rivers_coasts, text:'A river begins at its source, often high up in hills or mountains, and flows downhill towards the sea.'},
+      {icon:'ti-wave', img:EH_TOPIC_IMG.rivers_coasts, text:'Where a river meets the sea is called its mouth, and this is often a wide area called an estuary.'},
+      {icon:'ti-map-2', img:EH_TOPIC_IMG.rivers_coasts, text:'As rivers flow across flat land they often bend into loops called meanders.'},
+      {icon:'ti-flag-2', img:EH_TOPIC_IMG.rivers_coasts, text:'Coastlines are shaped by waves, which wear away rock through erosion and build up beaches by depositing sand.'},
+      {icon:'ti-shield', img:EH_TOPIC_IMG.rivers_coasts, text:'People build sea walls and other defences to protect coastal towns from erosion and flooding.'}
     ],
     links: [
       {url:'https://www.youtube.com/watch?v=lIK3bgjiEEk', kind:'video', label:'Watch: Rivers (BBC Teach)'}
@@ -22748,11 +22765,11 @@ var TOPIC_JOURNEYS = {
   },
   mountains_volcanoes: {
     facts: [
-      {icon:'ti-mountain', text:"Mountains form when huge slabs of the Earth's crust, called tectonic plates, push against each other and force the land upwards."},
-      {icon:'ti-flame', text:"Volcanoes are openings in the Earth's crust where hot melted rock, called magma, can escape as lava."},
-      {icon:'ti-alert-triangle', text:"Most volcanoes and earthquakes happen along the edges of tectonic plates, in places like the 'Ring of Fire' around the Pacific Ocean."},
-      {icon:'ti-globe', text:'Everest, in the Himalayas, is the tallest mountain above sea level on Earth.'},
-      {icon:'ti-snowflake', text:'The higher up a mountain you go, the colder it gets, which is why many tall mountains have snow on their peaks all year round.'}
+      {icon:'ti-mountain', img:EH_TOPIC_IMG.mountains_volcanoes, text:"Mountains form when huge slabs of the Earth's crust, called tectonic plates, push against each other and force the land upwards."},
+      {icon:'ti-flame', img:EH_TOPIC_IMG.mountains_volcanoes, text:"Volcanoes are openings in the Earth's crust where hot melted rock, called magma, can escape as lava."},
+      {icon:'ti-alert-triangle', img:EH_TOPIC_IMG.mountains_volcanoes, text:"Most volcanoes and earthquakes happen along the edges of tectonic plates, in places like the 'Ring of Fire' around the Pacific Ocean."},
+      {icon:'ti-globe', img:EH_TOPIC_IMG.mountains_volcanoes, text:'Everest, in the Himalayas, is the tallest mountain above sea level on Earth.'},
+      {icon:'ti-snowflake', img:EH_TOPIC_IMG.mountains_volcanoes, text:'The higher up a mountain you go, the colder it gets, which is why many tall mountains have snow on their peaks all year round.'}
     ],
     links: [
       {url:'https://www.natgeokids.com/uk/discover/geography/physical-geography/volcano-facts/', kind:'article', label:'Read: Volcano Facts (National Geographic Kids)'}
@@ -22768,11 +22785,11 @@ var TOPIC_JOURNEYS = {
   },
   tudors: {
     facts: [
-      {icon:'ti-crown', text:'The Tudor family ruled England from 1485 to 1603, starting with Henry VII and ending with Elizabeth I.'},
-      {icon:'ti-heart', text:'Henry VIII is famous for having six wives, as he desperately wanted a son to inherit his throne.'},
-      {icon:'ti-book', text:'Henry VIII broke away from the Catholic Church in Rome and set up the Church of England, with himself in charge.'},
-      {icon:'ti-sailboat', text:'In 1588 England defeated the Spanish Armada, a huge fleet of ships sent to invade England.'},
-      {icon:'ti-crown', text:"Elizabeth I, Henry VIII's daughter, ruled for 45 years and this period is often called a 'Golden Age' for England."}
+      {icon:'ti-crown', img:EH_TOPIC_IMG.tudors, text:'The Tudor family ruled England from 1485 to 1603, starting with Henry VII and ending with Elizabeth I.'},
+      {icon:'ti-heart', img:EH_TOPIC_IMG.tudors, text:'Henry VIII is famous for having six wives, as he desperately wanted a son to inherit his throne.'},
+      {icon:'ti-book', img:EH_TOPIC_IMG.tudors, text:'Henry VIII broke away from the Catholic Church in Rome and set up the Church of England, with himself in charge.'},
+      {icon:'ti-sailboat', img:EH_TOPIC_IMG.tudors, text:'In 1588 England defeated the Spanish Armada, a huge fleet of ships sent to invade England.'},
+      {icon:'ti-crown', img:EH_TOPIC_IMG.tudors, text:"Elizabeth I, Henry VIII's daughter, ruled for 45 years and this period is often called a 'Golden Age' for England."}
     ],
     links: [
       {url:'https://www.bbc.co.uk/teach/class-clips-video/articles/zmf2p9q', kind:'video', label:'Watch: Life in Tudor Times - Henry VIII (BBC Teach)'}
@@ -22788,11 +22805,11 @@ var TOPIC_JOURNEYS = {
   },
   ancient_greece: {
     facts: [
-      {icon:'ti-building-monument', text:'Ancient Greece was made up of separate city-states, like Athens and Sparta, which often had very different ways of life.'},
-      {icon:'ti-gavel', text:'Athens is often called the birthplace of democracy, where some citizens could vote on decisions.'},
-      {icon:'ti-flag', text:'The first Olympic Games were held in Ancient Greece, in the city of Olympia, over 2,700 years ago.'},
-      {icon:'ti-book', text:'The Ancient Greeks told myths about powerful gods and goddesses, like Zeus, who they believed controlled the world.'},
-      {icon:'ti-run', text:'Sparta was famous for its strict, tough training of soldiers from a young age, very different from life in Athens.'}
+      {icon:'ti-building-monument', img:EH_TOPIC_IMG.ancient_greece, text:'Ancient Greece was made up of separate city-states, like Athens and Sparta, which often had very different ways of life.'},
+      {icon:'ti-gavel', img:EH_TOPIC_IMG.ancient_greece, text:'Athens is often called the birthplace of democracy, where some citizens could vote on decisions.'},
+      {icon:'ti-flag', img:EH_TOPIC_IMG.ancient_greece, text:'The first Olympic Games were held in Ancient Greece, in the city of Olympia, over 2,700 years ago.'},
+      {icon:'ti-book', img:EH_TOPIC_IMG.ancient_greece, text:'The Ancient Greeks told myths about powerful gods and goddesses, like Zeus, who they believed controlled the world.'},
+      {icon:'ti-run', img:EH_TOPIC_IMG.ancient_greece, text:'Sparta was famous for its strict, tough training of soldiers from a young age, very different from life in Athens.'}
     ],
     links: [
       {url:'https://www.youtube.com/watch?v=qYdoBzgtlCw', kind:'video', label:'Watch: The Legacy of Ancient Greece (BBC Teach)'}
@@ -36080,6 +36097,18 @@ function ehRenderFindOutFact(){
   var isObj = typeof fact === 'object';
   var text = isObj ? fact.text : fact;
   var icon = isObj && fact.icon ? fact.icon : 'ti-bulb';
+  var img = isObj && fact.img ? fact.img : null;
+  var imgEl = document.getElementById('eh-findout-img');
+  var iconEl = document.getElementById('eh-findout-icon');
+  if(img){
+    imgEl.src = img;
+    imgEl.style.display = 'block';
+    iconEl.style.display = 'none';
+  } else {
+    imgEl.style.display = 'none';
+    imgEl.removeAttribute('src');
+    iconEl.style.display = 'flex';
+  }
   document.getElementById('eh-findout-icon-i').className = 'ti ' + icon;
   document.getElementById('eh-findout-text').textContent = text;
   var dotsEl = document.getElementById('eh-findout-dots');
