@@ -36153,7 +36153,7 @@ function ehChoose(btnEl, chosen){
   var allBtns = btnEl.parentElement.querySelectorAll('.mc-btn');
   allBtns.forEach(function(b){ b.disabled = true; if(b.textContent === item.answer) b.classList.add('mc-correct'); else if(b === btnEl) b.classList.add('mc-wrong'); });
   if(correct) ehCorrect++;
-  sb.rpc('update_home_attempt', { p_attempt_id: ehAttemptId, p_current_index: ehIdx + 1, p_total_correct: ehCorrect }).catch(function(){});
+  Promise.resolve(sb.rpc('update_home_attempt', { p_attempt_id: ehAttemptId, p_current_index: ehIdx + 1, p_total_correct: ehCorrect })).catch(function(){});
   setTimeout(function(){
     ehIdx++;
     if(ehIdx >= ehItems.length){ ehFinishQuest(); return; }
@@ -36538,7 +36538,7 @@ function renderPlayItem(){
 
 function updateLiveProgressPing(){
   if(!playParticipantId) return;
-  sb.rpc('update_live_progress', { p_participant_id: playParticipantId, p_current_index: playIdx, p_total_items: playItems.length }).catch(function(){});
+  Promise.resolve(sb.rpc('update_live_progress', { p_participant_id: playParticipantId, p_current_index: playIdx, p_total_items: playItems.length })).catch(function(){});
 }
 
 function playChoose(btnEl, chosen){
