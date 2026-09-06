@@ -4071,7 +4071,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <div id="eh-notes-list"></div>
   </div>
   <div class="card">
-    <div class="section-hd" style="margin-bottom:0.5rem;">Photos from home</div>
+    <div class="section-hd" style="margin-bottom:0.5rem;">Sent in from home</div>
     <div id="eh-photos-list"></div>
   </div>
 </div>
@@ -35836,18 +35836,22 @@ async function ehLoadInsights(){
 
   var photosEl = document.getElementById('eh-photos-list');
   if(photosEl){
-    var photosRes = await sb.from('home_activity_uploads').select('id,image_data,created_at,quest_id,pupils(name)').order('created_at',{ ascending:false }).limit(12);
+    var photosRes = await sb.from('home_activity_uploads').select('id,image_data,text_content,created_at,quest_id,pupils(name)').order('created_at',{ ascending:false }).limit(12);
     var photos = photosRes.data || [];
     if(!photos.length){
-      photosEl.innerHTML = '<div style="font-size:13px;color:var(--text-muted);">No photos sent in yet.</div>';
+      photosEl.innerHTML = '<div style="font-size:13px;color:var(--text-muted);">Nothing sent in yet.</div>';
     } else {
       photosEl.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;">' +
         photos.map(function(p){
           var q = quests.find(function(x){ return x.id === p.quest_id; });
           var name = p.pupils ? p.pupils.name : 'A child';
           var when = new Date(p.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+          var media = p.image_data
+            ? '<img src="' + p.image_data + '" style="width:100%;height:100px;object-fit:cover;border-radius:10px;border:1px solid var(--border-strong);"/>'
+            : '<div style="width:100%;height:100px;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface-2);padding:8px;overflow:hidden;font-size:11px;line-height:1.4;text-align:left;">' + escapeHtml((p.text_content || '').slice(0, 140)) + ((p.text_content || '').length > 140 ? '…' : '') + '</div>';
           return '<div style="text-align:center;">' +
-            '<img src="' + p.image_data + '" style="width:100%;height:100px;object-fit:cover;border-radius:10px;border:1px solid var(--border-strong);"/>' +
+            media +
+            (p.image_data && p.text_content ? '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;text-align:left;">' + escapeHtml(p.text_content.slice(0,140)) + (p.text_content.length > 140 ? '…' : '') + '</div>' : '') +
             '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">' + escapeHtml(name) + '</div>' +
             '<div style="font-size:10px;color:var(--text-muted);">' + escapeHtml(q ? q.title : '') + ' &middot; ' + when + '</div>' +
             '</div>';
@@ -35883,6 +35887,7 @@ function ehReset(){
   ehCode = ''; ehYear = ''; ehRosterCache = []; ehPupilId = null; ehPupilName = ''; ehQuests = [];
   ehAttemptId = null; ehItems = []; ehIdx = 0; ehCorrect = 0;
   ehFindOutQuestId = null; ehCurrentActivityPrompt = null; ehCurrentActivityType = null;
+  ehPendingActivityDataUrl = null;
   var codeEl = document.getElementById('eh-code-input'); if(codeEl) codeEl.value = '';
   var yearEl = document.getElementById('eh-year-input'); if(yearEl) yearEl.value = '';
   syncYearButtons('eh-year-input');
@@ -35944,29 +35949,27 @@ async function ehLoadQuestMap(){
   }
   var order = { warmup:0, standard:1, boss:2 };
   var sorted = ehQuests.slice().sort(function(a,b){ return (order[a.tier] || 9) - (order[b.tier] || 9); });
-  var prevDone = true;
   sorted.forEach(function(q){
-    var locked = !prevDone;
+    /* All quests are open from the start - a child (or their teacher) may
+       want to jump straight to the boss level or the activity without
+       playing through every tier first, so nothing here is gated. */
     var done = q.attempt_status === 'done';
     var card = document.createElement('button');
     card.type = 'button';
     card.className = 'phase-btn';
-    card.disabled = locked;
-    card.style.opacity = locked ? '0.55' : '1';
-    if(!locked) card.onclick = function(){ ehOpenQuest(q); };
+    card.onclick = function(){ ehOpenQuest(q); };
     var badge = document.createElement('div'); badge.className = 'phase-badge';
     var icon = document.createElement('i');
-    icon.className = 'ti ' + (done ? 'ti-check' : locked ? 'ti-lock' : 'ti-flag');
+    icon.className = 'ti ' + (done ? 'ti-check' : 'ti-flag');
     icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
     badge.appendChild(icon);
     var textWrap = document.createElement('div');
     var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = q.title;
     var desc = document.createElement('div'); desc.className = 'phase-desc';
-    desc.textContent = done ? ('Done - ' + q.total_correct + '/' + q.total_items + ' correct') : locked ? 'Opens once the one before it is done' : (q.description || 'Ready to play');
+    desc.textContent = done ? ('Done - ' + q.total_correct + '/' + q.total_items + ' correct') : (q.description || 'Ready to play');
     textWrap.appendChild(name); textWrap.appendChild(desc);
     card.appendChild(badge); card.appendChild(textWrap);
     el.appendChild(card);
-    prevDone = done;
   });
 }
 
@@ -36177,16 +36180,18 @@ async function ehFinishQuest(){
   var activityEl = document.getElementById('eh-done-activity');
   if(ehCurrentActivityPrompt){
     var html = '<div class="section-hd" style="font-size:13px;margin-bottom:0.35rem;">One more thing to try</div>' +
-      '<div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">' + escapeHtml(ehCurrentActivityPrompt) + '</div>';
-    if(ehCurrentActivityType === 'photo'){
-      html += '<input type="file" accept="image/*" capture="environment" id="eh-photo-input" style="display:none;" onchange="ehHandlePhotoSelected(this)"/>' +
-        '<button class="btn btn-primary" style="width:100%;margin-top:0.65rem;" id="eh-photo-pick-btn" onclick="document.getElementById(\'eh-photo-input\').click()">Take or choose a photo</button>' +
-        '<div id="eh-photo-preview" style="margin-top:0.5rem;text-align:center;"></div>' +
-        '<div id="eh-photo-status" style="font-size:11.5px;color:var(--text-muted);margin-top:0.4rem;text-align:center;"></div>' +
-        '<div style="font-size:11px;color:var(--text-muted);margin-top:0.5rem;">Only your teacher can see this. Please take a photo of your work, not of yourself.</div>';
-    } else {
-      html += '<div style="font-size:11px;color:var(--text-muted);margin-top:0.5rem;">No need to send this in - just something fun if you want to.</div>';
-    }
+      '<div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">' + escapeHtml(ehCurrentActivityPrompt) + '</div>' +
+      '<textarea id="eh-activity-text-input" placeholder="Write your answer here (optional)..." style="width:100%;min-height:90px;margin-top:0.65rem;font-size:13px;padding:8px;border-radius:8px;border:1px solid var(--border-strong);font-family:inherit;"></textarea>' +
+      '<div style="display:flex;gap:8px;margin-top:0.5rem;">' +
+        '<input type="file" accept="image/*" id="eh-activity-file-input" style="display:none;" onchange="ehHandleActivityFile(this)"/>' +
+        '<input type="file" accept="image/*" capture="environment" id="eh-activity-camera-input" style="display:none;" onchange="ehHandleActivityFile(this)"/>' +
+        '<button type="button" class="btn btn-ghost" style="flex:1;" onclick="document.getElementById(\'eh-activity-file-input\').click()">Attach a file</button>' +
+        '<button type="button" class="btn btn-ghost" style="flex:1;" onclick="document.getElementById(\'eh-activity-camera-input\').click()">Take a photo</button>' +
+      '</div>' +
+      '<div id="eh-activity-preview" style="margin-top:0.5rem;text-align:center;"></div>' +
+      '<button type="button" class="btn btn-primary" style="width:100%;margin-top:0.65rem;" id="eh-activity-send-btn" onclick="ehSubmitActivity()">Send to your teacher</button>' +
+      '<div id="eh-activity-status" style="font-size:11.5px;color:var(--text-muted);margin-top:0.4rem;text-align:center;"></div>' +
+      '<div style="font-size:11px;color:var(--text-muted);margin-top:0.5rem;">Only your teacher can see this. If you add a photo, please make it a photo of your work, not of yourself.</div>';
     activityEl.innerHTML = html;
     activityEl.style.display = 'block';
   } else {
@@ -36195,14 +36200,16 @@ async function ehFinishQuest(){
   ehShowChildScreen('eh-done');
 }
 
-/* Photo activity: resize/compress client-side before sending so the base64
-   payload stays small (the RPC also caps size server-side), then submit via
-   the SECURITY DEFINER RPC - never a direct table write. */
-var ehPendingPhotoDataUrl = null;
-function ehHandlePhotoSelected(inputEl){
+/* Activity submission: a child can type an answer directly, attach an
+   existing image file, or take a new photo - any combination of text plus
+   one image is sent together via the SECURITY DEFINER RPC (never a direct
+   table write). Images are resized/compressed client-side first so the
+   base64 payload stays small (the RPC also caps size server-side). */
+var ehPendingActivityDataUrl = null;
+function ehHandleActivityFile(inputEl){
   var file = inputEl.files && inputEl.files[0];
   if(!file) return;
-  var statusEl = document.getElementById('eh-photo-status');
+  var statusEl = document.getElementById('eh-activity-status');
   statusEl.textContent = 'Getting your photo ready…';
   var reader = new FileReader();
   reader.onload = function(e){
@@ -36215,29 +36222,40 @@ function ehHandlePhotoSelected(inputEl){
       canvas.height = Math.round(img.height * scale);
       var ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      ehPendingPhotoDataUrl = canvas.toDataURL('image/jpeg', 0.6);
-      var previewEl = document.getElementById('eh-photo-preview');
-      previewEl.innerHTML = '<img src="' + ehPendingPhotoDataUrl + '" style="max-width:100%;max-height:220px;border-radius:10px;border:1px solid var(--border-strong);"/>' +
-        '<button class="btn btn-primary" style="width:100%;margin-top:0.5rem;" onclick="ehSubmitPhoto()">Send to your teacher</button>';
+      ehPendingActivityDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+      var previewEl = document.getElementById('eh-activity-preview');
+      previewEl.innerHTML = '<img src="' + ehPendingActivityDataUrl + '" style="max-width:100%;max-height:220px;border-radius:10px;border:1px solid var(--border-strong);"/>' +
+        '<button type="button" class="btn" style="width:100%;margin-top:0.4rem;" onclick="ehClearActivityPhoto()">Remove photo</button>';
       statusEl.textContent = '';
     };
+    img.onerror = function(){ statusEl.textContent = 'Could not read that file - please try a photo instead.'; };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
-async function ehSubmitPhoto(){
-  if(!ehPendingPhotoDataUrl) return;
-  var statusEl = document.getElementById('eh-photo-status');
+function ehClearActivityPhoto(){
+  ehPendingActivityDataUrl = null;
+  var previewEl = document.getElementById('eh-activity-preview'); if(previewEl) previewEl.innerHTML = '';
+  var fileInput = document.getElementById('eh-activity-file-input'); if(fileInput) fileInput.value = '';
+  var camInput = document.getElementById('eh-activity-camera-input'); if(camInput) camInput.value = '';
+}
+async function ehSubmitActivity(){
+  var textInput = document.getElementById('eh-activity-text-input');
+  var text = textInput ? textInput.value.trim() : '';
+  var statusEl = document.getElementById('eh-activity-status');
+  if(!text && !ehPendingActivityDataUrl){ statusEl.textContent = 'Please write something or add a photo first.'; return; }
   statusEl.textContent = 'Sending…';
-  var res = await sb.rpc('submit_home_activity_upload', { p_code: ehCode, p_pupil_id: ehPupilId, p_quest_id: ehFindOutQuestId, p_image_data: ehPendingPhotoDataUrl });
+  var sendBtn = document.getElementById('eh-activity-send-btn'); if(sendBtn) sendBtn.disabled = true;
+  var res = await sb.rpc('submit_home_activity_upload', { p_code: ehCode, p_pupil_id: ehPupilId, p_quest_id: ehFindOutQuestId, p_image_data: ehPendingActivityDataUrl, p_text_content: text || null });
+  if(sendBtn) sendBtn.disabled = false;
   if(res.error){
     statusEl.textContent = 'Could not send that - please try again.';
     return;
   }
-  document.getElementById('eh-photo-preview').innerHTML = '';
-  document.getElementById('eh-photo-pick-btn').style.display = 'none';
+  if(textInput) textInput.value = '';
+  ehClearActivityPhoto();
+  if(sendBtn) sendBtn.style.display = 'none';
   statusEl.textContent = 'Sent to your teacher!';
-  ehPendingPhotoDataUrl = null;
 }
 function ehBackToQuestMap(){ ehLoadQuestMap(); }
 
