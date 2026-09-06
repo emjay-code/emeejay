@@ -3743,108 +3743,6 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
   </div>
 </div>
 
-<div id="eh-teacher-view" style="display:none;">
-<div class="wrap">
-<h2 class="sr-only">emeejay home</h2>
-
-<div class="chooser-decor" style="padding:0.5rem 0 2.25rem;">
-<div class="chooser-decor-icons" data-decor-size="header"></div>
-<div class="brand-lockup">
-  <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
-  <div style="display:flex;align-items:baseline;gap:8px;justify-content:center;">
-    <div class="brand-lockup-word">emeejay</div>
-    <div style="font-size:12.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#221C4A;background:#C8A6FF;padding:3px 11px;border-radius:999px;">home</div>
-  </div>
-  <div class="brand-lockup-sub">Not homework &ndash; opt-in independent study</div>
-</div>
-</div>
-
-<div class="school-bar">
-  <div class="school-bar-left">
-    <b id="eh-school-name">-</b>
-    <span id="eh-teacher-name">-</span>
-  </div>
-  <div class="school-bar-actions">
-    <button class="icon-btn export-btn" onclick="switchStrand('assess')"><i class="ti ti-school" aria-hidden="true" style="font-size:14px;"></i> emeejay assess</button>
-    <button class="icon-btn danger-btn" onclick="doSignOut()">Sign out</button>
-  </div>
-</div>
-
-<div class="card" style="margin-bottom:0.75rem;">
-  <div style="font-size:13px;color:var(--text-secondary);">Not homework &ndash; nothing assigned, nothing tracked for skipping. Seed a small pool of quests from something you've already taught; children let themselves in with the code below and choose if, and how far, they go.</div>
-</div>
-<div class="nav-tabs" style="margin-bottom:0.75rem;">
-  <button class="nav-tab eh-subnav-btn active" id="eh-subnav-setup" onclick="ehShowScreen('eh-teacher-setup')">This week</button>
-  <button class="nav-tab eh-subnav-btn" id="eh-subnav-insights" onclick="ehShowScreen('eh-teacher-insights')">Next morning</button>
-</div>
-
-<div class="content-shell">
-<div class="eh-teacher-screen active" id="eh-teacher-setup">
-  <div class="card" style="margin-bottom:0.75rem;text-align:center;">
-    <div class="section-hd" style="margin-bottom:0.35rem;">Your emeejay home code</div>
-    <div style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;font-size:22px;letter-spacing:2px;color:var(--hp-purple);" id="eh-code-display">------</div>
-    <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Share this with your class &ndash; it stays the same all year.</div>
-  </div>
-
-  <div class="card" style="margin-bottom:0.75rem;">
-    <div class="section-hd" style="margin-bottom:0.5rem;">What have you been teaching?</div>
-    <input type="text" id="eh-topics-search" placeholder="Search topics..." oninput="ehRenderTopicsList()" style="width:100%;margin-bottom:0.5rem;"/>
-    <div id="eh-topics-list" style="max-height:260px;overflow-y:auto;"></div>
-  </div>
-
-  <div class="card" style="margin-bottom:0.75rem;">
-    <div class="section-hd" style="margin-bottom:0.5rem;">Which tier suits your class?</div>
-    <div class="year-btn-grid">
-      <button type="button" class="year-btn eh-tier-btn" data-tier="KS1" onclick="ehSelectTier('KS1',this)">KS1</button>
-      <button type="button" class="year-btn eh-tier-btn active" data-tier="LKS2" onclick="ehSelectTier('LKS2',this)">LKS2</button>
-      <button type="button" class="year-btn eh-tier-btn" data-tier="UKS2" onclick="ehSelectTier('UKS2',this)">UKS2</button>
-    </div>
-    <button class="btn btn-primary" id="eh-publish-btn" style="width:100%;margin-top:0.75rem;" onclick="ehPublish()" disabled>Publish this week's quests</button>
-    <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Publishing replaces last week's quests for this topic &ndash; nothing is deleted from a child's history.</div>
-  </div>
-
-  <div class="card" style="margin-bottom:0.75rem;">
-    <div class="section-hd" style="margin-bottom:0.35rem;">Add an activity (optional)</div>
-    <div style="font-size:12px;color:var(--text-muted);margin-bottom:0.5rem;">Shown after the quiz. Writing and drawing are just an invitation - nothing to send in. Photo of your work lets a child send you a picture, privately.</div>
-    <div class="year-btn-grid" id="eh-activity-type-btns">
-      <button type="button" class="year-btn eh-activity-type-btn active" data-type="" onclick="ehSelectActivityType('',this)">None</button>
-      <button type="button" class="year-btn eh-activity-type-btn" data-type="writing" onclick="ehSelectActivityType('writing',this)">Creative writing</button>
-      <button type="button" class="year-btn eh-activity-type-btn" data-type="drawing" onclick="ehSelectActivityType('drawing',this)">Drawing</button>
-      <button type="button" class="year-btn eh-activity-type-btn" data-type="photo" onclick="ehSelectActivityType('photo',this)">Photo of your work</button>
-    </div>
-    <div id="eh-activity-prompt-wrap" style="display:none;margin-top:0.6rem;">
-      <textarea id="eh-activity-prompt-input" placeholder="e.g. Pretend you are Florence Nightingale and write a diary entry set during the Crimean War." style="width:100%;min-height:64px;font-size:13px;padding:8px;border-radius:8px;border:1px solid var(--border-strong);font-family:inherit;"></textarea>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="section-hd" style="margin-bottom:0.5rem;">Currently available</div>
-    <div id="eh-active-list"></div>
-  </div>
-</div>
-
-<div class="eh-teacher-screen" id="eh-teacher-insights">
-  <div class="stat-grid" id="eh-stats-row" style="margin-bottom:0.75rem;"></div>
-  <div class="card" style="margin-bottom:0.75rem;">
-    <div class="section-hd" style="margin-bottom:0.5rem;">Who explored what</div>
-    <table style="width:100%;font-size:13px;">
-      <thead><tr><th style="text-align:left;">Child</th><th style="text-align:left;">Quest</th><th style="text-align:left;">Progress</th></tr></thead>
-      <tbody id="eh-roster-body"></tbody>
-    </table>
-  </div>
-  <div class="card" style="margin-bottom:0.75rem;">
-    <div class="section-hd" style="margin-bottom:0.5rem;">Notes from home</div>
-    <div id="eh-notes-list"></div>
-  </div>
-  <div class="card">
-    <div class="section-hd" style="margin-bottom:0.5rem;">Photos from home</div>
-    <div id="eh-photos-list"></div>
-  </div>
-</div>
-</div>
-</div>
-</div>
-
 <div id="tab-targets" style="display:none;">
   <div class="rv-screen active" id="tg-subject-screen">
     <div class="card" style="margin-bottom:0.75rem;">
@@ -4064,6 +3962,108 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
 </div>
 <div class="site-footer" style="color:rgba(255,255,255,0.5);">&copy; 2026 Emeejay Assess &middot; data syncs securely to your school's account<br/><a href="mailto:marc@emeejay.com" style="color:#C8A6FF;">marc@emeejay.com</a> &middot; <a href="/privacy-policy.html" style="color:#C8A6FF;">Privacy Policy</a> &middot; <a href="/terms-of-service.html" style="color:#C8A6FF;">Terms of Service</a> &middot; <a href="/data-processing-agreement.html" style="color:#C8A6FF;">Data Processing Agreement</a> &middot; <a href="javascript:void(0)" onclick="openFeedbackModal()" style="color:#C8A6FF;">Send feedback</a></div>
+</div>
+
+<div id="eh-teacher-view" style="display:none;">
+<div class="wrap">
+<h2 class="sr-only">emeejay home</h2>
+
+<div class="chooser-decor" style="padding:0.5rem 0 2.25rem;">
+<div class="chooser-decor-icons" data-decor-size="header"></div>
+<div class="brand-lockup">
+  <svg class="brand-lockup-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="60" height="60" fill="none"><g transform="translate(0 11.5)" stroke="#C8A6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 80 C24 52 40 26 50 34 C58 41 38 54 24 64 C12 73 22 87 42 87 C64 87 86 67 106 38"/><path d="M92.4 44.4 L106 38 L104.8 53"/></g></svg>
+  <div style="display:flex;align-items:baseline;gap:8px;justify-content:center;">
+    <div class="brand-lockup-word">emeejay</div>
+    <div style="font-size:12.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#221C4A;background:#C8A6FF;padding:3px 11px;border-radius:999px;">home</div>
+  </div>
+  <div class="brand-lockup-sub">Not homework &ndash; opt-in independent study</div>
+</div>
+</div>
+
+<div class="school-bar">
+  <div class="school-bar-left">
+    <b id="eh-school-name">-</b>
+    <span id="eh-teacher-name">-</span>
+  </div>
+  <div class="school-bar-actions">
+    <button class="icon-btn export-btn" onclick="switchStrand('assess')"><i class="ti ti-school" aria-hidden="true" style="font-size:14px;"></i> emeejay assess</button>
+    <button class="icon-btn danger-btn" onclick="doSignOut()">Sign out</button>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:0.75rem;">
+  <div style="font-size:13px;color:var(--text-secondary);">Not homework &ndash; nothing assigned, nothing tracked for skipping. Seed a small pool of quests from something you've already taught; children let themselves in with the code below and choose if, and how far, they go.</div>
+</div>
+<div class="nav-tabs" style="margin-bottom:0.75rem;">
+  <button class="nav-tab eh-subnav-btn active" id="eh-subnav-setup" onclick="ehShowScreen('eh-teacher-setup')">This week</button>
+  <button class="nav-tab eh-subnav-btn" id="eh-subnav-insights" onclick="ehShowScreen('eh-teacher-insights')">Next morning</button>
+</div>
+
+<div class="content-shell">
+<div class="eh-teacher-screen active" id="eh-teacher-setup">
+  <div class="card" style="margin-bottom:0.75rem;text-align:center;">
+    <div class="section-hd" style="margin-bottom:0.35rem;">Your emeejay home code</div>
+    <div style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;font-size:22px;letter-spacing:2px;color:var(--hp-purple);" id="eh-code-display">------</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Share this with your class &ndash; it stays the same all year.</div>
+  </div>
+
+  <div class="card" style="margin-bottom:0.75rem;">
+    <div class="section-hd" style="margin-bottom:0.5rem;">What have you been teaching?</div>
+    <input type="text" id="eh-topics-search" placeholder="Search topics..." oninput="ehRenderTopicsList()" style="width:100%;margin-bottom:0.5rem;"/>
+    <div id="eh-topics-list" style="max-height:260px;overflow-y:auto;"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:0.75rem;">
+    <div class="section-hd" style="margin-bottom:0.5rem;">Which tier suits your class?</div>
+    <div class="year-btn-grid">
+      <button type="button" class="year-btn eh-tier-btn" data-tier="KS1" onclick="ehSelectTier('KS1',this)">KS1</button>
+      <button type="button" class="year-btn eh-tier-btn active" data-tier="LKS2" onclick="ehSelectTier('LKS2',this)">LKS2</button>
+      <button type="button" class="year-btn eh-tier-btn" data-tier="UKS2" onclick="ehSelectTier('UKS2',this)">UKS2</button>
+    </div>
+    <button class="btn btn-primary" id="eh-publish-btn" style="width:100%;margin-top:0.75rem;" onclick="ehPublish()" disabled>Publish this week's quests</button>
+    <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Publishing replaces last week's quests for this topic &ndash; nothing is deleted from a child's history.</div>
+  </div>
+
+  <div class="card" style="margin-bottom:0.75rem;">
+    <div class="section-hd" style="margin-bottom:0.35rem;">Add an activity (optional)</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:0.5rem;">Shown after the quiz. Writing and drawing are just an invitation - nothing to send in. Photo of your work lets a child send you a picture, privately.</div>
+    <div class="year-btn-grid" id="eh-activity-type-btns">
+      <button type="button" class="year-btn eh-activity-type-btn active" data-type="" onclick="ehSelectActivityType('',this)">None</button>
+      <button type="button" class="year-btn eh-activity-type-btn" data-type="writing" onclick="ehSelectActivityType('writing',this)">Creative writing</button>
+      <button type="button" class="year-btn eh-activity-type-btn" data-type="drawing" onclick="ehSelectActivityType('drawing',this)">Drawing</button>
+      <button type="button" class="year-btn eh-activity-type-btn" data-type="photo" onclick="ehSelectActivityType('photo',this)">Photo of your work</button>
+    </div>
+    <div id="eh-activity-prompt-wrap" style="display:none;margin-top:0.6rem;">
+      <textarea id="eh-activity-prompt-input" placeholder="e.g. Pretend you are Florence Nightingale and write a diary entry set during the Crimean War." style="width:100%;min-height:64px;font-size:13px;padding:8px;border-radius:8px;border:1px solid var(--border-strong);font-family:inherit;"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-hd" style="margin-bottom:0.5rem;">Currently available</div>
+    <div id="eh-active-list"></div>
+  </div>
+</div>
+
+<div class="eh-teacher-screen" id="eh-teacher-insights">
+  <div class="stat-grid" id="eh-stats-row" style="margin-bottom:0.75rem;"></div>
+  <div class="card" style="margin-bottom:0.75rem;">
+    <div class="section-hd" style="margin-bottom:0.5rem;">Who explored what</div>
+    <table style="width:100%;font-size:13px;">
+      <thead><tr><th style="text-align:left;">Child</th><th style="text-align:left;">Quest</th><th style="text-align:left;">Progress</th></tr></thead>
+      <tbody id="eh-roster-body"></tbody>
+    </table>
+  </div>
+  <div class="card" style="margin-bottom:0.75rem;">
+    <div class="section-hd" style="margin-bottom:0.5rem;">Notes from home</div>
+    <div id="eh-notes-list"></div>
+  </div>
+  <div class="card">
+    <div class="section-hd" style="margin-bottom:0.5rem;">Photos from home</div>
+    <div id="eh-photos-list"></div>
+  </div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="play-view" class="page-dark full-bleed" style="display:none;">
