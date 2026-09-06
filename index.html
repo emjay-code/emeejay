@@ -4205,7 +4205,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="card" style="margin-bottom:0.75rem;">
         <a href="javascript:void(0)" onclick="ehLoadQuestMap()" style="font-size:12.5px;color:var(--hp-purple);font-weight:500;">&larr; Back to your quest map</a>
         <div class="section-hd" style="margin:0.6rem 0 0.35rem;" id="eh-findout-title">Find out</div>
-        <div style="font-size:12.5px;color:var(--text-muted);">Tap through a few things to know, then play.</div>
+        <div style="font-size:12.5px;color:var(--text-muted);" id="eh-findout-sub">Tap through a few things to know, then play.</div>
       </div>
       <div class="card" id="eh-findout-facts" style="text-align:center;margin-bottom:0.5rem;display:none;">
         <div class="eh-fact-icon" id="eh-findout-icon"><i class="ti" id="eh-findout-icon-i" aria-hidden="true"></i></div>
@@ -4217,6 +4217,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
         </div>
       </div>
       <div id="eh-findout-links" style="margin-bottom:0.75rem;"></div>
+      <div class="card" id="eh-findout-activity" style="display:none;margin-bottom:0.75rem;"></div>
       <button class="btn btn-primary" id="eh-findout-cta" onclick="ehStartQuest(ehFindOutQuestId)">Start the quiz</button>
     </div>
 
@@ -4247,8 +4248,8 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="stat-card"><div class="stat-val" id="eh-done-score"></div><div class="stat-lbl">Correct</div></div>
         </div>
       </div>
-      <div class="card" id="eh-done-activity" style="display:none;margin-top:0.75rem;"></div>
-      <button class="btn btn-primary" onclick="ehBackToQuestMap()">Back to your quest map</button>
+      <button class="btn btn-primary" id="eh-done-back-task" style="display:none;" onclick="ehShowChildScreen('eh-findout')">Back to your task</button>
+      <button class="btn" onclick="ehBackToQuestMap()">Back to your quest map</button>
       <button class="btn" onclick="ehReset()">Enter a different code</button>
     </div>
   </div>
@@ -35981,9 +35982,11 @@ async function ehLoadQuestMap(){
   });
 }
 
-/* A quest with facts and/or links opens the "find out" screen first (read
-   and/or watch, then quiz); a plain quiz-only quest (or one already read)
-   skips straight to the quiz, same as before. */
+/* A quest with facts, links, and/or a main task opens the "find out" screen
+   first - everything (things to know, the main task box, and the option to
+   play the quiz/matching game) lives together on that one screen, so a
+   child never has to finish the quiz to reach the main task. A plain
+   quiz-only quest (nothing to read and no task) skips straight to the quiz. */
 var ehFindOutFacts = [], ehFindOutIdx = 0, ehFindOutMatchPairs = [];
 function ehOpenQuest(q){
   ehFindOutQuestId = q.quest_id;
@@ -35991,7 +35994,7 @@ function ehOpenQuest(q){
   ehCurrentActivityType = q.activity_type || null;
   var hasFacts = q.facts && q.facts.length;
   var hasLinks = q.links && q.links.length;
-  if(hasFacts || hasLinks){
+  if(hasFacts || hasLinks || ehCurrentActivityPrompt){
     ehRenderFindOut(q);
   } else {
     ehStartQuest(q.quest_id);
@@ -36009,6 +36012,13 @@ function ehRenderFindOut(q){
     ehRenderFindOutFact();
   } else {
     factsEl.style.display = 'none';
+  }
+  var subEl = document.getElementById('eh-findout-sub');
+  if(subEl){
+    var hasReadOrWatch = ehFindOutFacts.length || (q.links && q.links.length);
+    subEl.textContent = hasReadOrWatch
+      ? 'Tap through a few things to know, then play - or scroll down for your task.'
+      : 'Your task is below - the quiz is just for fun if you fancy it.';
   }
   var linksEl = document.getElementById('eh-findout-links');
   linksEl.innerHTML = '';
@@ -36035,7 +36045,34 @@ function ehRenderFindOut(q){
     ctaBtn.textContent = 'Start the quiz';
     ctaBtn.onclick = function(){ ehStartQuest(ehFindOutQuestId); };
   }
+  ehRenderActivityBox();
   ehShowChildScreen('eh-findout');
+}
+/* The main task (write/draw/photo/attach-a-file) is rendered straight onto
+   the Find Out screen so it's available as soon as a child opens a quest -
+   they don't need to play the quiz or matching game first to reach it. */
+function ehRenderActivityBox(){
+  var activityEl = document.getElementById('eh-findout-activity');
+  if(!activityEl) return;
+  if(ehCurrentActivityPrompt){
+    var html = '<div class="section-hd" style="font-size:13px;margin-bottom:0.35rem;">Your task</div>' +
+      '<div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">' + escapeHtml(ehCurrentActivityPrompt) + '</div>' +
+      '<textarea id="eh-activity-text-input" placeholder="Write your answer here (optional)..." style="width:100%;min-height:90px;margin-top:0.65rem;font-size:13px;padding:8px;border-radius:8px;border:1px solid var(--border-strong);font-family:inherit;"></textarea>' +
+      '<div style="display:flex;gap:8px;margin-top:0.5rem;">' +
+        '<input type="file" accept="image/*,application/pdf,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" id="eh-activity-file-input" style="display:none;" onchange="ehHandleActivityFile(this)"/>' +
+        '<input type="file" accept="image/*" capture="environment" id="eh-activity-camera-input" style="display:none;" onchange="ehHandleActivityFile(this)"/>' +
+        '<button type="button" class="btn btn-ghost" style="flex:1;" onclick="document.getElementById(\'eh-activity-file-input\').click()">Attach a file</button>' +
+        '<button type="button" class="btn btn-ghost" style="flex:1;" onclick="document.getElementById(\'eh-activity-camera-input\').click()">Take a photo</button>' +
+      '</div>' +
+      '<div id="eh-activity-preview" style="margin-top:0.5rem;text-align:center;"></div>' +
+      '<button type="button" class="btn btn-primary" style="width:100%;margin-top:0.65rem;" id="eh-activity-send-btn" onclick="ehSubmitActivity()">Send to your teacher</button>' +
+      '<div id="eh-activity-status" style="font-size:11.5px;color:var(--text-muted);margin-top:0.4rem;text-align:center;"></div>' +
+      '<div style="font-size:11px;color:var(--text-muted);margin-top:0.5rem;">Only your teacher can see this. If you attach a photo, please make it a photo of your work, not of yourself.</div>';
+    activityEl.innerHTML = html;
+    activityEl.style.display = 'block';
+  } else {
+    activityEl.innerHTML = ''; activityEl.style.display = 'none';
+  }
 }
 function ehRenderFindOutFact(){
   var fact = ehFindOutFacts[ehFindOutIdx];
@@ -36192,26 +36229,12 @@ async function ehFinishQuest(){
   } else {
     rewardEl.style.display = 'none'; captionEl.textContent = 'Nice one';
   }
-  var activityEl = document.getElementById('eh-done-activity');
-  if(ehCurrentActivityPrompt){
-    var html = '<div class="section-hd" style="font-size:13px;margin-bottom:0.35rem;">One more thing to try</div>' +
-      '<div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">' + escapeHtml(ehCurrentActivityPrompt) + '</div>' +
-      '<textarea id="eh-activity-text-input" placeholder="Write your answer here (optional)..." style="width:100%;min-height:90px;margin-top:0.65rem;font-size:13px;padding:8px;border-radius:8px;border:1px solid var(--border-strong);font-family:inherit;"></textarea>' +
-      '<div style="display:flex;gap:8px;margin-top:0.5rem;">' +
-        '<input type="file" accept="image/*,application/pdf,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" id="eh-activity-file-input" style="display:none;" onchange="ehHandleActivityFile(this)"/>' +
-        '<input type="file" accept="image/*" capture="environment" id="eh-activity-camera-input" style="display:none;" onchange="ehHandleActivityFile(this)"/>' +
-        '<button type="button" class="btn btn-ghost" style="flex:1;" onclick="document.getElementById(\'eh-activity-file-input\').click()">Attach a file</button>' +
-        '<button type="button" class="btn btn-ghost" style="flex:1;" onclick="document.getElementById(\'eh-activity-camera-input\').click()">Take a photo</button>' +
-      '</div>' +
-      '<div id="eh-activity-preview" style="margin-top:0.5rem;text-align:center;"></div>' +
-      '<button type="button" class="btn btn-primary" style="width:100%;margin-top:0.65rem;" id="eh-activity-send-btn" onclick="ehSubmitActivity()">Send to your teacher</button>' +
-      '<div id="eh-activity-status" style="font-size:11.5px;color:var(--text-muted);margin-top:0.4rem;text-align:center;"></div>' +
-      '<div style="font-size:11px;color:var(--text-muted);margin-top:0.5rem;">Only your teacher can see this. If you attach a photo, please make it a photo of your work, not of yourself.</div>';
-    activityEl.innerHTML = html;
-    activityEl.style.display = 'block';
-  } else {
-    activityEl.innerHTML = ''; activityEl.style.display = 'none';
-  }
+  /* The main task box lives on the Find Out screen itself (see
+     ehRenderActivityBox), so it doesn't need rebuilding here - a child can
+     already reach it without finishing the quiz. Just surface a way back to
+     it if this quest has one. */
+  var backTaskBtn = document.getElementById('eh-done-back-task');
+  if(backTaskBtn) backTaskBtn.style.display = ehCurrentActivityPrompt ? 'block' : 'none';
   ehShowChildScreen('eh-done');
 }
 
