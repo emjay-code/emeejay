@@ -759,6 +759,10 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
               <button class="btn btn-primary" onclick="chooseHomeTeacherEntry()">I'm a teacher</button>
               <button class="btn btn-primary" onclick="showHomePortal()">I'm a child with the home code</button>
             </div>
+            <div style="margin-top:0.9rem;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+              <button class="btn btn-ghost" onclick="viewHomeDemo(this)">Try a teacher demo</button>
+              <button class="btn btn-ghost" onclick="viewHomeChildDemo(this)">Try a child demo</button>
+            </div>
           </div>
         </div>
       </div>
@@ -4783,6 +4787,39 @@ function chooseTeacherEntry(){
 function chooseHomeTeacherEntry(){
   pendingStrand = 'home';
   goToAuth('signin');
+}
+/* emeejay home demo entries: reuse the exact same shared demo account/code
+   as the assess-side demos (DEMOLITION5678, demo@emeejay.com) so there's
+   only one set of demo credentials to maintain. The teacher path just signs
+   into the same demo school but routes into eh-teacher-view instead of
+   app-view; the child path skips straight to the seeded pupil's quest map
+   using the fixed demo home_code, rather than making a visitor type it in. */
+function viewHomeDemo(btn){
+  pendingStrand = 'home';
+  viewDemo(btn);
+}
+var DEMO_HOME_CODE = 'PANDA';
+async function viewHomeChildDemo(btn){
+  var code = window.prompt('Enter your demo code to continue:');
+  if(code === null) return; // cancelled
+  if(code.trim().toUpperCase() !== DEMO_ACCESS_CODE){
+    alert('That demo code isn\'t right. Please check it and try again.');
+    return;
+  }
+  var oldText = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'Loading demo...'; }
+  showHomePortal();
+  var res = await sb.rpc('get_home_roster', { p_code: DEMO_HOME_CODE, p_year_group: 'Year 4' });
+  if(btn){ btn.disabled = false; btn.textContent = oldText; }
+  var roster = res.data || [];
+  ehCode = DEMO_HOME_CODE; ehYear = 'Year 4'; ehRosterCache = roster;
+  var demoChild = roster.find(function(p){ return p.name === 'Maya Singh'; }) || roster[0];
+  if(demoChild){
+    await ehChoosePupil(demoChild.id, demoChild.name);
+  } else {
+    ehShowChildScreen('eh-roster');
+    ehRenderRosterList();
+  }
 }
 /* Lets a signed-in teacher move between the two strands without signing out
    again - both read from the same account and school. */
