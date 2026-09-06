@@ -4164,6 +4164,17 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div id="eh-quest-list"></div>
     </div>
 
+    <div class="eh-screen" id="eh-findout">
+      <div class="card" style="margin-bottom:0.75rem;">
+        <a href="javascript:void(0)" onclick="ehLoadQuestMap()" style="font-size:12.5px;color:var(--hp-purple);font-weight:500;">&larr; Back to your quest map</a>
+        <div class="section-hd" style="margin:0.6rem 0 0.35rem;" id="eh-findout-title">Find out</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">A few things to know before you play.</div>
+      </div>
+      <div class="card" id="eh-findout-facts" style="margin-bottom:0.75rem;"></div>
+      <div id="eh-findout-links" style="margin-bottom:0.75rem;"></div>
+      <button class="btn btn-primary" onclick="ehStartQuest(ehFindOutQuestId)">Start the quiz</button>
+    </div>
+
     <div class="eh-screen" id="eh-play">
       <div class="progress-bar"><div class="progress-fill" id="eh-play-prog"></div></div>
       <div class="sound-counter" id="eh-play-counter">Item 1 of 12</div>
@@ -4177,6 +4188,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
           <div class="stat-card"><div class="stat-val" id="eh-done-score"></div><div class="stat-lbl">Correct</div></div>
         </div>
       </div>
+      <div class="card" id="eh-done-activity" style="display:none;margin-top:0.75rem;"></div>
       <button class="btn btn-primary" onclick="ehBackToQuestMap()">Back to your quest map</button>
       <button class="btn" onclick="ehReset()">Enter a different code</button>
     </div>
@@ -35479,6 +35491,7 @@ var ehCode = '', ehYear = '', ehRosterCache = [];
 var ehPupilId = null, ehPupilName = '';
 var ehQuests = [];
 var ehAttemptId = null, ehItems = [], ehIdx = 0, ehCorrect = 0;
+var ehFindOutQuestId = null, ehCurrentActivityPrompt = null;
 
 function showHomePortal(){
   document.getElementById('entry-chooser-view').style.display = 'none';
@@ -35499,6 +35512,7 @@ function ehShowChildScreen(id){
 function ehReset(){
   ehCode = ''; ehYear = ''; ehRosterCache = []; ehPupilId = null; ehPupilName = ''; ehQuests = [];
   ehAttemptId = null; ehItems = []; ehIdx = 0; ehCorrect = 0;
+  ehFindOutQuestId = null; ehCurrentActivityPrompt = null;
   var codeEl = document.getElementById('eh-code-input'); if(codeEl) codeEl.value = '';
   var yearEl = document.getElementById('eh-year-input'); if(yearEl) yearEl.value = '';
   syncYearButtons('eh-year-input');
@@ -35569,7 +35583,7 @@ async function ehLoadQuestMap(){
     card.className = 'phase-btn';
     card.disabled = locked;
     card.style.opacity = locked ? '0.55' : '1';
-    if(!locked) card.onclick = function(){ ehStartQuest(q.quest_id); };
+    if(!locked) card.onclick = function(){ ehOpenQuest(q); };
     var badge = document.createElement('div'); badge.className = 'phase-badge';
     var icon = document.createElement('i');
     icon.className = 'ti ' + (done ? 'ti-check' : locked ? 'ti-lock' : 'ti-flag');
@@ -35586,6 +35600,44 @@ async function ehLoadQuestMap(){
   });
 }
 
+/* A quest with facts and/or links opens the "find out" screen first (read
+   and/or watch, then quiz); a plain quiz-only quest (or one already read)
+   skips straight to the quiz, same as before. */
+function ehOpenQuest(q){
+  ehCurrentActivityPrompt = q.activity_prompt || null;
+  var hasFacts = q.facts && q.facts.length;
+  var hasLinks = q.links && q.links.length;
+  if(hasFacts || hasLinks){
+    ehRenderFindOut(q);
+  } else {
+    ehStartQuest(q.quest_id);
+  }
+}
+function ehRenderFindOut(q){
+  ehFindOutQuestId = q.quest_id;
+  document.getElementById('eh-findout-title').textContent = q.title;
+  var factsEl = document.getElementById('eh-findout-facts');
+  if(q.facts && q.facts.length){
+    factsEl.innerHTML = '<div class="section-hd" style="font-size:14px;margin-bottom:0.5rem;">Find out</div>' +
+      '<ul style="margin:0;padding-left:1.1rem;font-size:13.5px;line-height:1.6;color:var(--text-primary);">' +
+      q.facts.map(function(f){ return '<li>' + escapeHtml(f) + '</li>'; }).join('') +
+      '</ul>';
+    factsEl.style.display = 'block';
+  } else {
+    factsEl.innerHTML = ''; factsEl.style.display = 'none';
+  }
+  var linksEl = document.getElementById('eh-findout-links');
+  linksEl.innerHTML = '';
+  (q.links || []).forEach(function(l){
+    var a = document.createElement('a');
+    a.href = l.url; a.target = '_blank'; a.rel = 'noopener';
+    a.className = 'btn btn-ghost';
+    a.style.cssText = 'display:block;text-align:center;margin-bottom:0.5rem;';
+    a.textContent = l.label || 'Take a look';
+    linksEl.appendChild(a);
+  });
+  ehShowChildScreen('eh-findout');
+}
 async function ehStartQuest(questId){
   var res = await sb.rpc('start_home_attempt', { p_code: ehCode, p_pupil_id: ehPupilId, p_quest_id: questId });
   if(res.error){ alert('Could not open that quest: ' + res.error.message); return; }
@@ -35626,6 +35678,15 @@ function ehChoose(btnEl, chosen){
 async function ehFinishQuest(){
   await sb.rpc('complete_home_attempt', { p_attempt_id: ehAttemptId, p_total_correct: ehCorrect, p_total_items: ehItems.length });
   document.getElementById('eh-done-score').textContent = ehCorrect + '/' + ehItems.length;
+  var activityEl = document.getElementById('eh-done-activity');
+  if(ehCurrentActivityPrompt){
+    activityEl.innerHTML = '<div class="section-hd" style="font-size:13px;margin-bottom:0.35rem;">One more thing to try</div>' +
+      '<div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">' + escapeHtml(ehCurrentActivityPrompt) + '</div>' +
+      '<div style="font-size:11px;color:var(--text-muted);margin-top:0.5rem;">No need to send this in - just something fun if you want to.</div>';
+    activityEl.style.display = 'block';
+  } else {
+    activityEl.innerHTML = ''; activityEl.style.display = 'none';
+  }
   ehShowChildScreen('eh-done');
 }
 function ehBackToQuestMap(){ ehLoadQuestMap(); }
