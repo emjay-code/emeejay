@@ -35836,7 +35836,7 @@ async function ehLoadInsights(){
 
   var photosEl = document.getElementById('eh-photos-list');
   if(photosEl){
-    var photosRes = await sb.from('home_activity_uploads').select('id,image_data,text_content,created_at,quest_id,pupils(name)').order('created_at',{ ascending:false }).limit(12);
+    var photosRes = await sb.from('home_activity_uploads').select('id,image_data,text_content,file_data,file_name,file_mime,created_at,quest_id,pupils(name)').order('created_at',{ ascending:false }).limit(12);
     var photos = photosRes.data || [];
     if(!photos.length){
       photosEl.innerHTML = '<div style="font-size:13px;color:var(--text-muted);">Nothing sent in yet.</div>';
@@ -35846,12 +35846,19 @@ async function ehLoadInsights(){
           var q = quests.find(function(x){ return x.id === p.quest_id; });
           var name = p.pupils ? p.pupils.name : 'A child';
           var when = new Date(p.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
-          var media = p.image_data
-            ? '<img src="' + p.image_data + '" style="width:100%;height:100px;object-fit:cover;border-radius:10px;border:1px solid var(--border-strong);"/>'
-            : '<div style="width:100%;height:100px;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface-2);padding:8px;overflow:hidden;font-size:11px;line-height:1.4;text-align:left;">' + escapeHtml((p.text_content || '').slice(0, 140)) + ((p.text_content || '').length > 140 ? '…' : '') + '</div>';
+          var media;
+          if(p.image_data){
+            media = '<img src="' + p.image_data + '" style="width:100%;height:100px;object-fit:cover;border-radius:10px;border:1px solid var(--border-strong);"/>';
+          } else if(p.file_data){
+            media = '<a href="' + p.file_data + '" download="' + escapeHtml(p.file_name || 'file') + '" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:100%;height:100px;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface-2);text-decoration:none;color:inherit;">' +
+              '<i class="ti ' + ehDocIconForName(p.file_name) + '" style="font-size:26px;"></i>' +
+              '<span style="font-size:10px;padding:0 6px;word-break:break-all;text-align:center;">' + escapeHtml(p.file_name || 'Download file') + '</span></a>';
+          } else {
+            media = '<div style="width:100%;height:100px;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface-2);padding:8px;overflow:hidden;font-size:11px;line-height:1.4;text-align:left;">' + escapeHtml((p.text_content || '').slice(0, 140)) + ((p.text_content || '').length > 140 ? '…' : '') + '</div>';
+          }
           return '<div style="text-align:center;">' +
             media +
-            (p.image_data && p.text_content ? '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;text-align:left;">' + escapeHtml(p.text_content.slice(0,140)) + (p.text_content.length > 140 ? '…' : '') + '</div>' : '') +
+            ((p.image_data || p.file_data) && p.text_content ? '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;text-align:left;">' + escapeHtml(p.text_content.slice(0,140)) + (p.text_content.length > 140 ? '…' : '') + '</div>' : '') +
             '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">' + escapeHtml(name) + '</div>' +
             '<div style="font-size:10px;color:var(--text-muted);">' + escapeHtml(q ? q.title : '') + ' &middot; ' + when + '</div>' +
             '</div>';
@@ -35888,6 +35895,7 @@ function ehReset(){
   ehAttemptId = null; ehItems = []; ehIdx = 0; ehCorrect = 0;
   ehFindOutQuestId = null; ehCurrentActivityPrompt = null; ehCurrentActivityType = null;
   ehPendingActivityDataUrl = null;
+  ehPendingActivityFileData = null; ehPendingActivityFileName = null; ehPendingActivityFileMime = null;
   var codeEl = document.getElementById('eh-code-input'); if(codeEl) codeEl.value = '';
   var yearEl = document.getElementById('eh-year-input'); if(yearEl) yearEl.value = '';
   syncYearButtons('eh-year-input');
@@ -36183,7 +36191,7 @@ async function ehFinishQuest(){
       '<div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">' + escapeHtml(ehCurrentActivityPrompt) + '</div>' +
       '<textarea id="eh-activity-text-input" placeholder="Write your answer here (optional)..." style="width:100%;min-height:90px;margin-top:0.65rem;font-size:13px;padding:8px;border-radius:8px;border:1px solid var(--border-strong);font-family:inherit;"></textarea>' +
       '<div style="display:flex;gap:8px;margin-top:0.5rem;">' +
-        '<input type="file" accept="image/*" id="eh-activity-file-input" style="display:none;" onchange="ehHandleActivityFile(this)"/>' +
+        '<input type="file" accept="image/*,application/pdf,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" id="eh-activity-file-input" style="display:none;" onchange="ehHandleActivityFile(this)"/>' +
         '<input type="file" accept="image/*" capture="environment" id="eh-activity-camera-input" style="display:none;" onchange="ehHandleActivityFile(this)"/>' +
         '<button type="button" class="btn btn-ghost" style="flex:1;" onclick="document.getElementById(\'eh-activity-file-input\').click()">Attach a file</button>' +
         '<button type="button" class="btn btn-ghost" style="flex:1;" onclick="document.getElementById(\'eh-activity-camera-input\').click()">Take a photo</button>' +
@@ -36191,7 +36199,7 @@ async function ehFinishQuest(){
       '<div id="eh-activity-preview" style="margin-top:0.5rem;text-align:center;"></div>' +
       '<button type="button" class="btn btn-primary" style="width:100%;margin-top:0.65rem;" id="eh-activity-send-btn" onclick="ehSubmitActivity()">Send to your teacher</button>' +
       '<div id="eh-activity-status" style="font-size:11.5px;color:var(--text-muted);margin-top:0.4rem;text-align:center;"></div>' +
-      '<div style="font-size:11px;color:var(--text-muted);margin-top:0.5rem;">Only your teacher can see this. If you add a photo, please make it a photo of your work, not of yourself.</div>';
+      '<div style="font-size:11px;color:var(--text-muted);margin-top:0.5rem;">Only your teacher can see this. If you attach a photo, please make it a photo of your work, not of yourself.</div>';
     activityEl.innerHTML = html;
     activityEl.style.display = 'block';
   } else {
@@ -36201,59 +36209,112 @@ async function ehFinishQuest(){
 }
 
 /* Activity submission: a child can type an answer directly, attach an
-   existing image file, or take a new photo - any combination of text plus
-   one image is sent together via the SECURITY DEFINER RPC (never a direct
+   existing file, or take a new photo - any combination of text plus one
+   attachment is sent together via the SECURITY DEFINER RPC (never a direct
    table write). Images are resized/compressed client-side first so the
-   base64 payload stays small (the RPC also caps size server-side). */
+   base64 payload stays small; PDFs and Word documents can't be resized like
+   that, so they're read as-is (capped to a friendly size limit client-side -
+   the RPC also caps size and checks the MIME type server-side). */
 var ehPendingActivityDataUrl = null;
+var ehPendingActivityFileData = null, ehPendingActivityFileName = null, ehPendingActivityFileMime = null;
+var EH_ACTIVITY_DOC_MAX_BYTES = 5 * 1024 * 1024;
+function ehIsAllowedActivityFile(file){
+  var mime = (file.type || '').toLowerCase();
+  var name = (file.name || '').toLowerCase();
+  if(mime.indexOf('image/') === 0) return 'image';
+  if(mime === 'application/pdf' || /\.pdf$/.test(name)) return 'doc';
+  if(mime === 'application/msword' || /\.doc$/.test(name)) return 'doc';
+  if(mime === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || /\.docx$/.test(name)) return 'doc';
+  return null;
+}
+function ehDocIconForName(name){
+  return /\.pdf$/i.test(name || '') ? 'ti-file-type-pdf' : 'ti-file-type-doc';
+}
 function ehHandleActivityFile(inputEl){
   var file = inputEl.files && inputEl.files[0];
   if(!file) return;
   var statusEl = document.getElementById('eh-activity-status');
-  statusEl.textContent = 'Getting your photo ready…';
-  var reader = new FileReader();
-  reader.onload = function(e){
-    var img = new Image();
-    img.onload = function(){
-      var maxDim = 900;
-      var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
-      var canvas = document.createElement('canvas');
-      canvas.width = Math.round(img.width * scale);
-      canvas.height = Math.round(img.height * scale);
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      ehPendingActivityDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+  var kind = ehIsAllowedActivityFile(file);
+  if(!kind){
+    statusEl.textContent = 'Sorry, that file type is not allowed - please use a photo, PDF or Word document.';
+    inputEl.value = '';
+    return;
+  }
+  if(kind === 'doc' && file.size > EH_ACTIVITY_DOC_MAX_BYTES){
+    statusEl.textContent = 'That file is too big (max 5MB) - please try a smaller one.';
+    inputEl.value = '';
+    return;
+  }
+  ehPendingActivityDataUrl = null; ehPendingActivityFileData = null; ehPendingActivityFileName = null; ehPendingActivityFileMime = null;
+  if(kind === 'image'){
+    statusEl.textContent = 'Getting your photo ready…';
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var maxDim = 900;
+        var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        var canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ehPendingActivityDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+        var previewEl = document.getElementById('eh-activity-preview');
+        previewEl.innerHTML = '<img src="' + ehPendingActivityDataUrl + '" style="max-width:100%;max-height:220px;border-radius:10px;border:1px solid var(--border-strong);"/>' +
+          '<button type="button" class="btn" style="width:100%;margin-top:0.4rem;" onclick="ehClearActivityAttachment()">Remove photo</button>';
+        statusEl.textContent = '';
+      };
+      img.onerror = function(){ statusEl.textContent = 'Could not read that file - please try a photo instead.'; };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    statusEl.textContent = 'Getting your file ready…';
+    var docReader = new FileReader();
+    docReader.onload = function(e){
+      ehPendingActivityFileData = e.target.result;
+      ehPendingActivityFileName = file.name;
+      ehPendingActivityFileMime = file.type || (/\.pdf$/i.test(file.name) ? 'application/pdf' : 'application/octet-stream');
       var previewEl = document.getElementById('eh-activity-preview');
-      previewEl.innerHTML = '<img src="' + ehPendingActivityDataUrl + '" style="max-width:100%;max-height:220px;border-radius:10px;border:1px solid var(--border-strong);"/>' +
-        '<button type="button" class="btn" style="width:100%;margin-top:0.4rem;" onclick="ehClearActivityPhoto()">Remove photo</button>';
+      previewEl.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:10px;border-radius:10px;border:1px solid var(--border-strong);text-align:left;">' +
+        '<i class="ti ' + ehDocIconForName(file.name) + '" style="font-size:22px;flex-shrink:0;"></i>' +
+        '<span style="font-size:12.5px;word-break:break-all;">' + escapeHtml(file.name) + '</span></div>' +
+        '<button type="button" class="btn" style="width:100%;margin-top:0.4rem;" onclick="ehClearActivityAttachment()">Remove file</button>';
       statusEl.textContent = '';
     };
-    img.onerror = function(){ statusEl.textContent = 'Could not read that file - please try a photo instead.'; };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
+    docReader.onerror = function(){ statusEl.textContent = 'Could not read that file - please try again.'; };
+    docReader.readAsDataURL(file);
+  }
 }
-function ehClearActivityPhoto(){
+function ehClearActivityAttachment(){
   ehPendingActivityDataUrl = null;
+  ehPendingActivityFileData = null; ehPendingActivityFileName = null; ehPendingActivityFileMime = null;
   var previewEl = document.getElementById('eh-activity-preview'); if(previewEl) previewEl.innerHTML = '';
   var fileInput = document.getElementById('eh-activity-file-input'); if(fileInput) fileInput.value = '';
   var camInput = document.getElementById('eh-activity-camera-input'); if(camInput) camInput.value = '';
 }
+/* Old name kept as an alias since nothing else needs to change. */
+function ehClearActivityPhoto(){ ehClearActivityAttachment(); }
 async function ehSubmitActivity(){
   var textInput = document.getElementById('eh-activity-text-input');
   var text = textInput ? textInput.value.trim() : '';
   var statusEl = document.getElementById('eh-activity-status');
-  if(!text && !ehPendingActivityDataUrl){ statusEl.textContent = 'Please write something or add a photo first.'; return; }
+  if(!text && !ehPendingActivityDataUrl && !ehPendingActivityFileData){ statusEl.textContent = 'Please write something or add a file first.'; return; }
   statusEl.textContent = 'Sending…';
   var sendBtn = document.getElementById('eh-activity-send-btn'); if(sendBtn) sendBtn.disabled = true;
-  var res = await sb.rpc('submit_home_activity_upload', { p_code: ehCode, p_pupil_id: ehPupilId, p_quest_id: ehFindOutQuestId, p_image_data: ehPendingActivityDataUrl, p_text_content: text || null });
+  var res = await sb.rpc('submit_home_activity_upload', {
+    p_code: ehCode, p_pupil_id: ehPupilId, p_quest_id: ehFindOutQuestId,
+    p_image_data: ehPendingActivityDataUrl, p_text_content: text || null,
+    p_file_data: ehPendingActivityFileData, p_file_name: ehPendingActivityFileName, p_file_mime: ehPendingActivityFileMime
+  });
   if(sendBtn) sendBtn.disabled = false;
   if(res.error){
     statusEl.textContent = 'Could not send that - please try again.';
     return;
   }
   if(textInput) textInput.value = '';
-  ehClearActivityPhoto();
+  ehClearActivityAttachment();
   if(sendBtn) sendBtn.style.display = 'none';
   statusEl.textContent = 'Sent to your teacher!';
 }
