@@ -244,8 +244,16 @@ p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75r
 .chip{font-family:var(--phonics-font);display:inline-block;padding:4px 10px;border-radius:6px;font-size:13px;font-weight:600;margin:3px;}
 .chip-ok{background:var(--bg-success);color:var(--text-success);}
 .chip-no{background:var(--bg-danger);color:var(--text-danger);}
-.eh-preset-chip{display:block;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:13px;font-family:inherit;color:#221C4A;cursor:pointer;transition:background 0.12s,border-color 0.12s;}
+.eh-preset-chip{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:var(--surface-2);border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:13px;font-family:inherit;color:#221C4A;cursor:pointer;transition:background 0.12s,border-color 0.12s;}
 .eh-preset-chip:hover{background:var(--hp-purple-light);border-color:var(--hp-purple-mid);}
+.eh-preset-chip-text{flex:1;}
+.eh-preset-chip-check{display:none;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--hp-purple);color:#fff;font-size:11px;flex-shrink:0;}
+.eh-preset-chip.selected{background:var(--hp-purple-light);border-color:var(--hp-purple);border-width:2px;font-weight:600;}
+.eh-preset-chip.selected .eh-preset-chip-check{display:flex;}
+.eh-topic-btn.active{background:var(--hp-purple-light);border:2px solid var(--hp-purple);}
+.eh-topic-btn .eh-topic-check{display:none;margin-left:auto;width:22px;height:22px;border-radius:50%;background:var(--hp-purple);color:#fff;font-size:12px;flex-shrink:0;align-items:center;justify-content:center;}
+.eh-topic-btn.active .eh-topic-check{display:flex;}
+.eh-topic-btn.active .phase-name{font-weight:700;}
 .section-hd{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;}
 .empty-state{text-align:center;padding:2.5rem 1rem;color:var(--text-muted);font-size:14px;}
 .name-row{display:flex;gap:0.5rem;margin-bottom:0.75rem;}
@@ -35354,6 +35362,19 @@ var ehTier = 'LKS2';
 var ehActivityType = '';
 
 function ehLoadTab(){
+  /* Reset the publish form fresh each time a teacher enters this strand -
+     otherwise a topic/activity picked in an earlier session (or an earlier
+     demo run in the same tab) lingers in these globals and silently
+     re-enables Publish without the teacher choosing anything this time. */
+  ehTopicKey = null;
+  ehTier = 'LKS2';
+  ehActivityType = '';
+  var topicSearchEl = document.getElementById('eh-topics-search'); if(topicSearchEl) topicSearchEl.value = '';
+  document.querySelectorAll('.eh-tier-btn').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-tier') === 'LKS2'); });
+  document.querySelectorAll('.eh-activity-type-btn').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-type') === ''); });
+  var promptWrap = document.getElementById('eh-activity-prompt-wrap'); if(promptWrap) promptWrap.style.display = 'none';
+  var promptInput = document.getElementById('eh-activity-prompt-input'); if(promptInput) promptInput.value = '';
+  var presetsEl = document.getElementById('eh-activity-presets'); if(presetsEl) presetsEl.innerHTML = '';
   ehShowScreen('eh-teacher-setup');
   ehLoadCode();
   ehRenderTopicsList();
@@ -35380,7 +35401,7 @@ function ehShowScreen(id){
 function ehBuildTopicBtn(key, t){
   var btn = document.createElement('button');
   btn.type = 'button';
-  btn.className = 'phase-btn' + (key === ehTopicKey ? ' active' : '');
+  btn.className = 'phase-btn eh-topic-btn' + (key === ehTopicKey ? ' active' : '');
   btn.onclick = function(){ ehTopicKey = key; ehRenderTopicsList(); ehRenderActivityPresets(); };
   var badge = document.createElement('div'); badge.className = 'phase-badge';
   var icon = document.createElement('i'); icon.className = 'ti ' + (t.icon || 'ti-world'); icon.setAttribute('aria-hidden','true'); icon.style.fontSize = '16px';
@@ -35389,7 +35410,10 @@ function ehBuildTopicBtn(key, t){
   var name = document.createElement('div'); name.className = 'phase-name'; name.textContent = t.label;
   var desc = document.createElement('div'); desc.className = 'phase-desc'; desc.textContent = t.desc || '';
   textWrap.appendChild(name); textWrap.appendChild(desc);
-  btn.appendChild(badge); btn.appendChild(textWrap);
+  var check = document.createElement('div'); check.className = 'eh-topic-check';
+  var checkIcon = document.createElement('i'); checkIcon.className = 'ti ti-check'; checkIcon.setAttribute('aria-hidden','true');
+  check.appendChild(checkIcon);
+  btn.appendChild(badge); btn.appendChild(textWrap); btn.appendChild(check);
   return btn;
 }
 
@@ -35453,10 +35477,22 @@ function ehRenderActivityPresets(){
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'eh-preset-chip';
-    btn.textContent = text;
-    btn.onclick = function(){ document.getElementById('eh-activity-prompt-input').value = text; };
+    var check = document.createElement('span'); check.className = 'eh-preset-chip-check';
+    var checkIcon = document.createElement('i'); checkIcon.className = 'ti ti-check'; checkIcon.setAttribute('aria-hidden','true');
+    check.appendChild(checkIcon);
+    var textSpan = document.createElement('span'); textSpan.className = 'eh-preset-chip-text'; textSpan.textContent = text;
+    btn.appendChild(check); btn.appendChild(textSpan);
+    btn.onclick = function(){
+      document.getElementById('eh-activity-prompt-input').value = text;
+      el.querySelectorAll('.eh-preset-chip').forEach(function(c){ c.classList.remove('selected'); });
+      btn.classList.add('selected');
+    };
     el.appendChild(btn);
   });
+  var input = document.getElementById('eh-activity-prompt-input');
+  if(input){
+    input.oninput = function(){ el.querySelectorAll('.eh-preset-chip').forEach(function(c){ c.classList.remove('selected'); }); };
+  }
 }
 function ehSelectActivityType(type, btnEl){
   ehActivityType = type;
