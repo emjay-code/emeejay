@@ -3803,6 +3803,20 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Publishing replaces last week's quests for this topic &ndash; nothing is deleted from a child's history.</div>
   </div>
 
+  <div class="card" style="margin-bottom:0.75rem;">
+    <div class="section-hd" style="margin-bottom:0.35rem;">Add an activity (optional)</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:0.5rem;">Shown after the quiz. Writing and drawing are just an invitation - nothing to send in. Photo of your work lets a child send you a picture, privately.</div>
+    <div class="year-btn-grid" id="eh-activity-type-btns">
+      <button type="button" class="year-btn eh-activity-type-btn active" data-type="" onclick="ehSelectActivityType('',this)">None</button>
+      <button type="button" class="year-btn eh-activity-type-btn" data-type="writing" onclick="ehSelectActivityType('writing',this)">Creative writing</button>
+      <button type="button" class="year-btn eh-activity-type-btn" data-type="drawing" onclick="ehSelectActivityType('drawing',this)">Drawing</button>
+      <button type="button" class="year-btn eh-activity-type-btn" data-type="photo" onclick="ehSelectActivityType('photo',this)">Photo of your work</button>
+    </div>
+    <div id="eh-activity-prompt-wrap" style="display:none;margin-top:0.6rem;">
+      <textarea id="eh-activity-prompt-input" placeholder="e.g. Pretend you are Florence Nightingale and write a diary entry set during the Crimean War." style="width:100%;min-height:64px;font-size:13px;padding:8px;border-radius:8px;border:1px solid var(--border-strong);font-family:inherit;"></textarea>
+    </div>
+  </div>
+
   <div class="card">
     <div class="section-hd" style="margin-bottom:0.5rem;">Currently available</div>
     <div id="eh-active-list"></div>
@@ -3818,9 +3832,13 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <tbody id="eh-roster-body"></tbody>
     </table>
   </div>
-  <div class="card">
+  <div class="card" style="margin-bottom:0.75rem;">
     <div class="section-hd" style="margin-bottom:0.5rem;">Notes from home</div>
     <div id="eh-notes-list"></div>
+  </div>
+  <div class="card">
+    <div class="section-hd" style="margin-bottom:0.5rem;">Photos from home</div>
+    <div id="eh-photos-list"></div>
   </div>
 </div>
 </div>
@@ -4840,12 +4858,6 @@ function viewHomeDemo(btn){
 }
 var DEMO_HOME_CODE = 'PANDA';
 async function viewHomeChildDemo(btn){
-  var code = window.prompt('Enter your demo code to continue:');
-  if(code === null) return; // cancelled
-  if(code.trim().toUpperCase() !== DEMO_ACCESS_CODE){
-    alert('That demo code isn\'t right. Please check it and try again.');
-    return;
-  }
   var oldText = btn ? btn.textContent : '';
   if(btn){ btn.disabled = true; btn.textContent = 'Loading demo...'; }
   showHomePortal();
@@ -4939,12 +4951,6 @@ async function doTrustSignUp(){
 var DEMO_TRUST_EMAIL = 'demo-trust@emeejay.com';
 var DEMO_TRUST_PASSWORD = 'EmeejayTrustDemo2026!';
 async function viewTrustDemo(btn){
-  var code = window.prompt('Enter your demo code to continue:');
-  if(code === null) return; // cancelled
-  if(code.trim().toUpperCase() !== DEMO_ACCESS_CODE){
-    alert('That demo code isn\'t right. Please check it and try again.');
-    return;
-  }
   var oldText = btn ? btn.textContent : '';
   if(btn){ btn.disabled = true; btn.textContent = 'Loading demo...'; }
   var res = await sb.auth.signInWithPassword({ email: DEMO_TRUST_EMAIL, password: DEMO_TRUST_PASSWORD });
@@ -5164,12 +5170,6 @@ async function resetDemoData(){
   } catch(e){ /* non-fatal - worst case a stale row or two lingers */ }
 }
 async function viewDemo(btn){
-  var code = window.prompt('Enter your demo code to continue:');
-  if(code === null) return; // cancelled
-  if(code.trim().toUpperCase() !== DEMO_ACCESS_CODE){
-    alert('That demo code isn\'t right. Please check it and try again.');
-    return;
-  }
   var oldText = btn ? btn.textContent : '';
   if(btn){ btn.disabled = true; btn.textContent = 'Loading demo...'; }
   var res = await sb.auth.signInWithPassword({ email: DEMO_EMAIL, password: DEMO_PASSWORD });
@@ -35347,6 +35347,7 @@ async function playJoin(pupilId, pupilName){
 /* --- Teacher side (tab-eh) --- */
 var ehTopicKey = null;
 var ehTier = 'LKS2';
+var ehActivityType = '';
 
 function ehLoadTab(){
   ehShowScreen('eh-teacher-setup');
@@ -35407,6 +35408,26 @@ function ehSelectTier(tier, btnEl){
   btnEl.classList.add('active');
 }
 
+var EH_ACTIVITY_PLACEHOLDERS = {
+  writing: 'e.g. Pretend you are Florence Nightingale and write a diary entry set during the Crimean War.',
+  drawing: 'e.g. Draw what you think the hospital looked like, and label three things in it.',
+  photo: 'e.g. Take a photo of something you made, wrote or drew for this topic.'
+};
+function ehSelectActivityType(type, btnEl){
+  ehActivityType = type;
+  document.querySelectorAll('.eh-activity-type-btn').forEach(function(b){ b.classList.remove('active'); });
+  btnEl.classList.add('active');
+  var wrap = document.getElementById('eh-activity-prompt-wrap');
+  var input = document.getElementById('eh-activity-prompt-input');
+  if(type){
+    wrap.style.display = 'block';
+    input.placeholder = EH_ACTIVITY_PLACEHOLDERS[type] || '';
+  } else {
+    wrap.style.display = 'none';
+    input.value = '';
+  }
+}
+
 /* Splits one topic/tier's question pool into three quest cards rather than
    inventing a second difficulty axis - warm-up/standard/boss is about how
    far into the topic a child goes, not a harder syllabus underneath. */
@@ -35427,10 +35448,12 @@ async function ehPublish(){
   var pool = built.pool && built.pool.length ? built.pool : built.items;
   if(!pool || !pool.length){ alert('This topic has no questions set up for that tier yet.'); return; }
   var split = ehSplitIntoQuests(pool);
+  var activityPromptInput = document.getElementById('eh-activity-prompt-input');
+  var activityPrompt = ehActivityType ? (activityPromptInput.value.trim() || EH_ACTIVITY_PLACEHOLDERS[ehActivityType]) : '';
   var quests = [];
-  if(split.warmup.length) quests.push({ tier:'warmup', title: t.label + ' - warm-up', description: 'A gentle way in.', items: split.warmup });
-  if(split.standard.length) quests.push({ tier:'standard', title: t.label, description: 'The main quest.', items: split.standard });
-  if(split.boss.length) quests.push({ tier:'boss', title: t.label + ' - boss level', description: 'A proper stretch, once the others are done.', items: split.boss });
+  if(split.warmup.length) quests.push({ tier:'warmup', title: t.label + ' - warm-up', description: 'A gentle way in.', items: split.warmup, activity_type: ehActivityType, activity_prompt: activityPrompt });
+  if(split.standard.length) quests.push({ tier:'standard', title: t.label, description: 'The main quest.', items: split.standard, activity_type: ehActivityType, activity_prompt: activityPrompt });
+  if(split.boss.length) quests.push({ tier:'boss', title: t.label + ' - boss level', description: 'A proper stretch, once the others are done.', items: split.boss, activity_type: ehActivityType, activity_prompt: activityPrompt });
   var res = await sb.rpc('publish_home_quests', { p_subject: 'topics', p_topic_label: t.label, p_year_group: null, p_quests: quests });
   if(res.error){ alert('Could not publish: ' + res.error.message); return; }
   alert('Published ' + quests.length + ' quest' + (quests.length === 1 ? '' : 's') + ' for ' + t.label + '.');
@@ -35512,6 +35535,27 @@ async function ehLoadInsights(){
       notesEl.appendChild(div);
     });
   }
+
+  var photosEl = document.getElementById('eh-photos-list');
+  if(photosEl){
+    var photosRes = await sb.from('home_activity_uploads').select('id,image_data,created_at,quest_id,pupils(name)').order('created_at',{ ascending:false }).limit(12);
+    var photos = photosRes.data || [];
+    if(!photos.length){
+      photosEl.innerHTML = '<div style="font-size:13px;color:var(--text-muted);">No photos sent in yet.</div>';
+    } else {
+      photosEl.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;">' +
+        photos.map(function(p){
+          var q = quests.find(function(x){ return x.id === p.quest_id; });
+          var name = p.pupils ? p.pupils.name : 'A child';
+          var when = new Date(p.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+          return '<div style="text-align:center;">' +
+            '<img src="' + p.image_data + '" style="width:100%;height:100px;object-fit:cover;border-radius:10px;border:1px solid var(--border-strong);"/>' +
+            '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">' + escapeHtml(name) + '</div>' +
+            '<div style="font-size:10px;color:var(--text-muted);">' + escapeHtml(q ? q.title : '') + ' &middot; ' + when + '</div>' +
+            '</div>';
+        }).join('') + '</div>';
+    }
+  }
 }
 
 /* --- Child side (eh-view): code -> pick yourself from the roster -> quest map -> play -- */
@@ -35519,7 +35563,7 @@ var ehCode = '', ehYear = '', ehRosterCache = [];
 var ehPupilId = null, ehPupilName = '';
 var ehQuests = [];
 var ehAttemptId = null, ehItems = [], ehIdx = 0, ehCorrect = 0;
-var ehFindOutQuestId = null, ehCurrentActivityPrompt = null;
+var ehFindOutQuestId = null, ehCurrentActivityPrompt = null, ehCurrentActivityType = null;
 
 function showHomePortal(){
   document.getElementById('entry-chooser-view').style.display = 'none';
@@ -35540,7 +35584,7 @@ function ehShowChildScreen(id){
 function ehReset(){
   ehCode = ''; ehYear = ''; ehRosterCache = []; ehPupilId = null; ehPupilName = ''; ehQuests = [];
   ehAttemptId = null; ehItems = []; ehIdx = 0; ehCorrect = 0;
-  ehFindOutQuestId = null; ehCurrentActivityPrompt = null;
+  ehFindOutQuestId = null; ehCurrentActivityPrompt = null; ehCurrentActivityType = null;
   var codeEl = document.getElementById('eh-code-input'); if(codeEl) codeEl.value = '';
   var yearEl = document.getElementById('eh-year-input'); if(yearEl) yearEl.value = '';
   syncYearButtons('eh-year-input');
@@ -35633,7 +35677,9 @@ async function ehLoadQuestMap(){
    skips straight to the quiz, same as before. */
 var ehFindOutFacts = [], ehFindOutIdx = 0, ehFindOutMatchPairs = [];
 function ehOpenQuest(q){
+  ehFindOutQuestId = q.quest_id;
   ehCurrentActivityPrompt = q.activity_prompt || null;
+  ehCurrentActivityType = q.activity_type || null;
   var hasFacts = q.facts && q.facts.length;
   var hasLinks = q.links && q.links.length;
   if(hasFacts || hasLinks){
@@ -35832,14 +35878,68 @@ async function ehFinishQuest(){
   }
   var activityEl = document.getElementById('eh-done-activity');
   if(ehCurrentActivityPrompt){
-    activityEl.innerHTML = '<div class="section-hd" style="font-size:13px;margin-bottom:0.35rem;">One more thing to try</div>' +
-      '<div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">' + escapeHtml(ehCurrentActivityPrompt) + '</div>' +
-      '<div style="font-size:11px;color:var(--text-muted);margin-top:0.5rem;">No need to send this in - just something fun if you want to.</div>';
+    var html = '<div class="section-hd" style="font-size:13px;margin-bottom:0.35rem;">One more thing to try</div>' +
+      '<div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">' + escapeHtml(ehCurrentActivityPrompt) + '</div>';
+    if(ehCurrentActivityType === 'photo'){
+      html += '<input type="file" accept="image/*" capture="environment" id="eh-photo-input" style="display:none;" onchange="ehHandlePhotoSelected(this)"/>' +
+        '<button class="btn btn-primary" style="width:100%;margin-top:0.65rem;" id="eh-photo-pick-btn" onclick="document.getElementById(\'eh-photo-input\').click()">Take or choose a photo</button>' +
+        '<div id="eh-photo-preview" style="margin-top:0.5rem;text-align:center;"></div>' +
+        '<div id="eh-photo-status" style="font-size:11.5px;color:var(--text-muted);margin-top:0.4rem;text-align:center;"></div>' +
+        '<div style="font-size:11px;color:var(--text-muted);margin-top:0.5rem;">Only your teacher can see this. Please take a photo of your work, not of yourself.</div>';
+    } else {
+      html += '<div style="font-size:11px;color:var(--text-muted);margin-top:0.5rem;">No need to send this in - just something fun if you want to.</div>';
+    }
+    activityEl.innerHTML = html;
     activityEl.style.display = 'block';
   } else {
     activityEl.innerHTML = ''; activityEl.style.display = 'none';
   }
   ehShowChildScreen('eh-done');
+}
+
+/* Photo activity: resize/compress client-side before sending so the base64
+   payload stays small (the RPC also caps size server-side), then submit via
+   the SECURITY DEFINER RPC - never a direct table write. */
+var ehPendingPhotoDataUrl = null;
+function ehHandlePhotoSelected(inputEl){
+  var file = inputEl.files && inputEl.files[0];
+  if(!file) return;
+  var statusEl = document.getElementById('eh-photo-status');
+  statusEl.textContent = 'Getting your photo ready…';
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var img = new Image();
+    img.onload = function(){
+      var maxDim = 900;
+      var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+      var canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      ehPendingPhotoDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+      var previewEl = document.getElementById('eh-photo-preview');
+      previewEl.innerHTML = '<img src="' + ehPendingPhotoDataUrl + '" style="max-width:100%;max-height:220px;border-radius:10px;border:1px solid var(--border-strong);"/>' +
+        '<button class="btn btn-primary" style="width:100%;margin-top:0.5rem;" onclick="ehSubmitPhoto()">Send to your teacher</button>';
+      statusEl.textContent = '';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+async function ehSubmitPhoto(){
+  if(!ehPendingPhotoDataUrl) return;
+  var statusEl = document.getElementById('eh-photo-status');
+  statusEl.textContent = 'Sending…';
+  var res = await sb.rpc('submit_home_activity_upload', { p_code: ehCode, p_pupil_id: ehPupilId, p_quest_id: ehFindOutQuestId, p_image_data: ehPendingPhotoDataUrl });
+  if(res.error){
+    statusEl.textContent = 'Could not send that - please try again.';
+    return;
+  }
+  document.getElementById('eh-photo-preview').innerHTML = '';
+  document.getElementById('eh-photo-pick-btn').style.display = 'none';
+  statusEl.textContent = 'Sent to your teacher!';
+  ehPendingPhotoDataUrl = null;
 }
 function ehBackToQuestMap(){ ehLoadQuestMap(); }
 
@@ -38845,12 +38945,6 @@ function submitParentCode(){
    permanently. */
 var DEMO_PARENT_TOKEN = 'emeejayfamdemo';
 function viewParentDemo(btn){
-  var code = window.prompt('Enter your demo code to continue:');
-  if(code === null) return; // cancelled
-  if(code.trim().toUpperCase() !== DEMO_ACCESS_CODE){
-    alert('That demo code isn\'t right. Please check it and try again.');
-    return;
-  }
   loadParentSummary(DEMO_PARENT_TOKEN);
 }
 function exitParentPortal(){
