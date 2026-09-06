@@ -36015,9 +36015,16 @@ function ehRenderFindOut(q){
   (q.links || []).forEach(function(l){
     var a = document.createElement('a');
     a.href = l.url; a.target = '_blank'; a.rel = 'noopener';
-    a.className = 'btn btn-ghost';
-    a.style.cssText = 'display:block;text-align:center;margin-bottom:0.5rem;';
-    a.textContent = l.label || 'Take a look';
+    a.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;width:100%;box-sizing:border-box;text-align:center;margin-bottom:0.5rem;padding:0.7rem;border-radius:var(--radius);font-size:15px;font-weight:600;text-decoration:none;background:var(--hp-purple-light);color:var(--hp-purple);border:1.5px solid var(--hp-purple-border);transition:background 0.12s;';
+    a.onmouseover = function(){ a.style.background = '#E2DCFA'; };
+    a.onmouseout = function(){ a.style.background = 'var(--hp-purple-light)'; };
+    var icon = document.createElement('i');
+    icon.className = 'ti ' + (l.kind === 'video' ? 'ti-player-play' : 'ti-external-link');
+    icon.style.fontSize = '17px';
+    a.appendChild(icon);
+    var label = document.createElement('span');
+    label.textContent = l.label || 'Take a look';
+    a.appendChild(label);
     linksEl.appendChild(a);
   });
   var ctaBtn = document.getElementById('eh-findout-cta');
