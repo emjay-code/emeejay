@@ -1265,18 +1265,17 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="subject-banner-title">Phonics</div>
     </div>
     <div class="card" id="phonics-set-card" style="margin-bottom:0.75rem;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
-        <span style="font-size:14px;font-weight:500;color:var(--text-primary);">Choose a set</span>
-        <button class="all-btn" onclick="startAll()">All sets</button>
-      </div>
+      <div class="section-hd" style="margin-bottom:0.35rem;"><i class="ti ti-device-desktop" aria-hidden="true" style="margin-right:4px;"></i>Mark it yourself</div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Sit with one child on this device and mark their answers as you go.</p>
       <button class="phase-btn" onclick="startPhase('set1')"><div class="phase-badge">1</div><div><div class="phase-name">Set 1</div><div class="phase-desc">m, a, s, d, t, i, n, p, g, o, c, k, u, b, f, e, l, h, r, j, v, y, w, z, x</div></div></button>
       <button class="phase-btn" onclick="startPhase('set2')"><div class="phase-badge">2</div><div><div class="phase-name">Set 2</div><div class="phase-desc">ay, ee, igh, ow, oo, ar, or, air, ir, ou, oy</div></div></button>
       <button class="phase-btn" onclick="startPhase('set3')"><div class="phase-badge">3</div><div><div class="phase-name">Set 3</div><div class="phase-desc">ea, oi, a-e, i-e, o-e, u-e, aw, are, ur, er, ow, ai, oa, ew, ire, ear, ure</div></div></button>
+      <button class="phase-btn" onclick="startAll()"><div class="phase-badge"><i class="ti ti-list-check" aria-hidden="true" style="font-size:16px;"></i></div><div><div class="phase-name">All sets</div><div class="phase-desc">Sets 1, 2 and 3 back to back, in one sitting</div></div></button>
       <button class="phase-btn" onclick="startBlendingCheck()"><div class="phase-badge"><i class="ti ti-puzzle" aria-hidden="true" style="font-size:16px;"></i></div><div><div class="phase-name">Blending Check</div><div class="phase-desc">Official Year 1 phonics screening check format &ndash; 40 words, half real and half pseudo-words</div></div></button>
     </div>
     <div class="card" style="margin-bottom:0.75rem;">
       <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check on their own device.</p>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check themselves, on their own device.</p>
       <div class="year-btn-grid" style="margin-bottom:0;">
         <button type="button" class="year-btn" onclick="startLiveSession('phonics','set1',null,null,'Set 1')">Set 1</button>
         <button type="button" class="year-btn" onclick="startLiveSession('phonics','set2',null,null,'Set 2')">Set 2</button>
