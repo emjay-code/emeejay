@@ -111,6 +111,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--hp-purple-mid);o
 .strand-tile-tag{position:absolute;top:12px;right:12px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;padding:3px 8px;border-radius:20px;background:var(--tile-accent,var(--hp-purple));color:#fff;opacity:0.9;}
 .strand-tile-arrow{display:flex;align-items:center;justify-content:center;gap:4px;font-size:11px;font-weight:700;color:var(--tile-accent,var(--hp-purple));opacity:0;transform:translateY(-2px);transition:opacity 0.16s ease,transform 0.16s ease;}
 .strand-tile:hover .strand-tile-arrow{opacity:1;transform:translateY(0);}
+.strand-tile.active{border-color:var(--tile-accent,var(--hp-purple));box-shadow:0 10px 24px rgba(90,80,230,0.22);}
+.strand-tile.active::after{opacity:1;}
 @media (max-width:480px){
   .strand-grid{grid-template-columns:1fr;max-width:280px;}
 }
@@ -1265,23 +1267,35 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
       <div class="subject-banner-title">Phonics</div>
     </div>
     <div class="card" id="phonics-set-card" style="margin-bottom:0.75rem;">
-      <div class="section-hd" style="margin-bottom:0.35rem;"><i class="ti ti-device-desktop" aria-hidden="true" style="margin-right:4px;"></i>Mark it yourself</div>
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Sit with one child on this device and mark their answers as you go.</p>
-      <button class="phase-btn" onclick="startPhase('set1')"><div class="phase-badge">1</div><div><div class="phase-name">Set 1</div><div class="phase-desc">m, a, s, d, t, i, n, p, g, o, c, k, u, b, f, e, l, h, r, j, v, y, w, z, x</div></div></button>
-      <button class="phase-btn" onclick="startPhase('set2')"><div class="phase-badge">2</div><div><div class="phase-name">Set 2</div><div class="phase-desc">ay, ee, igh, ow, oo, ar, or, air, ir, ou, oy</div></div></button>
-      <button class="phase-btn" onclick="startPhase('set3')"><div class="phase-badge">3</div><div><div class="phase-name">Set 3</div><div class="phase-desc">ea, oi, a-e, i-e, o-e, u-e, aw, are, ur, er, ow, ai, oa, ew, ire, ear, ure</div></div></button>
-      <button class="phase-btn" onclick="startAll()"><div class="phase-badge"><i class="ti ti-list-check" aria-hidden="true" style="font-size:16px;"></i></div><div><div class="phase-name">All sets</div><div class="phase-desc">Sets 1, 2 and 3 back to back, in one sitting</div></div></button>
-      <button class="phase-btn" onclick="startBlendingCheck()"><div class="phase-badge"><i class="ti ti-puzzle" aria-hidden="true" style="font-size:16px;"></i></div><div><div class="phase-name">Blending Check</div><div class="phase-desc">Official Year 1 phonics screening check format &ndash; 40 words, half real and half pseudo-words</div></div></button>
-    </div>
-    <div class="card" style="margin-bottom:0.75rem;">
-      <div class="section-hd" style="margin-bottom:0.5rem;"><i class="ti ti-broadcast" aria-hidden="true" style="margin-right:4px;"></i>Start a live session</div>
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check themselves, on their own device.</p>
-      <div class="year-btn-grid" style="margin-bottom:0;">
-        <button type="button" class="year-btn" onclick="startLiveSession('phonics','set1',null,null,'Set 1')">Set 1</button>
-        <button type="button" class="year-btn" onclick="startLiveSession('phonics','set2',null,null,'Set 2')">Set 2</button>
-        <button type="button" class="year-btn" onclick="startLiveSession('phonics','set3',null,null,'Set 3')">Set 3</button>
-        <button type="button" class="year-btn" onclick="startLiveSession('phonics','all',null,null,'All sets')">All sets</button>
-        <button type="button" class="year-btn" onclick="startLiveSession('blending',null,null,null,'Blending Check')">Blending Check</button>
+      <div class="section-hd" style="margin-bottom:0.6rem;">How do you want to run this check?</div>
+      <div class="strand-grid" style="max-width:100%;margin:0 0 0.85rem;">
+        <button type="button" class="strand-tile active" id="phonics-mode-tile-11" style="--tile-accent:var(--hp-purple);--tile-accent-2:#7A70F0;padding:1.3rem 0.9rem 1.1rem;" onclick="setPhonicsMode('11')">
+          <div class="strand-tile-icon" style="width:48px;height:48px;font-size:21px;"><i class="ti ti-device-desktop" aria-hidden="true"></i></div>
+          <div class="strand-tile-name" style="font-size:14.5px;">1-1 check</div>
+          <div class="strand-tile-desc">Mark one child yourself, on this device</div>
+        </button>
+        <button type="button" class="strand-tile" id="phonics-mode-tile-class" style="--tile-accent:#8B5CF6;--tile-accent-2:#C4B5FD;padding:1.3rem 0.9rem 1.1rem;" onclick="setPhonicsMode('class')">
+          <div class="strand-tile-icon" style="width:48px;height:48px;font-size:21px;"><i class="ti ti-broadcast" aria-hidden="true"></i></div>
+          <div class="strand-tile-name" style="font-size:14.5px;">Whole class check</div>
+          <div class="strand-tile-desc">Children join with a code, on their own device</div>
+        </button>
+      </div>
+      <div id="phonics-mode-panel-11">
+        <button class="phase-btn" onclick="startPhase('set1')"><div class="phase-badge">1</div><div><div class="phase-name">Set 1</div><div class="phase-desc">m, a, s, d, t, i, n, p, g, o, c, k, u, b, f, e, l, h, r, j, v, y, w, z, x</div></div></button>
+        <button class="phase-btn" onclick="startPhase('set2')"><div class="phase-badge">2</div><div><div class="phase-name">Set 2</div><div class="phase-desc">ay, ee, igh, ow, oo, ar, or, air, ir, ou, oy</div></div></button>
+        <button class="phase-btn" onclick="startPhase('set3')"><div class="phase-badge">3</div><div><div class="phase-name">Set 3</div><div class="phase-desc">ea, oi, a-e, i-e, o-e, u-e, aw, are, ur, er, ow, ai, oa, ew, ire, ear, ure</div></div></button>
+        <button class="phase-btn" onclick="startAll()"><div class="phase-badge"><i class="ti ti-list-check" aria-hidden="true" style="font-size:16px;"></i></div><div><div class="phase-name">All sets</div><div class="phase-desc">Sets 1, 2 and 3 back to back, in one sitting</div></div></button>
+        <button class="phase-btn" onclick="startBlendingCheck()"><div class="phase-badge"><i class="ti ti-puzzle" aria-hidden="true" style="font-size:16px;"></i></div><div><div class="phase-name">Blending Check</div><div class="phase-desc">Official Year 1 phonics screening check format &ndash; 40 words, half real and half pseudo-words</div></div></button>
+      </div>
+      <div id="phonics-mode-panel-class" style="display:none;">
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.6rem;">Children join with a code and complete the check themselves, on their own device.</p>
+        <div class="year-btn-grid" style="margin-bottom:0;">
+          <button type="button" class="year-btn" onclick="startLiveSession('phonics','set1',null,null,'Set 1')">Set 1</button>
+          <button type="button" class="year-btn" onclick="startLiveSession('phonics','set2',null,null,'Set 2')">Set 2</button>
+          <button type="button" class="year-btn" onclick="startLiveSession('phonics','set3',null,null,'Set 3')">Set 3</button>
+          <button type="button" class="year-btn" onclick="startLiveSession('phonics','all',null,null,'All sets')">All sets</button>
+          <button type="button" class="year-btn" onclick="startLiveSession('blending',null,null,null,'Blending Check')">Blending Check</button>
+        </div>
       </div>
     </div>
   </div>
@@ -5796,6 +5810,18 @@ function chooseChildFromModal(p){
   if(retry) retry();
 }
 
+function setPhonicsMode(mode){
+  var tile11 = document.getElementById('phonics-mode-tile-11');
+  var tileClass = document.getElementById('phonics-mode-tile-class');
+  var panel11 = document.getElementById('phonics-mode-panel-11');
+  var panelClass = document.getElementById('phonics-mode-panel-class');
+  if(!tile11 || !tileClass || !panel11 || !panelClass) return;
+  var is11 = mode === '11';
+  tile11.classList.toggle('active', is11);
+  tileClass.classList.toggle('active', !is11);
+  panel11.style.display = is11 ? '' : 'none';
+  panelClass.style.display = is11 ? 'none' : '';
+}
 function startPhase(key){if(!requireActiveSchool())return;if(!requireName(function(){startPhase(key);}))return;var s=SETS[key];currentSounds=s.sounds.slice();currentKeywords=s.keywords;currentSetLabel=s.label;currentSetKey=key;beginCheck();}
 function startAll(){if(!requireActiveSchool())return;if(!requireName(function(){startAll();}))return;currentSounds=ALL_SOUNDS.slice();currentKeywords=Object.assign({},SETS.set1.keywords,SETS.set2.keywords,SETS.set3.keywords);currentSetLabel='All sets';currentSetKey='all';beginCheck();}
 function beginCheck(){soundIdx=0;soundResults={};showScreen('screen-check');renderSound();}
