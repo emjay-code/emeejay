@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Look, say, cover, write, check spelling practice for Years 1 to 6.">
+<title>emeejay Spelling Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Caveat+Brush&family=Nunito:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --ink:#1A1033; --card:#2A1D4A; --card-2:#32245A; --line:#3E2F68;
+  --lilac:#C8A6FF; --lilac-dim:#9B7FD4; --text:#F1EAFF; --muted:#B3A4D4;
+  --green:#4FBF85; --green-bg:#1B3A2C; --amber:#E39A3F; --amber-bg:#3A2A18;
+  --y1:#3C5ADC; --y2:#2E9E63; --y3:#7C4DCD; --y4:#D87704; --y5:#3F7CAB; --y6:#C2245E;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 30px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--ink);color:var(--text);
+  font-family:Nunito,"Segoe UI",system-ui,sans-serif;
+  font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
+}
+.wrap{min-height:100%;display:flex;flex-direction:column;padding-inline:16px;padding-block:14px 22px;max-width:1120px;margin:0 auto;width:100%}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--lilac);outline-offset:3px;border-radius:6px}
+a{color:var(--lilac)}
+
+/* masthead */
+.mast{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand img{width:42px;height:42px;flex:0 0 42px;border-radius:11px;display:block}
+.brand .mj{font-family:"Caveat Brush",Nunito,cursive;font-size:29px;line-height:1;color:var(--lilac);letter-spacing:.01em}
+.brand .pg{font-size:13px;color:var(--muted);margin-top:2px}
+.method{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--lilac-dim);white-space:nowrap}
+
+/* setup */
+.lede{max-width:64ch;margin:0 0 22px;color:var(--muted);font-size:15.5px}
+.lede b{color:var(--text);font-weight:700}
+h2.sec{font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--lilac-dim);margin:0 0 11px;font-weight:700}
+.years{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:24px}
+.yr{padding:10px 18px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--text);font-weight:600}
+.yr[aria-pressed="true"]{border-color:transparent;color:#fff}
+.yr[data-y="Year 1"][aria-pressed="true"]{background:var(--y1)}
+.yr[data-y="Year 2"][aria-pressed="true"]{background:var(--y2)}
+.yr[data-y="Year 3"][aria-pressed="true"]{background:var(--y3)}
+.yr[data-y="Year 4"][aria-pressed="true"]{background:var(--y4)}
+.yr[data-y="Year 5"][aria-pressed="true"]{background:var(--y5)}
+.yr[data-y="Year 6"][aria-pressed="true"]{background:var(--y6)}
+
+.patterns{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:11px;margin-bottom:22px}
+.pat{text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;
+  display:flex;flex-direction:column;gap:5px;box-shadow:var(--shadow);color:var(--text)}
+.pat:hover{border-color:var(--lilac-dim);background:var(--card-2)}
+.pat .pn{font-weight:700;font-size:15.5px;line-height:1.3}
+.pat .pw{font-family:Andika,Nunito,sans-serif;font-size:13.5px;color:var(--muted);line-height:1.4;
+  overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pat .pc{font-size:12px;color:var(--lilac);font-weight:600;letter-spacing:.03em}
+
+.tiers{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.chip{padding:8px 15px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--muted);font-size:14px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--lilac);border-color:var(--lilac);color:var(--ink)}
+
+.own{background:var(--card);border:1.5px dashed var(--lilac-dim);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow)}
+.own h3{margin:0 0 5px;font-size:17px;font-weight:700}
+.own p{margin:0 0 14px;font-size:14.5px;color:var(--muted)}
+.own label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:5px}
+.own input,.own textarea{width:100%;font-family:Andika,Nunito,sans-serif;font-size:16px;color:var(--text);
+  background:var(--ink);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:12px}
+.own textarea{min-height:84px;resize:vertical;line-height:1.6}
+.own input::placeholder,.own textarea::placeholder{color:#7C6EA0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+.go{background:var(--lilac);color:var(--ink);border:none;border-radius:12px;padding:13px 24px;font-weight:700;font-size:16px}
+.go:hover{filter:brightness(1.08)}
+.go[disabled]{opacity:.4;cursor:not-allowed}
+.ghost{background:transparent;color:var(--lilac);border:1.5px solid var(--line);border-radius:12px;padding:12px 20px;font-weight:700}
+.ghost:hover{border-color:var(--lilac-dim)}
+
+/* practice */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.bar .now{font-size:14px;color:var(--muted)}
+.bar .now b{color:var(--text);font-weight:700}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dot.done{background:var(--green)}
+.dot.miss{background:var(--amber)}
+.dot.now{background:var(--lilac);box-shadow:0 0 0 3px rgba(200,166,255,.22)}
+.exit{background:transparent;border:none;color:var(--muted);font-size:14px;text-decoration:underline;padding:4px}
+
+.strip{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.st{flex:1 1 0;min-width:74px;text-align:center;padding:9px 4px;border-radius:10px;background:var(--card);
+  border:1.5px solid var(--line);font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.st.on{background:var(--lilac);border-color:var(--lilac);color:var(--ink)}
+.st.past{background:var(--card-2);border-color:var(--lilac-dim);color:var(--lilac)}
+
+.stage{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--card);border:1.5px solid var(--line);border-radius:20px;box-shadow:var(--shadow);
+  padding:28px 18px;min-height:250px;text-align:center;gap:16px}
+.word{font-family:Andika,Nunito,sans-serif;font-weight:700;line-height:1.1;color:var(--text);
+  font-size:clamp(46px,12vw,116px);word-break:break-word;max-width:100%}
+.word em{font-style:normal;color:var(--lilac);border-bottom:.09em solid var(--lilac-dim);padding-bottom:.02em}
+.cue{font-size:clamp(15px,2.2vw,19px);color:var(--muted);max-width:44ch;margin:0}
+.cue b{color:var(--text);font-weight:700}
+.covered{width:min(420px,88%);aspect-ratio:5/2;border-radius:18px;background:var(--card-2);border:2px dashed var(--lilac-dim);
+  display:flex;align-items:center;justify-content:center;color:var(--lilac);font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;font-size:14px}
+.lines{width:min(520px,94%);display:flex;flex-direction:column;gap:26px;padding:8px 0}
+.lines i{display:block;height:0;border-bottom:3px solid var(--line);border-radius:2px}
+.hear{background:transparent;border:1.5px solid var(--line);border-radius:999px;padding:8px 16px;color:var(--muted);font-size:14px;font-weight:600}
+.hear:hover{border-color:var(--lilac-dim);color:var(--lilac)}
+
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.actions button{flex:1 1 180px}
+.big{border:none;border-radius:14px;padding:18px 22px;font-weight:700;font-size:18px;background:var(--lilac);color:var(--ink)}
+.big:hover{filter:brightness(1.08)}
+.yes{background:var(--green-bg);color:var(--green);border:2px solid var(--green)}
+.no{background:var(--amber-bg);color:var(--amber);border:2px solid var(--amber)}
+.hint{text-align:center;font-size:12.5px;color:var(--muted);margin-top:11px}
+
+/* results */
+.score{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.tile{flex:1 1 150px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow)}
+.tile .n{font-size:36px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;color:var(--lilac)}
+.tile .l{font-size:13px;color:var(--muted);margin-top:5px}
+.tile.ok .n{color:var(--green)}
+.tile.again .n{color:var(--amber)}
+.wordlist{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.wordlist span{font-family:Andika,Nunito,sans-serif;font-size:18px;padding:7px 14px;border-radius:10px;
+  background:var(--amber-bg);color:var(--amber);border:1.5px solid var(--amber)}
+.wordlist span.ok{background:var(--green-bg);color:var(--green);border-color:var(--green)}
+.note{font-size:14px;color:var(--muted);margin:0 0 18px;max-width:60ch}
+
+footer{margin-top:26px;padding-top:15px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);
+  display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;justify-content:space-between}
+footer .tag{font-family:"Caveat Brush",Nunito,cursive;font-size:19px;color:var(--lilac)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mast">
+    <div class="brand">
+      <img src="data:image/png;base64,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" alt="emeejay">
+      <div>
+        <div class="mj">emeejay</div>
+        <div class="pg">Spelling practice</div>
+      </div>
+    </div>
+    <div class="method">Look &middot; Say &middot; Cover &middot; Write &middot; Check</div>
+  </div>
+
+  <!-- ============ SETUP ============ -->
+  <section id="setup">
+    <p class="lede">Pick a year group and a spelling pattern, or type in your own class list. The word appears on screen, you cover it, and you <b>write it on paper</b>. Nothing is typed in.</p>
+
+    <h2 class="sec">1. Year group</h2>
+    <div class="years" id="years" role="group" aria-label="Year group"></div>
+
+    <h2 class="sec" id="pathead">2. Pattern</h2>
+    <div class="tiers" role="group" aria-label="Which words">
+      <button class="chip" id="tCore" aria-pressed="true">Core words</button>
+      <button class="chip" id="tChal" aria-pressed="false">Challenge words</button>
+      <button class="chip" id="tShuf" aria-pressed="true">Shuffle</button>
+    </div>
+    <div class="patterns" id="patterns"></div>
+
+    <h2 class="sec">Or use your own list</h2>
+    <div class="own">
+      <h3>Your own list</h3>
+      <p>The words are yours. Type or paste them below, separated by commas or new lines, and the tool will run them through the same five steps.</p>
+      <label for="ownName">What is this list called?</label>
+      <input id="ownName" type="text" placeholder="e.g. Year 2, -le and -el endings" autocomplete="off">
+      <label for="ownWords">Words</label>
+      <textarea id="ownWords" placeholder="table, apple, little, camel, bottle, middle, tunnel, travel"></textarea>
+      <div class="row">
+        <button class="go" id="ownGo" disabled>Start with these words</button>
+        <button class="ghost" id="ownClear">Clear</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRACTICE ============ -->
+  <section id="practice" hidden style="flex:1 1 auto;display:flex;flex-direction:column">
+    <div class="bar">
+      <div class="now"><b id="listName"></b> &nbsp;&middot;&nbsp; Word <b id="wNum">1</b> of <b id="wTot">8</b></div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <button class="exit" id="exit">Finish early</button>
+    </div>
+
+    <div class="strip" id="strip" aria-hidden="true">
+      <div class="st" data-s="0">Look</div>
+      <div class="st" data-s="1">Say</div>
+      <div class="st" data-s="2">Cover</div>
+      <div class="st" data-s="3">Write</div>
+      <div class="st" data-s="4">Check</div>
+    </div>
+
+    <div class="stage" id="stage" aria-live="polite">
+      <div class="word" id="wordBox"></div>
+      <div class="covered" id="coverBox" hidden>Covered</div>
+      <div class="lines" id="linesBox" hidden><i></i><i></i><i></i></div>
+      <p class="cue" id="cue"></p>
+      <button class="hear" id="hear" hidden>Hear the word</button>
+    </div>
+
+    <div class="actions" id="actions">
+      <button class="big" id="next">Say it</button>
+      <button class="big yes" id="gotIt" hidden>I got it right</button>
+      <button class="big no" id="notYet" hidden>Not yet</button>
+    </div>
+    <p class="hint">Space or Enter for the next step. At the check, press 1 for right and 2 for not yet.</p>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section id="results" hidden>
+    <h2 class="sec">How it went</h2>
+    <div class="score">
+      <div class="tile"><div class="n" id="rTot">0</div><div class="l">words practised</div></div>
+      <div class="tile ok"><div class="n" id="rOk">0</div><div class="l">right first time</div></div>
+      <div class="tile again"><div class="n" id="rNo">0</div><div class="l">to try again</div></div>
+    </div>
+    <div class="wordlist" id="rList"></div>
+    <p class="note" id="rNote"></p>
+    <div class="row">
+      <button class="go" id="againTricky" hidden>Practise the tricky ones</button>
+      <button class="ghost" id="againAll">Same list again</button>
+      <button class="ghost" id="backHome">Choose another list</button>
+    </div>
+  </section>
+
+  <footer>
+    <span>Spelling patterns follow the national curriculum, English Appendix 1. The words are a starting point: teachers choose what suits their class.</span>
+    <span><a href="https://www.emeejay.com">www.emeejay.com</a> &nbsp; <span class="tag">Time to teach.</span></span>
+  </footer>
+</div>
+
+<script>
+/* ---------------- data: patterns and words by year ---------------- */
+const DATA = {
+"Year 1": [
+ {n:"ff, ll, ss, zz and ck", s:"after a short vowel", m:["ff","ll","ss","zz","ck"],
+  c:["off","well","miss","buzz","back","hill","kiss","duck"], x:["cliff","fluff","dress","cross","clock","stick"]},
+ {n:"n before k", m:["nk"], c:["bank","think","honk","sunk","pink"], x:["drink","thank","trunk","shrink"]},
+ {n:"-tch", s:"not in rich, which, much, such", m:["tch"], c:["catch","fetch","notch","hutch","match"], x:["kitchen","stretch","switch","scratch"]},
+ {n:"A /v/ at the end needs an e", m:["ve"], c:["have","live","give","love"], x:["above","glove","twelve","believe"]},
+ {n:"Adding -s and -es", m:["es","s"], c:["cats","dogs","rocks","thanks","wishes"], x:["catches","buses","boxes","brushes"]},
+ {n:"Adding -ing, -ed and -er", s:"no change to the root", m:["ing","ed","er"], c:["hunting","hunted","hunter","jumping","jumped"], x:["buzzing","buzzed","buzzer","jumper","shouting"]},
+ {n:"Adding -er and -est", m:["est","er"], c:["grander","grandest","quicker","quickest"], x:["fresher","freshest","strongest","smallest"]},
+ {n:"ai and oi in the middle", s:"ay and oy at the end", m:["ai","oi","ay","oy"], c:["rain","wait","paid","oil","join","day","play","boy","toy"], x:["train","afraid","point","spoil","stay","enjoy","annoy"]},
+ {n:"Split digraphs", s:"a-e, e-e, i-e, o-e, u-e", m:[], c:["made","came","five","ride","home","hope","June"], x:["these","complete","side","woke","rule","tune"]},
+ {n:"Words ending -y", m:["y"], c:["very","happy","funny","party"], x:["family","sunny","silly","lucky"]},
+ {n:"ph and wh", m:["ph","wh"], c:["when","where","which","wheel","while"], x:["dolphin","alphabet","phonics","elephant"]},
+ {n:"The prefix un-", m:["un"], c:["unhappy","undo","unfair","unlock"], x:["unload","untidy","unkind","unwell"]},
+ {n:"Compound words", m:[], c:["football","bedroom","sunset","farmyard"], x:["playground","blackberry","butterfly","everywhere"]},
+ {n:"Common exception words", m:[], c:["the","said","you","they","one","once","ask"], x:["friend","school","house","our","because","people"]}
+],
+"Year 2": [
+ {n:"/dj/ spelt -dge and -ge", s:"-dge after a short vowel", m:["dge","ge"], c:["badge","edge","bridge","dodge","age","huge","change"], x:["fudge","charge","bulge","village","damage"]},
+ {n:"/dj/ spelt g and j", s:"g before e, i and y", m:["g","j"], c:["gem","giant","magic","jacket","jar","jog"], x:["giraffe","energy","join","adjust","gentle"]},
+ {n:"/s/ spelt c", s:"before e, i and y", m:["c"], c:["race","ice","cell","city","fancy"], x:["pencil","circle","centre","decide"]},
+ {n:"kn, gn and wr", m:["kn","gn","wr"], c:["knock","know","knee","write","wrong"], x:["gnat","gnaw","written","wrote","wrap","knight"]},
+ {n:"-le, -el, -al and -il", s:"the /l/ ending", m:["le","el","al","il"], c:["table","apple","little","camel","metal","pencil"], x:["bottle","middle","tunnel","travel","squirrel","hospital","nostril"]},
+ {n:"/igh/ spelt -y", m:["y"], c:["cry","fly","dry","try"], x:["reply","July","supply","satisfy"]},
+ {n:"Adding -es to words ending -y", s:"the y becomes i", m:["ies"], c:["flies","tries","copies","babies"], x:["replies","carries","worries","hurries"]},
+ {n:"Suffixes on words ending -y", m:["ied","ier","iest","ying"], c:["copied","cried","happier","happiest"], x:["replied","copier","copying","crying","replying"]},
+ {n:"Dropping the e", m:["ing","er","est"], c:["hiking","hiked","hiker","nicer","nicest"], x:["shiny","closest","rider","later","writing"]},
+ {n:"Doubling the last consonant", s:"one syllable, one short vowel", m:[], c:["patting","patted","dropping","dropped","sadder"], x:["humming","hummed","fattest","runner","runny","mixing","boxer"]},
+ {n:"/or/ spelt a before l and ll", m:["al"], c:["all","ball","call","walk","talk"], x:["always","small","fall","chalk"]},
+ {n:"/u/ spelt o", m:["o"], c:["other","mother","brother","nothing"], x:["Monday","month","wonder","front"]},
+ {n:"-ment, -ness, -ful, -less, -ly", m:["ment","ness","ful","less","ly"], c:["enjoyment","sadness","careful","hopeless","badly"], x:["merriment","happiness","plentiful","penniless","happily","plainness"]},
+ {n:"Contractions", m:["'"], c:["can't","didn't","hasn't","it's","I'll"], x:["couldn't","shouldn't","we're","they've"]},
+ {n:"The possessive apostrophe", s:"singular nouns", m:["'s"], c:["girl's","dog's","child's"], x:["man's","teacher's","Wednesday's"]},
+ {n:"-tion", m:["tion"], c:["station","fiction","motion","section"], x:["national","question","action","fraction"]},
+ {n:"Homophones", s:"teach the pair together", m:[], c:["there","their","hear","here","one","won"], x:["they're","to","too","two","blue","blew","knight","night"]}
+],
+"Year 3": [
+ {n:"Suffixes on longer words", s:"double only if the last syllable is stressed", m:["ing","ed","er"], c:["forgetting","forgotten","beginning","beginner"], x:["preferred","gardening","gardener","limited","limitation"]},
+ {n:"/i/ spelt y", m:["y"], c:["myth","gym","Egypt","pyramid"], x:["mystery","crystal","system","symbol"]},
+ {n:"/u/ spelt ou", m:["ou"], c:["young","touch","double","trouble"], x:["country","cousin","enough","couple"]},
+ {n:"The prefixes dis- and mis-", m:["dis","mis"], c:["disappoint","disagree","disobey","misbehave"], x:["mislead","misspell","disapprove","misfortune"]},
+ {n:"in-, il-, im- and ir-", s:"the prefix changes to match the root", m:["in","il","im","ir"], c:["inactive","incorrect","illegal","impossible","irregular"], x:["illegible","immature","impatient","irrelevant","irresponsible"]},
+ {n:"re-, sub-, inter-, super-, anti-, auto-", m:["re","sub","inter","super","anti","auto"], c:["redo","return","submarine","interact","supermarket"], x:["subheading","international","superstar","antiseptic","autograph","autobiography"]},
+ {n:"The suffix -ly", s:"and its exceptions", m:["ly"], c:["sadly","completely","usually","finally"], x:["happily","angrily","gently","simply","basically","frantically","truly"]},
+ {n:"-sure and -ture", m:["sure","ture"], c:["measure","treasure","picture","nature"], x:["pleasure","enclosure","creature","furniture","adventure"]},
+ {n:"-sion sounding /zhun/", m:["sion"], c:["division","decision","television"], x:["invasion","confusion","collision","explosion"]},
+ {n:"Homophones", m:[], c:["here","hear","not","knot","break","brake"], x:["great","grate","accept","except","affect","effect","fair","fare"]},
+ {n:"Word list, first group", s:"statutory Years 3 and 4", m:[], c:["address","answer","believe","build","busy","certain","circle","complete","difficult","early","earth","eight"], x:["breath","breathe","business","calendar","centre","continue"]},
+ {n:"Word list, second group", s:"statutory Years 3 and 4", m:[], c:["famous","February","forward","fruit","group","guard","heard","heart","history","imagine","important"], x:["favourite","grammar","guide","height","increase","interest"]}
+],
+"Year 4": [
+ {n:"The suffix -ation", m:["ation"], c:["information","sensation","preparation"], x:["adoration","admiration","imagination","exploration"]},
+ {n:"The suffix -ous", s:"-our becomes -or before -ous", m:["ous"], c:["poisonous","dangerous","famous","various","jealous"], x:["mountainous","tremendous","enormous","humorous","glamorous","vigorous"]},
+ {n:"-ous with a kept e or an i", m:["ous","eous","ious"], c:["serious","obvious","curious"], x:["courageous","outrageous","hideous","spontaneous","courteous"]},
+ {n:"-tion, -ssion, -sion and -cian", s:"the ending depends on the root", m:["tion","ssion","sion","cian"], c:["invention","action","discussion","extension","musician"], x:["hesitation","completion","expression","permission","admission","comprehension","mathematician"]},
+ {n:"/k/ spelt ch", s:"Greek in origin", m:["ch"], c:["scheme","chorus","chemist","echo"], x:["character","stomach","anchor","technology"]},
+ {n:"/sh/ spelt ch", s:"mostly French", m:["ch"], c:["chef","chalet","machine"], x:["brochure","parachute","moustache"]},
+ {n:"-gue and -que", m:["gue","que"], c:["league","tongue","unique"], x:["antique","plague","cheque","grotesque"]},
+ {n:"/s/ spelt sc", m:["sc"], c:["science","scene","discipline"], x:["fascinate","crescent","scissors","scent"]},
+ {n:"/ay/ spelt ei, eigh and ey", m:["eigh","ei","ey"], c:["eight","weigh","they","obey"], x:["vein","neighbour","reign","sleigh","survey"]},
+ {n:"Apostrophe with plurals", m:["s'","'s"], c:["girls'","boys'","children's"], x:["babies'","men's","teachers'","ladies'"]},
+ {n:"Homophones", m:[], c:["meat","meet","plain","plane","peace","piece"], x:["medal","meddle","missed","mist","weather","whether","whose","who's"]},
+ {n:"Word list, first group", s:"statutory Years 3 and 4", m:[], c:["knowledge","learn","length","library","medicine","minute","natural","notice","often","opposite"], x:["material","mention","naughty","occasion","ordinary","particular","peculiar"]},
+ {n:"Word list, second group", s:"statutory Years 3 and 4", m:[], c:["perhaps","popular","position","possible","promise","purpose","quarter","question","remember"], x:["possess","potatoes","pressure","probably","recent","regular","separate","straight","strength"]}
+],
+"Year 5": [
+ {n:"-cious and -tious", s:"a root ending -ce takes the c", m:["cious","tious"], c:["precious","delicious","cautious","ambitious"], x:["vicious","malicious","suspicious","fictitious","infectious","nutritious","anxious"]},
+ {n:"-cial and -tial", s:"-cial after a vowel, -tial after a consonant", m:["cial","tial"], c:["special","official","partial","essential"], x:["artificial","confidential","initial","financial","commercial"]},
+ {n:"-ant, -ance and -ancy", s:"look for a related -ation word", m:["ant","ance","ancy"], c:["observant","observance","expectant","tolerant"], x:["hesitant","hesitancy","tolerance","substance","expectation"]},
+ {n:"-ent, -ence and -ency", s:"after soft c, soft g and qu", m:["ent","ence","ency"], c:["innocent","innocence","decent","frequent"], x:["decency","frequency","confidence","obedience","independence"]},
+ {n:"-able and -ible", s:"-able if a whole word can be heard", m:["able","ible"], c:["adorable","comfortable","reasonable","possible","horrible"], x:["considerable","understandable","reliable","terrible","visible","incredible","sensible"]},
+ {n:"Keeping the e before -able", m:["eable","ible"], c:["changeable","noticeable"], x:["forcible","legible","manageable","peaceable"]},
+ {n:"-ably and -ibly", m:["ably","ibly"], c:["adorably","possibly","horribly","sensibly"], x:["considerably","tolerably","visibly","incredibly"]},
+ {n:"Words ending -fer", s:"double the r only if -fer is still stressed", m:["fer","ferr"], c:["referring","referred","preferred","transferred"], x:["referral","reference","referee","preference","transference"]},
+ {n:"ei after c", m:["cei"], c:["receive","deceive","ceiling"], x:["conceive","perceive","protein","caffeine","seize"]},
+ {n:"Nouns end -ce, verbs end -se", m:["ce","se"], c:["advice","advise","practice","practise"], x:["device","devise","licence","license","prophecy","prophesy"]},
+ {n:"Word list, first group", s:"statutory Years 5 and 6", m:[], c:["achieve","according","ancient","apparent","average","awkward","bargain","bruise"], x:["accommodate","accompany","aggressive","amateur","appreciate","attached","available"]},
+ {n:"Word list, second group", s:"statutory Years 5 and 6", m:[], c:["category","committee","community","competition","conscious","definite","desperate"], x:["cemetery","communicate","conscience","controversy","convenience","correspond","criticise","curiosity"]}
+],
+"Year 6": [
+ {n:"The hyphen", m:["-"], c:["co-ordinate","co-operate","re-enter"], x:["co-own","re-examine","well-known","sugar-free"]},
+ {n:"The letter string ough", s:"one string, seven sounds", m:["ough"], c:["thought","bought","through","though","enough"], x:["ought","nought","brought","fought","rough","tough","cough","although","dough","thorough","borough","plough"]},
+ {n:"Silent letters", m:[], c:["doubt","island","lamb","knight"], x:["solemn","thistle","subtle","rhythm","column"]},
+ {n:"Often confused, first group", m:[], c:["aloud","allowed","altar","alter","aisle","isle"], x:["ascent","assent","bridal","bridle","cereal","serial"]},
+ {n:"Often confused, second group", m:[], c:["desert","dessert","farther","father","guessed","guest"], x:["compliment","complement","descent","dissent","draft","draught"]},
+ {n:"Often confused, third group", m:[], c:["past","passed","steal","steel","who's","whose"], x:["precede","proceed","principal","principle","profit","prophet","stationary","stationery"]},
+ {n:"Suffix rules at pace", s:"Year 2 rules on longer words", m:["ing","ed"], c:["preferring","forgetting","arguing","noticing"], x:["occurring","equipped","beginning","benefited","targeted"]},
+ {n:"Unstressed vowels", s:"link to a word where you can hear it", m:[], c:["definite","separate","interest","family"], x:["desperate","secretary","temperature","vegetable","category"]},
+ {n:"Word list, first group", s:"statutory Years 5 and 6", m:[], c:["determined","develop","dictionary","embarrass","environment","equipped","especially","excellent","familiar","foreign","forty"], x:["disastrous","exaggerate","existence","explanation","frequently"]},
+ {n:"Word list, second group", s:"statutory Years 5 and 6", m:[], c:["government","guarantee","identity","immediate","individual","interfere","interrupt","language","leisure","lightning"], x:["harass","hindrance","marvellous","mischievous","muscle","necessary"]},
+ {n:"Word list, third group", s:"statutory Years 5 and 6", m:[], c:["neighbour","nuisance","occupy","occur","opportunity","persuade","physical","privilege","profession","programme"], x:["parliament","prejudice","pronunciation","queue","recognise","recommend","relevant"]},
+ {n:"Word list, fourth group", s:"statutory Years 5 and 6", m:[], c:["restaurant","rhyme","rhythm","shoulder","signature","sincere","soldier","stomach","suggest","symbol","system","variety"], x:["sacrifice","secretary","sufficient","thorough","twelfth","vehicle","yacht"]}
+]
+};
+
+const CUES = [
+ {t:"Look at the word. Which part will you need to remember?", b:"Say it"},
+ {t:"Say the word out loud. Then say it sound by sound.", b:"Cover it"},
+ {t:"The word is covered. Get your pencil ready.", b:"Write it"},
+ {t:"Write the word on your paper now. Take your time.", b:"Check it"},
+ {t:"Check your writing letter by letter against the word.", b:""}
+];
+
+/* ---------------- state ---------------- */
+let year = "Year 2", useCore = true, useChal = false, shuffle = true;
+let session = [], idx = 0, step = 0, results = [], listLabel = "", marks = [];
+
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* remember the year group on this device only */
+try { const y = localStorage.getItem('mj-year'); if (y && DATA[y]) year = y; } catch(e){}
+
+/* ---------------- setup screen ---------------- */
+function drawYears(){
+  $('years').innerHTML = Object.keys(DATA).map(y =>
+    `<button class="yr" data-y="${y}" aria-pressed="${y===year}">${y}</button>`).join('');
+}
+function drawPatterns(){
+  const list = DATA[year] || [];
+  $('pathead').textContent = '2. Pattern for ' + year;
+  $('patterns').innerHTML = list.map((p,i) => {
+    const words = wordsFor(p);
+    return `<button class="pat" data-i="${i}">
+      <span class="pn">${esc(p.n)}</span>
+      ${p.s ? `<span class="pc">${esc(p.s)}</span>` : ''}
+      <span class="pw">${esc(words.slice(0,6).join(', '))}${words.length>6?'&hellip;':''}</span>
+      <span class="pc">${words.length} word${words.length===1?'':'s'}</span>
+    </button>`;
+  }).join('');
+}
+function wordsFor(p){
+  let w = [];
+  if (useCore) w = w.concat(p.c);
+  if (useChal) w = w.concat(p.x);
+  if (!w.length) w = p.c.concat(p.x);
+  return w;
+}
+function shuffled(a){ const b = a.slice(); for (let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
+
+$('years').addEventListener('click', e => {
+  const b = e.target.closest('.yr'); if (!b) return;
+  year = b.dataset.y;
+  try { localStorage.setItem('mj-year', year); } catch(err){}
+  drawYears(); drawPatterns();
+});
+$('patterns').addEventListener('click', e => {
+  const b = e.target.closest('.pat'); if (!b) return;
+  const p = DATA[year][+b.dataset.i];
+  let w = wordsFor(p);
+  start(shuffle ? shuffled(w) : w, year + ': ' + p.n, p.m || []);
+});
+function toggleChip(el, get, set){
+  el.addEventListener('click', () => { set(!get()); el.setAttribute('aria-pressed', String(get())); drawPatterns(); });
+}
+toggleChip($('tCore'), () => useCore, v => useCore = v);
+toggleChip($('tChal'), () => useChal, v => useChal = v);
+$('tShuf').addEventListener('click', () => { shuffle = !shuffle; $('tShuf').setAttribute('aria-pressed', String(shuffle)); });
+
+/* own list */
+function ownWords(){
+  return $('ownWords').value.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean);
+}
+function checkOwn(){ $('ownGo').disabled = ownWords().length === 0; }
+$('ownWords').addEventListener('input', () => {
+  checkOwn();
+  try { localStorage.setItem('mj-own', $('ownWords').value); localStorage.setItem('mj-ownname', $('ownName').value); } catch(e){}
+});
+$('ownName').addEventListener('input', () => { try { localStorage.setItem('mj-ownname', $('ownName').value); } catch(e){} });
+$('ownClear').addEventListener('click', () => { $('ownWords').value=''; $('ownName').value=''; checkOwn(); try{ localStorage.removeItem('mj-own'); localStorage.removeItem('mj-ownname'); }catch(e){} });
+$('ownGo').addEventListener('click', () => {
+  const w = ownWords();
+  start(shuffle ? shuffled(w) : w, $('ownName').value.trim() || 'Your own list', []);
+});
+try {
+  const ow = localStorage.getItem('mj-own'); if (ow) $('ownWords').value = ow;
+  const on = localStorage.getItem('mj-ownname'); if (on) $('ownName').value = on;
+} catch(e){}
+
+/* ---------------- practice ---------------- */
+function start(words, label, m){
+  session = words; listLabel = label; marks = m || [];
+  idx = 0; step = 0; results = [];
+  $('setup').hidden = true; $('results').hidden = true; $('practice').hidden = false;
+  $('listName').textContent = label;
+  $('wTot').textContent = session.length;
+  drawDots(); render();
+  $('next').focus();
+}
+function drawDots(){
+  $('dots').innerHTML = session.map((w,i) => {
+    let cls = 'dot';
+    if (i < results.length) cls += results[i].ok ? ' done' : ' miss';
+    else if (i === idx) cls += ' now';
+    return `<span class="${cls}"></span>`;
+  }).join('');
+}
+function markUp(word){
+  const safe = esc(word);
+  if (!marks.length) return safe;
+  const lower = word.toLowerCase();
+  let best = null;
+  for (const mk of marks){
+    const k = mk.toLowerCase();
+    if (!k) continue;
+    if (lower.endsWith(k)) { best = {i: word.length - k.length, len: k.length}; break; }
+  }
+  if (!best){
+    for (const mk of marks){
+      const k = mk.toLowerCase(); if (!k) continue;
+      const i = lower.indexOf(k);
+      if (i > -1 && (!best || i < best.i)) best = {i, len: k.length};
+    }
+  }
+  if (!best) return safe;
+  const a = esc(word.slice(0, best.i)), b = esc(word.slice(best.i, best.i + best.len)), c = esc(word.slice(best.i + best.len));
+  return a + '<em>' + b + '</em>' + c;
+}
+function render(){
+  const word = session[idx];
+  $('wNum').textContent = idx + 1;
+  [...$('strip').children].forEach(el => {
+    const s = +el.dataset.s;
+    el.classList.toggle('on', s === step);
+    el.classList.toggle('past', s < step);
+  });
+  const showWord = step === 0 || step === 1 || step === 4;
+  $('wordBox').hidden = !showWord;
+  $('coverBox').hidden = step !== 2;
+  $('linesBox').hidden = step !== 3;
+  if (showWord) $('wordBox').innerHTML = markUp(word);
+  $('cue').innerHTML = CUES[step].t;
+  $('hear').hidden = !(step === 1 && 'speechSynthesis' in window);
+  const atCheck = step === 4;
+  $('next').hidden = atCheck;
+  $('gotIt').hidden = !atCheck;
+  $('notYet').hidden = !atCheck;
+  if (!atCheck) $('next').textContent = CUES[step].b;
+  drawDots();
+}
+function advance(){
+  if (step < 4){ step++; render(); if (step === 4) $('gotIt').focus(); }
+}
+function mark(ok){
+  results[idx] = { word: session[idx], ok };
+  if (idx + 1 < session.length){ idx++; step = 0; render(); $('next').focus(); }
+  else finish();
+}
+function finish(){
+  $('practice').hidden = true; $('results').hidden = false;
+  const done = results.filter(Boolean);
+  const ok = done.filter(r => r.ok), no = done.filter(r => !r.ok);
+  $('rTot').textContent = done.length;
+  $('rOk').textContent = ok.length;
+  $('rNo').textContent = no.length;
+  $('rList').innerHTML = done.map(r => `<span class="${r.ok?'ok':''}">${esc(r.word)}</span>`).join('');
+  $('rNote').textContent = no.length
+    ? 'Look at the words above in orange. Which part of each one caught you out? That is the bit to practise, not the whole word.'
+    : 'Every word right. Try the same pattern with the challenge words, or move on to the next pattern.';
+  $('againTricky').hidden = no.length === 0;
+  $('againTricky').onclick = () => start(no.map(r => r.word), listLabel + ' (tricky words)', marks);
+  $('againAll').onclick = () => start(shuffle ? shuffled(session) : session, listLabel, marks);
+}
+$('next').addEventListener('click', advance);
+$('gotIt').addEventListener('click', () => mark(true));
+$('notYet').addEventListener('click', () => mark(false));
+$('exit').addEventListener('click', finish);
+$('backHome').addEventListener('click', () => {
+  $('results').hidden = true; $('practice').hidden = true; $('setup').hidden = false;
+});
+$('hear').addEventListener('click', () => {
+  try {
+    const u = new SpeechSynthesisUtterance(session[idx]);
+    u.rate = 0.75; u.lang = 'en-GB';
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  } catch(e){}
+});
+document.addEventListener('keydown', e => {
+  if ($('practice').hidden) return;
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'textarea') return;
+  if (step === 4){
+    if (e.key === '1'){ e.preventDefault(); mark(true); }
+    if (e.key === '2'){ e.preventDefault(); mark(false); }
+    return;
+  }
+  if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); advance(); }
+});
+
+drawYears(); drawPatterns(); checkOwn();
+</script>
+</body>
+</html>
