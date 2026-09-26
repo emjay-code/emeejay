@@ -7,7 +7,7 @@
 <title>emeejay Spelling Practice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Caveat+Brush&family=Nunito:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Caveat:wght@600;700&family=Caveat+Brush&family=Nunito:wght@400;500;600;700&display=swap">
 <style>
 :root{
   color-scheme:dark;
@@ -99,10 +99,11 @@ h2.sec{font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(
 
 .stage{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
   background:var(--card);border:1.5px solid var(--line);border-radius:20px;box-shadow:var(--shadow);
-  padding:28px 18px;min-height:250px;text-align:center;gap:16px}
+  padding:28px 18px;min-height:250px;text-align:center;gap:22px}
 .word{font-family:Andika,Nunito,sans-serif;font-weight:700;line-height:1.1;color:var(--text);
-  font-size:clamp(46px,12vw,116px);word-break:break-word;max-width:100%}
-.word em{font-style:normal;color:var(--lilac);border-bottom:.09em solid var(--lilac-dim);padding-bottom:.02em}
+  font-size:clamp(46px,12vw,116px);word-break:break-word;max-width:100%;margin-bottom:6px}
+.word.joined{font-family:'Caveat',cursive;font-weight:700;line-height:1;letter-spacing:.01em}
+.word em{font-style:normal;color:var(--lilac);border-bottom:.09em solid var(--lilac-dim);padding-bottom:.14em}
 .cue{font-size:clamp(15px,2.2vw,19px);color:var(--muted);max-width:44ch;margin:0}
 .cue b{color:var(--text);font-weight:700}
 .covered{width:min(420px,88%);aspect-ratio:5/2;border-radius:18px;background:var(--card-2);border:2px dashed var(--lilac-dim);
@@ -189,6 +190,10 @@ footer .tag{font-family:"Caveat Brush",Nunito,cursive;font-size:19px;color:var(-
       <div class="now"><b id="listName"></b> &nbsp;&middot;&nbsp; Word <b id="wNum">1</b> of <b id="wTot">8</b></div>
       <div class="dots" id="dots" aria-hidden="true"></div>
       <button class="exit" id="exit">Finish early</button>
+    </div>
+
+    <div class="row" style="margin-bottom:10px;">
+      <button class="chip" id="tJoin" aria-pressed="false" type="button">Joined-up writing</button>
     </div>
 
     <div class="strip" id="strip" aria-hidden="true">
@@ -345,7 +350,7 @@ const CUES = [
 ];
 
 /* ---------------- state ---------------- */
-let year = "Year 2", useCore = true, useChal = false, shuffle = true;
+let year = "Year 2", useCore = true, useChal = false, shuffle = true, joinedUp = false;
 let session = [], idx = 0, step = 0, results = [], listLabel = "", marks = [];
 
 const $ = id => document.getElementById(id);
@@ -353,6 +358,7 @@ const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','
 
 /* remember the year group on this device only */
 try { const y = localStorage.getItem('mj-year'); if (y && DATA[y]) year = y; } catch(e){}
+try { joinedUp = localStorage.getItem('mj-joined') === '1'; } catch(e){}
 
 /* ---------------- setup screen ---------------- */
 function drawYears(){
@@ -399,6 +405,15 @@ function toggleChip(el, get, set){
 toggleChip($('tCore'), () => useCore, v => useCore = v);
 toggleChip($('tChal'), () => useChal, v => useChal = v);
 $('tShuf').addEventListener('click', () => { shuffle = !shuffle; $('tShuf').setAttribute('aria-pressed', String(shuffle)); });
+
+/* joined-up (cursive) word display, remembered on this device only */
+$('tJoin').setAttribute('aria-pressed', String(joinedUp));
+$('tJoin').addEventListener('click', () => {
+  joinedUp = !joinedUp;
+  $('tJoin').setAttribute('aria-pressed', String(joinedUp));
+  try { localStorage.setItem('mj-joined', joinedUp ? '1' : '0'); } catch(e){}
+  if (!$('practice').hidden) render();
+});
 
 /* own list */
 function ownWords(){
@@ -472,6 +487,7 @@ function render(){
   $('coverBox').hidden = step !== 2;
   $('linesBox').hidden = step !== 3;
   if (showWord) $('wordBox').innerHTML = markUp(word);
+  $('wordBox').classList.toggle('joined', joinedUp);
   $('cue').innerHTML = CUES[step].t;
   $('hear').hidden = !(step === 1 && 'speechSynthesis' in window);
   const atCheck = step === 4;
