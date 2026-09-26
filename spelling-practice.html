@@ -629,10 +629,8 @@ function finish(){
   $('againAll').onclick = () => start(shuffle ? shuffled(session) : session, listLabel, marks);
 }
 function printSheet(title, words){
-  const w = window.open('', '_blank');
-  if (!w){ alert('Please allow pop-ups to print the practice sheet.'); return; }
   const rows = words.map(word => '<tr><td class="wcell">' + esc(word) + '</td><td></td><td></td><td></td><td></td></tr>').join('');
-  w.document.write('<!doctype html><html><head><title>' + esc(title) + ' – practice sheet</title><style>'
+  const html = '<!doctype html><html><head><title>' + esc(title) + ' – practice sheet</title><style>'
     + 'body{font-family:Arial,Helvetica,sans-serif;color:#1A1033;margin:32px}'
     + 'h1{font-size:20px;margin:0 0 4px}'
     + 'h2{font-size:14px;font-weight:normal;color:#555;margin:0 0 20px}'
@@ -651,8 +649,22 @@ function printSheet(title, words){
     + '<table><thead><tr><th>Word</th><th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 4</th></tr></thead><tbody>' + rows + '</tbody></table>'
     + '<p class="howto"><b>How to practise:</b> Look at the word carefully. Say it out loud, sound by sound. Cover it up. Write it from memory in today\'s column. Check your writing letter by letter against the word above, then correct any mistakes.</p>'
     + '<button class="noprint" onclick="window.print()" style="margin-top:20px;padding:10px 18px;font-size:14px;">Print this sheet</button>'
-    + '</body></html>');
-  w.document.close();
+    + '</body></html>';
+  let frame = document.getElementById('printFrame');
+  if (!frame){
+    frame = document.createElement('iframe');
+    frame.id = 'printFrame';
+    frame.style.position = 'fixed';
+    frame.style.right = '0';
+    frame.style.bottom = '0';
+    frame.style.width = '0';
+    frame.style.height = '0';
+    frame.style.border = '0';
+    document.body.appendChild(frame);
+  }
+  const doc = frame.contentWindow.document;
+  doc.open(); doc.write(html); doc.close();
+  setTimeout(() => { frame.contentWindow.focus(); frame.contentWindow.print(); }, 300);
 }
 $('ownPrint').addEventListener('click', () => {
   const w = ownWords();
