@@ -64,6 +64,9 @@ h2.sec{font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(
 .chip{padding:8px 15px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--muted);font-size:14px;font-weight:600}
 .chip[aria-pressed="true"]{background:var(--lilac);border-color:var(--lilac);color:var(--ink)}
 
+#weekPicker{font-family:Andika,Nunito,sans-serif;font-size:16px;color:var(--text);background:var(--ink);
+  border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;min-width:280px;max-width:100%}
+
 .own{background:var(--card);border:1.5px dashed var(--lilac-dim);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow)}
 .own h3{margin:0 0 5px;font-size:17px;font-weight:700}
 .own p{margin:0 0 14px;font-size:14.5px;color:var(--muted)}
@@ -169,6 +172,16 @@ footer .tag{font-family:"Caveat Brush",Nunito,cursive;font-size:19px;color:var(-
     </div>
     <div class="patterns" id="patterns"></div>
 
+    <h2 class="sec">3. This week's list</h2>
+    <p class="lede" style="margin-bottom:14px;">Every pattern for this year group is split into a full school year of weekly lists (around 38 weeks), so no two weeks repeat before the end of term. Some weeks are review and consolidation weeks, mixing words your class has already met. Pick a week, load it below, and edit it if you want to before you start.</p>
+    <div class="row" style="margin-bottom:22px;align-items:flex-end;">
+      <div>
+        <label for="weekPicker" style="display:block;font-size:12.5px;color:var(--muted);margin-bottom:5px;">Week</label>
+        <select id="weekPicker"></select>
+      </div>
+      <button class="ghost" id="weekLoad" type="button">Load this week</button>
+    </div>
+
     <h2 class="sec">Or use your own list</h2>
     <div class="own">
       <h3>Your own list</h3>
@@ -180,6 +193,8 @@ footer .tag{font-family:"Caveat Brush",Nunito,cursive;font-size:19px;color:var(-
       <div class="row">
         <button class="go" id="ownGo" disabled>Start with these words</button>
         <button class="ghost" id="ownClear">Clear</button>
+        <button class="ghost" id="weekSave" type="button" hidden>Save my edits for this week</button>
+        <button class="ghost" id="weekReset" type="button" hidden>Reset week to auto-generated</button>
       </div>
     </div>
   </section>
@@ -392,13 +407,78 @@ $('years').addEventListener('click', e => {
   const b = e.target.closest('.yr'); if (!b) return;
   year = b.dataset.y;
   try { localStorage.setItem('mj-year', year); } catch(err){}
-  drawYears(); drawPatterns();
+  drawYears(); drawPatterns(); drawWeeks();
 });
 $('patterns').addEventListener('click', e => {
   const b = e.target.closest('.pat'); if (!b) return;
   const p = DATA[year][+b.dataset.i];
   let w = wordsFor(p);
+  $('weekSave').hidden = true; $('weekReset').hidden = true;
   start(shuffle ? shuffled(w) : w, year + ': ' + p.n, p.m || []);
+});
+
+/* ---------------- weekly spelling lists ---------------- */
+const TARGET_WEEKS = 38;
+const weeksCache = {};
+function buildYearWeeks(yearKey){
+  if (weeksCache[yearKey]) return weeksCache[yearKey];
+  const patterns = DATA[yearKey] || [];
+  const content = [];
+  patterns.forEach(p => {
+    if (p.c && p.c.length) content.push({ label: p.n + ' — core words', words: p.c.slice(), marks: p.m || [] });
+    if (p.x && p.x.length) content.push({ label: p.n + ' — challenge words', words: p.x.slice(), marks: p.m || [] });
+  });
+  const weeks = content.slice();
+  const reviewNeeded = Math.max(0, TARGET_WEEKS - weeks.length);
+  if (reviewNeeded > 0){
+    const pool = []; const seen = new Set();
+    content.forEach(wk => wk.words.forEach(w => { if (!seen.has(w)){ seen.add(w); pool.push(w); } }));
+    const gap = weeks.length / (reviewNeeded + 1);
+    let poolPos = 0;
+    for (let r = 0; r < reviewNeeded; r++){
+      const insertAt = Math.min(weeks.length, Math.round((r + 1) * gap) + r);
+      const size = Math.min(16, pool.length) || 1;
+      const words = [];
+      for (let k = 0; k < size; k++) words.push(pool[(poolPos + k) % pool.length]);
+      poolPos = pool.length ? (poolPos + 11) % pool.length : 0;
+      weeks.splice(insertAt, 0, { label: 'Review and consolidation (set ' + (r + 1) + ')', words, marks: [] });
+    }
+  }
+  weeksCache[yearKey] = weeks;
+  return weeks;
+}
+function drawWeeks(){
+  const weeks = buildYearWeeks(year);
+  $('weekPicker').innerHTML = weeks.map((w, i) => `<option value="${i+1}">${esc('Week ' + (i+1) + ': ' + w.label)}</option>`).join('');
+}
+function weekOverrideKey(n){ return 'mj-week-' + year + '-' + n; }
+function loadWeek(){
+  const n = +$('weekPicker').value || 1;
+  const weeks = buildYearWeeks(year);
+  const wk = weeks[n-1];
+  if (!wk) return;
+  let saved = null;
+  try { const raw = localStorage.getItem(weekOverrideKey(n)); if (raw) saved = JSON.parse(raw); } catch(e){}
+  $('ownName').value = saved ? saved.name : (year + ', Week ' + n + ': ' + wk.label);
+  $('ownWords').value = (saved ? saved.words : wk.words).join(', ');
+  try { localStorage.setItem('mj-own', $('ownWords').value); localStorage.setItem('mj-ownname', $('ownName').value); } catch(e){}
+  checkOwn();
+  $('weekSave').hidden = false;
+  $('weekReset').hidden = !saved;
+  $('ownWords').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+$('weekLoad').addEventListener('click', loadWeek);
+$('weekSave').addEventListener('click', () => {
+  const n = +$('weekPicker').value || 1;
+  try { localStorage.setItem(weekOverrideKey(n), JSON.stringify({ name: $('ownName').value.trim(), words: ownWords() })); } catch(e){}
+  $('weekReset').hidden = false;
+  const btn = $('weekSave'); const old = btn.textContent;
+  btn.textContent = 'Saved!'; setTimeout(() => { btn.textContent = old; }, 1400);
+});
+$('weekReset').addEventListener('click', () => {
+  const n = +$('weekPicker').value || 1;
+  try { localStorage.removeItem(weekOverrideKey(n)); } catch(e){}
+  loadWeek();
 });
 function toggleChip(el, get, set){
   el.addEventListener('click', () => { set(!get()); el.setAttribute('aria-pressed', String(get())); drawPatterns(); });
@@ -426,7 +506,7 @@ $('ownWords').addEventListener('input', () => {
   try { localStorage.setItem('mj-own', $('ownWords').value); localStorage.setItem('mj-ownname', $('ownName').value); } catch(e){}
 });
 $('ownName').addEventListener('input', () => { try { localStorage.setItem('mj-ownname', $('ownName').value); } catch(e){} });
-$('ownClear').addEventListener('click', () => { $('ownWords').value=''; $('ownName').value=''; checkOwn(); try{ localStorage.removeItem('mj-own'); localStorage.removeItem('mj-ownname'); }catch(e){} });
+$('ownClear').addEventListener('click', () => { $('ownWords').value=''; $('ownName').value=''; checkOwn(); $('weekSave').hidden = true; $('weekReset').hidden = true; try{ localStorage.removeItem('mj-own'); localStorage.removeItem('mj-ownname'); }catch(e){} });
 $('ownGo').addEventListener('click', () => {
   const w = ownWords();
   start(shuffle ? shuffled(w) : w, $('ownName').value.trim() || 'Your own list', []);
@@ -547,7 +627,7 @@ document.addEventListener('keydown', e => {
   if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); advance(); }
 });
 
-drawYears(); drawPatterns(); checkOwn();
+drawYears(); drawPatterns(); drawWeeks(); checkOwn();
 </script>
 </body>
 </html>
