@@ -104,9 +104,10 @@ h2.sec{font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(
   background:var(--card);border:1.5px solid var(--line);border-radius:20px;box-shadow:var(--shadow);
   padding:28px 18px;min-height:250px;text-align:center;gap:22px}
 .word{font-family:Andika,Nunito,sans-serif;font-weight:700;line-height:1.1;color:var(--text);
-  font-size:clamp(46px,12vw,116px);word-break:break-word;max-width:100%;margin-bottom:6px}
+  font-size:clamp(46px,12vw,116px);word-break:break-word;max-width:100%;margin-bottom:0;padding-bottom:.35em}
 .word.joined{font-family:'Caveat',cursive;font-weight:700;line-height:1;letter-spacing:.01em}
-.word em{font-style:normal;color:var(--lilac);border-bottom:.09em solid var(--lilac-dim);padding-bottom:.14em}
+.word em{font-style:normal;color:var(--lilac);position:relative}
+.word em::after{content:'';position:absolute;left:0;right:0;bottom:-.16em;height:.07em;background:var(--lilac-dim);border-radius:2px}
 .cue{font-size:clamp(15px,2.2vw,19px);color:var(--muted);max-width:44ch;margin:0}
 .cue b{color:var(--text);font-weight:700}
 .covered{width:min(420px,88%);aspect-ratio:5/2;border-radius:18px;background:var(--card-2);border:2px dashed var(--lilac-dim);
@@ -114,6 +115,9 @@ h2.sec{font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(
   text-transform:uppercase;font-size:14px}
 .lines{width:min(520px,94%);display:flex;flex-direction:column;gap:26px;padding:8px 0}
 .lines i{display:block;height:0;border-bottom:3px solid var(--line);border-radius:2px}
+.typebox{width:min(520px,94%);font-family:Andika,Nunito,sans-serif;font-size:clamp(28px,6vw,48px);
+  text-align:center;color:var(--text);background:var(--card-2);border:2px solid var(--lilac-dim);
+  border-radius:14px;padding:14px 18px}
 .hear{background:transparent;border:1.5px solid var(--line);border-radius:999px;padding:8px 16px;color:var(--muted);font-size:14px;font-weight:600}
 .hear:hover{border-color:var(--lilac-dim);color:var(--lilac)}
 
@@ -193,6 +197,7 @@ footer .tag{font-family:"Caveat Brush",Nunito,cursive;font-size:19px;color:var(-
       <div class="row">
         <button class="go" id="ownGo" disabled>Start with these words</button>
         <button class="ghost" id="ownClear">Clear</button>
+        <button class="ghost" id="ownPrint" type="button">Print a take-home sheet</button>
         <button class="ghost" id="weekSave" type="button" hidden>Save my edits for this week</button>
         <button class="ghost" id="weekReset" type="button" hidden>Reset week to auto-generated</button>
       </div>
@@ -209,6 +214,7 @@ footer .tag{font-family:"Caveat Brush",Nunito,cursive;font-size:19px;color:var(-
 
     <div class="row" style="margin-bottom:10px;">
       <button class="chip" id="tJoin" aria-pressed="false" type="button">Joined-up writing</button>
+      <button class="chip" id="tType" aria-pressed="false" type="button">Type instead of write</button>
     </div>
 
     <div class="strip" id="strip" aria-hidden="true">
@@ -223,6 +229,7 @@ footer .tag{font-family:"Caveat Brush",Nunito,cursive;font-size:19px;color:var(-
       <div class="word" id="wordBox"></div>
       <div class="covered" id="coverBox" hidden>Covered</div>
       <div class="lines" id="linesBox" hidden><i></i><i></i><i></i></div>
+      <input class="typebox" id="typeBox" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" hidden>
       <p class="cue" id="cue"></p>
       <button class="hear" id="hear" hidden>Hear the word</button>
     </div>
@@ -248,6 +255,7 @@ footer .tag{font-family:"Caveat Brush",Nunito,cursive;font-size:19px;color:var(-
     <div class="row">
       <button class="go" id="againTricky" hidden>Practise the tricky ones</button>
       <button class="ghost" id="againAll">Same list again</button>
+      <button class="ghost" id="printSheetBtn" type="button">Print take-home sheet</button>
       <button class="ghost" id="backHome">Choose another list</button>
     </div>
   </section>
@@ -366,8 +374,8 @@ const CUES = [
 ];
 
 /* ---------------- state ---------------- */
-let year = "Year 2", useCore = true, useChal = false, shuffle = true, joinedUp = false;
-let session = [], idx = 0, step = 0, results = [], listLabel = "", marks = [];
+let year = "Year 2", useCore = true, useChal = false, shuffle = true, joinedUp = false, typeMode = false;
+let session = [], idx = 0, step = 0, results = [], listLabel = "", marks = [], typedAnswer = "";
 
 const $ = id => document.getElementById(id);
 const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -375,6 +383,7 @@ const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','
 /* remember the year group on this device only */
 try { const y = localStorage.getItem('mj-year'); if (y && DATA[y]) year = y; } catch(e){}
 try { joinedUp = localStorage.getItem('mj-joined') === '1'; } catch(e){}
+try { typeMode = localStorage.getItem('mj-type') === '1'; } catch(e){}
 
 /* ---------------- setup screen ---------------- */
 function drawYears(){
@@ -496,6 +505,16 @@ $('tJoin').addEventListener('click', () => {
   if (!$('practice').hidden) render();
 });
 
+/* type instead of write, remembered on this device only */
+$('tType').setAttribute('aria-pressed', String(typeMode));
+$('tType').addEventListener('click', () => {
+  typeMode = !typeMode;
+  $('tType').setAttribute('aria-pressed', String(typeMode));
+  try { localStorage.setItem('mj-type', typeMode ? '1' : '0'); } catch(e){}
+  if (!$('practice').hidden) render();
+});
+$('typeBox').addEventListener('input', () => { typedAnswer = $('typeBox').value; });
+
 /* own list */
 function ownWords(){
   return $('ownWords').value.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean);
@@ -566,10 +585,18 @@ function render(){
   const showWord = step === 0 || step === 1 || step === 4;
   $('wordBox').hidden = !showWord;
   $('coverBox').hidden = step !== 2;
-  $('linesBox').hidden = step !== 3;
+  $('linesBox').hidden = step !== 3 || typeMode;
+  $('typeBox').hidden = !(step === 3 && typeMode);
+  if (step === 3 && typeMode){
+    typedAnswer = '';
+    $('typeBox').value = '';
+    setTimeout(() => $('typeBox').focus(), 0);
+  }
   if (showWord) $('wordBox').innerHTML = markUp(word);
   $('wordBox').classList.toggle('joined', joinedUp);
-  $('cue').innerHTML = CUES[step].t;
+  $('cue').innerHTML = CUES[step].t + (typeMode && step === 4
+    ? '<br><span style="color:var(--lilac);font-weight:700;">You typed: ' + esc(typedAnswer.trim() || '(nothing)') + '</span>'
+    : '');
   $('hear').hidden = !(step === 1 && 'speechSynthesis' in window);
   const atCheck = step === 4;
   $('next').hidden = atCheck;
@@ -601,6 +628,38 @@ function finish(){
   $('againTricky').onclick = () => start(no.map(r => r.word), listLabel + ' (tricky words)', marks);
   $('againAll').onclick = () => start(shuffle ? shuffled(session) : session, listLabel, marks);
 }
+function printSheet(title, words){
+  const w = window.open('', '_blank');
+  if (!w){ alert('Please allow pop-ups to print the practice sheet.'); return; }
+  const rows = words.map(word => '<tr><td class="wcell">' + esc(word) + '</td><td></td><td></td><td></td><td></td></tr>').join('');
+  w.document.write('<!doctype html><html><head><title>' + esc(title) + ' – practice sheet</title><style>'
+    + 'body{font-family:Arial,Helvetica,sans-serif;color:#1A1033;margin:32px}'
+    + 'h1{font-size:20px;margin:0 0 4px}'
+    + 'h2{font-size:14px;font-weight:normal;color:#555;margin:0 0 20px}'
+    + '.meta{display:flex;gap:32px;margin-bottom:20px;font-size:13px}'
+    + '.meta div{flex:1;border-bottom:1px solid #999;padding-bottom:4px}'
+    + 'table{width:100%;border-collapse:collapse}'
+    + 'th,td{border:1px solid #ccc;padding:10px 8px;text-align:left;font-size:14px;height:34px}'
+    + 'th{background:#f2edfb;font-size:12px;text-transform:uppercase;letter-spacing:.05em}'
+    + '.wcell{font-weight:700;font-size:16px;width:22%}'
+    + '.howto{margin-top:24px;font-size:12px;color:#444;border-top:1px solid #ccc;padding-top:12px}'
+    + '@media print{.noprint{display:none}}'
+    + '</style></head><body>'
+    + '<h1>' + esc(title) + '</h1>'
+    + '<h2>emeejay spelling practice sheet</h2>'
+    + '<div class="meta"><div>Name: ____________________</div><div>Week beginning: ____________________</div></div>'
+    + '<table><thead><tr><th>Word</th><th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 4</th></tr></thead><tbody>' + rows + '</tbody></table>'
+    + '<p class="howto"><b>How to practise:</b> Look at the word carefully. Say it out loud, sound by sound. Cover it up. Write it from memory in today\'s column. Check your writing letter by letter against the word above, then correct any mistakes.</p>'
+    + '<button class="noprint" onclick="window.print()" style="margin-top:20px;padding:10px 18px;font-size:14px;">Print this sheet</button>'
+    + '</body></html>');
+  w.document.close();
+}
+$('ownPrint').addEventListener('click', () => {
+  const w = ownWords();
+  if (!w.length) return;
+  printSheet($('ownName').value.trim() || 'Spelling practice', w);
+});
+$('printSheetBtn').addEventListener('click', () => { printSheet(listLabel, session); });
 $('next').addEventListener('click', advance);
 $('gotIt').addEventListener('click', () => mark(true));
 $('notYet').addEventListener('click', () => mark(false));
@@ -618,7 +677,8 @@ $('hear').addEventListener('click', () => {
 document.addEventListener('keydown', e => {
   if ($('practice').hidden) return;
   const tag = (e.target.tagName || '').toLowerCase();
-  if (tag === 'input' || tag === 'textarea') return;
+  const fromTypeBoxEnter = e.target.id === 'typeBox' && e.key === 'Enter';
+  if ((tag === 'input' || tag === 'textarea') && !fromTypeBoxEnter) return;
   if (step === 4){
     if (e.key === '1'){ e.preventDefault(); mark(true); }
     if (e.key === '2'){ e.preventDefault(); mark(false); }
