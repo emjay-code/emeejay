@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Quickfire times tables practice, 2 to 12, for primary school children.">
+<title>emeejay Times Tables Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Caveat:wght@600;700&family=Caveat+Brush&family=Nunito:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --ink:#1A1033; --card:#2A1D4A; --card-2:#32245A; --line:#3E2F68;
+  --lilac:#C8A6FF; --lilac-dim:#9B7FD4; --text:#F1EAFF; --muted:#B3A4D4;
+  --green:#4FBF85; --green-bg:#1B3A2C; --amber:#E39A3F; --amber-bg:#3A2A18;
+  --teal:#1786A0; --teal-bg:#123642;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 30px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--ink);color:var(--text);
+  font-family:Nunito,"Segoe UI",system-ui,sans-serif;
+  font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
+}
+.wrap{min-height:100%;display:flex;flex-direction:column;padding-inline:16px;padding-block:14px 22px;max-width:1120px;margin:0 auto;width:100%}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--lilac);outline-offset:3px;border-radius:6px}
+a{color:var(--lilac)}
+
+/* masthead */
+.mast{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand img{width:42px;height:42px;flex:0 0 42px;border-radius:11px;display:block}
+.brand .mj{font-family:"Caveat Brush",Nunito,cursive;font-size:29px;line-height:1;color:var(--lilac);letter-spacing:.01em}
+.brand .pg{font-size:13px;color:var(--muted);margin-top:2px}
+.method{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--lilac-dim);white-space:nowrap}
+.coinBadge{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#8a6d00;background:#fff6d8;border:1px solid #f0d878;border-radius:999px;padding:6px 14px;white-space:nowrap}
+.coinDot{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ffe985,#e8b400);box-shadow:inset 0 0 0 1px #c99700;flex:0 0 auto}
+#coinName{font-weight:600;color:#a4893a}
+
+/* setup */
+.lede{max-width:64ch;margin:0 0 22px;color:var(--muted);font-size:15.5px}
+.lede b{color:var(--text);font-weight:700}
+h2.sec{font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--lilac-dim);margin:0 0 11px;font-weight:700}
+
+.tables{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:24px}
+.tb{padding:14px 0;width:64px;text-align:center;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--text);font-weight:700;font-size:17px}
+.tb[aria-pressed="true"]{border-color:var(--teal);background:var(--teal);color:#03222b}
+.tb.mixed{width:auto;padding:14px 20px}
+
+.tiers{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:24px}
+.chip{padding:8px 15px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--muted);font-size:14px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--lilac);border-color:var(--lilac);color:var(--ink)}
+
+.go{background:var(--lilac);color:var(--ink);border:none;border-radius:12px;padding:13px 24px;font-weight:700;font-size:16px}
+.go:hover{filter:brightness(1.08)}
+.go[disabled]{opacity:.4;cursor:not-allowed}
+.ghost{background:transparent;color:var(--lilac);border:1.5px solid var(--line);border-radius:12px;padding:12px 20px;font-weight:700}
+.ghost:hover{border-color:var(--lilac-dim)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* practice */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.bar .now{font-size:14px;color:var(--muted)}
+.bar .now b{color:var(--text);font-weight:700}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dot.done{background:var(--green)}
+.dot.miss{background:var(--amber)}
+.dot.now{background:var(--lilac);box-shadow:0 0 0 3px rgba(200,166,255,.22)}
+.exit{background:transparent;border:none;color:var(--muted);font-size:14px;text-decoration:underline;padding:4px}
+
+.stage{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--card);border:1.5px solid var(--line);border-radius:20px;box-shadow:var(--shadow);
+  padding:36px 18px;min-height:280px;text-align:center;gap:22px}
+.sum{font-family:Andika,Nunito,sans-serif;font-weight:700;line-height:1.1;color:var(--text);
+  font-size:clamp(40px,10vw,84px)}
+.typebox{width:min(260px,80%);font-family:Andika,Nunito,sans-serif;font-size:clamp(28px,6vw,44px);
+  text-align:center;color:var(--text);background:var(--card-2);border:2px solid var(--lilac-dim);
+  border-radius:14px;padding:12px 16px}
+.typebox.ok{border-color:var(--green);background:var(--green-bg)}
+.typebox.no{border-color:var(--amber);background:var(--amber-bg)}
+.feedback{font-size:17px;font-weight:700;min-height:26px}
+.feedback.ok{color:var(--green)}
+.feedback.no{color:var(--amber)}
+
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;width:100%;max-width:420px}
+.actions button{flex:1 1 180px}
+.big{border:none;border-radius:14px;padding:18px 22px;font-weight:700;font-size:18px;background:var(--lilac);color:var(--ink)}
+.big:hover{filter:brightness(1.08)}
+.big[disabled]{opacity:.45;cursor:not-allowed}
+.hint{text-align:center;font-size:12.5px;color:var(--muted);margin-top:11px}
+
+/* results */
+.score{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.tile{flex:1 1 150px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow)}
+.tile .n{font-size:36px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;color:var(--lilac)}
+.tile .l{font-size:13px;color:var(--muted);margin-top:5px}
+.tile.ok .n{color:var(--green)}
+.tile.again .n{color:var(--amber)}
+.wordlist{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.wordlist span{font-family:Andika,Nunito,sans-serif;font-size:16px;padding:7px 14px;border-radius:10px;
+  background:var(--amber-bg);color:var(--amber);border:1.5px solid var(--amber)}
+.note{font-size:14px;color:var(--muted);margin:0 0 18px;max-width:60ch}
+
+footer{margin-top:26px;padding-top:15px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);
+  display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;justify-content:space-between}
+footer .tag{font-family:"Caveat Brush",Nunito,cursive;font-size:19px;color:var(--lilac)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mast">
+    <div class="brand">
+      <img src="data:image/png;base64,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" alt="emeejay">
+      <div>
+        <div class="mj">emeejay</div>
+        <div class="pg">Times tables practice</div>
+      </div>
+    </div>
+    <div class="method">Quickfire &middot; 2&times; to 12&times;</div>
+    <div class="coinBadge" id="coinBadge" hidden><span class="coinDot" aria-hidden="true"></span><b id="coinCount">0</b> coins <span id="coinName"></span></div>
+  </div>
+
+  <!-- ============ SETUP ============ -->
+  <section id="setup">
+    <p class="lede">Pick a times table to practise, or a mixed check across them all. Each question is a quickfire multiplication fact &ndash; type the answer and press Enter or Check.</p>
+
+    <h2 class="sec">1. Table</h2>
+    <div class="tables" id="tables" role="group" aria-label="Times table"></div>
+
+    <h2 class="sec">2. How many questions?</h2>
+    <div class="tiers" role="group" aria-label="Number of questions">
+      <button class="chip" data-n="10" aria-pressed="true">10 questions</button>
+      <button class="chip" data-n="20" aria-pressed="false">20 questions</button>
+      <button class="chip" data-n="30" aria-pressed="false">30 questions</button>
+    </div>
+
+    <div class="row">
+      <button class="go" id="goBtn">Start practice</button>
+    </div>
+  </section>
+
+  <!-- ============ PRACTICE ============ -->
+  <section id="practice" hidden>
+    <div class="bar">
+      <div class="now"><b id="tableLabel"></b> &nbsp;&middot;&nbsp; Question <b id="qNum">1</b> of <b id="qTot">10</b></div>
+      <div class="dots" id="dots"></div>
+      <button class="exit" id="exit">Finish early</button>
+    </div>
+    <div class="stage">
+      <div class="sum" id="sum">7 &times; 8 = ?</div>
+      <input class="typebox" id="answerBox" type="text" inputmode="numeric" autocomplete="off" placeholder="?">
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="actions">
+      <button class="big" id="checkBtn">Check</button>
+    </div>
+    <p class="hint">Type your answer, then press Enter or click Check.</p>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section id="results" hidden>
+    <h2 class="sec">Well done!</h2>
+    <div class="score">
+      <div class="tile ok"><div class="n" id="scoreCorrect">0</div><div class="l">Correct</div></div>
+      <div class="tile again"><div class="n" id="scoreMissed">0</div><div class="l">To practise again</div></div>
+      <div class="tile"><div class="n" id="scoreTotal">0</div><div class="l">Total questions</div></div>
+    </div>
+    <div id="missedWrap">
+      <h2 class="sec">Facts to practise again</h2>
+      <div class="wordlist" id="missedList"></div>
+    </div>
+    <div class="row">
+      <button class="go" id="againBtn">Practise again</button>
+      <button class="ghost" id="newBtn">Choose a different table</button>
+    </div>
+  </section>
+
+  <footer>
+    <span>Times tables follow the national curriculum: children are expected to know all tables up to 12&times;12 by the end of Year 4. This tool is a starting point &ndash; teachers choose what suits their class.</span>
+    <span><a href="https://www.emeejay.com">www.emeejay.com</a> &nbsp; <span class="tag">Time to teach.</span></span>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const $ = id => document.getElementById(id);
+
+/* ---------------- coins (linked to a pupil via ?token=) ---------------- */
+const practiceToken = new URLSearchParams(location.search).get('token') || '';
+let coinCount = 0;
+let sb = null;
+if (practiceToken && window.supabase){
+  sb = window.supabase.createClient(
+    'https://qzbydxxqyqvloeogrycx.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6YnlkeHhxeXF2bG9lb2dyeWN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5NjU4NTIsImV4cCI6MjEwMTU0MTg1Mn0.1wBog1X_Z3XyG0e00IUz5U4LAL9UGPIa_1z5L-GzlvU'
+  );
+  sb.rpc('get_public_practice_profile', { p_token: practiceToken }).then(({ data, error }) => {
+    if (error || !data || !data.length) return;
+    const profile = data[0];
+    coinCount = profile.coins || 0;
+    $('coinCount').textContent = coinCount;
+    $('coinName').textContent = profile.name ? ('— ' + profile.name) : '';
+    $('coinBadge').hidden = false;
+  }).catch(() => {});
+}
+function awardCoin(subject){
+  if (!sb || !practiceToken) return;
+  sb.rpc('award_practice_coins', { p_token: practiceToken, p_subject: subject, p_amount: 1 }).then(({ data, error }) => {
+    if (error || typeof data !== 'number') return;
+    coinCount = data;
+    $('coinCount').textContent = coinCount;
+  }).catch(() => {});
+}
+
+/* ---------------- setup state ---------------- */
+let selectedTable = 'mixed';
+let numQuestions = 10;
+
+const tablesEl = $('tables');
+const tableDefs = [{ v: 'mixed', label: 'Mixed (2–12)' }];
+for (let n = 2; n <= 12; n++) tableDefs.push({ v: String(n), label: n + '×' });
+tableDefs.forEach(t => {
+  const btn = document.createElement('button');
+  btn.className = 'tb' + (t.v === 'mixed' ? ' mixed' : '');
+  btn.type = 'button';
+  btn.dataset.v = t.v;
+  btn.setAttribute('aria-pressed', t.v === selectedTable ? 'true' : 'false');
+  btn.textContent = t.label;
+  btn.addEventListener('click', () => {
+    selectedTable = t.v;
+    [...tablesEl.children].forEach(c => c.setAttribute('aria-pressed', c.dataset.v === selectedTable ? 'true' : 'false'));
+  });
+  tablesEl.appendChild(btn);
+});
+
+[...document.querySelectorAll('.tiers .chip')].forEach(chip => {
+  chip.addEventListener('click', () => {
+    numQuestions = +chip.dataset.n;
+    [...chip.parentElement.children].forEach(c => c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'));
+  });
+});
+
+/* ---------------- practice state ---------------- */
+let questions = [];
+let idx = 0;
+let results = [];
+let checked = false;
+
+function tableLabelText(){
+  return selectedTable === 'mixed' ? 'Mixed check (2–12)' : (selectedTable + '× table');
+}
+
+function buildQuestions(n){
+  const qs = [];
+  for (let i = 0; i < n; i++){
+    let a, b;
+    if (selectedTable === 'mixed'){
+      a = 2 + Math.floor(Math.random() * 11);
+    } else {
+      a = +selectedTable;
+    }
+    b = 1 + Math.floor(Math.random() * 12);
+    qs.push({ a, b, ans: a * b });
+  }
+  return qs;
+}
+
+function start(){
+  questions = buildQuestions(numQuestions);
+  idx = 0; results = [];
+  $('setup').hidden = true; $('results').hidden = true; $('practice').hidden = false;
+  $('tableLabel').textContent = tableLabelText();
+  $('qTot').textContent = questions.length;
+  drawDots();
+  render();
+}
+function drawDots(){
+  $('dots').innerHTML = questions.map((q, i) => {
+    let cls = 'dot';
+    if (i < results.length) cls += results[i].ok ? ' done' : ' miss';
+    else if (i === idx) cls += ' now';
+    return `<span class="${cls}"></span>`;
+  }).join('');
+}
+function render(){
+  const q = questions[idx];
+  $('qNum').textContent = idx + 1;
+  $('sum').textContent = q.a + ' × ' + q.b + ' = ?';
+  $('answerBox').value = '';
+  $('answerBox').classList.remove('ok', 'no');
+  $('feedback').textContent = '';
+  $('feedback').className = 'feedback';
+  $('checkBtn').textContent = 'Check';
+  checked = false;
+  drawDots();
+  setTimeout(() => $('answerBox').focus(), 0);
+}
+function checkAnswer(){
+  if (checked){ nextQuestion(); return; }
+  const q = questions[idx];
+  const val = $('answerBox').value.trim();
+  const ok = val !== '' && +val === q.ans;
+  results[idx] = { q, ok };
+  checked = true;
+  $('answerBox').classList.add(ok ? 'ok' : 'no');
+  $('feedback').classList.add(ok ? 'ok' : 'no');
+  $('feedback').textContent = ok ? 'Correct!' : ('Not quite — it’s ' + q.a + ' × ' + q.b + ' = ' + q.ans);
+  $('checkBtn').textContent = (idx + 1 < questions.length) ? 'Next' : 'Finish';
+  if (ok) awardCoin('times_tables');
+  drawDots();
+}
+function nextQuestion(){
+  if (idx + 1 < questions.length){ idx++; render(); }
+  else finish();
+}
+function finish(){
+  $('practice').hidden = true; $('results').hidden = false;
+  const done = results.filter(Boolean);
+  const correct = done.filter(r => r.ok).length;
+  const missed = done.filter(r => !r.ok);
+  $('scoreCorrect').textContent = correct;
+  $('scoreMissed').textContent = missed.length;
+  $('scoreTotal').textContent = done.length;
+  $('missedWrap').hidden = missed.length === 0;
+  $('missedList').innerHTML = missed.map(r => `<span>${r.q.a} × ${r.q.b} = ${r.q.ans}</span>`).join('');
+}
+
+$('goBtn').addEventListener('click', start);
+$('checkBtn').addEventListener('click', checkAnswer);
+$('answerBox').addEventListener('keydown', e => {
+  if (e.key === 'Enter'){ e.preventDefault(); checkAnswer(); }
+});
+$('exit').addEventListener('click', finish);
+$('againBtn').addEventListener('click', start);
+$('newBtn').addEventListener('click', () => {
+  $('results').hidden = true; $('practice').hidden = true; $('setup').hidden = false;
+});
+</script>
+</body>
+</html>
