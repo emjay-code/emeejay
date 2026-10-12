@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Type any topic and year group and get a ready-made class quiz with an answer key. Free for teachers.">
-<title>emeejay Topic Quiz Maker</title>
+<meta name="description" content="Ready-made topic quizzes, or build your own. Play on the board or print with an answer key. Free for teachers.">
+<title>emeejay Topic Quizzes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Caveat+Brush&family=Nunito:wght@400;600;700;800&display=swap">
@@ -28,25 +28,37 @@ a{color:var(--lilac)}
 .brand .mj{font-family:"Caveat Brush",Nunito,cursive;font-size:29px;line-height:1;color:var(--lilac)}
 .brand .pg{font-size:13px;color:var(--muted)}
 .back{font-size:14px;color:var(--muted)}
-.lede{max-width:62ch;margin:0 0 22px;color:var(--muted)}
-h2.sec{font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--lilac-dim);margin:0 0 10px;font-weight:800}
+.lede{max-width:62ch;margin:0 0 20px;color:var(--muted)}
+h2.sec{font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--lilac-dim);margin:26px 0 10px;font-weight:800}
 label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px}
-input[type=text],select{width:100%;font-family:inherit;font-size:17px;color:var(--text);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px}
-.row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+input[type=text],select,textarea{width:100%;font-family:inherit;font-size:16px;color:var(--text);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:11px 13px}
+textarea{resize:vertical;min-height:54px}
+.row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
 .row > div{flex:1 1 180px}
-.ideas{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 22px}
-.chip{padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--muted);font-size:14px;font-weight:600}
-.chip:hover{border-color:var(--lilac-dim);color:var(--lilac)}
-.btn{background:var(--lilac);color:var(--ink);border:none;border-radius:12px;padding:14px 26px;font-weight:800;font-size:17px}
+.packs{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.pack{text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:16px 16px 14px;color:var(--text);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:3px}
+.pack:hover{border-color:var(--lilac-dim);background:var(--card-2)}
+.pack b{font-size:17px}
+.pack span{font-size:13px;color:var(--muted)}
+.pack.mine{border-style:dashed;border-color:var(--lilac-dim)}
+.btn{background:var(--lilac);color:var(--ink);border:none;border-radius:12px;padding:13px 24px;font-weight:800;font-size:16px}
 .btn:hover{filter:brightness(1.08)}
-.btn[disabled]{opacity:.5;cursor:wait}
-.ghost{background:transparent;color:var(--lilac);border:1.5px solid var(--line);border-radius:12px;padding:12px 18px;font-weight:700}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.ghost{background:transparent;color:var(--lilac);border:1.5px solid var(--line);border-radius:12px;padding:11px 18px;font-weight:700}
 .ghost:hover{border-color:var(--lilac-dim)}
-.err{color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber);border-radius:10px;padding:10px 14px;margin-top:14px}
-.status{margin-top:16px;color:var(--muted)}
-.spin{display:inline-block;width:14px;height:14px;border:2.5px solid var(--line);border-top-color:var(--lilac);border-radius:50%;animation:sp .8s linear infinite;vertical-align:-2px;margin-right:8px}
-@keyframes sp{to{transform:rotate(360deg)}}
+.ghost.sm{padding:6px 12px;font-size:13px}
+.err{color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber);border-radius:10px;padding:10px 14px;margin-top:12px}
+.note{font-size:13px;color:var(--muted)}
 
+/* builder */
+.qcard{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.qcard .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:800;color:var(--lilac)}
+.opt-edit{display:flex;gap:8px;align-items:center;margin-top:8px}
+.opt-edit input[type=radio]{accent-color:#C8A6FF;width:20px;height:20px;flex:0 0 auto}
+.opt-edit input[type=text]{padding:9px 11px}
+.hint{font-size:12px;color:var(--muted);margin:6px 0 0}
+
+/* playing */
 .qhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .qhead h1{margin:0;font-size:26px}
 .qhead .sub{color:var(--muted);font-size:14px}
@@ -63,9 +75,8 @@ input[type=text],select{width:100%;font-family:inherit;font-size:17px;color:var(
 .expl{margin-top:16px;color:var(--muted);font-size:16px;min-height:24px}
 .nav{display:flex;gap:10px;justify-content:space-between;margin-top:18px;flex-wrap:wrap}
 .score{font-size:48px;font-weight:800;color:var(--lilac);margin:6px 0}
-.ansrow{margin:6px 0;color:var(--muted)}
+[hidden]{display:none!important}
 
-/* print sheet */
 #sheet{display:none}
 @media print{
   body{background:#fff;color:#000}
@@ -84,36 +95,45 @@ input[type=text],select{width:100%;font-family:inherit;font-size:17px;color:var(
 <body>
 <div class="wrap">
   <div class="mast">
-    <a class="brand" href="/"><img src="data:image/png;base64,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" alt="emeejay"><div><div class="mj">emeejay</div><div class="pg">Topic quiz maker</div></div></a>
-    <a class="back" href="/">&larr; All tools</a>
+    <a class="brand" href="/"><img src="data:image/png;base64,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" alt="emeejay"><div><div class="mj">emeejay</div><div class="pg">Topic quizzes</div></div></a>
+    <a class="back" href="/#teacher">&larr; Teacher tools</a>
   </div>
 
-  <!-- SETUP -->
-  <section id="setup">
-    <p class="lede">Type any topic you're teaching and pick a year group. You'll get a multiple-choice quiz with an answer key, ready to play on the board or print for the desk.</p>
-    <div class="row">
-      <div style="flex:3 1 280px">
-        <label for="topic">Topic</label>
-        <input id="topic" type="text" maxlength="120" placeholder="e.g. Florence Nightingale" autocomplete="off">
-      </div>
+  <!-- PICK -->
+  <section id="pick">
+    <p class="lede">Choose a ready-made quiz, or make your own. Play it on the board, or print a worksheet with an answer key.</p>
+    <h2 class="sec" style="margin-top:6px">Ready-made quizzes</h2>
+    <div class="packs" id="packs"></div>
+    <h2 class="sec">Make your own</h2>
+    <div class="packs">
+      <button class="pack mine" id="newQuiz"><b>+ Build a quiz</b><span>Type your own questions and answers</span></button>
     </div>
-    <div class="ideas" id="ideas"></div>
-    <div class="row">
-      <div><label for="year">Year group</label>
-        <select id="year">
-          <option>Reception</option><option>Year 1</option><option>Year 2</option><option>Year 3</option>
-          <option selected>Year 4</option><option>Year 5</option><option>Year 6</option>
-          <option>Year 7</option><option>Year 8</option><option>Year 9</option>
-        </select></div>
-      <div><label for="count">Questions</label>
-        <select id="count"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></div>
-      <div><label for="diff">Level</label>
-        <select id="diff"><option value="easier">Easier</option><option value="expected" selected>Expected</option><option value="harder">Harder (stretch)</option></select></div>
+    <div id="mineWrap" hidden>
+      <h2 class="sec">My saved quizzes</h2>
+      <div class="packs" id="mine"></div>
+      <p class="note" style="margin-top:8px">Saved on this device only.</p>
     </div>
-    <button class="btn" id="make">Make my quiz</button>
-    <div id="status" class="status" hidden></div>
-    <div id="err" class="err" hidden></div>
-    <p class="lede" style="margin-top:28px;font-size:13px">Quizzes are written by AI. Please give them a quick read before using them with your class, as they can occasionally contain mistakes.</p>
+  </section>
+
+  <!-- BUILD -->
+  <section id="build" hidden>
+    <h2 class="sec" style="margin-top:6px">Build your quiz</h2>
+    <div class="row">
+      <div style="flex:3 1 260px"><label for="bTitle">Quiz title</label><input id="bTitle" type="text" maxlength="80" placeholder="e.g. The Romans"></div>
+      <div><label for="bYear">Year group (optional)</label>
+        <select id="bYear"><option value="">Any</option><option>Reception</option><option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option><option>Year 5</option><option>Year 6</option><option>Year 7</option><option>Year 8</option><option>Year 9</option></select></div>
+    </div>
+    <div id="qlist"></div>
+    <div class="row" style="margin-top:6px">
+      <button class="ghost" id="addQ">+ Add a question</button>
+    </div>
+    <div class="row">
+      <button class="btn" id="playBuilt">Play this quiz</button>
+      <button class="ghost" id="saveBuilt">Save on this device</button>
+      <button class="ghost" id="cancelBuild">Cancel</button>
+    </div>
+    <div id="berr" class="err" hidden></div>
+    <p class="hint">Tick the circle next to the correct answer. Each question needs a question, and at least two answers. Explanations are optional.</p>
   </section>
 
   <!-- QUIZ -->
@@ -122,7 +142,7 @@ input[type=text],select{width:100%;font-family:inherit;font-size:17px;color:var(
       <div><h1 id="qTitle"></h1><div class="sub" id="qSub"></div></div>
       <div class="tools">
         <button class="ghost" id="printBtn">Print worksheet + answers</button>
-        <button class="ghost" id="newBtn">New quiz</button>
+        <button class="ghost" id="newBtn">All quizzes</button>
       </div>
     </div>
     <div class="stage" id="stage"></div>
@@ -132,62 +152,158 @@ input[type=text],select{width:100%;font-family:inherit;font-size:17px;color:var(
 </div>
 
 <script>
+const PACKS = [
+{id:'nightingale',title:'Florence Nightingale',year:'Years 2-4',questions:[
+{q:'Which city was Florence Nightingale born in?',options:['London','Florence','Paris','Rome'],answer:1,explanation:'She was born in Florence, Italy, and was named after the city.'},
+{q:'What was her job?',options:['Teacher','Soldier','Nurse','Doctor'],answer:2,explanation:'She became a nurse and trained other nurses.'},
+{q:'Which war did she go to help soldiers in?',options:['Crimean War','Trojan War','First World War','Civil War'],answer:0,explanation:'She went to care for wounded soldiers in the Crimean War in 1854.'},
+{q:'What was her famous nickname?',options:['The Iron Lady','The Lady with the Lamp','The Queen of Nurses','The Night Owl'],answer:1,explanation:'Soldiers called her the Lady with the Lamp.'},
+{q:'Why did she carry a lamp?',options:['To keep warm','To find her way home','To check on wounded soldiers at night','To signal ships'],answer:2,explanation:'She walked the wards at night carrying a lamp to check on patients.'},
+{q:'What did she do to make hospitals better?',options:['Made them much cleaner','Made them smaller','Painted them blue','Closed them at night'],answer:0,explanation:'Cleaner wards, fresh air and clean water helped many more patients to recover.'},
+{q:'In which year was Florence Nightingale born?',options:['1620','1720','1820','1920'],answer:2,explanation:'She was born in 1820, in the Victorian age.'},
+{q:'What did she set up in 1860?',options:['A school to train nurses','A railway','A zoo','A bakery'],answer:0,explanation:'The Nightingale Training School opened at St Thomas\' Hospital in London.'}]},
+{id:'romans',title:'The Romans in Britain',year:'Years 3-4',questions:[
+{q:'In which year did the Romans invade Britain?',options:['AD 43','AD 143','AD 543','AD 1066'],answer:0,explanation:'The Roman invasion of Britain began in AD 43.'},
+{q:'Which Roman emperor ordered the invasion of Britain in AD 43?',options:['Julius Caesar','Claudius','Nero','Augustus'],answer:1,explanation:'Emperor Claudius sent his army to Britain.'},
+{q:'Which wall did the Romans build across the north of England?',options:['The Great Wall','Berlin Wall','Hadrian\'s Wall','Offa\'s Dyke'],answer:2,explanation:'Hadrian\'s Wall was built to guard the northern edge of the Roman Empire.'},
+{q:'Who led a rebellion against the Romans in Britain?',options:['Boudicca','Cleopatra','Queen Victoria','Elizabeth I'],answer:0,explanation:'Boudicca was queen of the Iceni and led an uprising around AD 60.'},
+{q:'What language did the Romans speak?',options:['Greek','French','Latin','Italian'],answer:2,explanation:'Latin was the language of Rome, and many English words come from it.'},
+{q:'Why did the Romans build long, straight roads?',options:['To look pretty','So armies could march quickly','To stop traders','To mark farm land'],answer:1,explanation:'Straight roads let soldiers and messages travel quickly across the empire.'},
+{q:'What were Roman public baths used for?',options:['Washing and meeting friends','Growing food','Keeping animals','Training gladiators'],answer:0,explanation:'Baths were places to wash, relax and meet people.'},
+{q:'What number does the Roman numeral XII show?',options:['7','11','12','21'],answer:2,explanation:'X is 10 and II is 2, so XII is 12.'}]},
+{id:'watercycle',title:'The water cycle',year:'Years 3-5',questions:[
+{q:'What is it called when water turns into vapour because of heat?',options:['Condensation','Evaporation','Precipitation','Collection'],answer:1,explanation:'Evaporation is when liquid water turns into a gas.'},
+{q:'What is it called when water vapour cools and turns back into drops?',options:['Evaporation','Melting','Condensation','Freezing'],answer:2,explanation:'Condensation forms the tiny drops that make clouds.'},
+{q:'Rain, snow and hail falling from clouds is called...',options:['Precipitation','Evaporation','Condensation','Erosion'],answer:0,explanation:'Precipitation is any water that falls from the clouds.'},
+{q:'What gives the water cycle most of its energy?',options:['The Moon','The wind','The Sun','The tides'],answer:2,explanation:'Heat from the Sun makes water evaporate.'},
+{q:'Where is most of the Earth\'s water found?',options:['Rivers','Oceans','Lakes','Clouds'],answer:1,explanation:'About 97 percent of the Earth\'s water is in the oceans.'},
+{q:'Where do most rivers end up?',options:['In the sea','In the sky','Underground forever','In the desert'],answer:0,explanation:'Rivers flow downhill and usually reach the sea.'},
+{q:'Which state of matter is water vapour?',options:['Solid','Liquid','Gas','Plasma'],answer:2,explanation:'Water vapour is water in its gas form.'},
+{q:'Why is it called a cycle?',options:['It only happens once','The same water goes round and round','It only happens in summer','It happens in a circle of clouds'],answer:1,explanation:'The water is used again and again, with no start or end.'}]},
+{id:'tudors',title:'The Tudors',year:'Years 4-5',questions:[
+{q:'Who was the first Tudor king?',options:['Henry VII','Henry VIII','Edward VI','Richard III'],answer:0,explanation:'Henry VII won the Battle of Bosworth in 1485 and began the Tudor line.'},
+{q:'How many wives did Henry VIII have?',options:['Two','Four','Six','Eight'],answer:2,explanation:'Henry VIII married six times.'},
+{q:'What was the name of Henry VIII\'s famous warship that sank in 1545?',options:['The Golden Hind','The Mary Rose','Victory','The Titanic'],answer:1,explanation:'The Mary Rose sank near Portsmouth and was raised in 1982.'},
+{q:'Which queen was known as the Virgin Queen?',options:['Mary I','Anne Boleyn','Elizabeth I','Victoria'],answer:2,explanation:'Elizabeth I never married.'},
+{q:'In which year was the Spanish Armada defeated?',options:['1588','1488','1666','1805'],answer:0,explanation:'The English fleet defeated the Spanish Armada in 1588.'},
+{q:'Which famous playwright lived in Tudor times?',options:['Charles Dickens','William Shakespeare','Roald Dahl','Jane Austen'],answer:1,explanation:'Shakespeare\'s plays were performed at the Globe Theatre.'},
+{q:'What did many Tudor houses look like?',options:['Glass and steel','Black and white timber frames','Mud huts','Tall stone towers'],answer:1,explanation:'Tudor houses often had black timber frames with white walls.'},
+{q:'Which Tudor monarch ruled for the longest time?',options:['Henry VII','Mary I','Elizabeth I','Edward VI'],answer:2,explanation:'Elizabeth I was queen for about 45 years.'}]},
+{id:'egypt',title:'Ancient Egypt',year:'Years 3-5',questions:[
+{q:'Which river was most important to Ancient Egypt?',options:['The Thames','The Nile','The Amazon','The Tigris'],answer:1,explanation:'The Nile flooded each year and made the land good for farming.'},
+{q:'What were the rulers of Ancient Egypt called?',options:['Emperors','Kings of Rome','Pharaohs','Sultans'],answer:2,explanation:'Pharaohs were rulers and were thought to be gods.'},
+{q:'What was Egyptian picture writing called?',options:['Hieroglyphics','Alphabet','Morse code','Cuneiform'],answer:0,explanation:'Hieroglyphics used pictures and symbols for words and sounds.'},
+{q:'What were the pyramids built as?',options:['Palaces','Tombs for pharaohs','Markets','Schools'],answer:1,explanation:'Pyramids were tombs for pharaohs and their treasures.'},
+{q:'Which young pharaoh\'s tomb was found in 1922?',options:['Ramses II','Cleopatra','Tutankhamun','Khufu'],answer:2,explanation:'Howard Carter discovered Tutankhamun\'s tomb.'},
+{q:'What is it called when a body is preserved so it lasts?',options:['Mummification','Embalming paper','Burying','Pickling'],answer:0,explanation:'Mummification dried and wrapped the body to preserve it.'},
+{q:'Where is the Great Pyramid?',options:['Giza','Rome','Athens','Baghdad'],answer:0,explanation:'The Great Pyramid stands at Giza, near Cairo.'},
+{q:'What plant did Egyptians use to make paper?',options:['Bamboo','Papyrus','Cotton','Wheat'],answer:1,explanation:'Papyrus reeds from the Nile were pressed into sheets.'}]},
+{id:'gfol',title:'The Great Fire of London',year:'Years 1-3',questions:[
+{q:'In which year was the Great Fire of London?',options:['1066','1666','1966','1566'],answer:1,explanation:'The fire began on 2 September 1666.'},
+{q:'Where did the fire start?',options:['A bakery in Pudding Lane','A church','A palace','A pub in Bristol'],answer:0,explanation:'It started at Thomas Farriner\'s bakery in Pudding Lane.'},
+{q:'Who wrote a famous diary about the fire?',options:['Samuel Pepys','Charles Dickens','William Shakespeare','Anne Frank'],answer:0,explanation:'Samuel Pepys described the fire in his diary.'},
+{q:'Why did the fire spread so quickly?',options:['It was raining','Houses were wooden and close together','There was snow','There were no people'],answer:1,explanation:'Dry weather, wind and wooden houses packed tightly helped the fire spread.'},
+{q:'Who was the king at the time?',options:['Henry VIII','Charles II','George III','William the Conqueror'],answer:1,explanation:'Charles II was king in 1666.'},
+{q:'Which architect helped rebuild London, including St Paul\'s Cathedral?',options:['Isambard Brunel','Sir Christopher Wren','Capability Brown','Norman Foster'],answer:1,explanation:'Sir Christopher Wren designed the new St Paul\'s.'},
+{q:'How did people try to stop the fire spreading?',options:['Pulling down houses to make gaps','Switching off lights','Building snowmen','Calling the fire brigade'],answer:0,explanation:'There was no fire brigade, so they pulled down buildings to make firebreaks.'},
+{q:'About how long did the fire burn?',options:['One hour','Four days','Two months','One year'],answer:1,explanation:'It burned for around four days, from 2 to 6 September.'}]},
+{id:'rainforest',title:'Rainforests',year:'Years 3-5',questions:[
+{q:'Which is the biggest rainforest in the world?',options:['The Congo','The Amazon','The Daintree','Sherwood Forest'],answer:1,explanation:'The Amazon rainforest covers a huge part of South America.'},
+{q:'On which continent is the Amazon rainforest?',options:['Africa','Asia','South America','Australia'],answer:2,explanation:'Most of the Amazon is in Brazil, in South America.'},
+{q:'What is the tallest layer of a rainforest called?',options:['Emergent layer','Forest floor','Understorey','Canopy floor'],answer:0,explanation:'The emergent layer has the very tallest trees.'},
+{q:'Which animal would you NOT find in a rainforest?',options:['Jaguar','Toucan','Polar bear','Sloth'],answer:2,explanation:'Polar bears live in the Arctic, not in hot rainforests.'},
+{q:'What is the weather like in a tropical rainforest?',options:['Cold and dry','Hot and wet','Cool and windy','Snowy'],answer:1,explanation:'Tropical rainforests are warm and get lots of rain.'},
+{q:'Why are rainforests sometimes called the lungs of the Earth?',options:['They look like lungs','Trees take in carbon dioxide and give out oxygen','They are very noisy','They are shaped like a pair'],answer:1,explanation:'Trees absorb carbon dioxide and release oxygen.'},
+{q:'What is deforestation?',options:['Planting new trees','Cutting down large areas of forest','Watering trees','Counting trees'],answer:1,explanation:'Deforestation destroys habitats and harms wildlife.'},
+{q:'Which food comes from the cacao tree that grows in rainforests?',options:['Chocolate','Bread','Cheese','Rice'],answer:0,explanation:'Chocolate is made from cacao beans.'}]},
+{id:'victorians',title:'The Victorians',year:'Years 4-6',questions:[
+{q:'Which queen gave her name to the Victorian age?',options:['Elizabeth I','Victoria','Anne','Mary'],answer:1,explanation:'Queen Victoria ruled from 1837 to 1901.'},
+{q:'Which engineer built bridges, ships and railways in Victorian Britain?',options:['Isambard Kingdom Brunel','Alan Turing','Isaac Newton','James Watt'],answer:0,explanation:'Brunel designed the Great Western Railway and the SS Great Britain.'},
+{q:'What was the Penny Black?',options:['A coin','The first postage stamp','A kind of bread','A black cat'],answer:1,explanation:'The Penny Black was the world\'s first adhesive postage stamp in 1840.'},
+{q:'Who wrote Oliver Twist?',options:['Charles Dickens','Jane Austen','Roald Dahl','Beatrix Potter'],answer:0,explanation:'Charles Dickens wrote about poverty in Victorian Britain.'},
+{q:'What did Victorian schoolchildren often write on?',options:['Tablets','Slates','Laptops','Whiteboards'],answer:1,explanation:'They wrote on slates with slate pencils.'},
+{q:'What was the Great Exhibition of 1851 held in?',options:['The Crystal Palace','Buckingham Palace','The Tower of London','Big Ben'],answer:0,explanation:'The Crystal Palace was a huge glass building in Hyde Park.'},
+{q:'What was a workhouse?',options:['A factory for toys','A place where very poor people lived and worked','A school','A hotel'],answer:1,explanation:'Poor people could get food and a bed, but had to work hard.'},
+{q:'Which new invention helped people travel long distances quickly?',options:['Steam trains','Aeroplanes','Cars','Rockets'],answer:0,explanation:'Railways spread across Britain during Victoria\'s reign.'}]},
+{id:'electricity',title:'Electricity',year:'Years 4-6',questions:[
+{q:'What is a complete path that electricity flows around called?',options:['A circuit','A wire','A switch','A cell'],answer:0,explanation:'A circuit must be a complete loop for current to flow.'},
+{q:'Which material is a good electrical conductor?',options:['Plastic','Rubber','Copper','Wood'],answer:2,explanation:'Metals such as copper let electricity flow easily.'},
+{q:'Which material is an electrical insulator?',options:['Iron','Plastic','Aluminium','Gold'],answer:1,explanation:'Plastic does not let electricity pass through.'},
+{q:'What does a switch do?',options:['Makes electricity','Opens and closes the circuit','Makes bulbs brighter','Stores energy'],answer:1,explanation:'Closing the switch completes the circuit; opening it breaks the circuit.'},
+{q:'What provides the energy in a simple circuit?',options:['A bulb','A cell or battery','A wire','A buzzer'],answer:1,explanation:'The cell or battery pushes the current round the circuit.'},
+{q:'What usually happens if you add more bulbs to a series circuit?',options:['They get brighter','They get dimmer','They go off','Nothing changes'],answer:1,explanation:'The energy is shared between the bulbs, so each is dimmer.'},
+{q:'Which is safe?',options:['Poking metal into a socket','Using a plug with dry hands','Touching a broken wire','Pulling a plug by its cable'],answer:1,explanation:'Mains electricity is dangerous, so always follow safety rules.'},
+{q:'What unit is voltage measured in?',options:['Metres','Volts','Grams','Seconds'],answer:1,explanation:'Voltage is measured in volts (V).'}]},
+{id:'vikings',title:'The Vikings',year:'Years 4-5',questions:[
+{q:'Where did the Vikings come from?',options:['Scandinavia','Spain','Egypt','Italy'],answer:0,explanation:'Vikings came from Norway, Denmark and Sweden.'},
+{q:'In which year did Vikings raid Lindisfarne?',options:['AD 793','AD 1066','AD 43','AD 1215'],answer:0,explanation:'The raid on Lindisfarne monastery in AD 793 marks the start of the Viking Age.'},
+{q:'What were Viking ships called?',options:['Galleons','Longships','Steamers','Canoes'],answer:1,explanation:'Longships were fast and could sail in shallow water.'},
+{q:'What was the Viking alphabet called?',options:['Hieroglyphs','Runes','Latin','Braille'],answer:1,explanation:'Runes were carved on stone and wood.'},
+{q:'Which Anglo-Saxon king fought the Vikings and is called "the Great"?',options:['Alfred','Harold','Canute','Arthur'],answer:0,explanation:'Alfred the Great was king of Wessex.'},
+{q:'What was the Danelaw?',options:['A Viking law book','Part of England ruled by Vikings','A type of boat','A Viking god'],answer:1,explanation:'The Danelaw was the area of England under Viking control.'},
+{q:'Which Viking god was the god of thunder?',options:['Odin','Thor','Loki','Zeus'],answer:1,explanation:'Thor carried a hammer called Mjolnir.'},
+{q:'What did the Vikings call the city of York?',options:['Jorvik','Londinium','Eboracum','Camelot'],answer:0,explanation:'Jorvik was a busy Viking trading town.'}]}
+];
+
 const $ = id => document.getElementById(id);
 const LET = ['A','B','C','D'];
+const STORE = 'emeejay-my-quizzes';
 let quiz = null, idx = 0, picked = [], score = 0;
 
-const IDEAS = ['Florence Nightingale','The Romans','The water cycle','Tudors','Fractions of amounts','Rainforests','Ancient Egypt','The Great Fire of London','Electricity','Victorians'];
-IDEAS.forEach(t => {
-  const b = document.createElement('button');
-  b.type = 'button'; b.className = 'chip'; b.textContent = t;
-  b.addEventListener('click', () => { $('topic').value = t; $('topic').focus(); });
-  $('ideas').appendChild(b);
-});
-
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function shuffle(a){ a = a.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function loadMine(){ try { return JSON.parse(localStorage.getItem(STORE) || '[]'); } catch(e){ return []; } }
+function saveMine(list){ try { localStorage.setItem(STORE, JSON.stringify(list)); return true; } catch(e){ return false; } }
+function show(id){ ['pick','build','quiz'].forEach(s => $(s).hidden = (s !== id)); window.scrollTo(0,0); }
 
-async function make(){
-  const topic = $('topic').value.trim();
-  $('err').hidden = true;
-  if (topic.length < 2){ $('err').textContent = 'Please type a topic first.'; $('err').hidden = false; return; }
-  $('make').disabled = true;
-  $('status').hidden = false;
-  $('status').innerHTML = '<span class="spin"></span>Writing your quiz. This takes around 10 seconds...';
-  try {
-    const r = await fetch('/api/generate-topic-quiz', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ topic, yearGroup: $('year').value, count: +$('count').value, difficulty: $('diff').value })
-    });
-    const data = await r.json().catch(() => ({}));
-    if (!r.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
-    quiz = data; idx = 0; picked = []; score = 0;
-    $('setup').hidden = true; $('quiz').hidden = false;
-    $('qTitle').textContent = quiz.title;
-    $('qSub').textContent = (quiz.yearGroup || '') + ' · ' + quiz.questions.length + ' questions';
-    buildSheet();
-    render();
-  } catch (e) {
-    $('err').textContent = e.message; $('err').hidden = false;
-  } finally {
-    $('make').disabled = false; $('status').hidden = true;
-  }
+/* ---------- pick ---------- */
+function renderPick(){
+  $('packs').innerHTML = PACKS.map(p => '<button class="pack" data-id="' + p.id + '"><b>' + esc(p.title) + '</b><span>' + esc(p.year) + ' &middot; ' + p.questions.length + ' questions</span></button>').join('');
+  $('packs').querySelectorAll('.pack').forEach(b => b.addEventListener('click', () => {
+    const p = PACKS.find(x => x.id === b.dataset.id);
+    start({ title: p.title, yearGroup: p.year, questions: p.questions });
+  }));
+  const mine = loadMine();
+  $('mineWrap').hidden = mine.length === 0;
+  $('mine').innerHTML = mine.map((p, i) => '<div class="pack"><b>' + esc(p.title) + '</b><span>' + esc(p.yearGroup || 'Any year') + ' &middot; ' + p.questions.length + ' questions</span>' +
+    '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap"><button class="ghost sm" data-play="' + i + '">Play</button><button class="ghost sm" data-edit="' + i + '">Edit</button><button class="ghost sm" data-del="' + i + '">Delete</button></div></div>').join('');
+  $('mine').querySelectorAll('[data-play]').forEach(b => b.onclick = () => start(loadMine()[+b.dataset.play]));
+  $('mine').querySelectorAll('[data-edit]').forEach(b => b.onclick = () => openBuilder(+b.dataset.edit));
+  $('mine').querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
+    if (!confirm('Delete this quiz?')) return;
+    const l = loadMine(); l.splice(+b.dataset.del, 1); saveMine(l); renderPick();
+  });
 }
 
+/* ---------- play ---------- */
+function start(q){
+  quiz = {
+    title: q.title, yearGroup: q.yearGroup || '',
+    questions: shuffle(q.questions).map(x => {
+      const correct = x.options[x.answer];
+      const opts = shuffle(x.options);
+      return { q: x.q, options: opts, answer: opts.indexOf(correct), explanation: x.explanation || '' };
+    })
+  };
+  idx = 0; picked = []; score = 0;
+  $('qTitle').textContent = quiz.title;
+  $('qSub').textContent = (quiz.yearGroup ? quiz.yearGroup + ' · ' : '') + quiz.questions.length + ' questions';
+  buildSheet(); show('quiz'); render();
+}
 function render(){
   const stage = $('stage');
-  if (idx >= quiz.questions.length){
-    stage.innerHTML = '<div class="prog">Finished</div><div class="qtext">Quiz complete</div>' +
-      '<div class="score">' + score + ' / ' + quiz.questions.length + '</div>' +
+  const n = quiz.questions.length;
+  if (idx >= n){
+    stage.innerHTML = '<div class="prog">Finished</div><div class="qtext">Quiz complete</div><div class="score">' + score + ' / ' + n + '</div>' +
       '<div class="nav"><button class="ghost" id="again">Play again</button><button class="btn" id="print2">Print worksheet + answers</button></div>';
-    $('again').onclick = () => { idx = 0; picked = []; score = 0; render(); };
+    $('again').onclick = () => { start({ title: quiz.title, yearGroup: quiz.yearGroup, questions: quiz.questions }); };
     $('print2').onclick = () => window.print();
     return;
   }
   const q = quiz.questions[idx];
   const done = picked[idx] !== undefined;
   stage.innerHTML =
-    '<div class="prog">Question ' + (idx + 1) + ' of ' + quiz.questions.length + '</div>' +
+    '<div class="prog">Question ' + (idx + 1) + ' of ' + n + '</div>' +
     '<div class="qtext">' + esc(q.q) + '</div>' +
     '<div class="opts">' + q.options.map((o, i) => {
       let cls = 'opt';
@@ -196,34 +312,87 @@ function render(){
     }).join('') + '</div>' +
     '<div class="expl">' + (done ? esc(q.explanation) : '') + '</div>' +
     '<div class="nav"><button class="ghost" id="prev"' + (idx === 0 ? ' disabled' : '') + '>Back</button>' +
-    '<button class="btn" id="next"' + (done ? '' : ' disabled') + '>' + (idx + 1 === quiz.questions.length ? 'Finish' : 'Next') + '</button></div>';
+    '<button class="btn" id="next"' + (done ? '' : ' disabled') + '>' + (idx + 1 === n ? 'Finish' : 'Next') + '</button></div>';
   stage.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
-    const i = +b.dataset.i;
-    picked[idx] = i;
-    if (i === q.answer) score++;
-    render();
+    const i = +b.dataset.i; picked[idx] = i; if (i === q.answer) score++; render();
   }));
   $('prev').onclick = () => { if (idx > 0){ idx--; render(); } };
   $('next').onclick = () => { idx++; render(); };
 }
-
 function buildSheet(){
   const qs = quiz.questions;
   $('sheet').innerHTML =
-    '<h1>' + esc(quiz.title) + '</h1>' +
-    '<p class="meta">' + esc(quiz.yearGroup || '') + ' &middot; ' + qs.length + ' questions</p>' +
+    '<h1>' + esc(quiz.title) + '</h1><p class="meta">' + esc(quiz.yearGroup) + ' &middot; ' + qs.length + ' questions</p>' +
     '<p class="name">Name: ______________________________ &nbsp; Date: ______________</p>' +
-    '<ol>' + qs.map(q => '<li><div>' + esc(q.q) + '</div>' +
-      q.options.map((o, i) => '<div class="o">' + LET[i] + '. ' + esc(o) + '</div>').join('') + '</li>').join('') + '</ol>' +
+    '<ol>' + qs.map(q => '<li><div>' + esc(q.q) + '</div>' + q.options.map((o, i) => '<div class="o">' + LET[i] + '. ' + esc(o) + '</div>').join('') + '</li>').join('') + '</ol>' +
     '<div class="key"><h1>Answers: ' + esc(quiz.title) + '</h1><ol>' +
-    qs.map(q => '<li><div><b>' + LET[q.answer] + '.</b> ' + esc(q.options[q.answer]) + '</div><div class="o">' + esc(q.explanation) + '</div></li>').join('') +
-    '</ol></div>';
+    qs.map(q => '<li><div><b>' + LET[q.answer] + '.</b> ' + esc(q.options[q.answer]) + '</div>' + (q.explanation ? '<div class="o">' + esc(q.explanation) + '</div>' : '') + '</li>').join('') + '</ol></div>';
 }
 
-$('make').addEventListener('click', make);
-$('topic').addEventListener('keydown', e => { if (e.key === 'Enter') make(); });
+/* ---------- builder ---------- */
+let editing = -1;
+function qCard(i, q){
+  q = q || { q: '', options: ['', '', '', ''], answer: 0, explanation: '' };
+  const d = document.createElement('div');
+  d.className = 'qcard';
+  d.innerHTML = '<div class="top"><span class="qn"></span><button class="ghost sm rm" type="button">Remove</button></div>' +
+    '<label>Question</label><textarea class="qq" maxlength="300"></textarea>' +
+    [0,1,2,3].map(k => '<div class="opt-edit"><input type="radio" name="c' + i + '" value="' + k + '" aria-label="Correct answer ' + LET[k] + '"><input type="text" class="oo" maxlength="120" placeholder="Answer ' + LET[k] + (k > 1 ? ' (optional)' : '') + '"></div>').join('') +
+    '<label style="margin-top:10px">Explanation (optional)</label><input type="text" class="ee" maxlength="200">';
+  d.querySelector('.qq').value = q.q;
+  d.querySelectorAll('.oo').forEach((el, k) => el.value = q.options[k] || '');
+  d.querySelectorAll('input[type=radio]').forEach((el, k) => el.checked = (k === q.answer));
+  d.querySelector('.ee').value = q.explanation || '';
+  d.querySelector('.rm').onclick = () => { if ($('qlist').children.length > 1){ d.remove(); renumber(); } };
+  return d;
+}
+function renumber(){ [...$('qlist').children].forEach((c, i) => { c.querySelector('.qn').textContent = 'Question ' + (i + 1); c.querySelectorAll('input[type=radio]').forEach(r => r.name = 'c' + i); }); }
+function openBuilder(i){
+  editing = (i === undefined) ? -1 : i;
+  const src = editing >= 0 ? loadMine()[editing] : null;
+  $('bTitle').value = src ? src.title : '';
+  $('bYear').value = src ? (src.yearGroup || '') : '';
+  $('qlist').innerHTML = '';
+  (src ? src.questions : [null, null, null]).forEach((q, k) => $('qlist').appendChild(qCard(k, q)));
+  renumber(); $('berr').hidden = true; show('build');
+}
+function collect(){
+  const title = $('bTitle').value.trim();
+  if (!title) return { error: 'Please give your quiz a title.' };
+  const questions = [];
+  const cards = [...$('qlist').children];
+  for (let n = 0; n < cards.length; n++){
+    const c = cards[n];
+    const text = c.querySelector('.qq').value.trim();
+    const raw = [...c.querySelectorAll('.oo')].map(e => e.value.trim());
+    const sel = [...c.querySelectorAll('input[type=radio]')].findIndex(r => r.checked);
+    if (!text && raw.every(o => !o)) continue;
+    if (!text) return { error: 'Question ' + (n + 1) + ' needs a question.' };
+    const options = raw.filter(Boolean);
+    if (options.length < 2) return { error: 'Question ' + (n + 1) + ' needs at least two answers.' };
+    if (!raw[sel]) return { error: 'Question ' + (n + 1) + ': tick the circle next to a filled-in correct answer.' };
+    questions.push({ q: text, options, answer: options.indexOf(raw[sel]), explanation: c.querySelector('.ee').value.trim() });
+  }
+  if (!questions.length) return { error: 'Add at least one question.' };
+  return { quiz: { title, yearGroup: $('bYear').value, questions } };
+}
+$('newQuiz').addEventListener('click', () => openBuilder());
+$('addQ').addEventListener('click', () => { $('qlist').appendChild(qCard($('qlist').children.length)); renumber(); });
+$('cancelBuild').addEventListener('click', () => { renderPick(); show('pick'); });
+$('playBuilt').addEventListener('click', () => {
+  const r = collect(); if (r.error){ $('berr').textContent = r.error; $('berr').hidden = false; return; }
+  start(r.quiz);
+});
+$('saveBuilt').addEventListener('click', () => {
+  const r = collect(); if (r.error){ $('berr').textContent = r.error; $('berr').hidden = false; return; }
+  const l = loadMine();
+  if (editing >= 0) l[editing] = r.quiz; else l.push(r.quiz);
+  if (!saveMine(l)){ $('berr').textContent = 'Could not save on this device. You can still play the quiz.'; $('berr').hidden = false; return; }
+  renderPick(); show('pick');
+});
 $('printBtn').addEventListener('click', () => window.print());
-$('newBtn').addEventListener('click', () => { $('quiz').hidden = true; $('setup').hidden = false; });
+$('newBtn').addEventListener('click', () => { renderPick(); show('pick'); });
+renderPick();
 </script>
 </body>
 </html>
