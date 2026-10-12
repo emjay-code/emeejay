@@ -710,7 +710,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 <body>
 <div class="page">
 
-<div id="entry-chooser-view" class="page-dark full-bleed">
+<div id="entry-chooser-view" class="page-dark full-bleed" style="display:none;">
   <div class="auth-wrap landing-wrap">
     <div class="chooser-decor">
       <div class="chooser-icon" style="background:var(--hp-purple);top:2%;left:4%;transform:rotate(-12deg);"><i class="ti ti-abc ico-phonics" aria-hidden="true"></i></div>
@@ -5237,7 +5237,11 @@ function showLanding(){
   document.getElementById('landing-view').style.display = 'block';
   window.scrollTo(0,0);
 }
+/* The old second "which part of emeejay?" home page is retired: everything
+   now starts from the single home page at "/". */
 function goToChooser(){
+  location.href = '/';
+  return;
   document.getElementById('landing-view').style.display = 'none';
   document.getElementById('auth-view').style.display = 'none';
   document.getElementById('app-view').style.display = 'none';
@@ -5428,11 +5432,7 @@ async function doSignOut(){
   document.getElementById('auth-view').style.display = 'none';
   document.getElementById('trust-dashboard-view').style.display = 'none';
   document.getElementById('trust-auth-view').style.display = 'none';
-  if(wasTrust){
-    document.getElementById('entry-chooser-view').style.display = 'block';
-  } else {
-    document.getElementById('landing-view').style.display = 'block';
-  }
+  location.href = '/';
 }
 
 function copyJoinCode(){
@@ -41629,7 +41629,23 @@ renderMathsList();
 var isPlayMode = checkPlayParam();
 var isPracticeMode = !isPlayMode && checkPracticeParam();
 var isParentMode = !isPlayMode && !isPracticeMode && checkParentParam();
-if(!isPlayMode && !isPracticeMode && !isParentMode){ initAuth(); }
+/* Deep links from the single home page: /app.html?go=signin|signup|demo|student|parent|trust.
+   Signed-in teachers go straight to their dashboard (handled by initAuth);
+   anyone who arrives with no purpose is sent back to the home page. */
+function routeGo(){
+  if(currentUser || isPasswordRecovery) return;
+  if(/access_token|type=recovery/.test(location.hash || '')) return;
+  var go = new URLSearchParams(location.search).get('go');
+  if(go === 'signin') goToAuth('signin');
+  else if(go === 'signup') goToAuth('signup');
+  else if(go === 'demo') viewDemo(null);
+  else if(go === 'student') showPlayPortal();
+  else if(go === 'parent') chooseParentEntry();
+  else if(go === 'trust') chooseTrustEntry();
+  else if(new URLSearchParams(location.search).get('checkout')) goToAuth('signin');
+  else location.replace('/');
+}
+if(!isPlayMode && !isPracticeMode && !isParentMode){ initAuth().then(routeGo); }
 checkCheckoutReturn();
 </script>
 </body>
