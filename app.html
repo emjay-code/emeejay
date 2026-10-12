@@ -41640,6 +41640,8 @@ function routeGo(){
   else if(go === 'signup') goToAuth('signup');
   else if(go === 'demo') viewDemo(null);
   else if(go === 'student') showPlayPortal();
+  else if(go === 'home') chooseHomeTeacherEntry();
+  else if(go === 'homestudent') showHomePortal();
   else if(go === 'parent') chooseParentEntry();
   else if(go === 'trust') chooseTrustEntry();
   else if(new URLSearchParams(location.search).get('checkout')) goToAuth('signin');
