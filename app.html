@@ -41634,8 +41634,45 @@ var isParentMode = !isPlayMode && !isPracticeMode && checkParentParam();
 /* Deep links from the single home page: /app.html?go=signin|signup|demo|student|parent|trust.
    Signed-in teachers go straight to their dashboard (handled by initAuth);
    anyone who arrives with no purpose is sent back to the home page. */
+/* Password-reset links from the email point here with ?token_hash=...&type=recovery.
+   The token is only used when the person clicks Continue, so email security
+   scanners that pre-open links can't use it up. */
+function showRecoveryConfirm(tokenHash){
+  var o = document.createElement('div');
+  o.id = 'recovery-confirm';
+  o.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#1A1033;display:flex;align-items:center;justify-content:center;padding:1.25rem;';
+  o.innerHTML = '<div style="max-width:380px;width:100%;background:#2A1D4A;border:1.5px solid #3E2F68;border-radius:18px;padding:1.75rem;text-align:center;color:#F1EAFF;font-family:Nunito,sans-serif;">' +
+    '<div style="font-size:22px;font-weight:800;margin-bottom:0.5rem;">Reset your password</div>' +
+    '<p style="color:#B3A4D4;font-size:14px;margin:0 0 1.25rem;">Click below to choose a new password for your emeejay account.</p>' +
+    '<button id="rc-btn" style="width:100%;background:#C8A6FF;color:#1A1033;border:none;border-radius:12px;padding:13px;font-weight:800;font-size:16px;cursor:pointer;">Continue</button>' +
+    '<div id="rc-err" style="display:none;color:#E39A3F;font-size:13px;margin-top:0.9rem;"></div></div>';
+  document.body.appendChild(o);
+  document.getElementById('rc-btn').onclick = async function(){
+    var b = this; b.disabled = true; b.textContent = 'One moment...';
+    var res = await sb.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' });
+    if(res.error){
+      b.disabled = false; b.textContent = 'Continue';
+      var e = document.getElementById('rc-err');
+      e.textContent = 'That link has expired or was already used. Close this and request a new reset email.';
+      e.style.display = 'block';
+      return;
+    }
+    try{ window.history.replaceState({}, document.title, window.location.pathname); }catch(x){}
+    o.remove();
+    showResetPasswordView();
+  };
+}
 function routeGo(){
+  var qs = new URLSearchParams(location.search);
+  if(qs.get('token_hash') && qs.get('type') === 'recovery'){ showRecoveryConfirm(qs.get('token_hash')); return; }
   if(currentUser || isPasswordRecovery) return;
+  /* An expired or already-used reset link comes back with #error=... */
+  if(/error_code|error_description|error=/.test(location.hash || '')){
+    try{ window.history.replaceState({}, document.title, window.location.pathname); }catch(x){}
+    goToAuth('signin'); goToForgotPassword();
+    showAuthError('fp-error','That reset link has expired or was already used. Enter your email to get a fresh one, then open it straight away.');
+    return;
+  }
   if(/access_token|type=recovery/.test(location.hash || '')) return;
   var go = new URLSearchParams(location.search).get('go');
   if(go === 'signin') goToAuth('signin');
