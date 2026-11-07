@@ -758,6 +758,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 .strand-tile-arrow{color:#C8A6FF!important}
 .phase-name{color:#F1EAFF}
 </style>
+<style id="no-parent">#ch-profile-parent-card{display:none!important}</style>
 </head>
 <body>
 <div class="page">
@@ -843,7 +844,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
             <div class="cta-row" style="max-width:360px;margin:1.25rem auto 0;">
               <button class="btn btn-primary" onclick="chooseTeacherEntry()">I'm a teacher or school staff</button>
               <button class="btn btn-primary" onclick="showPlayPortal()">I'm a student with a class code</button>
-              <button class="btn btn-primary" onclick="chooseParentEntry()">I'm a parent/carer with a code</button>
+              
             </div>
           </div>
         </div>
@@ -1145,7 +1146,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <span id="sb-teacher-name">-</span>
   </div>
   <div class="school-bar-actions">
-    <button class="icon-btn export-btn" onclick="switchStrand('home')"><i class="ti ti-home" aria-hidden="true" style="font-size:14px;"></i> emeejay home</button>
+    <button class="icon-btn export-btn" onclick="switchStrand('home')"><i class="ti ti-home" aria-hidden="true" style="font-size:14px;"></i> Topic journeys</button>
     <button class="icon-btn export-btn" id="sb-code-btn" onclick="copyJoinCode()">Code: ------</button>
     <button class="icon-btn export-btn" onclick="openStaffModal()"><i class="ti ti-users" aria-hidden="true" style="font-size:14px;"></i> Staff</button>
     <button class="icon-btn danger-btn" onclick="doSignOut()">Sign out</button>
@@ -4131,7 +4132,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <span id="eh-teacher-name">-</span>
   </div>
   <div class="school-bar-actions">
-    <button class="icon-btn export-btn" onclick="switchStrand('assess')"><i class="ti ti-school" aria-hidden="true" style="font-size:14px;"></i> emeejay assess</button>
+    <button class="icon-btn export-btn" onclick="switchStrand('assess')"><i class="ti ti-school" aria-hidden="true" style="font-size:14px;"></i> Class checks</button>
     <button class="icon-btn danger-btn" onclick="doSignOut()">Sign out</button>
   </div>
 </div>
@@ -4144,7 +4145,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 <div class="content-shell">
 <div class="eh-teacher-screen active" id="eh-teacher-setup">
   <div class="card" style="margin-bottom:0.75rem;text-align:center;">
-    <div class="section-hd" style="margin-bottom:0.35rem;">Your emeejay home code</div>
+    <div class="section-hd" style="margin-bottom:0.35rem;">Your topic journey code</div>
     <div style="font-family:'SFMono-Regular',Consolas,monospace;font-weight:700;font-size:22px;letter-spacing:2px;color:var(--hp-purple);" id="eh-code-display">------</div>
   </div>
 
@@ -4601,7 +4602,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
       <div id="eh-parent-card" class="card" style="display:none;">
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:0.5rem;">
-          <div style="font-size:16px;font-weight:700;color:var(--hp-purple-dark);">This week at emeejay home</div>
+          <div style="font-size:16px;font-weight:700;color:var(--hp-purple-dark);">This week in topic journeys</div>
           <div style="font-size:11.5px;color:var(--text-muted);">Not homework</div>
         </div>
         <div id="eh-parent-list"></div>
