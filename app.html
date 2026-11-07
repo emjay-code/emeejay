@@ -759,6 +759,7 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 .phase-name{color:#F1EAFF}
 </style>
 <style id="no-parent">#ch-profile-parent-card{display:none!important}</style>
+<style id="no-home">button.strand-tile[onclick*="entry-step-home"]{display:none!important}</style>
 </head>
 <body>
 <div class="page">
@@ -1146,7 +1147,6 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <span id="sb-teacher-name">-</span>
   </div>
   <div class="school-bar-actions">
-    <button class="icon-btn export-btn" onclick="switchStrand('home')"><i class="ti ti-home" aria-hidden="true" style="font-size:14px;"></i> Topic journeys</button>
     <button class="icon-btn export-btn" id="sb-code-btn" onclick="copyJoinCode()">Code: ------</button>
     <button class="icon-btn export-btn" onclick="openStaffModal()"><i class="ti ti-users" aria-hidden="true" style="font-size:14px;"></i> Staff</button>
     <button class="icon-btn danger-btn" onclick="doSignOut()">Sign out</button>
@@ -4132,7 +4132,6 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
     <span id="eh-teacher-name">-</span>
   </div>
   <div class="school-bar-actions">
-    <button class="icon-btn export-btn" onclick="switchStrand('assess')"><i class="ti ti-school" aria-hidden="true" style="font-size:14px;"></i> Class checks</button>
     <button class="icon-btn danger-btn" onclick="doSignOut()">Sign out</button>
   </div>
 </div>
@@ -41755,8 +41754,8 @@ function routeGo(){
   else if(go === 'signup') goToAuth('signup');
   else if(go === 'demo') viewDemo(null);
   else if(go === 'student') showPlayPortal();
-  else if(go === 'home') chooseHomeTeacherEntry();
-  else if(go === 'homestudent') showHomePortal();
+  else if(go === 'home') chooseTeacherEntry();
+  else if(go === 'homestudent') showPlayPortal();
   else if(go === 'parent') chooseParentEntry();
   else if(go === 'trust') chooseTrustEntry();
   else if(new URLSearchParams(location.search).get('checkout')) goToAuth('signin');
