@@ -911,11 +911,15 @@ body.no-edit-delete .icon-btn[id^="clear-"]{display:none !important;}
 
     <div class="card" id="forgot-password-card" style="display:none;">
       <div class="section-hd" style="margin-bottom:0.35rem;">Reset your password</div>
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Enter the email you sign in with and we'll send you a link to set a new password.</p>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:0.75rem;">Enter the email you sign in with and we'll email you a 6-digit code.</p>
       <div class="field"><label>Email</label><input type="email" id="fp-email" autocomplete="username"/></div>
-      <button class="btn btn-primary" id="fp-submit" onclick="doRequestPasswordReset()">Send reset link</button>
+      <button class="btn btn-primary" id="fp-submit" onclick="doRequestPasswordReset()">Send code</button>
       <div class="error-text" id="fp-error" style="display:none;"></div>
       <div class="info-text" id="fp-info" style="display:none;"></div>
+      <div id="fp-code-wrap" style="display:none;margin-top:0.9rem;">
+        <div class="field"><label>6-digit code from the email</label><input type="text" id="fp-code" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="123456"/></div>
+        <button class="btn btn-primary" id="fp-code-submit" onclick="doVerifyResetCode()">Check code</button>
+      </div>
       <a href="javascript:void(0)" class="mini-link" onclick="backToSignInFromForgot()">&larr; Back to sign in</a>
     </div>
 
@@ -5302,6 +5306,7 @@ function goToForgotPassword(){
   hideAuthError('fp-error');
   document.getElementById('fp-info').style.display = 'none';
   document.getElementById('fp-email').value = document.getElementById('si-email').value;
+  document.getElementById('fp-code-wrap').style.display = 'none';
 }
 function backToSignInFromForgot(){
   document.getElementById('forgot-password-card').style.display = 'none';
@@ -5317,8 +5322,21 @@ async function doRequestPasswordReset(){
   btn.disabled = false;
   if(res.error){ showAuthError('fp-error', res.error.message); return; }
   var info = document.getElementById('fp-info');
-  info.textContent = "If there's an account for that email, we've sent a link to reset your password. Check your inbox (and spam folder).";
+  info.textContent = "If there's an account for that email, we've emailed you a 6-digit code. Check your inbox (and spam folder), then type it below.";
   info.style.display = 'block';
+  document.getElementById('fp-code-wrap').style.display = 'block';
+  document.getElementById('fp-code').focus();
+}
+async function doVerifyResetCode(){
+  hideAuthError('fp-error');
+  var email = document.getElementById('fp-email').value.trim();
+  var code = document.getElementById('fp-code').value.replace(/\s+/g,'');
+  if(!email || !code){ showAuthError('fp-error','Enter your email and the code.'); return; }
+  var btn = document.getElementById('fp-code-submit'); btn.disabled = true;
+  var res = await sb.auth.verifyOtp({ email: email, token: code, type: 'recovery' });
+  btn.disabled = false;
+  if(res.error){ showAuthError('fp-error','That code is wrong or has expired. Request a new one and use the newest email.'); return; }
+  showResetPasswordView();
 }
 async function doSetNewPassword(){
   hideAuthError('rp-error');
